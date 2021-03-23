@@ -1,0 +1,62 @@
+{
+  "_from": "github:MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
+  "_id": "iobroker.template@0.6.0",
+  "_inBundle": false,
+  "_integrity": "",
+  "_location": "/iobroker.template",
+  "_phantomChildren": {},
+  "_requested": {
+    "type": "git",
+    "raw": "MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
+    "rawSpec": "MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
+    "saveSpec": "github:MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
+    "fetchSpec": null,
+    "gitCommittish": "a9535fadadcb65dfb3fa4038fdc851f483a833f9"
+  },
+  "_requiredBy": [
+    "#USER",
+    "/"
+  ],
+  "_resolved": "github:MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
+  "_spec": "MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
+  "_where": "/opt/iobroker",
+  "author": {
+    "name": "@@Author@@",
+    "email": "@@email@@"
+  },
+  "bugs": {
+    "url": "https://github.com/ioBroker/ioBroker.template/issues"
+  },
+  "bundleDependencies": false,
+  "contributors": [
+    {
+      "name": "@@Author@@",
+      "email": "@@email@@"
+    }
+  ],
+  "deprecated": false,
+  "description": "ioBroker pvforecast Adapter",
+  "devDependencies": {
+    "chai": "^4.1.2",
+    "gulp": "^3.9.1",
+    "mocha": "^4.1.0"
+  },
+  "homepage": "https://github.com/ioBroker/ioBroker.template",
+  "keywords": [
+    "ioBroker",
+    "template",
+    "Smart Home",
+    "home automation"
+  ],
+  "license": "MIT",
+  "main": "main.js",
+  "name": "iobroker.template",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ioBroker/ioBroker.template.git"
+  },
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha --exit"
+  },
+  "version": "0.6.0"
+}

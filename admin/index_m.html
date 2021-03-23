@@ -1,0 +1,137 @@
+<html>
+<head>
+<!-- these 4 files always have to be included -->
+<link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
+<link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+
+<script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
+<script type="text/javascript" src="../../socket.io/socket.io.js"></script>
+
+<!-- these files always have to be included -->
+<script type="text/javascript" src="../../js/translate.js"></script>
+<script type="text/javascript" src="../../lib/js/materialize.js"></script>
+<script type="text/javascript" src="../../js/adapter-settings.js"></script>
+<script type="text/javascript" src="words.js"></script>
+<script type="text/javascript" src="index_m.js"></script>
+<!-- you have to define 2 functions in the global scope: -->
+<script type="text/javascript">
+
+    // the function loadSettings has to exist ...
+    function load(settings, onChange) {
+        // example: select elements with id=key and class=value and insert value
+       if (!settings) return;
+        $('.value').each(function () {
+            var $key = $(this);
+            var id = $key.attr('id');
+            if ($key.attr('type') === 'checkbox') {
+		        // do not call onChange direct, because onChange could expect some arguments
+                $key.prop('checked', settings[id]).change(function() {
+                    onChange();
+                });
+            } else {
+		        // do not call onChange direct, because onChange could expect some arguments
+                $key.val(settings[id]).change(function() {
+                    onChange();
+                }).keyup(function() {
+                    onChange();
+                });
+            }
+        });
+        onChange(false);
+    }
+
+    // ... and the function save has to exist.
+    // you have to make sure the callback is called with the settings object as first param!
+    function save(callback) {
+        // example: select elements with class=value and build settings object
+        var obj = {};
+        $('.value').each(function () {
+            var $this = $(this);
+			if ($this.attr('type') === 'checkbox') {
+				obj[$this.attr('id')] = $this.prop('checked');
+			} else {
+				obj[$this.attr('id')] = $this.val();
+			}
+        });
+        callback(obj);
+    }
+</script>
+</head>
+<body>
+<!-- you have to put your config page in a div with id adapter-container -->
+<div class="m adapter-container">
+    <div class="row">
+        <div class="col s12 m4 l2">
+            <img src="solar_2.png"" class="logo">
+        </div>
+    </div>
+    <div class="row">
+    
+		<div class="col s2 input-field">
+			<input type="text"  class="value" id="longitude" />
+			<span for="longitude">Längengrad</label>
+			<label for="longitude" class="translate">longitude</label>
+		</div>
+
+		<div class="col s2 input-field">
+			<input type="text"  class="value" id="latitude" />
+			<span for="latitude">Breitengrad</label>
+			<label for="latitude" class="translate">latitude</label>
+			
+		</div>
+    
+		<div class="col s2 input-field">
+			<input type="text"  class="value" id="option3" />
+			<span for="option3">Neigung</label>
+			<label for="option3" class="translate">Tilt</label>
+		</div>
+		
+		<div class="col s2 input-field">
+			<input type="text"  class="value" id="option4" />
+			<span for="option4">Azimuth</label>
+			<label for="option4" class="translate">Azimuth</label>
+		</div>
+	
+		<div class="col s2 input-field">
+			<input type="text" class="value" id="option5" />
+			<span for="option5">Anlagenleistung[kWp]</label>
+			<label for="option5" class="translate">Plant performance[kWp]</label>
+			
+	</div>
+	
+	<div class="row">	
+		<div class="col s3 input-field">
+			<input type="text" class="value" id="option6" />
+			<span for="option6">Link von Solar Forecast</label>
+			<label for="option6" class="translate">Link from Solar Forecast</label>
+		</div>	
+		
+		<div class="col s3 input-field">
+			<input type="text" class="value" id="option8" />
+			<span for="option8">API Schlüssel</label>
+			<label for="option8" class="translate">API Key</label>
+		</div>	
+		
+        <div class="col s3 l2 input-field">
+			<input type="checkbox" class="value" id="option7" />
+			<!--  <a id="HolidayDPPopUp" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a> -->
+			<span for="option7" class="translate">Use ioBroker settings</span>
+		</div>	
+	</div>
+	
+	<div class="row">		
+		<div class="input-field col s3 m6">
+			<select class="value" id="account">
+				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
+				<!--<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+			</select>
+			<label for="account" class="translate"></label>
+			<span class="translate">Account</span>
+		</div>
+	</div>	
+	
+</div>
+</body>
+</html>
