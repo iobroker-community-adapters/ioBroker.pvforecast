@@ -1,62 +1,55 @@
 {
-  "_from": "github:MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
-  "_id": "iobroker.template@0.6.0",
-  "_inBundle": false,
-  "_integrity": "",
-  "_location": "/iobroker.template",
-  "_phantomChildren": {},
-  "_requested": {
-    "type": "git",
-    "raw": "MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
-    "rawSpec": "MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
-    "saveSpec": "github:MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
-    "fetchSpec": null,
-    "gitCommittish": "a9535fadadcb65dfb3fa4038fdc851f483a833f9"
-  },
-  "_requiredBy": [
-    "#USER",
-    "/"
-  ],
-  "_resolved": "github:MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
-  "_spec": "MeisterTR/ioBroker.template#a9535fadadcb65dfb3fa4038fdc851f483a833f9",
-  "_where": "/opt/iobroker",
+  "name": "iobroker.pvforecast",
+  "version": "0.0.1",
+  "description": "pvforecast",
   "author": {
-    "name": "@@Author@@",
-    "email": "@@email@@"
+    "name": "Patrick Walther",
+    "email": "walther-patrick@gmx.net"
   },
-  "bugs": {
-    "url": "https://github.com/ioBroker/ioBroker.template/issues"
-  },
-  "bundleDependencies": false,
-  "contributors": [
-    {
-      "name": "@@Author@@",
-      "email": "@@email@@"
-    }
-  ],
-  "deprecated": false,
-  "description": "ioBroker pvforecast Adapter",
-  "devDependencies": {
-    "chai": "^4.1.2",
-    "gulp": "^3.9.1",
-    "mocha": "^4.1.0"
-  },
-  "homepage": "https://github.com/ioBroker/ioBroker.template",
-  "keywords": [
-    "ioBroker",
-    "template",
-    "Smart Home",
-    "home automation"
-  ],
+  "homepage": "https://github.com/Patrick-Walther/ioBroker.pvforecast",
   "license": "MIT",
-  "main": "main.js",
-  "name": "iobroker.template",
+  "keywords": [
+    "pvforecast"
+  ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ioBroker/ioBroker.template.git"
+    "url": "https://github.com/Patrick-Walther/ioBroker.pvforecast"
   },
+  "dependencies": {
+    "@iobroker/adapter-core": "^2.4.0",
+	"reguest": "^2.72.0"
+  },
+  "devDependencies": {
+    "@iobroker/testing": "^2.4.2",
+    "@types/chai": "^4.2.15",
+    "@types/chai-as-promised": "^7.1.3",
+    "@types/gulp": "^4.0.8",
+    "@types/mocha": "^8.2.1",
+    "@types/node": "^14.14.33",
+    "@types/proxyquire": "^1.3.28",
+    "@types/sinon": "^9.0.11",
+    "@types/sinon-chai": "^3.2.5",
+    "axios": "^0.21.1",
+    "chai": "^4.3.3",
+    "chai-as-promised": "^7.1.1",
+    "eslint": "^7.21.0",
+    "gulp": "^4.0.2",
+    "mocha": "^8.3.1",
+    "proxyquire": "^2.1.3",
+    "sinon": "^9.2.4",
+    "sinon-chai": "^3.5.0"
+  },
+  "main": "main.js",
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha --exit"
+    "test:js": "mocha \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
+    "test:package": "mocha test/package --exit",
+    "test:unit": "mocha test/unit --exit",
+    "test:integration": "mocha test/integration --exit",
+    "test": "npm run test:js && npm run test:package",
+    "lint": "eslint"
   },
-  "version": "0.6.0"
+  "bugs": {
+    "url": "https://github.com/Patrick-Walther/ioBroker.pvforecast/issues"
+  },
+  "readmeFilename": "README.md"
 }
