@@ -157,11 +157,11 @@ function main() {
 		//adapter.log.info(account);
 		if (account == 'account-public') {
 			//adapter.log.info('Account Public gewählt');	
-			var var1 = url2 + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
+			var var1 = url2 + "/" + längengrad + "/" + breitengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 			adapter.log.info(var1);
 		} else if (account == 'account-poffesional') {
 			adapter.log.info('Account Proffesional gewählt');
-			var var1 = url2 + "/" + apikey + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;		
+			var var1 = url2 + "/" + apikey + "/" + längengrad + "/" + breitengrad + "/"  + Neigung + "/" + Azimuth + "/" + Anlagenleistung;		
            adapter.log.info(var1);			
 		};
 
