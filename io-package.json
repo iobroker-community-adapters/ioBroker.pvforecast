@@ -1,79 +1,72 @@
 {
-    "common": {
-        "name": "pvforecast",
-        "version": "0.0.1",
-        "news": {
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
-            }
-        },
-        "title": "pvforecast",
-        "titleLang": {
-            "en": "pvforecast",
-            "de": "pvforecast",
-            "ru": "pvforecast",
-            "pt": "pvforecast",
-            "nl": "pvforecast",
-            "fr": "pvforecast",
-            "it": "pvforecast",
-            "es": "pvforecast",
-            "pl": "pvforecast",
-            "zh-cn": "预测"
-        },
-        "desc": {
-            "en": "pvforecast",
-            "de": "pvforecast",
-            "ru": "pvforecast",
-            "pt": "pvforecast",
-            "nl": "pvforecast",
-            "fr": "pvforecast",
-            "it": "pvforecast",
-            "es": "pvforecast",
-            "pl": "pvforecast",
-            "zh-cn": "预测"
-        },
-        "authors": [
-            "Patrick Walther <walther-patrick@gmx.net>"
-        ],
-        "keywords": [
-            "pvforecast"
-        ],
-        "license": "MIT",
-        "platform": "Javascript/Node.js",
-        "main": "main.js",
-        "icon": "pvforecast.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/pvforecast.png",
-        "readme": "https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "schedule",
-		"schedule": "*/5****",
-        "type": "protocols",
-        "compact": true,
-        "materialize": true,
-        "dependencies": [
-            {
-                "js-controller": ">=1.4.2"
-            }
-        ]
+  "common": {
+    "name": "pvforecast",
+    "version": "0.0.1",
+    "news": {
+      "0.0.1": {
+        "en": "initial adapter",
+        "de": "Initiale Version",
+        "ru": "Первоначальный адаптер",
+        "pt": "Versão inicial",
+        "fr": "Version initiale",
+        "nl": "Eerste release"
+      }
     },
-    "native": {
-        "option1": true,
-        "option2": "42",
-		"option3": "42",
-		"option4": "42",
-		"option5": "42",
-		"option6": "42"
+    "title": {
+      "en": "Javascript/Node.js based template adapter",
+      "de": "PV Forecast",
+      "ru": "Адаптер шаблонов на основе Javascript / Node.js",
+      "pt": "Adaptador de modelo baseado em Javascript / Node.js",
+      "nl": "Javascript / Node.js gebaseerde sjabloonadapter",
+      "fr": "Javascript / Node.js basé adaptateur de modèle",
+      "it": "Adattatore modello basato su Javascript / Node.js",
+      "es": "Adaptador de plantilla basado en JavaScript / Node.js"
     },
-    "objects": [],
-    "instanceObjects": []
+    "desc": {
+      "en": "ioBroker template Adapter",
+      "de": "ioBroker PV Forecast",
+      "ru": "ioBroker Template драйвер как образец",
+      "pt": "Modelo de adaptador para o ioBroker",
+      "fr": "ioBroker adaptateur modèle",
+      "nl": "ioBroker Template Adapter",
+      "it": "Adattatore modello ioBroker",
+      "es": "Adaptador de plantilla ioBroker"
+    },
+    "authors": [
+      "Patrick Walther <walther-patrick@gmx.net>"
+    ],
+    "docs": {
+      "en": "docs/en/admin.md",
+      "ru": "docs/ru/admin.md",
+      "de": "docs/de/admin.md",
+      "es": "docs/es/admin.md",
+      "it": "docs/it/admin.md",
+      "fr": "docs/fr/admin.md",
+      "nl": "docs/nl/admin.md",
+      "pt": "docs/pt/admin.md"
+    },
+    "platform": "Javascript/Node.js",
+    "mode": "daemon",
+    "icon": "template.png",
+    "materialize": true,
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/template.png",
+    "keywords": [
+      "Photovoltaik",
+      "PV",
+      "Forecast"
+    ],
+    "readme": "https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/master/README.md",
+    "loglevel": "info",
+    "type": "general",
+    "restartAdapters": [
+      "vis"
+    ]
+  },
+  "native": {
+    "test1": true,
+    "test2": 42,
+    "mySelect": "auto"
+  },
+  "objects": []
 }

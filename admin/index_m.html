@@ -12,7 +12,6 @@
 <script type="text/javascript" src="../../lib/js/materialize.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 <script type="text/javascript" src="words.js"></script>
-<script type="text/javascript" src="index_m.js"></script>
 <!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
 
@@ -37,6 +36,7 @@
                 });
             }
         });
+			
         onChange(false);
     }
 
@@ -53,6 +53,51 @@
 				obj[$this.attr('id')] = $this.val();
 			}
         });
+		
+		
+		if (($('#longitude').val() == '') ) {
+            showMessage(_('Please entry longitude data'));
+            return;
+        }
+
+		if (($('#latitude').val() == '') ) {
+            showMessage(_('Please entry longitude data'));
+           return;
+        }
+		
+		if (($('#option3').val() == '') ) {
+            showMessage(_('Please entry tilt data'));
+           return;
+        }
+
+		if (($('#option4').val() == '') ) {
+            showMessage(_('Please entry Azimuth data'));
+           return;
+        }	
+		
+		if (($('#option5').val() == '') ) {
+            showMessage(_('Please entry Plant performance data'));
+           return;
+        }
+		
+		if (($('#option6').val() == '') ) {
+            showMessage(_('Please entry link data'));
+           return;
+        }
+
+		
+		if (($('#account').val() == '') ) {
+            showMessage(_('Please choose the account '));
+           return;
+        }		
+
+		if (($('#option8').val() == '') && ($('#account').val() == 'Personal')) {
+            showMessage(_('Please entry api key data'));
+           return;
+        }	
+
+
+		
         callback(obj);
     }
 </script>
@@ -62,7 +107,7 @@
 <div class="m adapter-container">
     <div class="row">
         <div class="col s12 m4 l2">
-            <img src="solar_2.png"" class="logo">
+            <img src="template.png" class="logo">
         </div>
     </div>
     <div class="row">
@@ -92,7 +137,7 @@
 			<label for="option4" class="translate">Azimuth</label>
 		</div>
 	
-		<div class="col s2 input-field">
+		<div class="col s3 input-field">
 			<input type="text" class="value" id="option5" />
 			<span for="option5">Anlagenleistung[kWp]</label>
 			<label for="option5" class="translate">Plant performance[kWp]</label>
@@ -100,37 +145,43 @@
 	</div>
 	
 	<div class="row">	
-		<div class="col s3 input-field">
+		<div class="col s5 input-field">
 			<input type="text" class="value" id="option6" />
 			<span for="option6">Link von Solar Forecast</label>
 			<label for="option6" class="translate">Link from Solar Forecast</label>
 		</div>	
 		
-		<div class="col s3 input-field">
+		<div class="col s5 input-field">
 			<input type="text" class="value" id="option8" />
 			<span for="option8">API Schlüssel</label>
 			<label for="option8" class="translate">API Key</label>
 		</div>	
 		
-        <div class="col s3 l2 input-field">
-			<input type="checkbox" class="value" id="option7" />
-			<!--  <a id="HolidayDPPopUp" class="btn-floating waves-effect waves-light blue table-button-add"><i class="material-icons">add</i></a> -->
-			<span for="option7" class="translate">Use ioBroker settings</span>
-		</div>	
+ 
 	</div>
 	
-	<div class="row">		
-		<div class="input-field col s3 m6">
-			<select class="value" id="account">
+	<div class="row">	
+
+		<div class="input-field col s5 m6 l4">
+			<input id="settingsiobroker" type="checkbox" class="value" />
+			<span for="settingsiobroker">GPS Einstellungen IoBroker</label>
+			<label class="translate" for="settingsiobroker">GPS settings IoBroker</label>
+		</div>
+
+
+	
+		<div class="input-field col s12 m6" >
+			<select class="value" id="account" size="3">
 				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
 				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
 				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
-				<!--<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
 			</select>
 			<label for="account" class="translate"></label>
 			<span class="translate">Account</span>
 		</div>
 	</div>	
+	
 	
 </div>
 </body>
