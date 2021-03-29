@@ -126,38 +126,7 @@ function main() {
 	
 
 					let wattstunden_tag = res.watt_hours_day[date_1];
-	/*			
 	
-					adapter.setObjectNotExists('json', {
-						type: 'state',
-						common: {
-							name: 'json', 
-							type: 'state', //json
-							role: 'json'
-							},
-							native: {}
-					});
-					
-					adapter.setObjectNotExists('Leistung Wh pro Tag', {
-						type: 'state',
-						common: {
-							name: 'Leistung Wh pro Tag', 
-							type: 'number',
-							role: 'value'
-							},
-							native: {}
-					});
-					
-					adapter.setObjectNotExists('letzte Aktualisierung', {
-						type: 'state',
-						common: {
-							name: 'letzte Aktualisierung', 
-							type: 'string',
-							role: 'value.time'
-							},
-							native: {}
-					});
-	*/				
 					adapter.setState('json',{val:body, ack:true});
 					adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
 					adapter.setState('letzte_Aktualisierung',{val:date_1, ack:true});
@@ -193,28 +162,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					
 					
 					var obj = JSON.parse(state.val).result;
-/*
-					adapter.setObjectNotExists('Leistung W', {
-						type: 'state',
-						common: {
-							name: 'Leistung W', 
-							type: 'number',
-							role: 'value'
-							},
-							native: {}
-					});
-
-					adapter.setObjectNotExists('Leistung Wh', {
-						type: 'state',
-						common: {
-							name: 'Leistung Wh', 
-							type: 'number',
-							role: 'value'
-							},
-							native: {}
-					});		
-
-	*/				
+	
 					//result Information
 					var obj = JSON.parse(state.val).result;
 					let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
@@ -227,27 +175,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 						adapter.setState('Leistung_Wh',{val:watth, ack:true});
 					};	
 
-/*
-					adapter.setObjectNotExists('Ort', {
-						type: 'state',
-						common: {
-							name: 'ort', 
-							type: 'string',
-							role: 'value'
-							},
-							native: {}
-					});
 
-					adapter.setObjectNotExists('Übermittlung der Daten', {
-						type: 'state',
-						common: {
-							name: 'Übermittlung der Daten', 
-							type: 'string',
-							role: 'value'
-							},
-							native: {}
-					});	
-*/					
 					//Message Information
 					var obj5 = JSON.parse(state.val).message;
 
