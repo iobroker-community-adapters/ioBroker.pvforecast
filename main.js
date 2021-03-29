@@ -13,8 +13,10 @@ const schedule = require('node-schedule');
 const utils =    require('@iobroker/adapter-core');
 
 const request = require('request')
- 
+const axios = require('axios'); 
 var adapter = new utils.Adapter('pvforecast');
+
+var thisUrl ='';
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
@@ -85,6 +87,7 @@ function main() {
 	
 };
 	
+	
     if (url2 == ""){
 		adapter.log.error('Bitte tragen Sie einen Link ein');			
 	} else {
@@ -98,7 +101,9 @@ function main() {
 			adapter.log.debug('Account Proffesional gewählt');
 			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		};
-
+		
+		thisUrl = var1;
+/*
 		adapter.log.debug('request url: '+var1);
 		request(
 			{
@@ -135,14 +140,44 @@ function main() {
 				    adapter.log.debug('request error ' + error+' Status Code '+response.statusCode);
 				};//if error
 			} // function
-		); //request	   
+		); //request	
+*/		
 	};	//if else beenden
 }
 
 
-const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function () {
+async function getPV () {
+	adapter.log.debug('ThisUrl '+thisUrl);
+	await axios
+	.get(thisUrl)
+    .then (async function(response) {
+		adapter.log.debug('axios done');					
+			
+		let res = response.data.result;
+		adapter.log.debug('Json axios '+JSON.stringify(response.data.result));
+		var d = new Date();
+		var dd = d.getUTCDate();
+		var mm = d.getUTCMonth() + 1;
+		var yy= d.getUTCFullYear();
+		
+		var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+
+
+		let wattstunden_tag = res.watt_hours_day[date_1];
+
+		await adapter.setStateAsync('json',{val:JSON.stringify(response.data), ack:true});
+		adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
+		adapter.setState('letzte_Aktualisierung',{val:date_1, ack:true});
+    })
+    .catch(function(error) {
+		adapter.log.error('Error '+error);
+    }); 
+}
+
+
+const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', async function () {
 	adapter.log.debug('*/1 * * * * *');
-  
+	await getPV ();
 	adapter.getState('json', (err, state) => {
 	
 		if (err) {
