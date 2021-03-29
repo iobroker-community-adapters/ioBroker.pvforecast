@@ -103,6 +103,9 @@ function main() {
 		};
 		
 		thisUrl = var1;
+
+
+		await getPV ();
 /*
 		adapter.log.debug('request url: '+var1);
 		request(
@@ -177,7 +180,7 @@ async function getPV () {
 
 const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', async function () {
 	adapter.log.debug('*/1 * * * * *');
-	await getPV ();
+	
 	adapter.getState('json', (err, state) => {
 	
 		if (err) {
@@ -211,6 +214,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', async funct
 
 
 					//Message Information
+					if (state.val != "") {
 					var obj5 = JSON.parse(state.val).message;
 
 					let type1 = obj5.type;
@@ -220,7 +224,8 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', async funct
 					adapter.log.debug('Ort: '  + place);	
 					
 					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
-					adapter.setState('Ort',{val:place, ack:true});					   					
+					adapter.setState('Ort',{val:place, ack:true});		
+					}					
 		
 		};
     });
