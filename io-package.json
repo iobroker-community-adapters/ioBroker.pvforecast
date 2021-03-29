@@ -64,9 +64,96 @@
     ]
   },
   "native": {
-    "test1": true,
-    "test2": 42,
-    "mySelect": "auto"
+   
   },
-  "objects": []
+  "objects": [],
+  "instanceObjects": [
+        {
+            "_id": "Leistung W",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Leistung W",
+                "type": "number",
+                "read": true,
+                "write": true,
+				"unit": "W"
+            },
+            "native": {}
+        },
+		{
+            "_id": "Leistung Wh",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Leistung Wh",
+                "type": "number",
+                "read": true,
+                "write": true,
+				"unit": "Wh"
+            },
+            "native": {}
+        },
+		{
+            "_id": "Leistung Wh pro Tag",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Leistung Wh pro Tag",
+                "type": "number",
+                "read": true,
+                "write": true,
+				"unit": "Wh"
+            },
+            "native": {}
+        },
+		{
+            "_id": "Ort",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "Ort",
+                "type": "string",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+		{
+            "_id": "json",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "json",
+                "type": "json",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+		{
+            "_id": "letzte Aktualisierung",
+            "type": "state",
+            "common": {
+                "role": "value.time",
+                "name": "letzte Aktualisierung",
+                "type": "number",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+		{
+            "_id": "Übermittlung der Daten",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "letzte Aktualisierung",
+                "type": "String",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        }
+    ]
 }

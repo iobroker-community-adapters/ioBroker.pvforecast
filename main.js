@@ -126,7 +126,7 @@ function main() {
 	
 
 					let wattstunden_tag = res.watt_hours_day[date_1];
-				
+	/*			
 	
 					adapter.setObjectNotExists('json', {
 						type: 'state',
@@ -157,7 +157,7 @@ function main() {
 							},
 							native: {}
 					});
-					
+	*/				
 					adapter.setState('json',{val:body, ack:true});
 					adapter.setState('Leistung Wh pro Tag',{val:wattstunden_tag, ack:true});
 					adapter.setState('letzte Aktualisierung',{val:date_1, ack:true});
@@ -193,7 +193,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					
 					
 					var obj = JSON.parse(state.val).result;
-
+/*
 					adapter.setObjectNotExists('Leistung W', {
 						type: 'state',
 						common: {
@@ -214,7 +214,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 							native: {}
 					});		
 
-					
+	*/				
 					//result Information
 					var obj = JSON.parse(state.val).result;
 					let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
@@ -227,7 +227,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 						adapter.setState('Leistung Wh',{val:watth, ack:true});
 					};	
 
-
+/*
 					adapter.setObjectNotExists('Ort', {
 						type: 'state',
 						common: {
@@ -247,7 +247,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 							},
 							native: {}
 					});	
-					
+*/					
 					//Message Information
 					var obj5 = JSON.parse(state.val).message;
 
