@@ -25,6 +25,7 @@ adapter.on('unload', function (callback) {
 	   
 	    clearTimeout(timer);	
 		schedule.cancelJob('datenübertragen');
+		schedule.cancelJob('datenauswerten');
 		callback();
 
     } catch (e) {
@@ -105,7 +106,7 @@ function main() {
 		thisUrl = var1;
 
 
-		await getPV ();
+
 /*
 		adapter.log.debug('request url: '+var1);
 		request(
@@ -178,9 +179,18 @@ async function getPV () {
 }
 
 
-const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', async function () {
-	adapter.log.debug('*/1 * * * * *');
+const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async function () {
+	//adapter.log.debug('0 0 * * *');
+	await getPV ();
+
 	
+ 
+});
+
+
+// evaluate data from json to data point every minute 
+
+const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
 	adapter.getState('json', (err, state) => {
 	
 		if (err) {
@@ -229,6 +239,4 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', async funct
 		
 		};
     });
-	
- 
 });
