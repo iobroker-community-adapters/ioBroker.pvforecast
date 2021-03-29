@@ -69,7 +69,7 @@
   "objects": [],
   "instanceObjects": [
         {
-            "_id": "Leistung W",
+            "_id": "Leistung_W",
             "type": "state",
             "common": {
                 "role": "value",
@@ -82,7 +82,7 @@
             "native": {}
         },
 		{
-            "_id": "Leistung Wh",
+            "_id": "Leistung_Wh",
             "type": "state",
             "common": {
                 "role": "value",
@@ -95,7 +95,7 @@
             "native": {}
         },
 		{
-            "_id": "Leistung Wh pro Tag",
+            "_id": "Leistung_Wh_pro_Tag",
             "type": "state",
             "common": {
                 "role": "value",
@@ -132,7 +132,7 @@
             "native": {}
         },
 		{
-            "_id": "letzte Aktualisierung",
+            "_id": "letzte_Aktualisierung",
             "type": "state",
             "common": {
                 "role": "value.time",
@@ -144,11 +144,11 @@
             "native": {}
         },
 		{
-            "_id": "Übermittlung der Daten",
+            "_id": "Übermittlung_der_Daten",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "letzte Aktualisierung",
+                "name": "Übermittlung der Daten",
                 "type": "String",
                 "read": true,
                 "write": true

@@ -159,8 +159,8 @@ function main() {
 					});
 	*/				
 					adapter.setState('json',{val:body, ack:true});
-					adapter.setState('Leistung Wh pro Tag',{val:wattstunden_tag, ack:true});
-					adapter.setState('letzte Aktualisierung',{val:date_1, ack:true});
+					adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
+					adapter.setState('letzte_Aktualisierung',{val:date_1, ack:true});
 
 	
 				} else {
@@ -223,8 +223,8 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					if (  watt1 >= 0) {
 						adapter.log.info('watt: ' + watt1);
 						adapter.log.info('wattstunden: ' + watth);
-						adapter.setState('Leistung W',{val:watt1, ack:true});
-						adapter.setState('Leistung Wh',{val:watth, ack:true});
+						adapter.setState('Leistung_W',{val:watt1, ack:true});
+						adapter.setState('Leistung_Wh',{val:watth, ack:true});
 					};	
 
 /*
@@ -257,7 +257,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					let place = obj5.info.place;
 					adapter.log.info('Ort: '  + place);	
 					
-					adapter.setState('Übermittlung der Daten',{val:type1, ack:true});
+					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
 					adapter.setState('Ort',{val:place, ack:true});					   					
 		
 		};
