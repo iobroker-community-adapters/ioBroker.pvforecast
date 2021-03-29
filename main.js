@@ -10,9 +10,7 @@
 
 // you hav	e to require the utils module and call adapter function
 const schedule = require('node-schedule');
-//const utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 const utils =    require('@iobroker/adapter-core');
-const buttonAction = require('./lib/buttonAction.js');                  // buttonAction
 
 const request = require('request')
  
@@ -46,8 +44,8 @@ function main() {
    // adapter.config
 
    	adapter.log.info('Eingaben Admin:');
-   	adapter.log.info('Längengrad: ' + adapter.config.option1);
-	adapter.log.info('Breitengrad: ' + adapter.config.option2);
+   	adapter.log.info('Längengrad: ' + adapter.config.longitude);
+	adapter.log.info('Breitengrad: ' + adapter.config.latitude);
 	adapter.log.info('Neigung: ' + adapter.config.option3);
 	adapter.log.info('Azimuth: ' + adapter.config.option4);
 	adapter.log.info('Anlagenleistung: ' + adapter.config.option5);
@@ -96,16 +94,14 @@ function main() {
 		//adapter.log.info(account);
 		if (account == 'account-public') {
 			//adapter.log.info('Account Public gewählt');	
-			var var1 = url2 + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
-			adapter.log.info(var1);
-		} else if (account == 'account-poffesional') {
+			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
+		} else if (account == 'account-proffesional') {
 			adapter.log.info('Account Proffesional gewählt');
-			var var1 = url2 + "/" + apikey + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;		
-           adapter.log.info(var1);			
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		};
 
-	 
-	   request(
+		adapter.log.info('request url: '+var1);
+		request(
 			{
 				url: var1,	
 				method: 'GET',
@@ -168,7 +164,7 @@ function main() {
 
 	
 				} else {
-				    adapter.log.info('request error' + error);
+				    adapter.log.info('request error ' + error+' Status Code '+response.statusCode);
 				};//if error
 			} // function
 		); //request	   
