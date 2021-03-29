@@ -196,7 +196,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
 		} else {
-
+				if (state.val != "") {
 					var d = new Date();
 					var dd = d.getUTCDate();
 					var mm = d.getUTCMonth() + 1;
@@ -224,7 +224,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 
 
 					//Message Information
-					if (state.val != "") {
+
 					var obj5 = JSON.parse(state.val).message;
 
 					let type1 = obj5.type;
@@ -235,7 +235,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					
 					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
 					adapter.setState('Ort',{val:place, ack:true});		
-					}					
+				}			
 		
 		};
     });
