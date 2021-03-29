@@ -105,7 +105,6 @@ function main() {
 		
 		thisUrl = var1;
 
-		getPV ();
 
 /*
 		adapter.log.debug('request url: '+var1);
