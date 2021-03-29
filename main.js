@@ -105,7 +105,7 @@ function main() {
 		
 		thisUrl = var1;
 
-
+		getPV ();
 
 /*
 		adapter.log.debug('request url: '+var1);
@@ -196,7 +196,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
 		} else {
-				if (state.val != "") {
+				if (state.val != "" || state.val != 0) {
 					var d = new Date();
 					var dd = d.getUTCDate();
 					var mm = d.getUTCMonth() + 1;
