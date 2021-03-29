@@ -13,37 +13,35 @@
       }
     },
     "title": {
-      "en": "Javascript/Node.js based template adapter",
-      "de": "PV Forecast",
-      "ru": "Адаптер шаблонов на основе Javascript / Node.js",
-      "pt": "Adaptador de modelo baseado em Javascript / Node.js",
-      "nl": "Javascript / Node.js gebaseerde sjabloonadapter",
-      "fr": "Javascript / Node.js basé adaptateur de modèle",
-      "it": "Adattatore modello basato su Javascript / Node.js",
-      "es": "Adaptador de plantilla basado en JavaScript / Node.js"
+		"en": "PV-Forecast",
+		"de": "PV-Prognose",
+		"ru": "PV-прогноз",
+		"pt": "Previsão PV",
+		"nl": "PV-voorspelling",
+		"fr": "Prévisions PV",
+		"it": "Previsione PV",
+		"es": "PV-Forecast",
+		"pl": "Prognoza PV",
+		"zh-cn": "PV预测"
     },
     "desc": {
-      "en": "ioBroker template Adapter",
-      "de": "ioBroker PV Forecast",
-      "ru": "ioBroker Template драйвер как образец",
-      "pt": "Modelo de adaptador para o ioBroker",
-      "fr": "ioBroker adaptateur modèle",
-      "nl": "ioBroker Template Adapter",
-      "it": "Adattatore modello ioBroker",
-      "es": "Adaptador de plantilla ioBroker"
+		"en": "This Adapter can use for read photovoltaics forecast from \"forecast.solar\"",
+		"de": "Dieser Adapter kann zum Lesen der Photovoltaik-Vorhersage von \"Forecast.Solar\" verwendet werden.",
+		"ru": "Этот адаптер можно использовать для считывания прогнозов по фотоэлектрической энергии из \"прогноз.solar\"",
+		"pt": "Este adaptador pode ser usado para ler a previsão fotovoltaica de \"forecast.solar\"",
+		"nl": "Deze adapter kan worden gebruikt voor het lezen van fotovoltaïsche voorspellingen van \"forecast.solar\"",
+		"fr": "Cet adaptateur peut être utilisé pour lire les prévisions photovoltaïques à partir de \"prévisions.solar\"",
+		"it": "Questo adattatore può essere utilizzato per leggere le previsioni del fotovoltaico da \"forecast.solar\"",
+		"es": "Este adaptador se puede utilizar para leer el pronóstico de energía fotovoltaica de \"forecast.solar\"",
+		"pl": "Ten adapter może służyć do odczytywania prognozy fotowoltaiki z „prognozy.solar”",
+		"zh-cn": "该适配器可用于读取来自“ forecast.solar”的光伏预测"
     },
     "authors": [
       "Patrick Walther <walther-patrick@gmx.net>"
     ],
     "docs": {
       "en": "docs/en/admin.md",
-      "ru": "docs/ru/admin.md",
       "de": "docs/de/admin.md",
-      "es": "docs/es/admin.md",
-      "it": "docs/it/admin.md",
-      "fr": "docs/fr/admin.md",
-      "nl": "docs/nl/admin.md",
-      "pt": "docs/pt/admin.md"
     },
     "platform": "Javascript/Node.js",
     "mode": "daemon",
@@ -54,7 +52,9 @@
     "keywords": [
       "Photovoltaik",
       "PV",
-      "Forecast"
+      "Forecast",
+	  "Prognose",
+	  "Ertrag"
     ],
     "readme": "https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/master/README.md",
     "loglevel": "info",
