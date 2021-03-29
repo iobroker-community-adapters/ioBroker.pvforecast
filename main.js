@@ -105,7 +105,6 @@ function main() {
 		
 		thisUrl = var1;
 
-		getPV ();
 
 /*
 		adapter.log.debug('request url: '+var1);
@@ -192,51 +191,56 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
 	adapter.getState('json', (err, state) => {
-	
-		if (err) {
-			adapter.log.error('schedule datenabfrage: ' + err);
+		if (state.val == "" || state.val == 0 || state.val == nothing || state.val == null) {
+			adapter.log.info('Kein Json gefunden!!);
+			await getPV ();
 		} else {
-				if (state.val != "" || state.val != 0) {
-					var d = new Date();
-					var dd = d.getUTCDate();
-					var mm = d.getUTCMonth() + 1;
-					var yy= d.getUTCFullYear();
-					var h = d.getHours();
-					var m = d.getMinutes();
-					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
-					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-					adapter.log.debug(datum + ' ' + uhrzeit);
+			if (err) {
+				adapter.log.error('schedule datenabfrage: ' + err);
+			} else {
 					
-					
-					var obj = JSON.parse(state.val).result;
-	
-					//result Information
-					var obj = JSON.parse(state.val).result;
-					let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
-					let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
-					
-					if (  watt1 >= 0) {
-						adapter.log.debug('watt: ' + watt1);
-						adapter.log.debug('wattstunden: ' + watth);
-						adapter.setState('Leistung_W',{val:watt1, ack:true});
-						adapter.setState('Leistung_Wh',{val:watth, ack:true});
-					};	
-
-
-					//Message Information
-
-					var obj5 = JSON.parse(state.val).message;
-
-					let type1 = obj5.type;
-					adapter.log.debug('Übertragung: '  + type1);
-
-					let place = obj5.info.place;
-					adapter.log.debug('Ort: '  + place);	
-					
-					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
-					adapter.setState('Ort',{val:place, ack:true});		
-				}			
+						var d = new Date();
+						var dd = d.getUTCDate();
+						var mm = d.getUTCMonth() + 1;
+						var yy= d.getUTCFullYear();
+						var h = d.getHours();
+						var m = d.getMinutes();
+						var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
+						var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+						adapter.log.debug(datum + ' ' + uhrzeit);
+						
+						
+						var obj = JSON.parse(state.val).result;
 		
-		};
+						//result Information
+						var obj = JSON.parse(state.val).result;
+						let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
+						let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
+						
+						if (  watt1 >= 0) {
+							adapter.log.debug('watt: ' + watt1);
+							adapter.log.debug('wattstunden: ' + watth);
+							adapter.setState('Leistung_W',{val:watt1, ack:true});
+							adapter.setState('Leistung_Wh',{val:watth, ack:true});
+						};	
+
+
+						//Message Information
+
+						var obj5 = JSON.parse(state.val).message;
+
+						let type1 = obj5.type;
+						adapter.log.debug('Übertragung: '  + type1);
+
+						let place = obj5.info.place;
+						adapter.log.debug('Ort: '  + place);	
+						
+						adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
+						adapter.setState('Ort',{val:place, ack:true});		
+								
+			
+			};	
+		};	
+			
     });
 });
