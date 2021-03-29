@@ -116,7 +116,7 @@
             "common": {
                 "role": "value",
                 "name": "Ort",
-                "type": "string",
+                "type": "json",
                 "read": true,
                 "write": true
             },
@@ -140,7 +140,7 @@
             "common": {
                 "role": "value.time",
                 "name": "letzte Aktualisierung",
-                "type": "number",
+                "type": "String",
                 "read": true,
                 "write": true
             },
@@ -152,7 +152,7 @@
             "common": {
                 "role": "value",
                 "name": "Übermittlung der Daten",
-                "type": "String",
+                "type": "json",
                 "read": true,
                 "write": true
             },
