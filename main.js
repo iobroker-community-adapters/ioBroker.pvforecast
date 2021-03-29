@@ -19,7 +19,7 @@ var adapter = new utils.Adapter('pvforecast');
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
     try {
-        adapter.log.info('cleaned everything up...');
+        adapter.log.debug('cleaned everything up...');
 	   
 	    clearTimeout(timer);	
 		schedule.cancelJob('datenübertragen');
@@ -43,18 +43,17 @@ function main() {
 	
    // adapter.config
 
-   	adapter.log.info('Eingaben Admin:');
-   	adapter.log.info('Längengrad: ' + adapter.config.longitude);
-	adapter.log.info('Breitengrad: ' + adapter.config.latitude);
-	adapter.log.info('Neigung: ' + adapter.config.option3);
-	adapter.log.info('Azimuth: ' + adapter.config.option4);
-	adapter.log.info('Anlagenleistung: ' + adapter.config.option5);
-	adapter.log.info('Link: ' + adapter.config.option6);
-    adapter.log.info('Account: ' + account);
-    adapter.log.info('    ');	
+   	adapter.log.debug('Eingaben Admin:');
+   	adapter.log.debug('Längengrad: ' + adapter.config.longitude);
+	adapter.log.debug('Breitengrad: ' + adapter.config.latitude);
+	adapter.log.debug('Neigung: ' + adapter.config.option3);
+	adapter.log.debug('Azimuth: ' + adapter.config.option4);
+	adapter.log.debug('Anlagenleistung: ' + adapter.config.option5);
+	adapter.log.debug('Link: ' + adapter.config.option6);
+    adapter.log.debug('Account: ' + account);
+    adapter.log.debug('    ');	
 	
 	//Variablen zur Übergabe und Prüfen der Einträge im Admin
-	var url = adapter.config.option6;
 	var längengrad = adapter.config.longitude;
 	var breitengrad  = adapter.config.latitude;
 	var Neigung = adapter.config.option3;
@@ -66,7 +65,7 @@ function main() {
 	var account = adapter.config.account;
 	var settinggpsiobroker = adapter.config.settingsiobroker;
 
-	adapter.log.info("setting-gps-iobroker:  " + settinggpsiobroker);
+	adapter.log.debug("setting-gps-iobroker:  " + settinggpsiobroker);
 	if (settinggpsiobroker  == true){
 		 adapter.getForeignObject("system.config", 
         (err, state) => {
@@ -78,7 +77,7 @@ function main() {
 				adapter.config.longitude = state.common.longitude;
 				adapter.config.latitude = state.common.latitude;
 
-				adapter.log.info("get System longitude  " + längengrad + ' & ' +" latitude " + breitengrad);
+				adapter.log.debug("get System longitude  " + längengrad + ' & ' +" latitude " + breitengrad);
 
             }
         });
@@ -87,20 +86,20 @@ function main() {
 };
 	
     if (url2 == ""){
-		adapter.log.info('Bitte tragen Sie einen Link ein');			
+		adapter.log.error('Bitte tragen Sie einen Link ein');			
 	} else {
 	
 		//var var1 = url2 + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
-		//adapter.log.info(account);
+		//adapter.log.debug(account);
 		if (account == 'account-public') {
-			//adapter.log.info('Account Public gewählt');	
+			//adapter.log.debug('Account Public gewählt');	
 			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		} else if (account == 'account-proffesional') {
-			adapter.log.info('Account Proffesional gewählt');
+			adapter.log.debug('Account Proffesional gewählt');
 			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		};
 
-		adapter.log.info('request url: '+var1);
+		adapter.log.debug('request url: '+var1);
 		request(
 			{
 				url: var1,	
@@ -113,7 +112,7 @@ function main() {
 			function(error, response, body) {
 
 				if (!error && response.statusCode == 200) {
-					adapter.log.info('request done');					
+					adapter.log.debug('request done');					
 					
 					let res = JSON.parse(body).result; 
 					
@@ -133,7 +132,7 @@ function main() {
 
 	
 				} else {
-				    adapter.log.info('request error ' + error+' Status Code '+response.statusCode);
+				    adapter.log.debug('request error ' + error+' Status Code '+response.statusCode);
 				};//if error
 			} // function
 		); //request	   
@@ -142,7 +141,7 @@ function main() {
 
 
 const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function () {
-	adapter.log.info('*/1 * * * * *');
+	adapter.log.debug('*/1 * * * * *');
   
 	adapter.getState('json', (err, state) => {
 	
@@ -158,7 +157,7 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
 					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-					adapter.log.info(datum + ' ' + uhrzeit);
+					adapter.log.debug(datum + ' ' + uhrzeit);
 					
 					
 					var obj = JSON.parse(state.val).result;
@@ -169,8 +168,8 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
 					
 					if (  watt1 >= 0) {
-						adapter.log.info('watt: ' + watt1);
-						adapter.log.info('wattstunden: ' + watth);
+						adapter.log.debug('watt: ' + watt1);
+						adapter.log.debug('wattstunden: ' + watth);
 						adapter.setState('Leistung_W',{val:watt1, ack:true});
 						adapter.setState('Leistung_Wh',{val:watth, ack:true});
 					};	
@@ -180,10 +179,10 @@ const calc = schedule.scheduleJob('datenübertragen', '*/1 * * * *', function ()
 					var obj5 = JSON.parse(state.val).message;
 
 					let type1 = obj5.type;
-					adapter.log.info('Übertragung: '  + type1);
+					adapter.log.debug('Übertragung: '  + type1);
 
 					let place = obj5.info.place;
-					adapter.log.info('Ort: '  + place);	
+					adapter.log.debug('Ort: '  + place);	
 					
 					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
 					adapter.setState('Ort',{val:place, ack:true});					   					

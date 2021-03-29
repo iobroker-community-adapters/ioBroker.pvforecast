@@ -35,6 +35,9 @@
     "authors": [
       "Patrick Walther <walther-patrick@gmx.net>"
     ],
+	"contributors": [
+            "SurfGargano",
+    ],
     "docs": {
       "en": "docs/en/admin.md",
       "ru": "docs/ru/admin.md",
