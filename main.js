@@ -10,7 +10,7 @@
 
 // you hav	e to require the utils module and call adapter function
 const schedule = require('node-schedule');
-const utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
+//const utils =    require(__dirname + '/lib/utils'); // Get common adapter utils
 const utils =    require('@iobroker/adapter-core');
 const buttonAction = require('./lib/buttonAction.js');                  // buttonAction
 
