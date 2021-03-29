@@ -137,7 +137,7 @@
             "common": {
                 "role": "value.time",
                 "name": "letzte Aktualisierung",
-                "type": "json",
+                "type": "string",
                 "read": true,
                 "write": true
             },
@@ -149,7 +149,7 @@
             "common": {
                 "role": "value",
                 "name": "Übermittlung der Daten",
-                "type": "String",
+                "type": "json",
                 "read": true,
                 "write": true
             },
