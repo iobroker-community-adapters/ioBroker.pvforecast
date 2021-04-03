@@ -104,7 +104,7 @@ function main() {
 		};
 		
 		thisUrl = var1;
-		await getPV ();
+		getPV ();
 /*
 		adapter.log.debug('request url: '+var1);
 		request(
