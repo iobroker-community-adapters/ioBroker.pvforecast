@@ -193,7 +193,6 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 	
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
-			await getPV ();
 		} else {
 				if (state.val != "" || state.val != 0|| state.val != null) {
 					var d = new Date();
