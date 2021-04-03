@@ -66,8 +66,12 @@
 			}
         });
 		
-		fillPosition();
+
 		
+		if (($('#longitude').val() == '') && ($('#settingsiobroker').val() == 'true')  ) {
+			fillPosition();   
+            return;
+        }
 		
 		if (($('#longitude').val() == '') && ($('#settingsiobroker').val() == 'false')  ) {
             showMessage(_('Please entry longitude data'));
