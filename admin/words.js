@@ -99,5 +99,18 @@ systemDictionary = {
 		"es": "cuenta",
 		"pl": "konto",
 		"zh-cn": "帐户"
-    }
+    },
+	
+	"https://api.forecast.solar": {
+		"en": "https://api.forecast.solar",
+		"de": "https://api.forecast.solar",
+		"ru": "https://api.forecast.solar",
+		"pt": "https://api.forecast.solar",
+		"nl": "https://api.forecast.solar",
+		"fr": "https://api.forecast.solar",
+		"it": "https://api.forecast.solar",
+		"es": "https://api.forecast.solar",
+		"pl": "https://api.forecast.solar",
+		"zh-cn": "https://api.forecast.solar"
+  }
 };

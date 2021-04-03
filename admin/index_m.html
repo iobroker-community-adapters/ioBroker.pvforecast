@@ -76,26 +76,26 @@
         }
 
 		if (($('#latitude').val() == '')   ) {
-            showMessage(_('Please entry longitude data'));
+            showMessage(_('Please entry latitude data'));
            return;
         }
 		
-		if (($('#option3').val() == '') ) {
+		if (($('#tilt').val() == '') ) {
             showMessage(_('Please entry tilt data'));
            return;
         }
 
-		if (($('#option4').val() == '') ) {
+		if (($('#Azimuth').val() == '') ) {
             showMessage(_('Please entry Azimuth data'));
            return;
         }	
 		
-		if (($('#option5').val() == '') ) {
+		if (($('#Plant-performance').val() == '') ) {
             showMessage(_('Please entry Plant performance data'));
            return;
         }
 		
-		if (($('#option6').val() == '') ) {
+		if (($('#linkdata').val() == '') ) {
             showMessage(_('Please entry link data'));
            return;
         }
@@ -106,7 +106,7 @@
            return;
         }		
 
-		if (($('#option8').val() == '') && ($('#account').val() == 'Personal')) {
+		if (($('#API-Schlüssel').val() == '') && ($('#account').val() == 'Personal')) {
             showMessage(_('Please entry api key data'));
            return;
         }	
@@ -141,35 +141,35 @@
 		</div>
     
 		<div class="col s2 input-field">
-			<input type="text"  class="value" id="option3" />
-			<span for="option3">Neigung</label>
-			<label for="option3" class="translate">Tilt</label>
+			<input type="text"  class="value" id="tilt" />
+			<span for="tilt">Neigung</label>
+			<label for="tilt" class="translate">Tilt</label>
 		</div>
 		
 		<div class="col s2 input-field">
-			<input type="text"  class="value" id="option4" />
-			<span for="option4">Azimuth</label>
-			<label for="option4" class="translate">Azimuth</label>
+			<input type="text"  class="value" id="Azimuth" />
+			<span for="Azimuth">Azimuth</label>
+			<label for="Azimuth" class="translate">Azimuth</label>
 		</div>
 	
 		<div class="col s3 input-field">
-			<input type="text" class="value" id="option5" />
-			<span for="option5">Anlagenleistung[kWp]</label>
-			<label for="option5" class="translate">Plant performance[kWp]</label>
+			<input type="text" class="value" id="Plant-performance" />
+			<span for="Plant-performance">Plant-performance[kWp]</label>
+			<label for="Plant-performance" class="translate">Plant performance[kWp]</label>
 			
 	    </div>
 	
 	<div class="row">	
 		<div class="col s5 input-field">
-			<input type="text" class="value" id="option6" />
-			<span for="option6">Link von Solar Forecast</label>
-			<label for="option6" class="translate">Link from Solar Forecast</label>
+			<input type="text" class="value" id="linkdata" />
+			<span for="linkdata">Link von Solar Forecast</label>
+			<label for="linkdata" class="translate">Link from Solar Forecast</label>
 		</div>	
 		
 		<div class="col s5 input-field">
-			<input type="text" class="value" id="option8" />
-			<span for="option8">API Schlüssel</label>
-			<label for="option8" class="translate">API Key</label>
+			<input type="text" class="value" id=">API-Key" />
+			<span for="API-Key">API Schlüssel</label>
+			<label for="API-Key" class="translate">API Key</label>
 		</div>	
 		
 	</div>
@@ -186,6 +186,13 @@
 			<span class="translate">Account</span>
 		</div>
 	</div>	
+	
+   <div class="row">
+		<div class="input-field col s6">
+			<label for="text" class="translate"></label>
+			<span class="translate">  "https://api.forecast.solar"</span> 
+		</div>
+	</div>
 	
 	
 </div>
