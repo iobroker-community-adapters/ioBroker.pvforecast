@@ -51,7 +51,10 @@
         }
     });
 }
-
+		if ($('#settingsiobroker').val() == true  ) {
+			fillPosition();   
+            return;
+        }
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
     function save(callback) {
@@ -66,11 +69,8 @@
 			}
         });
 		
-fillPosition();
-		if ($('#settingsiobroker').val() == true  ) {
-			fillPosition();   
-            return;
-        }
+
+
 		
 		if (($('#longitude').val() == '')  ) {
             showMessage(_('Please entry longitude data'));
