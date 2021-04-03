@@ -157,19 +157,23 @@ async function getPV () {
 			
 		let res = response.data.result;
 		adapter.log.debug('Json axios '+JSON.stringify(response.data.result));
-		var d = new Date();
-		var dd = d.getUTCDate();
-		var mm = d.getUTCMonth() + 1;
-		var yy= d.getUTCFullYear();
-		
-		var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+					var d = new Date();
+					var dd = d.getUTCDate();
+					var mm = d.getUTCMonth() + 1;
+					var yy= d.getUTCFullYear();
+					var h = d.getHours();
+					var m = d.getMinutes();
+					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
+					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+				//	adapter.log.debug(datum + ' ' + uhrzeit);
+					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+					var datetime =datum + ' ' + uhrzeit
 
-
-		let wattstunden_tag = res.watt_hours_day[date_1];
+		let wattstunden_tag = res.watt_hours_day[datum];
 
 		await adapter.setStateAsync('json',{val:JSON.stringify(response.data), ack:true});
 		adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
-		adapter.setState('letzte_Aktualisierung',{val:date_1, ack:true});
+		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
     })
     .catch(function(error) {
 		adapter.log.error('Error '+error);
