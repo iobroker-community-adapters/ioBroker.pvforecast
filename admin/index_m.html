@@ -126,7 +126,20 @@
         </div>
     </div>
     <div class="row">
-    
+    	
+		<div class="col s12 m4 l2 input-field" >
+			<select class="value" id="account" size="4">
+				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
+				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+			</select>
+			<label for="account" class="translate"></label>
+			<span class="translate">Account</span>
+		</div>
+	</div>
+	
+	<div class="row">
 		<div class="col s2 input-field">
 			<input type="text"  class="value" id="longitude" />
 			<span for="longitude">Längengrad</label>
@@ -160,17 +173,7 @@
 	    </div>
 	
 	<div class="row">	
-	
-		<div class="col s12 m4 l2 input-field" >
-			<select class="value" id="account" size="4">
-				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
-				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-			</select>
-			<label for="account" class="translate"></label>
-			<span class="translate">Account</span>
-		</div>
+
 		<div class="col s5 input-field">
 			<input type="text" class="value" id="linkdata" />
 			<span for="linkdata">Link von Solar Forecast</label>
