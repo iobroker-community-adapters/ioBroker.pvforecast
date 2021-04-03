@@ -35,10 +35,22 @@
                     onChange();
                 });
             }
-        });
+        });	
 			
         onChange(false);
     }
+	fillPosition();
+	
+	function fillPosition() {
+    socket.emit('getObject', 'system.config', function (err, obj) {
+        if ($('#longitude').val() === '') {
+            $('#longitude').val(obj.common.longitude).trigger('change');
+        }
+        if ($('#latitude').val() === '') {
+            $('#latitude').val(obj.common.latitude).trigger('change');
+        }
+    });
+}
 
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
