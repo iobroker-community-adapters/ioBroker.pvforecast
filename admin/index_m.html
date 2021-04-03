@@ -69,12 +69,12 @@
 		fillPosition();
 		
 		
-		if (($('#longitude').val() == '') ) {
+		if (($('#longitude').val() == '') && ($('#settingsiobroker').val() == 'false')  ) {
             showMessage(_('Please entry longitude data'));
             return;
         }
 
-		if (($('#latitude').val() == '') ) {
+		if (($('#latitude').val() == '') && ($('#settingsiobroker').val() == 'false')  ) {
             showMessage(_('Please entry longitude data'));
            return;
         }
