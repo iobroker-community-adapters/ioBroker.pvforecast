@@ -66,8 +66,8 @@
 			}
         });
 		
-
-		if ($('#settingsiobroker').val() == 'true'  ) {
+fillPosition();
+		if ($('#settingsiobroker').val() == true  ) {
 			fillPosition();   
             return;
         }
@@ -77,7 +77,7 @@
             return;
         }
 
-		if (($('#latitude').val() == '') && ($('#settingsiobroker').val() == 'false')  ) {
+		if (($('#latitude').val() == '') && ($('#settingsiobroker').val() == false)  ) {
             showMessage(_('Please entry longitude data'));
            return;
         }
