@@ -105,20 +105,16 @@
             showMessage(_('Please choose the account '));
            return;
         }
-
-		if (($('#account').val() == 'account-Personal') && ($('#API-Schlüssel').val() == '') {
-            showMessage(_('Please insert api-key '));
-           return;
-        }				
-		if (($('#account').val() == 'account-Professional') && ($('#API-Schlüssel').val() == '') {
-            showMessage(_('Please insert api-key '));
-           return;
-        }					
+		
 
 		if (($('#API-Schlüssel').val() == '') && ($('#account').val() == 'Personal')) {
             showMessage(_('Please entry api key data'));
            return;
-        }	
+        }
+		if (($('#API-Schlüssel').val() == '') && ($('#account').val() == 'Professional')) {
+            showMessage(_('Please entry api key data'));
+           return;
+        }			
 
 
 		
