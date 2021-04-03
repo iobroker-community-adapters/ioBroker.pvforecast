@@ -67,13 +67,13 @@
         });
 		
 
-		
-		if (($('#longitude').val() == '') && ($('#settingsiobroker').val() == 'true')  ) {
+		 if ($('#publicHolidays').prop('checked')) {
+		if (($('#longitude').val() == '') && ($('#settingsiobroker').prop('checked')  ) {
 			fillPosition();   
             return;
         }
 		
-		if (($('#longitude').val() == '') && ($('#settingsiobroker').val() == 'false')  ) {
+		if (($('#longitude').val() == '') && ($('#settingsiobroker').prop('checked')  ) {
             showMessage(_('Please entry longitude data'));
             return;
         }
