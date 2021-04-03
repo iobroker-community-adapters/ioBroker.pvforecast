@@ -39,7 +39,7 @@
 			
         onChange(false);
     }
-	fillPosition();
+	
 	
 	function fillPosition() {
     socket.emit('getObject', 'system.config', function (err, obj) {
@@ -65,6 +65,8 @@
 				obj[$this.attr('id')] = $this.val();
 			}
         });
+		
+		fillPosition();
 		
 		
 		if (($('#longitude').val() == '') ) {
