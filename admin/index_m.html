@@ -36,11 +36,11 @@
                 });
             }
         });	
-			
+				fillPosition();
         onChange(false);
     }
 	
-	
+
 	function fillPosition() {
     socket.emit('getObject', 'system.config', function (err, obj) {
         if ($('#longitude').val() === '') {
@@ -50,11 +50,8 @@
             $('#latitude').val(obj.common.latitude).trigger('change');
         }
     });
-}
-		if ($('#settingsiobroker').val() == true  ) {
-			fillPosition();   
-            return;
-        }
+	}
+
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
     function save(callback) {
@@ -77,7 +74,7 @@
             return;
         }
 
-		if (($('#latitude').val() == '') && ($('#settingsiobroker').val() == false)  ) {
+		if (($('#latitude').val() == '')   ) {
             showMessage(_('Please entry longitude data'));
            return;
         }
