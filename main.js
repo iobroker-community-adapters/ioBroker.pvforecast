@@ -49,22 +49,22 @@ function main() {
    	adapter.log.debug('Eingaben Admin:');
    	adapter.log.debug('Längengrad: ' + adapter.config.longitude);
 	adapter.log.debug('Breitengrad: ' + adapter.config.latitude);
-	adapter.log.debug('Neigung: ' + adapter.config.option3);
-	adapter.log.debug('Azimuth: ' + adapter.config.option4);
-	adapter.log.debug('Anlagenleistung: ' + adapter.config.option5);
-	adapter.log.debug('Link: ' + adapter.config.option6);
+	adapter.log.debug('Neigung: ' + adapter.config.tilt);
+	adapter.log.debug('Azimuth: ' + adapter.config.Azimuth);
+	adapter.log.debug('Plant-performance: ' + adapter.config.Plant-performance);
+	adapter.log.debug('Link: ' + adapter.config.linkdata);
     adapter.log.debug('Account: ' + account);
     adapter.log.debug('    ');	
 	
 	//Variablen zur Übergabe und Prüfen der Einträge im Admin
 	var längengrad = adapter.config.longitude;
 	var breitengrad  = adapter.config.latitude;
-	var Neigung = adapter.config.option3;
-	var Azimuth = adapter.config.option4;	
-	var Anlagenleistung = adapter.config.option5;	
-	var url2 = adapter.config.option6;	
+	var Neigung = adapter.config.tilt;
+	var Azimuth = adapter.config.Azimuth;	
+	var Anlagenleistung = adapter.config.Plant-performance;	
+	var url2 = adapter.config.linkdata;	
 	var checkbox_setting = adapter.config.option7;	
-	var apikey = adapter.config.option8;
+	var apikey = adapter.config.API-Key;
 	var account = adapter.config.account;
 	var settinggpsiobroker = adapter.config.settingsiobroker;
 
@@ -105,7 +105,8 @@ function main() {
 		
 		thisUrl = var1;
 		getPV ();
-/*
+		adapter.log.info('get pv main');
+/*adapter.log.debug
 		adapter.log.debug('request url: '+var1);
 		request(
 			{
@@ -165,7 +166,7 @@ async function getPV () {
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
 					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-				//	adapter.log.debug(datum + ' ' + uhrzeit);
+					adapter.log.debug(datum + ' ' + uhrzeit);
 					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
 					var datetime =datum + ' ' + uhrzeit
 
@@ -198,7 +199,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
 		} else {
-				if (state.val != "" || state.val != 0|| state.val != null) {
+				
 					var d = new Date();
 					var dd = d.getUTCDate();
 					var mm = d.getUTCMonth() + 1;
@@ -237,7 +238,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					
 					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
 					adapter.setState('Ort',{val:place, ack:true});		
-				}			
+							
 		
 		};
     });
