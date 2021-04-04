@@ -104,7 +104,7 @@ function main() {
 		};
 		
 		thisUrl = var1;
-		
+		getPV();
 /*adapter.log.debug
 		adapter.log.debug('request url: '+var1);
 		request(
@@ -176,7 +176,7 @@ async function getPV () {
 		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
     })
     .catch(function(error) {
-		adapter.log.error('Error '+error);
+		adapter.log.error('Error '+ error);
     }); 
 }
 
@@ -193,6 +193,7 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 // evaluate data from json to data point every minute 
 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
+	
 	adapter.getState('json', (err, state) => {
 	
 		if (err) {
