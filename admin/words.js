@@ -62,7 +62,7 @@ systemDictionary = {
 		"pl": " Wydajność roślin",
 		"zh-cn": " 工厂绩效"
 		},
-	"API-Key": {
+	"APIK": {
 		"en": "API-key",
 		"de": "API-Schlüssel",
 		"ru": "API-ключ",

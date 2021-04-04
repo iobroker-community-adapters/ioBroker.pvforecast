@@ -64,7 +64,7 @@ function main() {
 	var Anlagenleistung = adapter.config.Plantp;	
 	var url2 = adapter.config.linkdata;	
 	var checkbox_setting = adapter.config.option7;	
-	var apikey = adapter.config.API-Key;
+	var apikey = adapter.config.APIK;
 	var account = adapter.config.account;
 	var settinggpsiobroker = adapter.config.settingsiobroker;
 
