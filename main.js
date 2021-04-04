@@ -16,7 +16,7 @@ const request = require('request')
 const axios = require('axios'); 
 var adapter = new utils.Adapter('pvforecast');
 
-var thisUrl ='';
+let thisUrl ='';
 var pvname = '';
 
 
