@@ -53,8 +53,8 @@ function main() {
 	adapter.log.debug('Azimuth: ' + adapter.config.Azimuth);
 	adapter.log.debug('Plant-performance: ' + adapter.config.Plantp);
 	adapter.log.debug('Link: ' + adapter.config.linkdata);
-    adapter.log.debug('plant name: ' + dapter.config.pvname);
-    adapter.log.debug('Account: ' + dapter.config.account);
+    adapter.log.debug('plant name: ' + adapter.config.pvname);
+    adapter.log.debug('Account: ' + adapter.config.account);
     adapter.log.debug('    ');	
 	
 	//Variablen zur Übergabe und Prüfen der Einträge im Admin
