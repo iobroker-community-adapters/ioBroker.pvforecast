@@ -51,7 +51,7 @@ function main() {
 	adapter.log.debug('Breitengrad: ' + adapter.config.latitude);
 	adapter.log.debug('Neigung: ' + adapter.config.tilt);
 	adapter.log.debug('Azimuth: ' + adapter.config.Azimuth);
-	adapter.log.debug('Plant-performance: ' + adapter.config.Plant-performance);
+	adapter.log.debug('Plant-performance: ' + adapter.config.Plantp);
 	adapter.log.debug('Link: ' + adapter.config.linkdata);
     adapter.log.debug('Account: ' + account);
     adapter.log.debug('    ');	
@@ -61,7 +61,7 @@ function main() {
 	var breitengrad  = adapter.config.latitude;
 	var Neigung = adapter.config.tilt;
 	var Azimuth = adapter.config.Azimuth;	
-	var Anlagenleistung = adapter.config.Plant-performance;	
+	var Anlagenleistung = adapter.config.Plantp;	
 	var url2 = adapter.config.linkdata;	
 	var checkbox_setting = adapter.config.option7;	
 	var apikey = adapter.config.API-Key;

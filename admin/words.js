@@ -50,7 +50,7 @@ systemDictionary = {
 		"pl": "Azymut",
 		"zh-cn": "方位角"
     },
-    "Plant-performance": {
+    "Plantperformance": {
 		"en": " Plant performance",
 		"de": " Anlagenleistung",
 		"ru": " Производительность завода",
