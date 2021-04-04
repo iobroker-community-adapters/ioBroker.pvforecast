@@ -66,7 +66,10 @@
 			}
         });
 		
-
+		if (($('#pvname').val() == '')  ) {
+            showMessage(_('Please entry pvname data'));
+            return;
+        }
 
 		
 		if (($('#longitude').val() == '')  ) {
@@ -147,6 +150,15 @@
 			<span for="APIK">API Schlüssel</label>
 			<label for="APIK" class="translate">API Key</label>
 		</div>	
+		
+		<div class="col s5 input-field">
+			<input type="text" class="value" id="pvname" />
+			<span for="pvname">Anlagen Name</label>
+			<label for="pvname" class="translate">Plant name</label>
+		</div>	
+		
+		
+		
 		
 	</div>
 	
