@@ -207,10 +207,10 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
 					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-					adapter.log.debug(datum + ' ' + uhrzeit);
+					//adapter.log.debug(datum + ' ' + uhrzeit);
 					
 					
-					var obj = JSON.parse(state.val).result;
+					//var obj = JSON.parse(state.val).result;
 	
 					//result Information
 					var obj = JSON.parse(state.val).result;
