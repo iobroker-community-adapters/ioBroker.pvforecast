@@ -120,7 +120,7 @@
             "common": {
                 "role": "value",
                 "name": "Ort",
-                "type": "json",
+                "type": "string",
                 "read": true,
                 "write": true
             },
