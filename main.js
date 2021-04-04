@@ -176,6 +176,7 @@ async function getPV () {
 
 		await adapter.setStateAsync('json',{val:JSON.stringify(response.data), ack:true});
 		adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
+		adapter.setState('Anlagenname',{val:pvname, ack:true});
 		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
     })
     .catch(function(error) {
