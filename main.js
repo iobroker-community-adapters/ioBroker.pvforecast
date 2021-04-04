@@ -17,6 +17,8 @@ const axios = require('axios');
 var adapter = new utils.Adapter('pvforecast');
 
 var thisUrl ='';
+var pvname = adapter.config.pvname;
+
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
 adapter.on('unload', function (callback) {
@@ -68,7 +70,7 @@ function main() {
 	var apikey = adapter.config.APIK;
 	var account = adapter.config.account;
 	var settinggpsiobroker = adapter.config.settingsiobroker;
-	var pvname = adapter.config.pvname;
+
 	
 	
 	adapter.log.debug("setting-gps-iobroker:  " + settinggpsiobroker);
