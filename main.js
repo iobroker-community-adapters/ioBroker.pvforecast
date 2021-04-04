@@ -104,8 +104,7 @@ function main() {
 		};
 		
 		thisUrl = var1;
-		getPV ();
-		adapter.log.info('get pv main');
+		
 /*adapter.log.debug
 		adapter.log.debug('request url: '+var1);
 		request(
