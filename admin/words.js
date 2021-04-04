@@ -50,7 +50,7 @@ systemDictionary = {
 		"pl": "Azymut",
 		"zh-cn": "方位角"
     },
-    "Plantperformance": {
+    "Plantp": {
 		"en": " Plant performance",
 		"de": " Anlagenleistung",
 		"ru": " Производительность завода",
@@ -75,6 +75,19 @@ systemDictionary = {
 		"zh-cn": "API密钥"
 
     },
+	
+	"pvname":{
+		"en": "pv plant name",
+		"de": "PV Anlagenname",
+		"ru": "pv название завода",
+		"pt": "nome da planta pv",
+		"nl": "pv plant naam",
+		"fr": "nom de la plante pv",
+		"it": "nome dell'impianto fotovoltaico",
+		"es": "nombre de la planta pv",
+		"pl": "nazwa rośliny pv",
+		"zh-cn": "光伏工厂名称"			
+	},
 	
     "Link from Solar Forecast": {	
 		"en": "Link from Solar Forecast",

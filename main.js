@@ -53,7 +53,8 @@ function main() {
 	adapter.log.debug('Azimuth: ' + adapter.config.Azimuth);
 	adapter.log.debug('Plant-performance: ' + adapter.config.Plantp);
 	adapter.log.debug('Link: ' + adapter.config.linkdata);
-    adapter.log.debug('Account: ' + account);
+    adapter.log.debug('plant name: ' + dapter.config.pvname);
+    adapter.log.debug('Account: ' + dapter.config.account);
     adapter.log.debug('    ');	
 	
 	//Variablen zur Übergabe und Prüfen der Einträge im Admin
@@ -67,7 +68,9 @@ function main() {
 	var apikey = adapter.config.APIK;
 	var account = adapter.config.account;
 	var settinggpsiobroker = adapter.config.settingsiobroker;
-
+	var pvname = adapter.config.pvname;
+	
+	
 	adapter.log.debug("setting-gps-iobroker:  " + settinggpsiobroker);
 	if (settinggpsiobroker  == true){
 		 adapter.getForeignObject("system.config", 
