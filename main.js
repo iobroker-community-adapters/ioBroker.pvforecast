@@ -198,7 +198,7 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 
 // evaluate data from json to data point every minute 
 
-const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
+const calc2 = schedule.scheduleJob('datenauswerten', '*/5 * * * *', async function () {
 	
 	adapter.getState('json', (err, state) => {
 	
@@ -220,7 +220,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					//var obj = JSON.parse(state.val).result;
 	
 					//result Information
-					var obj = JSON.parse(state.val).result;
+					let obj = JSON.parse(state.val).result;
 					let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
 					let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
 					
