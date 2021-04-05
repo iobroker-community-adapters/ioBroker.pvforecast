@@ -65,7 +65,7 @@ function main() {
 	var Neigung = adapter.config.tilt;
 	var Azimuth = adapter.config.Azimuth;	
 	var Anlagenleistung = adapter.config.Plantp;	
-	var url2 = adapter.config.linkdata;	
+	let url2 = adapter.config.linkdata;	
 	var checkbox_setting = adapter.config.option7;	
 	var apikey = adapter.config.APIK;
 	var account = adapter.config.account;
@@ -108,10 +108,10 @@ function main() {
 		//adapter.log.debug(account);
 		if (account == 'account-public') {
 			//adapter.log.debug('Account Public gewählt');	
-			let var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
+			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		} else if (account == 'account-proffesional') {
 			adapter.log.debug('Account Proffesional gewählt');
-			let var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
 		/*} else if (account == 'account-proffesional') {
 			adapter.log.debug('Account Proffesional gewählt');
 			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
