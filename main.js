@@ -166,13 +166,13 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 
 // evaluate data from json to data point every minute 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
-
-	adapter.getState('json', (err, state) => {
-	
-		if (err) {
-			adapter.log.error('schedule datenabfrage: ' + err);
-		} else {
+	if (json_geschrieben == '1') {
+		adapter.getState('json', (err, state) => {
 				
+				if (err) {
+					adapter.log.error('schedule datenabfrage: ' + err);
+				} else {
+						
 					var d = new Date();
 					var dd = d.getUTCDate();
 					var mm = d.getUTCMonth() + 1;
@@ -203,6 +203,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					
 					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
 					adapter.setState('Ort',{val:place, ack:true});		
-		};
-    });
+				};
+		});
+	};	
 });
