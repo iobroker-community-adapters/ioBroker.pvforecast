@@ -16,7 +16,7 @@ const request = require('request')
 const axios = require('axios'); 
 var adapter = new utils.Adapter('pvforecast');
 
-var thisUrl ='';
+let thisUrl ='';
 var pvname = '';
 
 
@@ -97,7 +97,13 @@ function main() {
     if (url2 == ""){
 		adapter.log.error('Bitte tragen Sie einen Link ein');			
 	} else {
-	
+	/*
+	https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
+	https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp 
+	https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3
+	https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
+
+	*/
 		//var var1 = url2 + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		//adapter.log.debug(account);
 		if (account == 'account-public') {
@@ -105,50 +111,16 @@ function main() {
 			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		} else if (account == 'account-proffesional') {
 			adapter.log.debug('Account Proffesional gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
+		/*} else if (account == 'account-proffesional') {
+			adapter.log.debug('Account Proffesional gewählt');
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
+			*/				
 		};
 		
 		thisUrl = var1;
 		getPV();
-/*adapter.log.debug
-		adapter.log.debug('request url: '+var1);
-		request(
-			{
-				url: var1,	
-				method: 'GET',
-				headers:{
-					'User-Agent': 'request' 
-				}				
-			},
-		
-			function(error, response, body) {
 
-				if (!error && response.statusCode == 200) {
-					adapter.log.debug('request done');					
-					
-					let res = JSON.parse(body).result; 
-					
-					var d = new Date();
-					var dd = d.getUTCDate();
-					var mm = d.getUTCMonth() + 1;
-					var yy= d.getUTCFullYear();
-					
-					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-	
-
-					let wattstunden_tag = res.watt_hours_day[date_1];
-	
-					adapter.setState('json',{val:body, ack:true});
-					adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
-					adapter.setState('letzte_Aktualisierung',{val:date_1, ack:true});
-
-	
-				} else {
-				    adapter.log.debug('request error ' + error+' Status Code '+response.statusCode);
-				};//if error
-			} // function
-		); //request	
-*/		
 	};	//if else beenden
 }
 
