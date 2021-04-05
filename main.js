@@ -18,6 +18,7 @@ var adapter = new utils.Adapter('pvforecast');
 
 let thisUrl ='';
 var pvname = '';
+var json_geschrieben = '';
 
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
@@ -149,6 +150,7 @@ async function getPV () {
 		let wattstunden_tag = res.watt_hours_day[datum];
 
 		await adapter.setStateAsync('json',{val:JSON.stringify(response.data), ack:true});
+		json_geschrieben = '1';
 		adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
 		adapter.setState('Anlagenname',{val:pvname, ack:true});
 		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
@@ -171,10 +173,12 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 // evaluate data from json to data point every minute 
 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
-	
+	if ()
 	adapter.getState('json', (err, state) => {
 	
-		adapter.log.info('state.val' + state.val);
+	if (JSON.parse(state.val).result != null){
+		adapter.log.info('json ungleich null');
+	};
 	
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
