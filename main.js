@@ -170,10 +170,12 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 
 // evaluate data from json to data point every minute 
 
-const calc2 = schedule.scheduleJob('datenauswerten', '*/5 * * * *', async function () {
+const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
 	
 	adapter.getState('json', (err, state) => {
-	
+	if (){
+		adapter.log.info('state.val' + state.val);
+	};
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
 		} else {
@@ -210,14 +212,11 @@ const calc2 = schedule.scheduleJob('datenauswerten', '*/5 * * * *', async functi
 
 					let type1 = obj5.type;
 					adapter.log.debug('Übertragung: '  + type1);
-
 					let place = obj5.info.place;
 					adapter.log.debug('Ort: '  + place);	
 					
 					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
 					adapter.setState('Ort',{val:place, ack:true});		
-							
-		
 		};
     });
 });
