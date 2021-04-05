@@ -173,7 +173,7 @@ const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async functio
 // evaluate data from json to data point every minute 
 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
-	if ()
+
 	adapter.getState('json', (err, state) => {
 	
 	if (JSON.parse(state.val).result != null){
