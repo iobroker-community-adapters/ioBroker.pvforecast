@@ -108,10 +108,10 @@ function main() {
 		//adapter.log.debug(account);
 		if (account == 'account-public') {
 			//adapter.log.debug('Account Public gewählt');	
-			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
+			let var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		} else if (account == 'account-proffesional') {
 			adapter.log.debug('Account Proffesional gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
+			let var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
 		/*} else if (account == 'account-proffesional') {
 			adapter.log.debug('Account Proffesional gewählt');
 			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
