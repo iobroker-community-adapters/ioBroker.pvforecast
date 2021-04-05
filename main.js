@@ -90,10 +90,7 @@ function main() {
 
             }
         });
- 
-	
 };
-	
 	
     if (url2 == ""){
 		adapter.log.error('Bitte tragen Sie einen Link ein');			
@@ -163,22 +160,14 @@ async function getPV () {
 
 const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async function () {
 	//adapter.log.debug('0 0 * * *');
-	await getPV ();
-
-	
- 
+	await getPV (); 
 });
 
 
 // evaluate data from json to data point every minute 
-
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
 
 	adapter.getState('json', (err, state) => {
-	
-	if (JSON.parse(state.val).result != null){
-		adapter.log.info('json ungleich null');
-	};
 	
 		if (err) {
 			adapter.log.error('schedule datenabfrage: ' + err);
@@ -192,13 +181,9 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
 					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-					//adapter.log.debug(datum + ' ' + uhrzeit);
-					
-					
-					//var obj = JSON.parse(state.val).result;
-	
+
 					//result Information
-					let obj = JSON.parse(state.val).result;
+					var obj = JSON.parse(state.val).result;
 					let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
 					let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
 					
@@ -208,9 +193,6 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 						adapter.setState('Leistung_W',{val:watt1, ack:true});
 						adapter.setState('Leistung_Wh',{val:watth, ack:true});
 					};	
-
-
-					//Message Information
 
 					var obj5 = JSON.parse(state.val).message;
 
