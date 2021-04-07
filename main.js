@@ -124,11 +124,11 @@ function main() {
 
 
 async function getPV () {
-	adapter.log.debug('ThisUrl '+thisUrl);
+	adapter.log('ThisUrl '+thisUrl);
 	await axios
 	.get(thisUrl)
     .then (async function(response) {
-		adapter.log.debug('axios done');					
+		adapter.log.info('axios done');					
 			
 		let res = response.data.result;
 		adapter.log.debug('Json axios '+JSON.stringify(response.data.result));
@@ -153,7 +153,7 @@ async function getPV () {
 		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
     })
     .catch(function(error) {
-		adapter.log.error('Error '+ error);
+		adapter.log.error('Axios Error '+ error);
     }); 
 }
 
