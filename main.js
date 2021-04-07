@@ -124,7 +124,8 @@ function main() {
 
 
 async function getPV () {
-	adapter.log.debug('ThisUrl '+thisUrl);
+	adapter.log.info('ThisUrl '+thisUrl);
+	if (thisUrl) {
 	await axios
 	.get(thisUrl)
     .then (async function(response) {
@@ -153,8 +154,9 @@ async function getPV () {
 		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
     })
     .catch(function(error) {
-		adapter.log.error('Error '+ error);
+		adapter.log.error('Axios Error '+ error);
     }); 
+	}
 }
 
 
