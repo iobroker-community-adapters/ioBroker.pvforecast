@@ -125,6 +125,7 @@ function main() {
 
 async function getPV () {
 	adapter.log.info('ThisUrl '+thisUrl);
+	if (thisURL) {
 	await axios
 	.get(thisUrl)
     .then (async function(response) {
@@ -155,6 +156,7 @@ async function getPV () {
     .catch(function(error) {
 		adapter.log.error('Axios Error '+ error);
     }); 
+	}
 }
 
 
