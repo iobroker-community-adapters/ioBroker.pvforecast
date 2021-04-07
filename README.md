@@ -21,7 +21,7 @@ Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Dat
 
 All diese Information werden benötigt um eine saubere Funtkion des Adapters gewährleisten zu können.
 
-Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sysytem die Daten automatisch in die Felder ein.
+Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das System die Daten automatisch in die Felder ein.
 
 
 
