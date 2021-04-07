@@ -129,7 +129,7 @@ async function getPV () {
 	await axios
 	.get(thisUrl)
     .then (async function(response) {
-		adapter.log.info('axios done');					
+		adapter.log.debug('axios done');					
 			
 		let res = response.data.result;
 		adapter.log.debug('Json axios '+JSON.stringify(response.data.result));
