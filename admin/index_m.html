@@ -35,10 +35,22 @@
                     onChange();
                 });
             }
-        });
-			
+        });	
+				fillPosition();
         onChange(false);
     }
+	
+
+	function fillPosition() {
+    socket.emit('getObject', 'system.config', function (err, obj) {
+        if ($('#longitude').val() === '') {
+            $('#longitude').val(obj.common.longitude).trigger('change');
+        }
+        if ($('#latitude').val() === '') {
+            $('#latitude').val(obj.common.latitude).trigger('change');
+        }
+    });
+	}
 
     // ... and the function save has to exist.
     // you have to make sure the callback is called with the settings object as first param!
@@ -54,33 +66,38 @@
 			}
         });
 		
+		if (($('#pvname').val() == '')  ) {
+            showMessage(_('Please entry pvname data'));
+            return;
+        }
+
 		
-		if (($('#longitude').val() == '') ) {
+		if (($('#longitude').val() == '')  ) {
             showMessage(_('Please entry longitude data'));
             return;
         }
 
-		if (($('#latitude').val() == '') ) {
-            showMessage(_('Please entry longitude data'));
+		if (($('#latitude').val() == '')   ) {
+            showMessage(_('Please entry latitude data'));
            return;
         }
 		
-		if (($('#option3').val() == '') ) {
+		if (($('#tilt').val() == '') ) {
             showMessage(_('Please entry tilt data'));
            return;
         }
 
-		if (($('#option4').val() == '') ) {
+		if (($('#Azimuth').val() == '') ) {
             showMessage(_('Please entry Azimuth data'));
            return;
         }	
 		
-		if (($('#option5').val() == '') ) {
+		if (($('#Plantp').val() == '') ) {
             showMessage(_('Please entry Plant performance data'));
            return;
         }
 		
-		if (($('#option6').val() == '') ) {
+		if (($('#linkdata').val() == '') ) {
             showMessage(_('Please entry link data'));
            return;
         }
@@ -89,12 +106,17 @@
 		if (($('#account').val() == '') ) {
             showMessage(_('Please choose the account '));
            return;
-        }		
+        }
+		
 
-		if (($('#option8').val() == '') && ($('#account').val() == 'Personal')) {
+		if (($('#APIK').val() == '') && ($('#account').val() == 'account-Personal')) {
             showMessage(_('Please entry api key data'));
            return;
-        }	
+        }
+		if (($('#APIK').val() == '') && ($('#account').val() == 'account-Professional')) {
+            showMessage(_('Please entry api key data'));
+           return;
+        }			
 
 
 		
@@ -111,7 +133,36 @@
         </div>
     </div>
     <div class="row">
-    
+    	
+		<div class="col s12 m4 l2 input-field" >
+			<select class="value" id="account" size="4">
+				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
+				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+			</select>
+			<label for="account" class="translate">Account</label>
+			<span class="translate">Konto</span>
+		</div>
+				
+		<div class="col s5 input-field">
+			<input type="text" class="value" id="APIK" />
+			<span for="APIK">API Schlüssel</label>
+			<label for="APIK" class="translate">API Key</label>
+		</div>	
+		
+		<div class="col s5 input-field">
+			<input type="text" class="value" id="pvname" />
+			<span for="pvname">Anlagen Name</label>
+			<label for="pvname" class="translate">Plant name</label>
+		</div>	
+		
+		
+		
+		
+	</div>
+	
+	<div class="row">
 		<div class="col s2 input-field">
 			<input type="text"  class="value" id="longitude" />
 			<span for="longitude">Längengrad</label>
@@ -126,62 +177,39 @@
 		</div>
     
 		<div class="col s2 input-field">
-			<input type="text"  class="value" id="option3" />
-			<span for="option3">Neigung</label>
-			<label for="option3" class="translate">Tilt</label>
+			<input type="text"  class="value" id="tilt" />
+			<span for="tilt">Neigung</label>
+			<label for="tilt" class="translate">Tilt</label>
 		</div>
 		
 		<div class="col s2 input-field">
-			<input type="text"  class="value" id="option4" />
-			<span for="option4">Azimuth</label>
-			<label for="option4" class="translate">Azimuth</label>
+			<input type="text"  class="value" id="Azimuth" />
+			<span for="Azimuth">Azimuth</label>
+			<label for="Azimuth" class="translate">Azimuth</label>
 		</div>
 	
 		<div class="col s3 input-field">
-			<input type="text" class="value" id="option5" />
-			<span for="option5">Anlagenleistung[kWp]</label>
-			<label for="option5" class="translate">Plant performance[kWp]</label>
+			<input type="text" class="value" id="Plantp" />
+			<span for="Plantp">Anlagenleistung[kWp]</label>
+			<label for="Plantp" class="translate">Plant performance[kWp]</label>
 			
-	</div>
-	
-	<div class="row">	
-		<div class="col s5 input-field">
-			<input type="text" class="value" id="option6" />
-			<span for="option6">Link von Solar Forecast</label>
-			<label for="option6" class="translate">Link from Solar Forecast</label>
-		</div>	
-		
-		<div class="col s5 input-field">
-			<input type="text" class="value" id="option8" />
-			<span for="option8">API Schlüssel</label>
-			<label for="option8" class="translate">API Key</label>
-		</div>	
-		
- 
-	</div>
+	    </div>
 	
 	<div class="row">	
 
-		<div class="input-field col s5 m6 l4">
-			<input id="settingsiobroker" type="checkbox" class="value" />
-			<span for="settingsiobroker">GPS Einstellungen IoBroker</label>
-			<label class="translate" for="settingsiobroker">GPS settings IoBroker</label>
-		</div>
+		<div class="col s5 input-field">
+			<input type="text" class="value" id="linkdata" />
+			<span for="linkdata">Link von Solar Forecast</label>
+			<label for="linkdata" class="translate">Link from Solar Forecast</label>
+			<label for="text" class="translate"></label>
+			<span class="translate">https://api.forecast.solar</span> 
+		</div>	
+
+		
+	</div>
+	
 
 
-	
-		<div class="input-field col s12 m6" >
-			<select class="value" id="account" size="3">
-				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
-				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-			</select>
-			<label for="account" class="translate"></label>
-			<span class="translate">Account</span>
-		</div>
-	</div>	
-	
 	
 </div>
 </body>

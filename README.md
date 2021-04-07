@@ -1,56 +1,31 @@
 ![Logo](admin/template.png)
 # ioBroker.pvforecast
-=================
 
-This adapter is a template for the creation of an ioBroker adapter. You do not need it at least that you plan developing your own adapter.
+# Information
 
-It includes both code running within iobroker and as vis widget. If you only plan to create a vis widget then you should use the [iobroker.vis-template](https://github.com/ioBroker/ioBroker.vis-template) instead.
+Dieser Adapter ersetz das Javascript vom Iobroker Forum https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter
 
-## Steps 
-1. download and unpack this packet from github ```https://github.com/ioBroker/ioBroker.template/archive/master.zip```
-  or clone git repository ```git clone --depth=1 https://github.com/ioBroker/ioBroker.template.git```
+Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Daten:
 
-2. download required npm packets. Write in ioBroker.template directory:
+1. Account: 
+    - Public
+    - Personal
+    - Proffesional
+    - Enterprise
+2. Längengrad 
+3. Breitengrad
+4. Neigung
+5. Azimuth
+6. Anlagenleistung
+7. Link zu Seite
 
-  ```npm install```
-  
-3. set name of this template. Call
-  
-  ```grunt rename --name=mynewname --email=email@mail.com --author="Author Name"```
-  
-  *mynewname* must be **lower** case and with no spaces.
+All diese Information werden benötigt um eine saubere Funtkion des Adapters gewährleisten zu können.
 
-  If grunt is not available, install grunt globally:
-  
-  ```npm install -g grunt-cli```
- 
-4. rename directory from *ioBroker.template* (can be *ioBroker.template-master*) to *iobroker.mynewname*
+Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sysytem die Daten automatisch in die Felder ein.
 
-5. to use this template you should copy it into *.../iobroker/node_modules* directory and then create an instance for it with iobroker.admin
 
-6. create your adapter:
 
-  * you might want to start with main.js (code running within iobroker) and admin/index.html (the adapter settings page).
 
-  * [Adapter-Development-Documentation](https://github.com/ioBroker/ioBroker/wiki/Adapter-Development-Documentation),
-  
-  * [Installation, setup and first steps with an ioBroker Development Environment](https://github.com/ioBroker/ioBroker/wiki/Installation,-setup-and-first-steps-with-an-ioBroker-Development-Environment)
-  
-  * [Write and debug vis widgets](https://github.com/ioBroker/ioBroker/wiki/How-to-debug-vis-and-to-write-own-widget-set)
-  
-  * files under the www folders are made available under http://&lt;iobrokerIP&gt;:8082/&lt;adapter-name&gt;/
-    * for this to work the iobroker.vis adapter has to be installed
-    * delete this folder if you do not plan to export any files this way
-    * call ```iobroker upload <adapter-name>``` after you change files in the www folder to get the new files uploaded to vis
-  * the widget folder contains an example of a vis widget
-    * you might want to start with *widget/<adapter-name>.html* and *widget/js/<adapter-name>.js*
-    * call ```iobroker visdebug <adapter-name>``` to enable debugging and upload widget to "vis". (This works only from V0.7.15 of js-controller)
-    * If you do not plan to export any widget then delete the whole widget folder and remove the ```"restartAdapters": ["vis"]``` statement from *io-package.json*
-    * After admin/index.html is changed you must execute ```iobroker upload mynewname``` to see changes in admin console. The same is valid for any files in *admin* and *www* directory  
-
-7. change version: edit package.json and then call ```grunt p``` in your adapter directory.
-  
-8. share it with the community
 
 ## Changelog
 
