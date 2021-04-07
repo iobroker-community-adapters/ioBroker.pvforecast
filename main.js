@@ -125,7 +125,7 @@ function main() {
 
 async function getPV () {
 	adapter.log.info('ThisUrl '+thisUrl);
-	if (thisURL) {
+	if (thisUrl) {
 	await axios
 	.get(thisUrl)
     .then (async function(response) {
