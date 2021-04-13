@@ -46,9 +46,7 @@ adapter.on('ready', function () {
 
 
 function main() {
-	
-   // adapter.config
-
+		
    	adapter.log.debug('Eingaben Admin:');
    	adapter.log.debug('Längengrad: ' + adapter.config.longitude);
 	adapter.log.debug('Breitengrad: ' + adapter.config.latitude);
@@ -93,7 +91,7 @@ function main() {
 };
 	
     if (url2 == ""){
-		adapter.log.error('Bitte tragen Sie einen Link ein');			
+		adapter.log.error('Please insert https://api.forecast.solar in the link field ');			
 	} else {
 	/*
 	https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
