@@ -47,7 +47,7 @@ adapter.on('ready', function () {
 
 function main() {
 		
-   	adapter.log.debug('Eingaben Admin:');
+   
    	adapter.log.debug('Längengrad: ' + adapter.config.longitude);
 	adapter.log.debug('Breitengrad: ' + adapter.config.latitude);
 	adapter.log.debug('Neigung: ' + adapter.config.tilt);
