@@ -167,7 +167,7 @@ const calc = schedule.scheduleJob('datenübertragen', '1 4 * * *', async functio
 // evaluate data from json to data point every minute 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
 	//if (json_geschrieben == '1') {
-		adapter.getState('json', (err, state) => {
+		adapter.getState('object', (err, state) => {
 				
 				if (err) {
 					adapter.log.error('schedule datenabfrage: ' + err);
