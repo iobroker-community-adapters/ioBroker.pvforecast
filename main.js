@@ -151,7 +151,7 @@ async function getPV () {
 		// conversion  from Wh to kWh
 		wattstunden_tag = wattstunden_tag / 1000;
 		
-		adapter.setState('power_day',{val:wattstunden_tag, ack:true});
+		adapter.setState('power_day_kWh',{val:wattstunden_tag, ack:true});
 		adapter.setState('plantname',{val:pvname, ack:true});
 		adapter.setState('lastUpdated_object',{val:datetime, ack:true});
     })
