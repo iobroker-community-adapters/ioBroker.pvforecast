@@ -76,15 +76,15 @@
   "objects": [],
   "instanceObjects": [
         {
-            "_id": "power_w",
+            "_id": "power_kW",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_w",
+                "name": "power_kW",
                 "type": "number",
                 "read": true,
                 "write": true,
-				"unit": "kWh"
+				"unit": "kW"
             },
             "native": {}
         },
