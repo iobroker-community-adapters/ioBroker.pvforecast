@@ -102,11 +102,11 @@
             "native": {}
         },
 		{
-            "_id": "power_day",
+            "_id": "power_day_kWh",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_day",
+                "name": "power_day_kWh",
                 "type": "number",
                 "read": true,
                 "write": true,
@@ -131,7 +131,7 @@
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "json",
+                "name": "object",
                 "type": "json",
                 "read": true,
                 "write": true
