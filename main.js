@@ -145,7 +145,7 @@ async function getPV () {
 
 		let wattstunden_tag = res.watt_hours_day[datum];
 
-		await adapter.setStateAsync('json',{val:JSON.stringify(response.data), ack:true});
+		await adapter.setStateAsync('object',{val:JSON.stringify(response.data), ack:true});
 		//json_geschrieben = '1';
 		adapter.setState('power_day',{val:wattstunden_tag, ack:true});
 		adapter.setState('plantname',{val:pvname, ack:true});
