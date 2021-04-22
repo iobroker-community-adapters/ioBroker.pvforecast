@@ -84,20 +84,20 @@
                 "type": "number",
                 "read": true,
                 "write": true,
-				"unit": "W"
+				"unit": "kWh"
             },
             "native": {}
         },
 		{
-            "_id": "power_wh",
+            "_id": "power_kWh",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_wh",
+                "name": "power_kwh",
                 "type": "number",
                 "read": true,
                 "write": true,
-				"unit": "Wh"
+				"unit": "kWh"
             },
             "native": {}
         },

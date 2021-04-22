@@ -202,11 +202,11 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					
 						
 						
-					adapter.log.debug('power_w: ' + watt1);
-					adapter.log.debug('power_wh: ' + watth);
+					adapter.log.debug('power_kW: ' + watt1);
+					adapter.log.debug('power_kWh: ' + watth);
 					
-					adapter.setState('power_w',{val:watt1, ack:true});
-					adapter.setState('power_wh',{val:watth, ack:true});
+					adapter.setState('power_kW',{val:watt1, ack:true});
+					adapter.setState('power_kWh',{val:watth, ack:true});
 
 					var obj5 = JSON.parse(state.val).message;
 					let type1 = obj5.type;
