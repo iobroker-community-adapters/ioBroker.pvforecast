@@ -147,6 +147,10 @@ async function getPV () {
 
 		await adapter.setStateAsync('object',{val:JSON.stringify(response.data), ack:true});
 		//json_geschrieben = '1';
+		
+		// conversion  from Wh to kWh
+		wattstunden_tag = wattstunden_tag / 1000;
+		
 		adapter.setState('power_day',{val:wattstunden_tag, ack:true});
 		adapter.setState('plantname',{val:pvname, ack:true});
 		adapter.setState('lastUpdated_object',{val:datetime, ack:true});
@@ -190,8 +194,17 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
 					
 					if ( watt1 >=  0) {
+						
+					// conversion  from Wh to kWh
+
+					watt1 = watt1 / 1000;
+					watth = watth / 1000;
+					
+						
+						
 					adapter.log.debug('power_w: ' + watt1);
 					adapter.log.debug('power_wh: ' + watth);
+					
 					adapter.setState('power_w',{val:watt1, ack:true});
 					adapter.setState('power_wh',{val:watth, ack:true});
 
