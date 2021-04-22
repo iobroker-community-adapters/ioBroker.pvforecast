@@ -76,11 +76,11 @@
   "objects": [],
   "instanceObjects": [
         {
-            "_id": "Leistung_W",
+            "_id": "power_w",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "Leistung W",
+                "name": "power_w",
                 "type": "number",
                 "read": true,
                 "write": true,
@@ -89,11 +89,11 @@
             "native": {}
         },
 		{
-            "_id": "Leistung_Wh",
+            "_id": "power_wh",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "Leistung Wh",
+                "name": "power_wh",
                 "type": "number",
                 "read": true,
                 "write": true,
@@ -102,24 +102,24 @@
             "native": {}
         },
 		{
-            "_id": "Leistung_Wh_pro_Tag",
+            "_id": "power_day",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "Leistung Wh pro Tag",
+                "name": "power_day",
                 "type": "number",
                 "read": true,
                 "write": true,
-				"unit": "Wh"
+				"unit": "kWh"
             },
             "native": {}
         },
 		{
-            "_id": "Ort",
+            "_id": "place",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "Ort",
+                "name": "place",
                 "type": "string",
                 "read": true,
                 "write": true
@@ -127,7 +127,7 @@
             "native": {}
         },
 		{
-            "_id": "json",
+            "_id": "object",
             "type": "state",
             "common": {
                 "role": "value",
@@ -139,7 +139,7 @@
             "native": {}
         },
 		{
-            "_id": "letzte_Aktualisierung",
+            "_id": "lastUpdated_object",
             "type": "state",
             "common": {
                 "role": "value.time",
@@ -151,11 +151,11 @@
             "native": {}
         },
 		{
-            "_id": "Anlagenname",
+            "_id": "lastUpdated_data",
             "type": "state",
             "common": {
-                "role": "value",
-                "name": "Anlagenname",
+                "role": "value.time",
+                "name": "lastUpdated_data",
                 "type": "string",
                 "read": true,
                 "write": true
@@ -163,11 +163,23 @@
             "native": {}
         },
 		{
-            "_id": "Übermittlung_der_Daten",
+            "_id": "plantname",
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "Übermittlung der Daten",
+                "name": "plantname",
+                "type": "string",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+		{
+            "_id": "transfer",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "transfer",
                 "type": "json",
                 "read": true,
                 "write": true

@@ -141,15 +141,15 @@ async function getPV () {
 					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
 					adapter.log.debug(datum + ' ' + uhrzeit);
 					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-					var datetime =datum + ' ' + uhrzeit
+					var datetime =datum + ' ' + uhrzeit;
 
 		let wattstunden_tag = res.watt_hours_day[datum];
 
 		await adapter.setStateAsync('json',{val:JSON.stringify(response.data), ack:true});
-		json_geschrieben = '1';
-		adapter.setState('Leistung_Wh_pro_Tag',{val:wattstunden_tag, ack:true});
-		adapter.setState('Anlagenname',{val:pvname, ack:true});
-		adapter.setState('letzte_Aktualisierung',{val:datetime, ack:true});
+		//json_geschrieben = '1';
+		adapter.setState('power_day',{val:wattstunden_tag, ack:true});
+		adapter.setState('plantname',{val:pvname, ack:true});
+		adapter.setState('lastUpdated_object',{val:datetime, ack:true});
     })
     .catch(function(error) {
 		adapter.log.error('Axios Error '+ error);
@@ -158,15 +158,15 @@ async function getPV () {
 }
 
 
-const calc = schedule.scheduleJob('datenübertragen', '0 0 * * *', async function () {
-	//adapter.log.debug('0 0 * * *');
+const calc = schedule.scheduleJob('datenübertragen', '1 4 * * *', async function () {
+	dapter.log.debug('1 4 * * *');
 	await getPV (); 
 });
 
 
 // evaluate data from json to data point every minute 
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
-	if (json_geschrieben == '1') {
+	//if (json_geschrieben == '1') {
 		adapter.getState('json', (err, state) => {
 				
 				if (err) {
@@ -181,29 +181,31 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
 					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-
+					adapter.log.debug(datum + ' ' + uhrzeit);
+					var datetime1 = datum + ' ' + uhrzeit;
+					
 					//result Information
 					var obj = JSON.parse(state.val).result;
 					let watt1 = obj.watts[datum + ' ' +  uhrzeit  + ':00'];
 					let watth = obj.watt_hours[datum + ' ' +  uhrzeit  + ':00'];
 					
-					if (  watt1 >= 0) {
-						adapter.log.debug('watt: ' + watt1);
-						adapter.log.debug('wattstunden: ' + watth);
-						adapter.setState('Leistung_W',{val:watt1, ack:true});
-						adapter.setState('Leistung_Wh',{val:watth, ack:true});
-					};	
+					if ( watt1 >=  0) {
+					adapter.log.debug('power_w: ' + watt1);
+					adapter.log.debug('power_wh: ' + watth);
+					adapter.setState('power_w',{val:watt1, ack:true});
+					adapter.setState('power_wh',{val:watth, ack:true});
 
 					var obj5 = JSON.parse(state.val).message;
-
 					let type1 = obj5.type;
-					adapter.log.debug('Übertragung: '  + type1);
+					adapter.log.debug('transfer: '  + type1);
 					let place = obj5.info.place;
-					adapter.log.debug('Ort: '  + place);	
-					
-					adapter.setState('Übermittlung_der_Daten',{val:type1, ack:true});
-					adapter.setState('Ort',{val:place, ack:true});		
+					adapter.log.debug('place: '  + place);	
+					adapter.setState('lastUpdated_data',{val:datetime1, ack:true});
+					adapter.setState('transfer',{val:type1, ack:true});
+					adapter.setState('place',{val:place, ack:true});
+					};	
+
 				};
 		});
-	};	
+	//};	
 });
