@@ -11,13 +11,13 @@ Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Dat
     - Public
     - Personal
     - Proffesional
-    - Enterprise
 2. Längengrad 
 3. Breitengrad
 4. Neigung
 5. Azimuth
 6. Anlagenleistung
 7. Link zu Seite
+8. Anlagenname
 
 All diese Information werden benötigt um eine saubere Funtkion des Adapters gewährleisten zu können.
 
@@ -29,6 +29,9 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 ## Changelog
 
+
+### 0.0.2
+* (Patrick Walther) added data JSONgraph and JSONtable, fix failure with personal account(url)
 
 ### 0.0.1
 * (Patrick Walther) initial release
