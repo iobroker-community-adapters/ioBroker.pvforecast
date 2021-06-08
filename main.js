@@ -18,7 +18,6 @@ var adapter = new utils.Adapter('pvforecast');
 
 let thisUrl ='';
 var pvname = '';
-var json_geschrieben = '';
 
 
 // is called when adapter shuts down - callback has to be called under any circumstances!
@@ -47,7 +46,7 @@ adapter.on('ready', function () {
 
 function main() {
 		
-   
+    adapter.log.debug('    ');	   
    	adapter.log.debug('Längengrad: ' + adapter.config.longitude);
 	adapter.log.debug('Breitengrad: ' + adapter.config.latitude);
 	adapter.log.debug('Neigung: ' + adapter.config.tilt);
@@ -98,22 +97,19 @@ function main() {
 	https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp 
 	https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3
 	https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
-
 	*/
-		//var var1 = url2 + "/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
-		//adapter.log.debug(account);
+
 		if (account == 'account-public') {
-			//adapter.log.debug('Account Public gewählt');	
+			adapter.log.debug('Account public gewählt');
 			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
-		} else if (account == 'account-proffesional') {
-			adapter.log.debug('Account Proffesional gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
-		/*} else if (account == 'account-proffesional') {
-			adapter.log.debug('Account Proffesional gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;	
-			*/				
+		} else if ( account == 'account-personal') {
+			adapter.log.debug('Account Personal gewählt');
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
+		} else if ( account == 'account-professional') {
+			adapter.log.debug('Account Professional gewählt');
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		};
-		
+		adapter.log.debug('Link: ' + var1);
 		thisUrl = var1;
 		getPV();
 
@@ -146,7 +142,7 @@ async function getPV () {
 		let wattstunden_tag = res.watt_hours_day[datum];
 
 		await adapter.setStateAsync('object',{val:JSON.stringify(response.data), ack:true});
-		//json_geschrieben = '1';
+
 		
 		// conversion  from Wh to kWh
 		wattstunden_tag = wattstunden_tag / 1000;
@@ -154,6 +150,43 @@ async function getPV () {
 		adapter.setState('power_day_kWh',{val:wattstunden_tag, ack:true});
 		adapter.setState('plantname',{val:pvname, ack:true});
 		adapter.setState('lastUpdated_object',{val:datetime, ack:true});
+		
+		
+		//result Information
+		//var obj = JSON.parse(state.val).result;
+				
+			
+		let watts = res.watts;
+	
+		//jsongraph
+		let table = [];
+
+		for(let time in watts) {
+		   let entry = {};
+			entry.Uhrzeit = time;
+			entry.Leistung = watts[time];
+			table.push(entry);
+		}  
+		adapter.setState('JSONTable',{val:JSON.stringify(table), ack:true}); 
+		// GraphTable
+		let graphTimeData = [];
+
+		for(let time in watts) {
+			let graphEntry ={};
+			graphEntry.t = Date.parse(time);
+			graphEntry.y = watts[time];
+			graphTimeData.push(graphEntry);
+		} 
+
+		var graph = {};
+		var graphData ={};
+		var graphAllData = [];
+		graphData.data = graphTimeData;
+		graphAllData.push(graphData);
+		graph.graphs=graphAllData;
+		adapter.setState('JSONGraph',{val:JSON.stringify(graph), ack:true});  
+
+
     })
     .catch(function(error) {
 		adapter.log.error('Axios Error '+ error);

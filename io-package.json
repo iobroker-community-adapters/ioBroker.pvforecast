@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.0.1",
-    "news": {
+    "version": "0.0.2",
+    "news":{
+      "0.0.2": {
+		"en": "add jsongraph and jsontable, fix failure personal link",
+		"de": "jsongraph und jsontable hinzufügen, Fehler beim persönlichen Link beheben",
+		"ru": "добавить jsongraph и jsontable, исправить сбой личной ссылки",
+		"pt": "adicionar jsongraph e jsontable, corrigir falha no link pessoal",
+		"nl": "voeg jsongraph en jsontable toe, herstel de persoonlijke link van de fout failure",
+		"fr": "ajouter jsongraph et jsontable, corriger le lien personnel d'échec",
+		"it": "aggiungi jsongraph e jsontable, correggi il collegamento personale di errore",
+		"es": "agregue jsongraph y jsontable, corrija el enlace personal de falla",
+		"pl": "dodaj jsongraph i jsontable, napraw osobisty link awarii",
+		"zh-cn": "添加jsongraph和jsontable，修复失败的个人链接"
+      },		
       "0.0.1": {
         "en": "initial adapter",
         "de": "Initiale Version",
@@ -180,6 +192,30 @@
             "common": {
                 "role": "value",
                 "name": "transfer",
+                "type": "json",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },
+		{
+            "_id": "JSONGraph",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "JSONGraph",
+                "type": "json",
+                "read": true,
+                "write": true
+            },
+            "native": {}
+        },	
+		{
+            "_id": "JSONTable",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "JSONTable",
                 "type": "json",
                 "read": true,
                 "write": true

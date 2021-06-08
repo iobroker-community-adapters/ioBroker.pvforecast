@@ -36,7 +36,9 @@
                 });
             }
         });	
-				fillPosition();
+		
+		fillPosition();
+		$('#linkdata').val('https://api.forecast.solar').trigger('change');
         onChange(false);
     }
 	
@@ -137,9 +139,9 @@
 		<div class="col s12 m4 l2 input-field" >
 			<select class="value" id="account" size="4">
 				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-Personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-Professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
-				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
+				<option value="account-professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
+<!--				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
 			</select>
 			<label for="account" class="translate">Account</label>
 			<span class="translate">Konto</span>
@@ -156,10 +158,6 @@
 			<span for="pvname">Anlagen Name</label>
 			<label for="pvname" class="translate">Plant name</label>
 		</div>	
-		
-		
-		
-		
 	</div>
 	
 	<div class="row">
