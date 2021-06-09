@@ -196,7 +196,7 @@ async function getPV () {
 
 
 const calc = schedule.scheduleJob('datenübertragen', '1 4 * * *', async function () {
-	dapter.log.debug('1 4 * * *');
+	adapter.log.debug('1 4 * * *');
 	await getPV (); 
 });
 
