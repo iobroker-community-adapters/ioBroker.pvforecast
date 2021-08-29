@@ -78,12 +78,19 @@ function main() {
             if (err) { 
 				adapter.log.error(err);
             } else {
-              	 längengrad = state.common.longitude;
+              	längengrad = state.common.longitude;
 				breitengrad = state.common.latitude;
-				adapter.config.longitude = state.common.longitude;
-				adapter.config.latitude = state.common.latitude;
+				
+				var längengrad_korrektur = längengrad.replace(/[^\.^,\d]/g, '') ; //Nur Zahlen und Dez-Zeichen
+				längengrad_korrektur       = längengrad_korrektur.replace(/[,]/g, '.') ; // "," ersetzen zu "."
+				
+				var breitengrad_korrektur = breitengrad.replace(/[^\.^,\d]/g, '') ; //Nur Zahlen und Dez-Zeichen
+				breitengrad_korrektur       = breitengrad_korrektur.replace(/[,]/g, '.') ; // "," ersetzen zu "."
+								
+				adapter.config.longitude = längengrad_korrektur;
+				adapter.config.latitude = breitengrad_korrektur;
 
-				adapter.log.debug("get System longitude  " + längengrad + ' & ' +" latitude " + breitengrad);
+				adapter.log.debug("get System longitude  " + längengrad_korrektur + ' & ' +" latitude " + breitengrad_korrektur);
 
             }
         });
@@ -101,13 +108,13 @@ function main() {
 
 		if (account == 'account-public') {
 			adapter.log.debug('Account public gewählt');
-			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
+			var var1 = url2 + "/estimate/" + breitengrad_korrektur + "/" + längengrad_korrektur + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		} else if ( account == 'account-personal') {
 			adapter.log.debug('Account Personal gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad_korrektur + "/" + längengrad_korrektur + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		} else if ( account == 'account-professional') {
 			adapter.log.debug('Account Professional gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad_korrektur + "/" + längengrad_korrektur + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		};
 		adapter.log.debug('Link: ' + var1);
 		thisUrl = var1;
@@ -134,27 +141,31 @@ async function getPV () {
 					var h = d.getHours();
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
-					var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+					var data_today = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+					
+					var day_tomorrow = dd + 1;
+					var data_tomorrow =  yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (day_tomorrow + 1  <= 9 ? '0' + day_tomorrow : day_tomorrow);
 					adapter.log.debug(datum + ' ' + uhrzeit);
-					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
+					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd); //aktueller tag
 					var datetime =datum + ' ' + uhrzeit;
 
-		let wattstunden_tag = res.watt_hours_day[datum];
-
+					
+		let wattstunden_tag = res.watt_hours_day[data_today];
+		let wattstunden_tag_tomorrow = res.watt_hours_day[data_tomorrow];
 		await adapter.setStateAsync('object',{val:JSON.stringify(response.data), ack:true});
 
 		
 		// conversion  from Wh to kWh
 		wattstunden_tag = wattstunden_tag / 1000;
+        wattstunden_tag_tomorrow = wattstunden_tag_tomorrow / 1000;
 		
+		// write value to datapoints
 		adapter.setState('power_day_kWh',{val:wattstunden_tag, ack:true});
+		adapter.setState('power_day_tomorrow_kWh',{val:wattstunden_tag_tomorrow, ack:true});
 		adapter.setState('plantname',{val:pvname, ack:true});
 		adapter.setState('lastUpdated_object',{val:datetime, ack:true});
 		
-		
-		//result Information
-		//var obj = JSON.parse(state.val).result;
-				
+			
 			
 		let watts = res.watts;
 	
@@ -196,7 +207,7 @@ async function getPV () {
 
 
 const calc = schedule.scheduleJob('datenübertragen', '1 4 * * *', async function () {
-	adapter.log.debug('1 4 * * *');
+	dapter.log.debug('1 4 * * *');
 	await getPV (); 
 });
 
@@ -232,9 +243,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 
 					watt1 = watt1 / 1000;
 					watth = watth / 1000;
-					
-						
-						
+								
 					adapter.log.debug('power_kW: ' + watt1);
 					adapter.log.debug('power_kWh: ' + watth);
 					

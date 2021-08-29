@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.0.2",
+    "version": "0.0.3",
     "news":{
+		
+      "0.0.3": {
+		"en": "add new datapoint power_day_kWh_tomorrow",
+		"de": "neuen Datenpunkt power_day_kWh_tomorrow hinzufügen",
+		"ru": "добавить новую точку данных power_day_kWh_tomorrow",
+		"pt": "adicionar novo ponto de dados power_day_kWh_tomorrow",
+		"nl": "nieuw datapunt toevoegen power_day_kWh_tomorrow",
+		"fr": "ajouter un nouveau point de données power_day_kWh_tomorrow",
+		"it": "aggiungi nuovo datapoint power_day_kWh_tomorrow",
+		"es": "agregar un nuevo punto de datos power_day_kWh_tomorrow",
+		"pl": "dodaj nowy punkt danych power_day_kWh_tomorrow",
+		"zh-cn": "添加新数据点 power_day_kWh_tomorrow"
+      },			
       "0.0.2": {
 		"en": "add jsongraph and jsontable, fix failure personal link",
 		"de": "jsongraph und jsontable hinzufügen, Fehler beim persönlichen Link beheben",
@@ -127,6 +140,19 @@
             "native": {}
         },
 		{
+            "_id": "power_day_tomorrow_kWh",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": "power_day_tomorrow_kWh",
+                "type": "number",
+                "read": true,
+                "write": true,
+				"unit": "kWh"
+            },
+            "native": {}
+        },
+		{
             "_id": "place",
             "type": "state",
             "common": {
@@ -155,7 +181,7 @@
             "type": "state",
             "common": {
                 "role": "value.time",
-                "name": "letzte Aktualisierung",
+                "name": "lastUpdated",
                 "type": "string",
                 "read": true,
                 "write": true
