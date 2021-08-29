@@ -81,16 +81,16 @@ function main() {
               	längengrad = state.common.longitude;
 				breitengrad = state.common.latitude;
 				
-				var längengrad_korrektur = längengrad.replace(/[^\.^,\d]/g, '') ; //Nur Zahlen und Dez-Zeichen
-				längengrad_korrektur       = längengrad_korrektur.replace(/[,]/g, '.') ; // "," ersetzen zu "."
+				//var längengrad_korrektur = längengrad.replace(/[^\.^,\d]/g, '') ; //Nur Zahlen und Dez-Zeichen
+				//längengrad_korrektur       = längengrad_korrektur.replace(/[,]/g, '.') ; // "," ersetzen zu "."
 				
-				var breitengrad_korrektur = breitengrad.replace(/[^\.^,\d]/g, '') ; //Nur Zahlen und Dez-Zeichen
-				breitengrad_korrektur       = breitengrad_korrektur.replace(/[,]/g, '.') ; // "," ersetzen zu "."
+				//var breitengrad_korrektur = breitengrad.replace(/[^\.^,\d]/g, '') ; //Nur Zahlen und Dez-Zeichen
+				//breitengrad_korrektur       = breitengrad_korrektur.replace(/[,]/g, '.') ; // "," ersetzen zu "."
 								
-				adapter.config.longitude = längengrad_korrektur;
-				adapter.config.latitude = breitengrad_korrektur;
+				adapter.config.longitude = längengrad_;
+				adapter.config.latitude = breitengrad;
 
-				adapter.log.debug("get System longitude  " + längengrad_korrektur + ' & ' +" latitude " + breitengrad_korrektur);
+				adapter.log.debug("get System longitude  " + längengrad + ' & ' +" latitude " + breitengrad);
 
             }
         });
@@ -108,13 +108,13 @@ function main() {
 
 		if (account == 'account-public') {
 			adapter.log.debug('Account public gewählt');
-			var var1 = url2 + "/estimate/" + breitengrad_korrektur + "/" + längengrad_korrektur + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
+			var var1 = url2 + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;
 		} else if ( account == 'account-personal') {
 			adapter.log.debug('Account Personal gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad_korrektur + "/" + längengrad_korrektur + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		} else if ( account == 'account-professional') {
 			adapter.log.debug('Account Professional gewählt');
-			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad_korrektur + "/" + längengrad_korrektur + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
+			var var1 = url2 + "/" + apikey + "/estimate/" + breitengrad + "/" + längengrad + "/" + Neigung + "/" + Azimuth + "/" + Anlagenleistung;				
 		};
 		adapter.log.debug('Link: ' + var1);
 		thisUrl = var1;
