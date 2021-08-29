@@ -145,9 +145,9 @@ async function getPV () {
 					
 					var day_tomorrow = dd + 1;
 					var data_tomorrow =  yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (day_tomorrow + 1  <= 9 ? '0' + day_tomorrow : day_tomorrow);
-					adapter.log.debug(datum + ' ' + uhrzeit);
+					adapter.log.debug(data_today + ' ' + uhrzeit);
 					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd); //aktueller tag
-					var datetime =datum + ' ' + uhrzeit;
+					var datetime =data_today + ' ' + uhrzeit;
 
 					
 		let wattstunden_tag = res.watt_hours_day[data_today];
