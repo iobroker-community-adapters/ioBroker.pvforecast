@@ -144,12 +144,14 @@ async function getPV () {
 					var data_today = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
 					
 		
-				
+					var y = new Date().getFullYear()
+					var m = new Date().getMonth()
+					var f= new Date(y, m+1, 1);
 					
-				    var date = new Date(data_today);
+				    var date = new Date(f);
 					var dd2 = date.getDate()
 					var mm2 = (date.getMonth() + 1)
-					var day_tomorrow = dd + 1;
+					
 					var data_tomorrow =  date.getFullYear() + '-' + (mm2 <= 9 ? '0' + mm2 : mm2 ) + '-' +  (dd2   <= 9 ? '0' + dd2 : dd2);
 					adapter.log.debug(data_today + ' ' + uhrzeit);
 					adapter.log.debug("date_tomorrow"+data_tomorrow );
