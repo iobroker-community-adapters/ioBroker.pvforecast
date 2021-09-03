@@ -138,7 +138,7 @@ async function getPV () {
 					var d = new Date();
 					var dd = d.getUTCDate();
 					var mm = d.getUTCMonth() + 1;
-					var yy= date.getFullYear();
+					var yy= d.getUTCFullYear();
 					var h = d.getHours();
 					var m = d.getMinutes();
 					var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
@@ -173,9 +173,8 @@ async function getPV () {
     
 					if (dd < tage ){
 						dd = dd +1
-						var data_tomorrow = date.getFullYear() + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd   <= 9 ? '0' + dd : dd);						
+						var data_tomorrow = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd   <= 9 ? '0' + dd : dd);						
 					}else if (dd >= tage -1){
-						var y = new Date().getUTCFullYear();
 						var m = new Date().getMonth();
 						var f= new Date(y, m+1, 1);
 						
@@ -183,7 +182,7 @@ async function getPV () {
 						var dd2 = date.getDate()
 						var mm2 = (date.getMonth() + 1)
 						
-						var data_tomorrow =  date.getUTCFullYear() + '-' + (mm2 <= 9 ? '0' + mm2 : mm2 ) + '-' +  (dd2   <= 9 ? '0' + dd2 : dd2);
+						var data_tomorrow =  yy + '-' + (mm2 <= 9 ? '0' + mm2 : mm2 ) + '-' +  (dd2   <= 9 ? '0' + dd2 : dd2);
 					};
 					
 	
