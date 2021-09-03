@@ -134,6 +134,7 @@ async function getPV () {
 			
 		let res = response.data.result;
 		adapter.log.debug('Json axios '+JSON.stringify(response.data.result));
+
 					var d = new Date();
 					var dd = d.getUTCDate();
 					var mm = d.getUTCMonth() + 1;
@@ -144,20 +145,60 @@ async function getPV () {
 					var data_today = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
 					
 		
-					var y = new Date().getFullYear()
-					var m = new Date().getMonth()
-					var f= new Date(y, m+1, 1);
-					
-				    var date = new Date(f);
-					var dd2 = date.getDate()
-					var mm2 = (date.getMonth() + 1)
-					
-					var data_tomorrow =  date.getFullYear() + '-' + (mm2 <= 9 ? '0' + mm2 : mm2 ) + '-' +  (dd2   <= 9 ? '0' + dd2 : dd2);
-					adapter.log.debug(data_today + ' ' + uhrzeit);
-					adapter.log.debug("date_tomorrow"+data_tomorrow );
+
+
 					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd); //aktueller tag
 					var datetime =data_today + ' ' + uhrzeit;
 
+					let tage = dd;
+					let jahr_a = yy;
+
+					
+					
+					if (mm == 1 || mm == 3 || mm == 5 || mm == 7 || mm == 8 || mm == 10 || mm == 12) {
+						tage == 31;
+					}
+					else if (mm ==4 || mm== 6 || mm== 9){
+						tage = 30;
+					} 
+					else {
+						if (jahr_a%4 == 0){
+							tage = 29;
+						}
+						else {
+							tage = 28
+						};
+					}; 
+
+                    log(tage);
+					log(dd);
+					if (dd < tage ){
+						dd = dd +1
+						var data_tomorrow =  date.getFullYear() + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd   <= 9 ? '0' + dd : dd);						
+					}else if (dd >= tage -1){
+						var y = new Date().getFullYear()
+						var m = new Date().getMonth()
+						var f= new Date(y, m+1, 1);
+						
+						var date = new Date(f);
+						var dd2 = date.getDate()
+						var mm2 = (date.getMonth() + 1)
+						
+						var data_tomorrow =  date.getFullYear() + '-' + (mm2 <= 9 ? '0' + mm2 : mm2 ) + '-' +  (dd2   <= 9 ? '0' + dd2 : dd2);
+					};
+					
+	
+                    log(data_tomorrow);		
+					
+					
+					
+					adapter.log.debug(data_today + ' ' + uhrzeit);
+					adapter.log.debug("date_tomorrow"+data_tomorrow );					
+					
+					
+					
+					
+					
 					
 		let wattstunden_tag = res.watt_hours_day[data_today];
 		let wattstunden_tag_tomorrow = res.watt_hours_day[data_tomorrow];
