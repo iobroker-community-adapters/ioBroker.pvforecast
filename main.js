@@ -170,8 +170,7 @@ async function getPV () {
 						};
 					}; 
 
-                    log(tage);
-					log(dd);
+    
 					if (dd < tage ){
 						dd = dd +1
 						var data_tomorrow =  date.getFullYear() + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd   <= 9 ? '0' + dd : dd);						
@@ -188,7 +187,7 @@ async function getPV () {
 					};
 					
 	
-                    log(data_tomorrow);		
+
 					
 					
 					
