@@ -169,7 +169,7 @@ async function getPV () {
 							tage = 28
 						};
 					}; 
-
+					adapter.log.debug("Anzahl der tage im Monat: "+ tage + "  Monatstag:" +dd);
     
 					if (dd < tage ){
 						dd = dd +1
