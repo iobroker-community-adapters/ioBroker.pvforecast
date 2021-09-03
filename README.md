@@ -30,6 +30,9 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 ## Changelog
 
 
+### 0.0.3
+* (Patrick Walther) added datapoint power_day_tomorrow
+* 
 ### 0.0.2
 * (Patrick Walther) added data JSONgraph and JSONtable, fix failure with personal account(url)
 
