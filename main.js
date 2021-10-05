@@ -153,7 +153,7 @@ async function getPV () {
 					let tage = dd;
 					let jahr_a = yy;
 
-					
+					adapter.log.debug( "Monat:" + mm);
 					
 					if (mm == 1 || mm == 3 || mm == 5 || mm == 7 || mm == 8 || mm == 10 || mm == 12) {
 						tage == 31;
