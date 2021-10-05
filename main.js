@@ -155,13 +155,16 @@ async function getPV () {
 
 					adapter.log.debug( "Monat:" + mm);
 					
-					if (mm == "1" || mm == "3" || mm == "5" || mm == "7" || mm == "8" || mm == "10" || mm == "12") {
+					if (mm == 1 || mm == 3 || mm == 5 || mm == 7 || mm == 8 || mm == 10 || mm == 12) {
 						tage == 31;
+						adapter.log.debug( "Monat 1-3-5-7-8-10-12:" + mm + " Tage im Monat": + tage);
 					}
-					else if (mm =="4" || mm== "6" || mm== "9"){
+					else if (mm ==4 || mm== 6 || mm== 9){
 						tage = 30;
+						adapter.log.debug( "Monat 1-3-5-7-8-10-12:" + mm+ " Tage im Monat": + tage);
 					} 
 					else {
+						
 						if (jahr_a%4 == 0){
 							tage = 29;
 						}
