@@ -151,17 +151,16 @@ async function getPV () {
 					var datetime =data_today + ' ' + uhrzeit;
 
 					let tage = dd;
+					let monate = mm;
 					let jahr_a = yy;
 
 					adapter.log.debug( "Monat:" + mm);
 					
-					if (mm == 1 || mm == 3 || mm == 5 || mm == 7 || mm == 8 || mm == 10 || mm == 12) {
+					if (monate == 1 || monate == 3 || monate == 5 || monate == 7 || monate == 8 || monate == 10 || monate == 12) {
 						tage == 31;
-						adapter.log.debug( "Monat 1-3-5-7-8-10-12:" + mm + " Tage im Monat": + tage);
 					}
-					else if (mm ==4 || mm== 6 || mm== 9){
+					else if (monate ==4 || monate== 6 || monate== 9){
 						tage = 30;
-						adapter.log.debug( "Monat 1-3-5-7-8-10-12:" + mm+ " Tage im Monat": + tage);
 					} 
 					else {
 						
