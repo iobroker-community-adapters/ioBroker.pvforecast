@@ -176,7 +176,7 @@ async function getPV () {
 						var data_tomorrow = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd   <= 9 ? '0' + dd : dd);						
 					}else if (dd >= tage -1){
 						var m = new Date().getMonth();
-						var f= new Date(y, m+1, 1);
+						var f= new Date(yy, m+1, 1);
 						
 						var date = new Date(f);
 						var dd2 = date.getDate()
