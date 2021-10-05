@@ -156,15 +156,15 @@ async function getPV () {
 
 					adapter.log.debug( "Monat:" + mm);
 					
-					if ((monate = 1 || monate = 3 || monate = 5 || monate = 7 || monate = 8 || monate = 10 || monate = 12)) {
+					if (monate == 1 || monate == 3 || monate == 5 || monate == 7 || monate == 8 || monate == 10 || monate == 12) {
 						tage == 31;
 					}
-					else if ((monate = 4 || monate = 6 || monate = 9)){
+					else if (monate == 4 || monate == 6 || monate == 9){
 						tage = 30;
 					} 
 					else {
 						
-						if ((jahr_a%4 = 0)){
+						if (jahr_a%4 == 0){
 							tage = 29;
 						}
 						else {
