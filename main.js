@@ -150,9 +150,9 @@ async function getPV () {
 					var date_1 = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd); //aktueller tag
 					var datetime =data_today + ' ' + uhrzeit;
 
-					var tage = 0;
-					var monate = mm;
-					var jahr_a = yy;
+					let tage = '0';
+					let monate = mm;
+					let jahr_a = yy;
 
 					adapter.log.debug( "Monat:" + mm);
 					
