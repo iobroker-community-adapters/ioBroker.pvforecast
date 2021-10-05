@@ -156,6 +156,10 @@ async function getPV () {
 
 					adapter.log.debug( "Monat:" + mm);
 					
+					if (mm == 10 || monate == 10){
+						tage == 31;				
+					};
+					
 					if (monate == 1 || monate == 3 || monate == 5 || monate == 7 || monate == 8 || monate == 10 || monate == 12) {
 						tage == 31;
 					}
@@ -171,6 +175,7 @@ async function getPV () {
 							tage = 28
 						};
 					}; 
+					
 					adapter.log.debug("Anzahl der tage im Monat: "+ tage + "  Monatstag:" +dd);
     
 					if (dd < tage ){
