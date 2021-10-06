@@ -157,21 +157,50 @@ async function getPV () {
 					adapter.log.debug( "Monat:" + mm);
 					
 
-					if ( monate == 3 ||  monate == 5 || monate ==  7 ||monate ==  8 ||monate == 10 ||monate ==  12) {
-						tage == 31;
-					}
-					else if (monate == '4' ||monate == '6' || monate == '9'){
-						tage = 30;
-					} 
-					else {
-						
-						if (jahr_a%4 == 0){
-							tage = 29;
-						}
-						else {
-							tage = 28
-						};
-					}; 
+
+                    switch(mm){
+                        case 1:
+                            tage = 31;
+                            break;
+                        case 2:
+                            if (jahr_a%4 == 0){
+                                tage = 29;
+                            }
+                            else {
+                                tage = 28;
+                            };
+                            break;
+                        case 3:
+                            tage = 31;
+                            break;
+                        case 4:
+                            tage = 30;
+                            break;                        
+                        case 5:
+                           tage = 31;
+                           break;
+                        case 6:
+                            tage = 30;
+                            break;
+                        case 7:
+                            tage = 31;
+                            break;
+                        case 8:
+                            tage = 31;
+                            break;
+                        case 9:
+                            tage = 30;
+                            break;
+                        case 10:
+                            tage = 31;
+                            break;
+                         case 11:
+                            tage = 30;
+                            break;                                      
+                        case 12:
+                            tage = 31;
+                            break;
+                    };
 					
 					adapter.log.debug("Anzahl der tage im Monat: "+ tage + "  Monatstag:" +dd);
     
