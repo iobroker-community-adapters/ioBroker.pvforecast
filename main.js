@@ -355,11 +355,12 @@ async function getPV () {
 	for (let index = 1; index < 6; index++) {
 		if (plant_activ[index-1] == true){
 			const stateValue = await adapter.getStateAsync(index + '.object');
-			
-			var obj2 = JSON.parse(stateValue.val).result;
+			if (statevalue != null){
+				var obj2 = JSON.parse(stateValue.val).result;
 
-			übergabe_power_kw[index] = obj2.watts;
-			übergabe_power_kwh[index] = obj2.watt_hours;
+				übergabe_power_kw[index] = obj2.watts;
+				übergabe_power_kwh[index] = obj2.watt_hours;
+			}
 		}
 	}
 	
