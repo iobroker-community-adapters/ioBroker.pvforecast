@@ -1,0 +1,62 @@
+
+* {
+    box-sizing: border-box
+}
+.m {
+
+    overflow: hidden;
+}
+
+#header-area {margin-top: 2px; margin-bottom: 1px; background-color:#007a99;} /*174475*/
+#header-area #header-logo-title .logo {float:left; margin-right: 10px;}
+#header-area #header-logo-title p {line-height: normal !important; margin: 0 !important; padding: 8px 0 0 8px;}
+#header-area #header-logo-title p>span.h-title {font-size: 2em !important; color:white; }
+#header-area #header-logo-title p>span.h-sub-title {font-size: 1.1em !important; color:white; font-style: italic; }
+
+
+#body-area {margin-top: 2px; margin-bottom: 1px; background-color:#007a99;}
+#body-area #body-logo-title .logo {float:left; margin-right: 10px;}
+#body-area #body-logo-title p {line-height: high !important; margin: 0 !important; padding: 8px 0 0 8px;}
+#body-area #body-logo-title p>span.h-title {font-size: 2em !important; color:white; padding: 8px 0 0 8px; }
+#body-area #body-logo-title p>span.h-sub-title {font-size: 1.1em !important; color:white; font-style: italic; padding: 8px 0 0 8px; }
+
+.m .col .select-wrapper + label {
+    top: -26px;
+}
+
+.m span {
+    font-size: 0.9em;
+}
+
+.m .tabs {
+    height: 48px;
+}
+
+.m .page {
+    height: calc(100% - 160px);
+}
+
+.do-restore {
+    cursor: pointer;
+}
+
+.collapsible-body {
+    margin-left: 2rem !important;
+    padding-top: 0 !important;
+}
+
+
+.modal .page {
+    width: calc(100% - 20px) !important;
+}
+
+.m .collapsible-header {
+    padding: 0.5rem;
+}
+.trigger-add {
+    margin-top: 1.3rem;
+    margin-left: -0.5rem;
+}
+.m .modal .modal-footer {
+    padding-right: 2rem;
+}

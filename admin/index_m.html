@@ -3,6 +3,7 @@
 <!-- these 4 files always have to be included -->
 <link rel="stylesheet" type="text/css" href="../../lib/css/materialize.css">
 <link rel="stylesheet" type="text/css" href="../../css/adapter.css"/>
+<link rel="stylesheet" type="text/css" href="style.css" />
 
 <script type="text/javascript" src="../../lib/js/jquery-1.11.1.min.js"></script>
 <script type="text/javascript" src="../../socket.io/socket.io.js"></script>
@@ -12,6 +13,7 @@
 <script type="text/javascript" src="../../lib/js/materialize.js"></script>
 <script type="text/javascript" src="../../js/adapter-settings.js"></script>
 <script type="text/javascript" src="words.js"></script>
+
 <!-- you have to define 2 functions in the global scope: -->
 <script type="text/javascript">
 
@@ -68,11 +70,10 @@
 			}
         });
 		
-		if (($('#pvname').val() == '')  ) {
+		if (($('#pvname1').val() == '')  ) {
             showMessage(_('Please entry pvname data'));
             return;
         }
-
 		
 		if (($('#longitude').val() == '')  ) {
             showMessage(_('Please entry longitude data'));
@@ -84,17 +85,17 @@
            return;
         }
 		
-		if (($('#tilt').val() == '') ) {
+		if (($('#tilt1').val() == '') ) {
             showMessage(_('Please entry tilt data'));
            return;
         }
 
-		if (($('#Azimuth').val() == '') ) {
+		if (($('#Azimuth1').val() == '') ) {
             showMessage(_('Please entry Azimuth data'));
            return;
         }	
 		
-		if (($('#Plantp').val() == '') ) {
+		if (($('#Plantp1').val() == '') ) {
             showMessage(_('Please entry Plant performance data'));
            return;
         }
@@ -103,13 +104,11 @@
             showMessage(_('Please entry link data'));
            return;
         }
-
 		
 		if (($('#account').val() == '') ) {
             showMessage(_('Please choose the account '));
            return;
-        }
-		
+        }	
 
 		if (($('#APIK').val() == '') && ($('#account').val() == 'account-Personal')) {
             showMessage(_('Please entry api key data'));
@@ -119,8 +118,6 @@
             showMessage(_('Please entry api key data'));
            return;
         }			
-
-
 		
         callback(obj);
     }
@@ -129,86 +126,423 @@
 <body>
 <!-- you have to put your config page in a div with id adapter-container -->
 <div class="m adapter-container">
-    <div class="row">
-        <div class="col s12 m4 l2">
-            <img src="template.png" class="logo">
+
+        <div id="header-area" class="row" >
+            <div id="header-logo-title" class="col s6" >
+                <img class="logo" src="template.png" >
+                <p>
+                    <span class="translate h-title">Pvforecast<br></span>
+                    <span class="translate h-sub-title">forecast for your photovoltaik</span>
+                </p>
+            </div>
         </div>
-    </div>
-    <div class="row">
-    	
-		<div class="col s12 m4 l2 input-field" >
-			<select class="value" id="account" size="4">
-				<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
-				<option value="account-professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
-<!--				<option value="account-Enterprise" class="translate">Enterprise</option>	<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
-			</select>
-			<label for="account" class="translate">Account</label>
-			<span class="translate">Konto</span>
+	<!-- Settings -->	
+	<div  id="body-area" class="row">
+        <div id="body-logo-title" class="col s6" >		
+			<p>
+				<span class="translate h-sub-title">Settings</span>
+			</p>	
 		</div>
+	</div>
+	
+	<div class="row">					
+		<div class="row">
+				<div class="col s12 m4 l2 input-field" >
+				<select class="value" id="account" size="4">
+					<option value="account-public" class="translate">Public</option>				<!-- https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp -->
+					<option value="account-personal" class="translate">Personal</option>			<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp -->
+					<option value="account-professional" class="translate">Professional</option>	<!-- https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec1/:az1/:kwp1/:dec2/:az2/:kwp2/:dec3/:az3/:kwp3 -->
+				</select>
+				<label for="account" class="translate">Account</label>
+				<span class="translate">Konto</span>
+			</div>
+
+			<div class="col s3 input-field">
+				<input type="text" class="value" id="linkdata" />
+				<span for="linkdata">Link von Solar Forecast</label>
+				<label for="linkdata" class="translate">Link from Solar Forecast</label>
+				<label for="text" class="translate"></label>
+				<span class="translate">https://api.forecast.solar</span> 
+			</div>
+
+
+			<div class="col s3 input-field">
+				<input type="text" class="value" id="APIK" />
+				<span for="APIK">API Schlüssel</label>
+				<label for="APIK" class="translate">API Key</label>
+			</div>	
+
+			<div class="col s2 input-field">
+				<input type="text"  class="value" id="longitude" />
+				<span for="longitude">Längengrad</label>
+				<label for="longitude" class="translate">longitude</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text"  class="value" id="latitude" />
+				<span for="latitude">Breitengrad</label>
+				<label for="latitude" class="translate">latitude</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text"  class="value" id="datalabel_rotation1" />
+				<span for="datalabel_rotation1">datalabel rotaion</span>
+				<label for="datalabel_rotation1" class="translate">datalabel rotaion</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text"  class="value" id="axisy_step1" />
+				<span for="axisy_step1">Y-Achse Step</span>
+				<label for="axisy_step1" class="translate">Y-Achse Step</label>
+			</div>
+		</div>			
+		
+		<div class="row">	
+			<div class="col s2 input-field">			
+				<p> 				
+				plane declination(tilt), 0 (horizontal) … 90 (vertical)
+				</p>
+			</div>		
+			
+			<div class="col s2 input-field">			
+				<p> 
+				azimuth, -180 … 180 (-180 = north, -90 = east, 0 = south, 90 = west, 180 = north)
+				</p>
+			</div>	
 				
-		<div class="col s5 input-field">
-			<input type="text" class="value" id="APIK" />
-			<span for="APIK">API Schlüssel</label>
-			<label for="APIK" class="translate">API Key</label>
-		</div>	
-		
-		<div class="col s5 input-field">
-			<input type="text" class="value" id="pvname" />
-			<span for="pvname">Anlagen Name</label>
-			<label for="pvname" class="translate">Plant name</label>
-		</div>	
-	</div>
-	
-	<div class="row">
-		<div class="col s2 input-field">
-			<input type="text"  class="value" id="longitude" />
-			<span for="longitude">Längengrad</label>
-			<label for="longitude" class="translate">longitude</label>
-		</div>
+			<div class="col s2 input-field">			
+				<p> 
+				kwp - installed modules power in kilo watt
+			</p>
+			</div>	
+			<div class="col s2 input-field">			
+				<p> 	
+				latitude -90 (south) … 90 (north)
+				</p>
+			</div>
+			
+			<div class="col s2 input-field">			
+				<p> 
+				longitude -180 (west) … 180 (east)
+				</p>
+			</div>	
 
-		<div class="col s2 input-field">
-			<input type="text"  class="value" id="latitude" />
-			<span for="latitude">Breitengrad</label>
-			<label for="latitude" class="translate">latitude</label>
+			<div class="col s2 input-field">			
+				<p> 
+				datalabel rotaion -90° … 90°
+				</p>
+			</div>	
+
+
 			
 		</div>
-    
-		<div class="col s2 input-field">
-			<input type="text"  class="value" id="tilt" />
-			<span for="tilt">Neigung</label>
-			<label for="tilt" class="translate">Tilt</label>
+	</div>		
+	<!-- Plant1 -->	
+
+	<div  id="body-area" class="row">
+        <div id="body-logo-title" class="col s6" >		
+			<p>
+				<span class="translate h-sub-title">Plant1</span>
+			</p>	
 		</div>
+	</div>
+	<div class="row">		
+		<div class="row">
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="tilt1" />
+				<span for="tilt1">Neigung</label>
+				<label for="tilt1" class="translate">Tilt</label>
+			</div>
+			
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="Azimuth1" />
+				<span for="Azimuth1">Azimuth</label>
+				<label for="Azimuth1" class="translate">Azimuth</label>
+			</div>
 		
-		<div class="col s2 input-field">
-			<input type="text"  class="value" id="Azimuth" />
-			<span for="Azimuth">Azimuth</label>
-			<label for="Azimuth" class="translate">Azimuth</label>
-		</div>
-	
-		<div class="col s3 input-field">
-			<input type="text" class="value" id="Plantp" />
-			<span for="Plantp">Anlagenleistung[kWp]</label>
-			<label for="Plantp" class="translate">Plant performance[kWp]</label>
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="Plantp1" />
+				<span for="Plantp1">Anlagenleistung[kWp]</label>
+				<label for="Plantp1" class="translate">Plant performance[kWp]</label>
+				
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="pvname1" />
+				<span for="pvname1">Anlagen Name</label>
+				<label for="pvname1" class="translate">Plant name</label>
+			</div>
 			
-	    </div>
-	
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="legend1" />
+				<span for="legend1">legend</label>
+				<label for="legend1" class="translate">legend</label>
+			</div>	
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="graphcolor1" />
+				<span for="graphcolor1">graphcolor</label>
+				<label for="graphcolor1" class="translate">graphcolor</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="datalabelColor1" />
+				<span for="datalabelColor1">Labelcolor</label>
+				<label for="datalabelColor1" class="translate">Labelcolor</label>
+			</div>										
+		</div>
+	</div>				
+	<!-- Plant2 -->
+	<div  id="body-area" class="row">
+        <div id="body-logo-title" class="col s6" >		
+			<p>
+				<span class="translate h-sub-title">Plant2</span>
+
+			</p>	
+		</div>
+	</div>
 	<div class="row">	
+		<div class="row">
+			<div class="input-field col s3">
+				<input type="checkbox" class="value" id="plant2_activ" />
+				<span class="translate">plant2 aktiv</span>
+			</div>
+		</div>
 
-		<div class="col s5 input-field">
-			<input type="text" class="value" id="linkdata" />
-			<span for="linkdata">Link von Solar Forecast</label>
-			<label for="linkdata" class="translate">Link from Solar Forecast</label>
-			<label for="text" class="translate"></label>
-			<span class="translate">https://api.forecast.solar</span> 
-		</div>	
-
+		<div class="row">	
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="tilt2" />
+				<span for="tilt2">Neigung</label>
+				<label for="tilt2" class="translate">Tilt</label>
+			</div>
+			
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="Azimuth2" />
+				<span for="Azimuth2">Azimuth</label>
+				<label for="Azimuth2" class="translate">Azimuth</label>
+			</div>			
 		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="Plantp2" />
+				<span for="Plantp2">Anlagenleistung[kWp]</label>
+				<label for="Plantp2" class="translate">Plant performance[kWp]</label>
+				
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="pvname2" />
+				<span for="pvname2">Anlagen Name</label>
+				<label for="pvname2" class="translate">Plant name</label>
+			</div>
+			
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="legend2" />
+				<span for="legend2">legend</label>
+				<label for="legend2" class="translate">legend</label>
+			</div>	
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="graphcolor2" />
+				<span for="graphcolor2">graphcolor</label>
+				<label for="graphcolor2" class="translate">graphcolor</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="datalabelColor2" />
+				<span for="datalabelColor2">Labelcolor</label>
+				<label for="datalabelColor2" class="translate">Labelcolor</label>
+			</div>										
+		</div>
+	</div>			
+	<!-- Plant3 -->
+	<div  id="body-area" class="row">
+        <div id="body-logo-title" class="col s6" >		
+			<p>
+				<span class="translate h-sub-title">Plant3</span>
+			</p>	
+		</div>
 	</div>
-	
+	<div class="row">	
+		
+		<div class="row">
+		
+			<div class="input-field col s3">
+				<input type="checkbox" class="value" id="plant3_activ" />
+				<span class="translate">plant3 aktiv</span>
+			</div>
+			
+		</div>
+		<div class="row">	
+			
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="tilt3" />
+				<span for="tilt3">Neigung</label>
+				<label for="tilt3" class="translate">Tilt</label>
+			</div>
+			
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="Azimuth3" />
+				<span for="Azimuth3">Azimuth</label>
+				<label for="Azimuth3" class="translate">Azimuth</label>
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="Plantp3" />
+				<span for="Plantp3">Anlagenleistung[kWp]</label>
+				<label for="Plantp3" class="translate">Plant performance[kWp]</label>
+				
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="pvname3" />
+				<span for="pvname3">Anlagen Name</label>
+				<label for="pvname3" class="translate">Plant name</label>
+			</div>
+			
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="legend3" />
+				<span for="legend3">legend</label>
+				<label for="legend3" class="translate">legend</label>
+			</div>	
 
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="graphcolor3" />
+				<span for="graphcolor3">graphcolor</label>
+				<label for="graphcolor3" class="translate">graphcolor</label>
+			</div>
 
-	
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="datalabelColor3" />
+				<span for="datalabelColor3">Labelcolor</label>
+				<label for="datalabelColor3" class="translate">Labelcolor</label>
+			</div>										
+		</div>
+	</div>	
+	<!-- Plant4 -->
+	<div  id="body-area" class="row">
+        <div id="body-logo-title" class="col s6" >		
+			<p>
+				<span class="translate h-sub-title">Plant4</span>
+			</p>	
+		</div>
+	</div>
+	<div class="row">	
+		<div class="row">
+		
+			<div class="input-field col s4">
+				<input type="checkbox" class="value" id="plant4_activ" />
+				<span class="translate">plant4 aktiv</span>
+			</div>
+		</div>
+
+		<div class="row">			
+		
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="tilt4" />
+				<span for="tilt4">Neigung</label>
+				<label for="tilt4" class="translate">Tilt</label>
+			</div>
+			
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="Azimuth4" />
+				<span for="Azimuth4">Azimuth</label>
+				<label for="Azimuth4" class="translate">Azimuth</label>
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="Plantp4" />
+				<span for="Plantp4">Anlagenleistung[kWp]</label>
+				<label for="Plantp4" class="translate">Plant performance[kWp]</label>
+				
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="pvname4" />
+				<span for="pvname4">Anlagen Name</label>
+				<label for="pvname4" class="translate">Plant name</label>
+			</div>
+			
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="legend4" />
+				<span for="legend4">legend</label>
+				<label for="legend4" class="translate">legend</label>
+			</div>	
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="graphcolor4" />
+				<span for="graphcolor4">graphcolor</label>
+				<label for="graphcolor4" class="translate">graphcolor</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="datalabelColor4" />
+				<span for="datalabelColor4">Labelcolor</label>
+				<label for="datalabelColor4" class="translate">Labelcolor</label>
+			</div>										
+		</div>
+	</div>
+	<!-- Plant5 -->
+	<div  id="body-area" class="row">
+        <div id="body-logo-title" class="col s6" >		
+			<p>
+				<span class="translate h-sub-title">Plant5</span>
+			</p>	
+		</div>
+	</div>
+	<div class="row">	
+		<div class="row">
+		
+			<div class="input-field col s4">
+				<input type="checkbox" class="value" id="plant5_activ" />
+				<span class="translate">plant5 aktiv</span>
+			</div>
+		</div>
+
+		<div class="row">					
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="tilt5" />
+				<span for="tilt5">Neigung</label>
+				<label for="tilt5" class="translate">Tilt</label>
+			</div>
+			
+			<div class="col s1 input-field">
+				<input type="text"  class="value" id="Azimuth5" />
+				<span for="Azimuth5">Azimuth</label>
+				<label for="Azimuth5" class="translate">Azimuth</label>
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="Plantp5" />
+				<span for="Plantp5">Anlagenleistung[kWp]</label>
+				<label for="Plantp5" class="translate">Plant performance[kWp]</label>
+				
+			</div>
+		
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="pvname5" />
+				<span for="pvname5">Anlagen Name</label>
+				<label for="pvname5" class="translate">Plant name</label>
+			</div>
+			
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="legend5" />
+				<span for="legend5">legend</label>
+				<label for="legend5" class="translate">legend</label>
+			</div>	
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="graphcolor5" />
+				<span for="graphcolor5">graphcolor</label>
+				<label for="graphcolor5" class="translate">graphcolor</label>
+			</div>
+
+			<div class="col s2 input-field">
+				<input type="text" class="value" id="datalabelColor5" />
+				<span for="datalabelColor5">Labelcolor</label>
+				<label for="datalabelColor5" class="translate">Labelcolor</label>
+			</div>										
+		</div>
+	</div>
 </div>
 </body>
 </html>

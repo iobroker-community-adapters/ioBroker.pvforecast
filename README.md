@@ -1,4 +1,4 @@
-![Logo](admin/template.png)
+	![Logo](admin/template.png)
 # ioBroker.pvforecast
 
 # Information
@@ -10,7 +10,7 @@ Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Dat
 1. Account: 
     - Public
     - Personal
-    - Proffesional
+    - Profesional
 2. Längengrad 
 3. Breitengrad
 4. Neigung
@@ -28,8 +28,8 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 
 ## Changelog
-
-
+### 0.1.0
+* (Patrick Walther) add  more plants, add summary, add json graph/table 
 ### 0.0.3
 * (Patrick Walther) added datapoint power_day_tomorrow
 * 

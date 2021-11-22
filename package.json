@@ -1,6 +1,6 @@
 {
   "name": "iobroker.pvforecast",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "description": "pvforecast",
   "author": {
     "name": "Patrick Walther",
@@ -9,7 +9,11 @@
   "homepage": "https://github.com/Patrick-Walther/ioBroker.pvforecast",
   "license": "MIT",
   "keywords": [
-    "pvforecast"
+      "Photovoltaik",
+      "PV",
+      "Forecast",
+	  "Prognose",
+	  "Ertrag"
   ],
   "repository": {
     "type": "git",
