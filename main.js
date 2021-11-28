@@ -814,7 +814,7 @@ async function create_delete_state (){
 			}
 		}
 
-		await  adapter.setObjectNotExistsAsync('summary.JSONTable',{
+	/*	await  adapter.setObjectNotExistsAsync('summary.JSONTable',{
 			type: 'state',
 			common: {
 				name: "history-Json",
@@ -824,7 +824,7 @@ async function create_delete_state (){
 				write: false
 			},
 			native: {}
-		});
+		});*/
 
 	} catch (err) {
 				// ignore
