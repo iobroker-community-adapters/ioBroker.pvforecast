@@ -1,24 +1,37 @@
-
+/* You can delete those if you want. I just found them very helpful */
 * {
     box-sizing: border-box
 }
 .m {
-
+    /* Don't cut off dropdowns!
+    overflow: initial;*/
     overflow: hidden;
 }
 
-#header-area {margin-top: 2px; margin-bottom: 1px; background-color:#007a99;} /*174475*/
+/* Add your styles here */
+/* Header section*/
+#header-area {margin-top: 2px; margin-bottom: 1px; background-color:#007a99;}
 #header-area #header-logo-title .logo {float:left; margin-right: 10px;}
-#header-area #header-logo-title p {line-height: normal !important; margin: 0 !important; padding: 8px 0 0 8px;}
+#header-area #header-logo-title p {line-height: normal !important; margin: 0 !important; padding: 20px 0 0 8px;}
 #header-area #header-logo-title p>span.h-title {font-size: 2em !important; color:white; }
-#header-area #header-logo-title p>span.h-sub-title {font-size: 1.1em !important; color:white; font-style: italic; }
+#header-area #header-logo-title p>span.h-sub-title {font-size: 1.1em !important; color:white; font-style: italic; padding: 20px 0 0 8px;}
 
+/* Tabs menu */
+.m .tabs .tab a { color: rgba(13, 134, 231, 0.7); } /* Color */
+.m .tabs .tab a { padding: 0 5px; } /* space of x px at beginning and end of text  */
+.m .tabs .active { border-bottom: 2px solid #0d47a1; font-weight: bold;}
+.m .tabs .tab a.active, .m .tabs .tab a:hover { color:#0d47a1; }
+.m .tabs .tab a:hover { border-bottom: 2px solid #46a0e9 !important; }
+.m .row .col.m1 { width: 14%;}
+#tab-area { padding-left:0;padding-right:0; margin-top: 0px; margin-bottom: 1px; background-color:#174475; box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 1px 5px 0 rgba(0, 0, 0, 0.12), 0 3px 1px -2px rgba(0, 0, 0, 0.2) }
 
-#body-area {margin-top: 2px; margin-bottom: 1px; background-color:#007a99;}
-#body-area #body-logo-title .logo {float:left; margin-right: 10px;}
-#body-area #body-logo-title p {line-height: high !important; margin: 0 !important; padding: 8px 0 0 8px;}
-#body-area #body-logo-title p>span.h-title {font-size: 2em !important; color:white; padding: 8px 0 0 8px; }
-#body-area #body-logo-title p>span.h-sub-title {font-size: 1.1em !important; color:white; font-style: italic; padding: 8px 0 0 8px; }
+/* Tabs menu react-dark */
+.m.react-dark .tabs .tab a.active, .m .tabs .tab a:hover { color: #2196f3; }
+.m.react-dark .tabs { background-color: #272727 !important;}
+
+/* Tabs menu react-blue */
+.m.react-blue .tabs .tab a.active, .m .tabs .tab a:hover { color: #2196f3; }
+.m.react-blue .tabs { background-color: #272727 !important;}
 
 .m .col .select-wrapper + label {
     top: -26px;
@@ -36,20 +49,118 @@
     height: calc(100% - 160px);
 }
 
+#dialog-command {
+    width: calc(100% - 100px);
+}
+
+#dialog-command .title {
+    background: #174475;
+    color: #FFF;
+    padding: 0.5rem;
+}
+
+#dialog-command .textarea {
+    margin-bottom: 0;
+}
+
+#dialog-command textarea {
+    background: #e9e9e9;
+    font-family: courier, monospace;
+    font-size: 11px;
+    resize: none;
+    width: 100%;
+    height: calc(100% - 125px);
+    margin-bottom: 0;
+}
+
+#dialog-command .progress-dont-close {
+    float: left;
+    padding-left: 1rem;
+    padding-top: 1rem;
+}
+
+#dialog-command .command {
+    font-style: italic;
+}
+
+#dialog-command .btn {
+    margin-right: 1.5rem;
+}
+
 .do-restore {
     cursor: pointer;
 }
 
 .collapsible-body {
     margin-left: 2rem !important;
-    padding-top: 0 !important;
+    padding-top:20px !important;
 }
 
+#dialog-shutter-edit .title {
+    width: 100% !important;
+    background: #174475;
+    color: #FFF;
+    padding: 0.3rem;
+}
 
 .modal .page {
     width: calc(100% - 20px) !important;
 }
 
+#dialog-shutter-edit .modal-content {
+    width: 100% !important;
+    height: calc(100% - 10px) !important;
+}
+
+#dialog-shutter-edit .tabs {
+    width: calc(100% - 0px) !important;
+    margin-top: -25px;
+    height: auto !important;
+}
+#dialog-shutter-edit .titlePopUp {
+    width: 100% !important;
+    background: #174475;
+    color: #FFF;
+    padding: 0.2rem;
+}
+
+#dialog-shutter-edit .page {
+    width: calc(100% - 10px) !important;
+    padding-left:20;
+    height: calc(100% - 100px);
+}
+/*
+#dialog-shutter-edit .btn {
+    margin-right: 1.5rem;
+}
+*/
+/* hidden table column */
+#events td:nth-of-type(n+7) {
+    visibility: hidden !important;
+    display: none !important;
+}
+/* hidden table column */
+#events th:nth-of-type(n+7) {
+    visibility: hidden !important;
+    display: none !important;
+}
+
+#dialog-select-member {
+    z-index: 9999 !important;
+}
+
+#dialog-shutter-edit {
+    z-index: 9900 !important;
+}
+
+#dialog-shutter-edit {
+    max-height: 95% !important;
+    max-width: 85% !important;
+    width: 80% !important;
+    height: 90% !important;
+    overflow: visible !important;
+    top: 10px !important;
+}
 .m .collapsible-header {
     padding: 0.5rem;
 }

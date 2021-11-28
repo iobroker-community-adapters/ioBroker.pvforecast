@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.0",
+    "version": "0.1.2",
     "news":{
+      "0.1.2": {
+        "en": "new settings design, new logo, remove Bugfixes",
+        "de": "neues Einstellungsdesign, neues Logo, Bugfixes entfernen",
+        "ru": "новый дизайн настроек, новый логотип, удаление исправлений",
+        "pt": "novo design de configurações, novo logotipo, remover correções de bugs",
+        "nl": "nieuw instellingenontwerp, nieuw logo, bugfixes verwijderen",
+        "fr": "nouvelle conception des paramètres, nouveau logo, suppression des corrections de bugs",
+        "it": "nuovo design delle impostazioni, nuovo logo, rimozione di bugfix",
+        "es": "nuevo diseño de configuración, nuevo logotipo, eliminar correcciones de errores",
+        "pl": "nowy projekt ustawień, nowe logo, usuń poprawki",
+        "zh-cn": "新的设置设计，新的标志，删除错误修正"
+      },
       "0.1.0": {
 		"en": "add 5 plants",
 		"de": "5 Pflanzen hinzufügen",
