@@ -148,7 +148,7 @@ function main() {
 
 	getPV();
 	create_delete_state();
-	gethistory;
+	//gethistory();
 }
 	
 async function getPV () {
