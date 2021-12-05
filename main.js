@@ -1001,7 +1001,7 @@ async function getweather () {
 						weather_data1 = response.data.result;
 						adapter.log.debug('Json weather axios ' + JSON.stringify(weather_data1));
 						adapter.setState('weather.object',{val:JSON.stringify(response.data.result), ack:true});
-						weather_data();
+
 					})
 					.catch(function (error) {
 						if (error == "Error: Request failed with status code 429") {
