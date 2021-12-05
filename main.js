@@ -525,8 +525,8 @@ async function getPV () {
 
 			var obj2 = JSON.parse(stateValue.val).result;
 
-			übergabe_power_kw[index-1] = obj2.watts;
-			übergabe_power_kwh[index-1] = obj2.watt_hours;
+			übergabe_power_kw[index] = obj2.watts;
+			übergabe_power_kwh[index] = obj2.watt_hours;
 
 			let obj5 = JSON.parse(stateValue.val).message;
 			let place1 = obj5.info.place;
@@ -545,7 +545,7 @@ async function getPV () {
 	adapter.log.debug('vorübergabe_power_kw[2]: ' + JSON.stringify(übergabe_power_kw[2]));
 	adapter.log.debug('vorübergabe_power_kw[3]: ' + JSON.stringify(übergabe_power_kw[3]));
 	adapter.log.debug('vorübergabe_power_kw[4]: ' + JSON.stringify(übergabe_power_kw[4]));
-	adapter.log.debug('vorübergabe_power_kw[5]: ' + JSON.stringify(übergabe_power_kw[4]));
+	adapter.log.debug('vorübergabe_power_kw[5]: ' + JSON.stringify(übergabe_power_kw[5]));
 
 	var d = new Date();
 	var dd = d.getUTCDate();
@@ -563,6 +563,8 @@ async function getPV () {
 
 	let watts1 = übergabe_power_kw[1]; let	watts2 = übergabe_power_kw[2]; let	watts3 = übergabe_power_kw[3]; let	watts4 = übergabe_power_kw[4]; let	watts5 = übergabe_power_kw[5];
 
+
+
 	for(let time in watts1) {
 
 		let pos1 = time.indexOf(':00:00');
@@ -574,14 +576,15 @@ async function getPV () {
 			let entry = {};
 			entry.Uhrzeit = time;
 			entry.Leistung1 = watts1[time];
-			if (plant2_activ2){entry.Leistung2 = watts2[time]}
-			if (plant3_activ3){entry.Leistung3 = watts3[time]}
-			if (plant4_activ4){entry.Leistung4 = watts4[time]}
-			if (plant5_activ5){entry.Leistung5 = watts5[time]}
-			if (plant2_activ2 ){entry.summe = watts1[time] +  watts2[time]}
-			if (plant2_activ2  && plant3_activ3){entry.summe = watts1[time] +  watts2[time] +  watts3[time]}
-			if (plant2_activ2  && plant3_activ3  &&  plant4_activ4){entry.summe = watts1[time] +  watts2[time] +  watts3[time] +  watts4[time]}
-			if (plant2_activ2  && plant3_activ3  &&  plant4_activ4 &&  plant5_activ5){entry.summe = watts1[time] +  watts2[time] +  watts3[time] +  watts4[time] +  watts5[time]}
+			if (plant2_active2){entry.Leistung2 = watts2[time]}
+			if (plant3_active3){entry.Leistung3 = watts3[time]}
+			if (plant4_active4){entry.Leistung4 = watts4[time]}
+			if (plant5_active5){entry.Leistung5 = watts5[time]}
+			if (plant1_active1 ){entry.summe = watts1[time]}
+			if (plant2_active2 ){entry.summe = watts1[time] +  watts2[time]}
+			if (plant2_active2  && plant3_activ3){entry.summe = watts1[time] +  watts2[time] +  watts3[time]}
+			if (plant2_active2  && plant3_activ3  &&  plant4_activ4){entry.summe = watts1[time] +  watts2[time] +  watts3[time] +  watts4[time]}
+			if (plant2_active2  && plant3_activ3  &&  plant4_activ4 &&  plant5_activ5){entry.summe = watts1[time] +  watts2[time] +  watts3[time] +  watts4[time] +  watts5[time]}
 
 			table.push(entry);
 		}
