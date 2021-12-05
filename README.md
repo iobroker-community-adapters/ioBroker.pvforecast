@@ -55,7 +55,7 @@ Gehe zum <a href="#top">Anfang</a><br>
 <h1 id="zweitens">Documentation</h1>
 This Adapter replaced the javascript from the iobroker forum https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter
 
-The adapter take the roh data from https://api.forecast.solar and filter this information:
+The adapter take the roh data from https://api.forecast.solar and need this information:
 
 settings:
 1. longitude
