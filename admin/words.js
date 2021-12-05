@@ -410,7 +410,7 @@ systemDictionary = {
 		"pl": "kolor etykiety danych",
 		"zh-cn": "数据标签颜色"
 	},
-   "datalabel Color5": {
+    "datalabel Color5": {
 		"en": "datalabel Color",
 		"de": "Datenetikett Farbe",
 		"ru": "цвет метки данных",
@@ -505,7 +505,115 @@ systemDictionary = {
 		"es": "latitud",
 		"pl": "szerokość",
 		"zh-cn": "纬度"
-    }
+    },  
+	"weather": {
+		"en": "weather",
+		"de": "Wetter",
+		"ru": "Погода",
+		"pt": "clima",
+		"nl": "het weer",
+		"fr": "conditions météorologiques",
+		"it": "tempo metereologico",
+		"es": "clima",
+		"pl": "pogoda",
+		"zh-cn": "天气"
+    },  
+	"weather_active": {
+		"en": "weather acive",
+		"de": "Wetter aktiv",
+		"ru": "погода активная",
+		"pt": "tempo ativo",
+		"nl": "weer actief",
+		"fr": "météo active",
+		"it": "tempo attivo",
+		"es": "clima activo",
+		"pl": "pogoda aktywna",
+		"zh-cn": "天气活跃"
+    },  
+	"plant1": {
+		"en": "plant1",
+		"de": "Anlage1",
+		"ru": "растение1",
+		"pt": "plant1",
+		"nl": "plant1",
+		"fr": "plante1",
+		"it": "pianta1",
+		"es": "planta1",
+		"pl": "roślina1",
+		"zh-cn": "工厂1"
+    },  
+	"plant2": {
+		"en": "plant2",
+		"de": "Anlage2",
+		"ru": "растение2",
+		"pt": "plant2",
+		"nl": "plant2",
+		"fr": "plante2",
+		"it": "pianta2",
+		"es": "planta2",
+		"pl": "roślina2",
+		"zh-cn": "工厂2"
+    },  
+	"plant3": {
+		"en": "plant3",
+		"de": "Anlage3",
+		"ru": "растение3",
+		"pt": "plant3",
+		"nl": "plant3",
+		"fr": "plante3",
+		"it": "pianta3",
+		"es": "planta3",
+		"pl": "roślina3",
+		"zh-cn": "工厂3"
+    },  
+	"plant4": {
+		"en": "plant4",
+		"de": "Anlage4",
+		"ru": "растение4",
+		"pt": "plant4",
+		"nl": "plant4",
+		"fr": "plante4",
+		"it": "pianta4",
+		"es": "planta4",
+		"pl": "roślina4",
+		"zh-cn": "工厂4"
+    },  
+	"plant5": {
+		"en": "plant5",
+		"de": "Anlage5",
+		"ru": "растение5",
+		"pt": "plant5",
+		"nl": "plant5",
+		"fr": "plante5",
+		"it": "pianta5",
+		"es": "planta5",
+		"pl": "roślina5",
+		"zh-cn": "工厂5"
+    },
+	"comment": {
+		"en": "comment",
+		"de": "Kommentar",
+		"ru": "комментарий",
+		"pt": "Comente",
+		"nl": "opmerking",
+		"fr": "commenter",
+		"it": "commento",
+		"es": "comentario",
+		"pl": "komentarz",
+		"zh-cn": "评论"
+    },
+	"settings": {
+		"en": "settings",
+		"de": "Einstellungen",
+		"ru": "настройки",
+		"pt": "definições",
+		"nl": "instellingen",
+		"fr": "Les paramètres",
+		"it": "impostazioni",
+		"es": "ajustes",
+		"pl": "ustawienia",
+		"zh-cn": "设置"
+  }	
 };
 
 
