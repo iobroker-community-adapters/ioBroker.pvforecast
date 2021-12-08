@@ -1,6 +1,12 @@
 
+![Logo](docs/de/img/pvforecast.png)
+# pvforecast - Adapter zu vorhersage eurer PV Erträge
 
-<h1 id="zweitens">Documentation</h1>
+**If you like it, please consider a donation:**
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UYB92ZVNEFNF6&source=url)
+
+
 This Adapter replaced the javascript from the iobroker forum https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter
 
 The adapter take the roh data from https://api.forecast.solar and need this information:
@@ -39,4 +45,3 @@ all this information are needed, that the adapter runs perfect.
 If longitde and latitude in the iobroker main settings, the adapter will fill out the fields automatic.
 
 
-go to the<a href="#top">top</a><br>
