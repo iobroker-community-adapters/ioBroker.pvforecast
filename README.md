@@ -1,8 +1,16 @@
 <h1 id="top"></h1>
+
 ![Logo](admin/template.png)
+# pvforecast - Adapter zu vorhersage eure PV Erträge
+
 
 
 # ioBroker.pvforecast
+
+**If you like it, please consider a donation:**
+
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UYB92ZVNEFNF6&source=url)
+
 <p>
 Hier findest du die Dokumentation auf <a href="#erstens">Deutsch</a><br>
 Here you can find the documentation in <a href="#zweitens">Englisch</a><br>
@@ -98,13 +106,16 @@ go to the<a href="#top">top</a><br>
 
 <h1 id="drittens">Changelog</h1>
 ## Changelog
+
 ### 0.1.2
 * (Patrick Walther) remove bugfixes, add weather forecast(api), add new logo from forecast.solar 
+
 ### 0.1.0
 * (Patrick Walther) add  more plants, add summary, add json graph/table 
+
 ### 0.0.3
 * (Patrick Walther) added datapoint power_day_tomorrow
-* 
+
 ### 0.0.2
 * (Patrick Walther) added data JSONgraph and JSONtable, fix failure with personal account(url)
 
