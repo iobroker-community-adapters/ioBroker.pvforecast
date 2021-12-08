@@ -1,5 +1,5 @@
+![Logo](img/pvforecast.png)
 
-![Logo](docs/de/img/pvforecast.png)
 # pvforecast - Adapter zu vorhersage eurer PV Erträge
 
 **If you like it, please consider a donation:**
