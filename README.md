@@ -1,8 +1,7 @@
 <h1 id="top"></h1>
 
-![Logo](admin/template.png)
+![Logo](docs/de/img/pvforecast.png)
 # pvforecast - Adapter zu vorhersage eure PV Erträge
-
 
 **If you like it, please consider a donation:**
 
