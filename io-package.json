@@ -111,6 +111,8 @@
     "platform": "Javascript/Node.js",
     "mode": "daemon",
     "icon": "template.png",
+    "connectionType": "cloud",
+    "dataSource": "push",
     "materialize": true,
     "enabled": false,
     "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/template.png",
