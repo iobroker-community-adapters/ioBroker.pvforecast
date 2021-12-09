@@ -3,7 +3,6 @@
     "name": "pvforecast",
     "version": "0.1.3",
     "news":{
-
       "0.1.3": {
         "de": "history, mehrtägige Vorschau"
       },
