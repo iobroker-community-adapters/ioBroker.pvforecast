@@ -105,8 +105,7 @@
     ],
     "docs": {
 	"en": "docs/en/admin.md",
-	"de": "docs/de/admin.md",
-	  
+	"de": "docs/de/admin.md"
     },
     "license": "MIT",
     "platform": "Javascript/Node.js",
