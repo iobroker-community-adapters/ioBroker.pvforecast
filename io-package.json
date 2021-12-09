@@ -76,6 +76,18 @@
 		"pl": "Prognoza PV",
 		"zh-cn": "PV预测"
     },
+    "titleLang": {
+	    "en": "pvforecast",
+	    "de": "pvforecast",
+	    "ru": "pvforecast",
+	    "pt": "pvforecast",
+	    "nl": "pvprognose",
+	    "fr": "pvprévision",
+	    "it": "pvforecast",
+	    "es": "pvforecast",
+	    "pl": "prognoza pv",
+	    "zh-cn": "预测"
+        },
     "desc": {
 		"en": "This Adapter can use for read photovoltaics forecast from \"forecast.solar\"",
 		"de": "Dieser Adapter kann zum Lesen der Photovoltaik-Vorhersage von \"Forecast.Solar\" verwendet werden.",
@@ -106,7 +118,7 @@
     "mode": "daemon",
     "icon": "template.png",
     "materialize": true,
-    "enabled": true,
+    "enabled": false,
     "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/template.png",
     "keywords": [
       "Photovoltaik",
