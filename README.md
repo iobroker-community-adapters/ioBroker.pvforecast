@@ -13,6 +13,8 @@ forecast your pv earnings
 
 
 ## Changelog
+### 0.1.4
+* (Patrick Walther)add hourly forecast
 
 ### 0.1.2
 * (Patrick Walther) remove bugfixes, add weather forecast(api), add new logo from forecast.solar 
