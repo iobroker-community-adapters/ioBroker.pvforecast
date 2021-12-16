@@ -46,7 +46,10 @@ all this information are needed, that the adapter runs perfect.
 If longitde and latitude in the iobroker main settings, the adapter will fill out the fields automatic.
 
 # vis exmaple
-If you want to take the json graph and table you can use this ![exmaple](https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/main/docs/example/visdocs/example/vis)
+Please install: ![Material Design](https://github.com/Scrounger/ioBroker.vis-materialdesign) before you use the example.
+If you want to take the json graph and table you can use this ![exmaple](https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/main/docs/example/vis/)
+
+
 
 
 # test setting
