@@ -1,6 +1,6 @@
 {
-  "name": "iobroker.pvforecast",
-  "version": "0.1.2",
+  "name": "pvforecast",
+  "version": "0.1.4",
   "description": "pvforecast",
   "author": {
     "name": "Patrick Walther",

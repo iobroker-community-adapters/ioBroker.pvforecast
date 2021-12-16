@@ -1,8 +1,32 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.2",
+    "version": "0.1.4",
     "news":{
+      "0.1.4": {
+        "en": "add hour interval",
+        "de": "Stundenintervall hinzufügen",
+        "ru": "добавить часовой интервал",
+        "pt": "adicionar intervalo de hora",
+        "nl": "uur interval toevoegen",
+        "fr": "ajouter un intervalle d'heures",
+        "it": "aggiungi intervallo di ore",
+        "es": "agregar intervalo de horas",
+        "pl": "dodaj interwał godzinowy",
+        "zh-cn": "添加小时间隔"
+      },
+      "0.1.3": {
+        "en": "add weather",
+        "de": "Wetter hinzufügen",
+        "ru": "добавить погоду",
+        "pt": "adicionar clima",
+        "nl": "weer toevoegen",
+        "fr": "ajouter la météo",
+        "it": "aggiungi meteo",
+        "es": "agregar clima",
+        "pl": "dodaj pogodę",
+        "zh-cn": "添加天气"
+      },
       "0.1.2": {
         "en": "new settings design, new logo, remove Bugfixes",
         "de": "neues Einstellungsdesign, neues Logo, Bugfixes entfernen",
@@ -26,7 +50,7 @@
 		"es": "agregar 5 plantas",
 		"pl": "dodaj 5 roślin",
 		"zh-cn": "添加5种植物"
-      },		
+      },
       "0.0.3": {
 		"en": "add new datapoint power_day_kWh_tomorrow",
 		"de": "neuen Datenpunkt power_day_kWh_tomorrow hinzufügen",
@@ -38,7 +62,7 @@
 		"es": "agregar un nuevo punto de datos power_day_kWh_tomorrow",
 		"pl": "dodaj nowy punkt danych power_day_kWh_tomorrow",
 		"zh-cn": "添加新数据点 power_day_kWh_tomorrow"
-      },			
+      },
       "0.0.2": {
 		"en": "add jsongraph and jsontable, fix failure personal link",
 		"de": "jsongraph und jsontable hinzufügen, Fehler beim persönlichen Link beheben",
@@ -50,7 +74,7 @@
 		"es": "agregue jsongraph y jsontable, corrija el enlace personal de falla",
 		"pl": "dodaj jsongraph i jsontable, napraw osobisty link awarii",
 		"zh-cn": "添加jsongraph和jsontable，修复失败的个人链接"
-      },		
+      },
       "0.0.1": {
         "en": "initial adapter",
         "de": "Initiale Version",
@@ -135,7 +159,7 @@
     ]
   },
   "native": {
-   
+
   },
   "objects": [],
   "instanceObjects": [
@@ -274,7 +298,7 @@
                 "write": true
             },
             "native": {}
-        },	
+        },
 		{
             "_id": "1.JSONTable",
             "type": "state",
