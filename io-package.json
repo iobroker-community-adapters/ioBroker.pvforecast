@@ -1,6 +1,6 @@
 {
   "common": {
-    "name": "pvforecast",
+    "name": "ioBroker.pvforecast",
     "version": "0.1.4",
     "news":{
       "0.1.4": {
