@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.4",
+    "version": "0.1.5",
     "news":{
+      "0.1.5": {
+        "en": "fix everyhour failure",
+        "de": "stündliche Störung beheben",
+        "ru": "исправить каждый час сбоя",
+        "pt": "consertar todas as falhas de hora",
+        "nl": "elk uur storing oplossen",
+        "fr": "réparer les pannes toutes les heures",
+        "it": "risolvere ogni ora il fallimento",
+        "es": "arreglar cada hora de fallas",
+        "pl": "napraw cogodzinną awarię",
+        "zh-cn": "修复每小时故障"
+      },
       "0.1.4": {
         "en": "add hour interval",
         "de": "Stundenintervall hinzufügen",

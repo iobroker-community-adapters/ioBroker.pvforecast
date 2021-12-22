@@ -62,7 +62,7 @@ function main() {
 
 	let weather_active = adapter.config.weather_active;
 
-	if(weather_active === true) {
+	if(weather_active == true) {
 		getweather();
 	}
 }
@@ -70,9 +70,9 @@ function main() {
 // request data from server
 const calc = schedule.scheduleJob('datenübertragen', '1 4 * * *', async function () {
 	getPV();
-	everyhour_data();
+
 	let weather_active = adapter.config.weather_active;
-	if(weather_active === true) {
+	if(weather_active == true) {
 		getweather ();
 	}
 });
@@ -81,7 +81,7 @@ const calc = schedule.scheduleJob('datenübertragen', '1 4 * * *', async functio
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
 
 	let weather_active = adapter.config.weather_active;
-	if(weather_active === true) {
+	if(weather_active == true) {
 		weather_data();
 	}
 
@@ -246,22 +246,22 @@ async function getPV () {
 	adapter.log.info('urls: ' + urls[0]);
 	adapter.log.info('Plant1 -> tilt: ' + Neigung1 + ' Azimuth: ' + Azimuth1 + ' Plant-performance: ' + Anlagenleistung1 + ' plant name: ' + pvname1);
 
-	if (plant2_active2 === true){
+	if (plant2_active2 == true){
 		urls[1]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[1]+'/'+azimuth[1]+'/'+kwp[1]
 		adapter.log.info('urls: ' + urls[1]);
 		adapter.log.info('Plant2 -> tilt: ' + Neigung2 + ' Azimuth: ' + Azimuth2 + ' Plant-performance: ' + Anlagenleistung2 + ' plant name: ' + pvname2);
 	}
-	if (plant3_active3 === true){
+	if (plant3_active3 == true){
 		urls[2]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[2]+'/'+azimuth[2]+'/'+kwp[2]
 		adapter.log.info('urls: ' + urls[2]);
 		adapter.log.info('Plant3 -> tilt: ' + Neigung3 + ' Azimuth: ' + Azimuth3 + ' Plant-performance: ' + Anlagenleistung3 + ' plant name: ' + pvname3);
 	}
-	if (plant4_active4 === true){
+	if (plant4_active4 == true){
 		urls[3]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[3]+'/'+azimuth[3]+'/'+kwp[3]
 		adapter.log.info('urls: ' + urls[3]);
 		adapter.log.info('Plant4 -> tilt: ' + Neigung4 + ' Azimuth: ' + Azimuth4 + ' Plant-performance: ' + Anlagenleistung4 + ' plant name: ' + pvname4);
 	}
-	if (plant5_active5=== true){
+	if (plant5_active5== true){
 		urls[4]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[4]+'/'+azimuth[4]+'/'+kwp[4]
 		adapter.log.info('urls: ' + urls[4]);
 		adapter.log.info('Plant5 -> tilt: ' + Neigung5 + ' Azimuth: ' + Azimuth5 + ' Plant-performance: ' + Anlagenleistung5 + ' plant name: ' + pvname5);
@@ -387,9 +387,9 @@ async function getPV () {
 
 				})
 				.catch(function(error) {
-					if (error === "Error: Request failed with status code 429"){
+					if (error == "Error: Request failed with status code 429"){
 						adapter.log.error('too many data requests');
-					} else if (error === "Error: Request failed with status code 400"){
+					} else if (error == "Error: Request failed with status code 400"){
 						adapter.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
 					} else{
 						adapter.log.error('Axios Error '+ error);
@@ -436,7 +436,7 @@ async function getPV () {
 	var uebergabe_power_kwh = [uebergabe_power_kwh1,uebergabe_power_kwh2,uebergabe_power_kwh3,uebergabe_power_kwh4,uebergabe_power_kwh5];
 
 	for (let index = 1; index < 6; index++) {
-		if (plant_active[index-1] === true){
+		if (plant_active[index-1] == true){
 			const stateValue = await adapter.getStateAsync(index + '.object');
 
 			var obj2 = JSON.parse(stateValue.val).result;
@@ -594,7 +594,7 @@ async function getPV () {
 	adapter.log.debug('write zero to everyhour')
 	let nulldata = 0;
 	for (let index = 1; index < 6; index++){
-		if (plant_d_everyhour[index-1] ===true && plant_active[index-1] ===true) {
+		if (plant_d_everyhour[index-1] == true && plant_active[index-1] == true) {
 
 			adapter.log.debug('index: '+index+' plant_d_everyhour: '+ plant_d_everyhour[index-1] +'plant_active: ' +plant_active[index-1]);
 			for (let j = 5; j < 22; j++) {
@@ -627,10 +627,12 @@ async function create_delete_state (){
 
 		adapter.log.debug('plant_active: '  + plant_active);
 
+		let apikey = adapter.config.APIK;
 		let weather_active = adapter.config.weather_active;
-		adapter.log.debug('weather_active: ' + weather_active);
 
-		if (weather_active === true ) {
+		adapter.log.debug('weather_active: ' + weather_active);
+		let step = 0;
+		if (weather_active == true ) {
 			await adapter.setObjectNotExistsAsync('weather.object', {
 				type: 'state',
 				common: {
@@ -744,7 +746,7 @@ async function create_delete_state (){
 				},
 				native: {}
 			});
-		} else  if (weather_active === false) {
+		} else  if (weather_active == false) {
 			await adapter.delObjectAsync('weather.object');
 			await adapter.delObjectAsync('weather.datetime');
 			await adapter.delObjectAsync('weather.sky');
@@ -758,7 +760,7 @@ async function create_delete_state (){
 		}
 
 		for (let index = 1; index < 6; index++) {
-			if (plant_active[index-1] === true){
+			if (plant_active[index-1] == true){
 				await  adapter.setObjectNotExistsAsync(index + '.power_day_kWh', {
 					type: 'state',
 					common: {
@@ -896,7 +898,7 @@ async function create_delete_state (){
 					native: {}
 				});
 
-			} else if (plant_active[index-1] === false){
+			} else if (plant_active[index-1] == false){
 
 				await  adapter.delObjectAsync(index + '.JSONTable');
 				await  adapter.delObjectAsync(index + '.JSONGraph');
@@ -910,15 +912,81 @@ async function create_delete_state (){
 				await  adapter.delObjectAsync(index + '.power_day_tomorrow_kWh');
 				await  adapter.delObjectAsync(index + '.lastUpdated_data');
 				await  adapter.delObjectAsync(index + '.power_day_kWh');
-
 			}
 		}
 
+		adapter.log.debug('plant-everyhour');
 		for (let index = 1; index < 6; index++) {
-			if (plant_d_everyhour[index - 1] === true && plant_active[index - 1] ===true) {
+			if (plant_d_everyhour[index - 1] == true && plant_active[index - 1] == true) {
 				for (let j = 5; j < 22; j++) {
-					for (let i = 0; i < 59; i = i + 15) {
-						await adapter.setObjectNotExistsAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+					if (apikey != '') {
+						adapter.log.debug('mit key');
+						for (let i = 0; i < 59; i = i + 15) {
+							await adapter.setObjectNotExistsAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+								type: 'state',
+								common: {
+									name: "power_kW",
+									type: 'number',
+									role: 'value',
+									read: true,
+									write: false
+								},
+								native: {}
+							});
+						}
+					} else if(apikey == '') {
+						adapter.log.debug('ohne key');
+							for (let i = 15; i < 50; i = i + 15) {
+								//adapter.log.debug('apiky zeit: ' + i);
+								await adapter.delObjectAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':'+ (i <= 9 ? '0' + i : i) + ':00');
+							}
+						await adapter.setObjectNotExistsAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+							type: 'state',
+							common: {
+								name: "power_kW",
+								type: 'number',
+								role: 'value',
+								read: true,
+								write: false
+							},
+							native: {}
+						});
+						}
+					}
+			} else if (plant_d_everyhour[index - 1] == false && plant_active[index - 1] == false){
+				for (let j = 5; j < 22; j++) {
+						for (let i = 0; i < 59; i = i + 15) {
+							await adapter.delObjectAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
+						}
+					}
+				}
+			}
+
+		for (let index = 1; index < 6; index++) {
+			if (plant_d_everyhour[0] || plant_d_everyhour[1] ||plant_d_everyhour[2]||plant_d_everyhour[3]||plant_d_everyhour[4]) {
+				for (let j = 5; j < 22; j++) {
+					if (apikey != '') {
+						adapter.log.debug('mit key');
+						for (let i = 0; i < 59; i = i + 15) {
+							await adapter.setObjectNotExistsAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+								type: 'state',
+								common: {
+									name: "power_kW",
+									type: 'number',
+									role: 'value',
+									read: true,
+									write: false
+								},
+								native: {}
+							});
+						}
+					} else if(apikey == '') {
+						adapter.log.debug('ohne key');
+						for (let i = 15; i < 50; i = i + 15) {
+							//adapter.log.debug('apiky zeit: ' + i);
+							await adapter.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':'+ (i <= 9 ? '0' + i : i) + ':00');
+						}
+						await adapter.setObjectNotExistsAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 							type: 'state',
 							common: {
 								name: "power_kW",
@@ -931,35 +999,11 @@ async function create_delete_state (){
 						});
 					}
 				}
-			} else {
+			} else if (plant_d_everyhour[index - 1] == false && plant_active[index - 1] == false){
 				for (let j = 5; j < 22; j++) {
 					for (let i = 0; i < 59; i = i + 15) {
-						await adapter.delObjectAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
+						await adapter.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
 					}
-				}
-			}
-		}
-
-		if (plant_d_everyhour[0]) {
-			for (let j = 5; j < 22; j++) {
-				for (let i = 0; i < 59; i = i + 15) {
-					await adapter.setObjectNotExistsAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
-						type: 'state',
-						common: {
-							name: "power_kW",
-							type: 'number',
-							role: 'value',
-							read: true,
-							write: false
-						},
-						native: {}
-					});
-				}
-			}
-		} else {
-			for (let j = 5; j < 22; j++) {
-				for (let i = 0; i < 59; i = i + 15) {
-					await adapter.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
 				}
 			}
 		}
@@ -972,7 +1016,7 @@ async function create_delete_state (){
 async function getweather () {
 
 	let weather_active = adapter.config.weather_active;
-	let apikey_weater = adapter.config.APIK
+	let apikey_weater = adapter.config.APIK;
 	let lon = adapter.config.longitude
 	let lat = adapter.config.latitude;
 	let forcastUrl = adapter.config.linkdata;
@@ -996,9 +1040,9 @@ async function getweather () {
 
 					})
 					.catch(function (error) {
-						if (error === "Error: Request failed with status code 429") {
+						if (error == "Error: Request failed with status code 429") {
 							adapter.log.error('too many data requests');
-						} else if (error === "Error: Request failed with status code 400") {
+						} else if (error == "Error: Request failed with status code 400") {
 							adapter.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
 						} else {
 							adapter.log.error('Axios Error ' + error);
@@ -1079,7 +1123,14 @@ async function everyhour_data () {
 	let plant5_d_everyhour = adapter.config.plant5_everyhour;
 	let plant_d_everyhour = [plant1_d_everyhour, plant2_d_everyhour, plant3_d_everyhour, plant4_d_everyhour, plant5_d_everyhour];
 
+	let apikey = adapter.config.APIK;
+
 	adapter.log.debug('plant_d_everyhour' + plant_d_everyhour);
+	adapter.log.debug('plant_d_everyhour1' + plant1_d_everyhour);
+	adapter.log.debug('plant_d_everyhour2' + plant2_d_everyhour);
+	adapter.log.debug('plant_d_everyhour3' + plant3_d_everyhour);
+	adapter.log.debug('plant_d_everyhour4' + plant4_d_everyhour);
+	adapter.log.debug('plant_d_everyhour5' + plant5_d_everyhour);
 
 
 	let uebergabe_power_kw1 = 0;	let uebergabe_power_kw2 = 0;	let uebergabe_power_kw3 = 0;	let uebergabe_power_kw4 = 0;	let uebergabe_power_kw5 = 0;
@@ -1089,7 +1140,28 @@ async function everyhour_data () {
 	var uebergabe_power_kwh = [uebergabe_power_kwh1,uebergabe_power_kwh2,uebergabe_power_kwh3,uebergabe_power_kwh4,uebergabe_power_kwh5];
 
 	for (let index = 1; index < 6; index++) {
-		if (plant_d_everyhour[index-1] ===true && plant_active[index-1] ===true) {
+		if (plant_d_everyhour[index - 1] == true && plant_active[index - 1] == true) {
+			for (let j = 5; j < 22; j++) {
+				if (apikey != '') {
+					adapter.log.debug('mit key');
+					for (let i = 0; i < 59; i = i + 15) {
+						adapter.setState(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+							val: '0',
+							ack: true
+						});
+					}
+				} else {
+					adapter.log.debug('ohne key');
+					adapter.setState(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+						val: '0',
+						ack: true
+					});
+				}
+			}
+		}
+	}
+	for (let index = 1; index < 6; index++) {
+		if (plant_d_everyhour[index-1] == true && plant_active[index-1] == true) {
 			const stateValue = await adapter.getStateAsync(index + '.object');
 			if (stateValue !== '') {
 				var obj2 = JSON.parse(stateValue.val).result;
@@ -1100,52 +1172,80 @@ async function everyhour_data () {
 	}
 
 	let watts1 = uebergabe_power_kw[1]; let	watts2 = uebergabe_power_kw[2]; let	watts3 = uebergabe_power_kw[3]; let	watts4 = uebergabe_power_kw[4]; let	watts5 = uebergabe_power_kw[5];
-	let watts1_data;
-	let watts2_data;
-	let watts3_data;
-	let watts4_data;
-	let watts5_data;
+
+	let watts1_data;	let watts2_data;	let watts3_data;	let watts4_data;	let watts5_data;
+
+
+
+	let pos1;	let pos2;	let pos3;	let pos4;	let a=0;
 
 	for(let time in watts1) {
+
 		let today = new Date();
 		let month = today.getUTCMonth() +1;
 		let year = today.getUTCFullYear();
 		let day = today.getUTCDate();
-		let pos5 = (year+'-'+ month  + '-'+day);
-		let pos1 = time.indexOf(pos5 + ' ' +time.substr(-8,2)+':00:00');
-		let pos2 = time.indexOf(pos5+ ' ' +time.substr(-8,2)+':15:00');
-		let pos3= time.indexOf(pos5 + ' ' +time.substr(-8,2)+':30:00');
-		let pos4= time.indexOf(pos5 + ' '+ time.substr(-8,2)+':45:00');
+		let pos5 = time.indexOf(year+'-'+ month  + '-'+day);
+		adapter.log.debug('pos5'+pos5)
 
-		if((pos1 !== -1) ||(pos2 !== -1)||(pos3 !== -1) ||(pos4 !== -1)  )  {
+		if(apikey != ''){
+			adapter.log.debug('erveryhour_filter_an');
+			pos1 = time.indexOf(time.substr(-8,2)+':00:00');
+			pos2 = time.indexOf(':15:00');
+			pos3 = time.indexOf(':30:00');
+			pos4 = time.indexOf(':45:00');
+		} else {
+			adapter.log.debug('erveryhour_filter_aus');
+			pos1 = time.indexOf(time.substr(-8,2)+':00:00');
+		}
+
+		//adapter.log.debug('pos1'+ pos1);
+		//adapter.log.debug('pos2'+ pos2);
+		//adapter.log.debug('pos3'+ pos3);
+		//adapter.log.debug('pos4'+ pos4);
+		//adapter.log.debug('pos5'+ pos5);
+
+		if((pos1 != -1 ||pos2 != -1||pos3 != -1 ||pos4 != -1) && (pos5 != -1)  )  {
 
 			let time2 =time.substr(-8,8);
 
-			if (plant_d_everyhour[0] ===true && plant_active[0] ===true){
+			adapter.log.debug('time2'+time2);
+			if (plant_d_everyhour[0] == true && plant_active[0] == true){
 				watts1_data =  JSON.parse(watts1[time]);
 				adapter.setState('1.everyhour_kw.' + time2,{val: watts1_data, ack:true});
-		/*	}	else {
-				watts1_data = 0;
-				adapter.setState('1.everyhour_kw.' + time2,{val: watts1_data, ack:true});*/
+				//adapter.log.debug('watts1_data'+ watts1_data);
 			}
-			if (plant_d_everyhour[1] ===true && plant_active[1] ===true){
+			if (plant_d_everyhour[1] == true && plant_active[1] == true){
 				watts2_data =  JSON.parse(watts2[time]);
 				adapter.setState('2.everyhour_kw.' + time2,{val: watts2_data, ack:true});
+				//adapter.log.debug('watts2_data'+ watts2_data);
 			}
-			if (plant_d_everyhour[2] ===true && plant_active[2] ===true){
+			if (plant_d_everyhour[2] == true && plant_active[2] == true){
 				watts3_data =  JSON.parse(watts3[time]);
 				adapter.setState('3.everyhour_kw.' + time2,{val: watts3_data, ack:true});
+				//adapter.log.debug('watts3_data'+ watts3_data);
 			}
-			if (plant_d_everyhour[3] ===true && plant_active[3] ===true){
+			if (plant_d_everyhour[3] == true && plant_active[3] == true){
 				watts4_data =  JSON.parse(watts4[time]);
 				adapter.setState('4.everyhour_kw.' + time2,{val: watts4_data, ack:true});
+				//adapter.log.debug('watts4_data'+ watts4_data);
 			}
-			if (plant_d_everyhour[4] ===true && plant_active[4] ===true){
+			if (plant_d_everyhour[4] == true && plant_active[4] == true){
 				watts5_data =  JSON.parse(watts5[time]);
 				adapter.setState('5.everyhour_kw.' + time2,{val: watts5_data, ack:true});
+				//adapter.log.debug('watts5_data'+ watts5_data);
 			}
-			if (plant_d_everyhour[0] ===true || plant_d_everyhour[1] ===true|| plant_d_everyhour[2] ===true||plant_d_everyhour[3] ===true||plant_d_everyhour[4] ===true) {
+
+			if (plant_d_everyhour[0] == true || plant_d_everyhour[1] == true || plant_d_everyhour[2] == true || plant_d_everyhour[3] == true || plant_d_everyhour[4] == true) {
+
+				if(watts1_data == null){watts1_data = 0}
+				if(watts2_data == null){watts2_data = 0}
+				if(watts3_data == null){watts3_data = 0}
+				if(watts4_data == null){watts4_data = 0}
+				if(watts5_data == null){watts5_data = 0}
+
 				let a = watts1_data + watts2_data + watts3_data + watts4_data + watts5_data;
+				//adapter.log.debug('summary' + a);
 				adapter.setState('summary.everyhour_kw.' + time2, {val: a, ack: true});
 			}
 		}
