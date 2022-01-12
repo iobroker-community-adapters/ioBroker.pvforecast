@@ -1185,17 +1185,18 @@ async function everyhour_data () {
 		let month = today.getUTCMonth() +1;
 		let year = today.getUTCFullYear();
 		let day = today.getUTCDate();
+		month = (month <= 9 ? '0' + month : month);
+		day = (day <= 9 ? '0'+ day : day);
 		let pos5 = time.indexOf(year+'-'+ month  + '-'+day);
-		adapter.log.debug('pos5'+pos5)
 
 		if(apikey != ''){
-			adapter.log.debug('erveryhour_filter_an');
+			//adapter.log.debug('erveryhour_filter_an');
 			pos1 = time.indexOf(time.substr(-8,2)+':00:00');
 			pos2 = time.indexOf(':15:00');
 			pos3 = time.indexOf(':30:00');
 			pos4 = time.indexOf(':45:00');
 		} else {
-			adapter.log.debug('erveryhour_filter_aus');
+			//adapter.log.debug('erveryhour_filter_aus');
 			pos1 = time.indexOf(time.substr(-8,2)+':00:00');
 		}
 
