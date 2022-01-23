@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.5",
-    "news":{
+    "version": "0.1.6",
+    "news": {
+      "0.1.6": {
+        "en": "fix failure",
+        "de": "Fehler beheben",
+        "ru": "исправить сбой",
+        "pt": "corrigir falha",
+        "nl": "fout oplossen",
+        "fr": "réparer l'échec",
+        "it": "correggere il fallimento",
+        "es": "arreglar falla",
+        "pl": "napraw awarię",
+        "zh-cn": "修复失败"
+      },
       "0.1.5": {
         "en": "fix everyhour failure",
         "de": "stündliche Störung beheben",
@@ -52,40 +64,40 @@
         "zh-cn": "新的设置设计，新的标志，删除错误修正"
       },
       "0.1.0": {
-		"en": "add 5 plants",
-		"de": "5 Pflanzen hinzufügen",
-		"ru": "добавить 5 растений",
-		"pt": "adicione 5 plantas",
-		"nl": "voeg 5 planten toe",
-		"fr": "ajouter 5 plantes",
-		"it": "aggiungi 5 piante",
-		"es": "agregar 5 plantas",
-		"pl": "dodaj 5 roślin",
-		"zh-cn": "添加5种植物"
+        "en": "add 5 plants",
+        "de": "5 Pflanzen hinzufügen",
+        "ru": "добавить 5 растений",
+        "pt": "adicione 5 plantas",
+        "nl": "voeg 5 planten toe",
+        "fr": "ajouter 5 plantes",
+        "it": "aggiungi 5 piante",
+        "es": "agregar 5 plantas",
+        "pl": "dodaj 5 roślin",
+        "zh-cn": "添加5种植物"
       },
       "0.0.3": {
-		"en": "add new datapoint power_day_kWh_tomorrow",
-		"de": "neuen Datenpunkt power_day_kWh_tomorrow hinzufügen",
-		"ru": "добавить новую точку данных power_day_kWh_tomorrow",
-		"pt": "adicionar novo ponto de dados power_day_kWh_tomorrow",
-		"nl": "nieuw datapunt toevoegen power_day_kWh_tomorrow",
-		"fr": "ajouter un nouveau point de données power_day_kWh_tomorrow",
-		"it": "aggiungi nuovo datapoint power_day_kWh_tomorrow",
-		"es": "agregar un nuevo punto de datos power_day_kWh_tomorrow",
-		"pl": "dodaj nowy punkt danych power_day_kWh_tomorrow",
-		"zh-cn": "添加新数据点 power_day_kWh_tomorrow"
+        "en": "add new datapoint power_day_kWh_tomorrow",
+        "de": "neuen Datenpunkt power_day_kWh_tomorrow hinzufügen",
+        "ru": "добавить новую точку данных power_day_kWh_tomorrow",
+        "pt": "adicionar novo ponto de dados power_day_kWh_tomorrow",
+        "nl": "nieuw datapunt toevoegen power_day_kWh_tomorrow",
+        "fr": "ajouter un nouveau point de données power_day_kWh_tomorrow",
+        "it": "aggiungi nuovo datapoint power_day_kWh_tomorrow",
+        "es": "agregar un nuevo punto de datos power_day_kWh_tomorrow",
+        "pl": "dodaj nowy punkt danych power_day_kWh_tomorrow",
+        "zh-cn": "添加新数据点 power_day_kWh_tomorrow"
       },
       "0.0.2": {
-		"en": "add jsongraph and jsontable, fix failure personal link",
-		"de": "jsongraph und jsontable hinzufügen, Fehler beim persönlichen Link beheben",
-		"ru": "добавить jsongraph и jsontable, исправить сбой личной ссылки",
-		"pt": "adicionar jsongraph e jsontable, corrigir falha no link pessoal",
-		"nl": "voeg jsongraph en jsontable toe, herstel de persoonlijke link van de fout failure",
-		"fr": "ajouter jsongraph et jsontable, corriger le lien personnel d'échec",
-		"it": "aggiungi jsongraph e jsontable, correggi il collegamento personale di errore",
-		"es": "agregue jsongraph y jsontable, corrija el enlace personal de falla",
-		"pl": "dodaj jsongraph i jsontable, napraw osobisty link awarii",
-		"zh-cn": "添加jsongraph和jsontable，修复失败的个人链接"
+        "en": "add jsongraph and jsontable, fix failure personal link",
+        "de": "jsongraph und jsontable hinzufügen, Fehler beim persönlichen Link beheben",
+        "ru": "добавить jsongraph и jsontable, исправить сбой личной ссылки",
+        "pt": "adicionar jsongraph e jsontable, corrigir falha no link pessoal",
+        "nl": "voeg jsongraph en jsontable toe, herstel de persoonlijke link van de fout failure",
+        "fr": "ajouter jsongraph et jsontable, corriger le lien personnel d'échec",
+        "it": "aggiungi jsongraph e jsontable, correggi il collegamento personale di errore",
+        "es": "agregue jsongraph y jsontable, corrija el enlace personal de falla",
+        "pl": "dodaj jsongraph i jsontable, napraw osobisty link awarii",
+        "zh-cn": "添加jsongraph和jsontable，修复失败的个人链接"
       },
       "0.0.1": {
         "en": "initial adapter",
@@ -97,319 +109,171 @@
       }
     },
     "title": {
-		"en": "PV-Forecast",
-		"de": "PV-Prognose",
-		"ru": "PV-прогноз",
-		"pt": "Previsão PV",
-		"nl": "PV-voorspelling",
-		"fr": "Prévisions PV",
-		"it": "Previsione PV",
-		"es": "PV-Forecast",
-		"pl": "Prognoza PV",
-		"zh-cn": "PV预测"
+      "en": "PV-Forecast",
+      "de": "PV-Prognose",
+      "ru": "PV-прогноз",
+      "pt": "Previsão PV",
+      "nl": "PV-voorspelling",
+      "fr": "Prévisions PV",
+      "it": "Previsione PV",
+      "es": "PV-Forecast",
+      "pl": "Prognoza PV",
+      "zh-cn": "PV预测"
     },
     "titleLang": {
-	    "en": "pvforecast",
-	    "de": "pvforecast",
-	    "ru": "pvforecast",
-	    "pt": "pvforecast",
-	    "nl": "pvprognose",
-	    "fr": "pvprévision",
-	    "it": "pvforecast",
-	    "es": "pvforecast",
-	    "pl": "prognoza pv",
-	    "zh-cn": "预测"
-        },
+      "en": "pvforecast",
+      "de": "pvforecast",
+      "ru": "pvforecast",
+      "pt": "pvforecast",
+      "nl": "pvprognose",
+      "fr": "pvprévision",
+      "it": "pvforecast",
+      "es": "pvforecast",
+      "pl": "prognoza pv",
+      "zh-cn": "预测"
+    },
     "desc": {
-		"en": "This Adapter can use for read photovoltaics forecast from \"forecast.solar\"",
-		"de": "Dieser Adapter kann zum Lesen der Photovoltaik-Vorhersage von \"Forecast.Solar\" verwendet werden.",
-		"ru": "Этот адаптер можно использовать для считывания прогнозов по фотоэлектрической энергии из \"прогноз.solar\"",
-		"pt": "Este adaptador pode ser usado para ler a previsão fotovoltaica de \"forecast.solar\"",
-		"nl": "Deze adapter kan worden gebruikt voor het lezen van fotovoltaïsche voorspellingen van \"forecast.solar\"",
-		"fr": "Cet adaptateur peut être utilisé pour lire les prévisions photovoltaïques à partir de \"prévisions.solar\"",
-		"it": "Questo adattatore può essere utilizzato per leggere le previsioni del fotovoltaico da \"forecast.solar\"",
-		"es": "Este adaptador se puede utilizar para leer el pronóstico de energía fotovoltaica de \"forecast.solar\"",
-		"pl": "Ten adapter może służyć do odczytywania prognozy fotowoltaiki z „prognozy.solar”",
-		"zh-cn": "该适配器可用于读取来自“ forecast.solar”的光伏预测"
+      "en": "This Adapter can use for read photovoltaics forecast from \"forecast.solar\"",
+      "de": "Dieser Adapter kann zum Lesen der Photovoltaik-Vorhersage von \"Forecast.Solar\" verwendet werden.",
+      "ru": "Этот адаптер можно использовать для считывания прогнозов по фотоэлектрической энергии из \"прогноз.solar\"",
+      "pt": "Este adaptador pode ser usado para ler a previsão fotovoltaica de \"forecast.solar\"",
+      "nl": "Deze adapter kan worden gebruikt voor het lezen van fotovoltaïsche voorspellingen van \"forecast.solar\"",
+      "fr": "Cet adaptateur peut être utilisé pour lire les prévisions photovoltaïques à partir de \"prévisions.solar\"",
+      "it": "Questo adattatore può essere utilizzato per leggere le previsioni del fotovoltaico da \"forecast.solar\"",
+      "es": "Este adaptador se puede utilizar para leer el pronóstico de energía fotovoltaica de \"forecast.solar\"",
+      "pl": "Ten adapter może służyć do odczytywania prognozy fotowoltaiki z „prognozy.solar”",
+      "zh-cn": "该适配器可用于读取来自“ forecast.solar”的光伏预测"
     },
     "authors": [
       "Patrick Walther <walther-patrick@gmx.net>"
     ],
     "docs": {
-	"en": "docs/en/admin.md",
-	"de": "docs/de/admin.md"
+      "en": "docs/en/admin.md",
+      "de": "docs/de/admin.md"
     },
     "dependencies": [
-	    {
-		"admin": ">=3.0.0"
-	    },
-	    {
-		"js-controller": ">=3.2.0"
-	    }
+      {
+        "admin": ">=3.0.0"
+      },
+      {
+        "js-controller": ">=3.2.0"
+      }
     ],
     "license": "MIT",
     "platform": "Javascript/Node.js",
-    "mode": "daemon",
-    "icon": "template.png",
+    "icon": "pvforecast.png",
     "connectionType": "cloud",
     "dataSource": "push",
+    "mode": "daemon",
+    "allowInit": true,
     "materialize": true,
     "enabled": false,
-    "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/template.png",
+    "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/pvforecast.png",
     "keywords": [
       "Photovoltaik",
       "PV",
       "Forecast",
-	  "Prognose",
-	  "Ertrag"
+      "Prognose",
+      "Ertrag"
     ],
     "readme": "https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/master/README.md",
     "loglevel": "info",
     "type": "general",
     "restartAdapters": [
       "vis"
-    ]
+    ],
+    "installedFrom": "Patrick-Walther/ioBroker.pvforecast#f33c4055698c0d2acddae4925130929c2cb9b995"
   },
-  "native": {
-
-  },
+  "native": {},
   "objects": [],
   "instanceObjects": [
-        {
-            "_id": "1.power_kW",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "power_kW",
-                "type": "number",
-                "read": true,
-                "write": true,
-				"unit": "kW"
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.power_kWh",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "power_kwh",
-                "type": "number",
-                "read": true,
-                "write": true,
-				"unit": "kWh"
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.power_day_kWh",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "power_day_kWh",
-                "type": "number",
-                "read": true,
-                "write": true,
-				"unit": "kWh"
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.power_day_tomorrow_kWh",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "power_day_tomorrow_kWh",
-                "type": "number",
-                "read": true,
-                "write": true,
-				"unit": "kWh"
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.place",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "place",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.object",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "object",
-                "type": "json",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.lastUpdated_object",
-            "type": "state",
-            "common": {
-                "role": "value.time",
-                "name": "lastUpdated",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.lastUpdated_data",
-            "type": "state",
-            "common": {
-                "role": "value.time",
-                "name": "lastUpdated_data",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.plantname",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "plantname",
-                "type": "string",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.transfer",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "transfer",
-                "type": "json",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.JSONGraph",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "JSONGraph",
-                "type": "json",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-		{
-            "_id": "1.JSONTable",
-            "type": "state",
-            "common": {
-                "role": "value",
-                "name": "JSONTable",
-                "type": "json",
-                "read": true,
-                "write": true
-            },
-            "native": {}
-        },
-        {
-          "_id": "summary.power_kW",
-          "type": "state",
-          "common": {
-            "role": "value",
-            "name": "power_kW",
-            "type": "number",
-            "read": true,
-            "write": true,
-            "unit": "kW"
-          },
-          "native": {}
-        },
-        {
-          "_id": "summary.power_kWh",
-          "type": "state",
-          "common": {
-            "role": "value",
-            "name": "power_kWh",
-            "type": "number",
-            "read": true,
-            "write": true,
-            "unit": "kWh"
-          },
-          "native": {}
-        },
-        {
-          "_id": "summary.power_day_kWh",
-          "type": "state",
-          "common": {
-            "role": "value",
-            "name": "power_day_kWh",
-            "type": "number",
-            "read": true,
-            "write": true,
-            "unit": "kWh"
-          },
-          "native": {}
-        },
-        {
-          "_id": "summary.power_day_tomorrow_kWh",
-          "type": "state",
-          "common": {
-            "role": "value",
-            "name": "power_day_tomorrow_kWh",
-            "type": "number",
-            "read": true,
-            "write": true,
-            "unit": "kWh"
-          },
-          "native": {}
-        },
-        {
-          "_id": "summary.lastUpdated_data",
-          "type": "state",
-          "common": {
-            "role": "value.time",
-            "name": "lastUpdated_data",
-            "type": "string",
-            "read": true,
-            "write": true
-          },
-          "native": {}
-        },
-        {
-          "_id": "summary.JSONGraph",
-          "type": "state",
-          "common": {
-            "role": "value",
-            "name": "JSONGraph",
-            "type": "json",
-            "read": true,
-            "write": true
-          },
-          "native": {}
-        },
-        {
-          "_id": "summary.JSONTable",
-          "type": "state",
-          "common": {
-            "role": "value",
-            "name": "JSONTable",
-            "type": "json",
-            "read": true,
-            "write": true
-          },
-          "native": {}
-        }
-    ]
+    {
+      "_id": "summary.power_kW",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "power_kW",
+        "type": "number",
+        "read": true,
+        "write": true,
+        "unit": "kW"
+      },
+      "native": {}
+    },
+    {
+      "_id": "summary.power_kWh",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "power_kWh",
+        "type": "number",
+        "read": true,
+        "write": true,
+        "unit": "kWh"
+      },
+      "native": {}
+    },
+    {
+      "_id": "summary.power_day_kWh",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "power_day_kWh",
+        "type": "number",
+        "read": true,
+        "write": true,
+        "unit": "kWh"
+      },
+      "native": {}
+    },
+    {
+      "_id": "summary.power_day_tomorrow_kWh",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "power_day_tomorrow_kWh",
+        "type": "number",
+        "read": true,
+        "write": true,
+        "unit": "kWh"
+      },
+      "native": {}
+    },
+    {
+      "_id": "summary.lastUpdated_data",
+      "type": "state",
+      "common": {
+        "role": "value.time",
+        "name": "lastUpdated_data",
+        "type": "string",
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "summary.JSONGraph",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "JSONGraph",
+        "type": "json",
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    },
+    {
+      "_id": "summary.JSONTable",
+      "type": "state",
+      "common": {
+        "role": "value",
+        "name": "JSONTable",
+        "type": "json",
+        "read": true,
+        "write": true
+      },
+      "native": {}
+    }
+  ]
 }

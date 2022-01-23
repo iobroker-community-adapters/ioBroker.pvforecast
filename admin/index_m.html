@@ -52,6 +52,8 @@
 
 				fillPosition();
 				$('#linkdata').val('https://api.forecast.solar').trigger('change');
+				$('#tschedule').val('60').trigger('change');
+
 				onChange(false);
 			}
 
@@ -91,7 +93,7 @@
 			<!--logo -->
 			<div id="header-area" class="row" >
 				<div id="header-logo-title" class="col s6" >
-					<img class="logo" src="template.png" >
+					<img class="logo" src="pvforecast.png" >
 					<p>
 						<span class="translate h-title">Pvforecast - </span>
 						<span class="translate h-sub-title"> forecast for your photovoltaik</span>
@@ -173,7 +175,9 @@
 								<span for="APIK">API Schlüssel</span>
 								<label for="APIK" class="translate">API Key</label>
 							</div>
+
 						</div>
+
 
 						<div class="row">
 							<div class="col s2 input-field">
@@ -202,6 +206,14 @@
 								<label for="axisy_step1" class="translate">Y-Achse Step</label>
 							</div>
 						</div>
+						<div class="row">
+							<div class="col s3 input-field">
+								<input type="text" class="value" id="tschedule" />
+								<span for="tschedule">Schedule data query(min)</span>
+								<label for="tschedule" class="translate">Zeitplan Datenabfrage(min)</label>
+							</div>
+						</div>
+
 					</div>
 				</li>
 				<!--weather-->
