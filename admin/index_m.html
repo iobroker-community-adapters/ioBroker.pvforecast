@@ -30,32 +30,32 @@
 
 				// the function loadSettings has to exist ...
 				function load(settings, onChange) {
-				// example: select elements with id=key and class=value and insert value
-				if (!settings) return;
-				$('.value').each(function () {
-				var $key = $(this);
-				var id = $key.attr('id');
-				if ($key.attr('type') === 'checkbox') {
-				// do not call onChange direct, because onChange could expect some arguments
-				$key.prop('checked', settings[id]).change(function() {
-				onChange();
-			});
-			} else {
-				// do not call onChange direct, because onChange could expect some arguments
-				$key.val(settings[id]).change(function() {
-				onChange();
-			}).keyup(function() {
-				onChange();
-			});
-			}
-			});
+					// example: select elements with id=key and class=value and insert value
+					if (!settings) return;
+					$('.value').each(function () {
+						var $key = $(this);
+						var id = $key.attr('id');
+						if ($key.attr('type') === 'checkbox') {
+						// do not call onChange direct, because onChange could expect some arguments
+							$key.prop('checked', settings[id]).change(function() {
+								onChange();
+							});
+						} else {
+							// do not call onChange direct, because onChange could expect some arguments
+							$key.val(settings[id]).change(function() {
+							onChange();
+							}).keyup(function() {
+								onChange();
+							});
+						}
+					});
 
-				fillPosition();
-				$('#linkdata').val('https://api.forecast.solar').trigger('change');
-				$('#tschedule').val('60').trigger('change');
+					fillPosition();
+					$('#linkdata').val('https://api.forecast.solar').trigger('change');
 
-				onChange(false);
-			}
+
+					onChange(false);
+				}
 
 				function fillPosition() {
 				socket.emit('getObject', 'system.config', function (err, obj) {
@@ -64,6 +64,9 @@
 					}
 					if ($('#latitude').val() === '') {
 						$('#latitude').val(obj.common.latitude).trigger('change');
+					}
+					if ($('#tschedule').val() === '') {
+						$('#tschedule').val('60').trigger('change');
 					}
 				});
 			}
