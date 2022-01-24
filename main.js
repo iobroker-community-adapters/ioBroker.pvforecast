@@ -217,7 +217,6 @@ async function getPV () {
 	let Anlagenleistung5 = adapter.config.Plantp5; pvname5 = adapter.config.pvname5;
 
 
-
 	//Data from settings user interface
 	let legend1 = adapter.config.legend1;
 	let graphcolor1 = adapter.config.graphcolor1;
@@ -242,8 +241,6 @@ async function getPV () {
 	let axisy_step = adapter.config.axisy_step1;
 	let datalabel_rotation = adapter.config.datalabel_rotation1;
 	let pvname = [pvname1,pvname2,pvname3,pvname4,pvname5];
-
-
 
 	let plant1_active1 = true;
 	let plant2_active2 = adapter.config.plant2_active;
@@ -306,7 +303,6 @@ async function getPV () {
 	var datetime =data_today + ' ' + uhrzeit;
 
 
-
 //heute = heute.getDate();
 	let vorhersage_d_tag1=0;
 	let vorhersage_d_tag2=0;
@@ -367,7 +363,6 @@ async function getPV () {
 					// write value to datapoints
 					//adapter.log.debug("url_read_index" + url_read_index);
 
-
 					await adapter.setStateAsync(url_read_index + '.object',{val:JSON.stringify(response.data), ack:true});
 					await adapter.setStateAsync(url_read_index + '.power_day_kWh',{val:Number(wattstunden_tag), ack:true});
 					await adapter.setStateAsync(url_read_index + '.power_day_tomorrow_kWh',{val:Number(wattstunden_tag_tomorrow), ack:true});
@@ -412,17 +407,15 @@ async function getPV () {
 				})
 				.catch(function(error) {
 					if (error == "Error: Request failed with status code 429"){
-						adapter.log.error('too many data requests');
-					//	adapter.stop();
-
+						adapter.log.error("too many data requests");
 					} else if (error == "Error: Request failed with status code 400"){
-						adapter.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
+						adapter.log.error("entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude");
 					} else if (error == "Error: Request failed with status code 404"){
-						adapter.log.error('Error: Not Found');
+						adapter.log.error("Error: Not Found");
 					} else if (error == "Error: Request failed with status code 502"){
-						adapter.log.error('Error: Bad Gateway');
+						adapter.log.error("Error: Bad Gateway");
 					} else {
-						adapter.log.error('Axios Error '+ error);
+						adapter.log.error("Axios Error "+ error);
 					}
 				});
 		}
@@ -449,11 +442,8 @@ async function getPV () {
 	adapter.log.debug("watts_tag_plants[2]" + watts_tag_plants[2]);
 	adapter.log.debug("watts_tag_plants[3]" + watts_tag_plants[3]);
 	adapter.log.debug("watts_tag_plants[4]" + watts_tag_plants[4]);
-	adapter.log.debug("watts_tomorrow_plants[0]" + watts_tomorrow_plants[0]);
-	adapter.log.debug("watts_tomorrow_plants[1]" + watts_tomorrow_plants[1]);
-	adapter.log.debug("watts_tomorrow_plants[2]" + watts_tomorrow_plants[2]);
-	adapter.log.debug("watts_tomorrow_plants[3]" + watts_tomorrow_plants[3]);
-	adapter.log.debug("watts_tomorrow_plants[4]" + watts_tomorrow_plants[4]);*/
+	adapter.log.debug("watts_tomorrow_plants" + watts_tomorrow_plants);
+*/
 
 	adapter.log.debug("summary.power_day_kWh:" + wattstunden_tag_summary + ' summary.power_day_tomorrow_kWh: ' + wattstunden_tag_tomorrow_summary);
 
@@ -616,17 +606,17 @@ async function getPV () {
 				adapter.log.debug("index: "+index+" plant_d_everyhour: "+ plant_d_everyhour[index-1] +"plant_active: " +plant_active[index-1]);
 				for (let j = 5; j < 22; j++) {
 					for (let i = 0; i < 59; i = i + 15) {
-						await adapter.setStateAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val: Number(nulldata), ack:true});
-						await adapter.setStateAsync(index+'.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val:Number(nulldata) , ack:true});
+						await adapter.setState('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val: Number(nulldata), ack:true});
+						await adapter.setState(index+'.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val:Number(nulldata) , ack:true});
 					}
 				}
 			}
 		}
-		await everyhour_data();
+
 	}catch (e) {
 
 	}
-
+	await everyhour_data();
 }
 
 // create or delete states from plants
@@ -682,11 +672,11 @@ async function create_delete_state (){
 				type: 'state',
 				common: {
 					name: "sky",
-					type: 'string',
+					type: 'number',
 					role: 'value',
 					read: true,
 					write: false,
-					def: ''
+					def: 0
 				},
 				native: {}
 			});
@@ -694,11 +684,11 @@ async function create_delete_state (){
 				type: 'state',
 				common: {
 					name: "visibility",
-					type: 'string',
+					type: 'number',
 					role: 'value',
 					read: true,
 					write: false,
-					def: ''
+					def: 0
 				},
 				native: {}
 			});
@@ -957,7 +947,7 @@ async function create_delete_state (){
 			}
 		}
 
-		adapter.log.debug("plant-everyhour");
+		//adapter.log.debug("plant-everyhour");
 		for (let index = 1; index < 6; index++) {
 			if (plant_d_everyhour[index - 1] == true && plant_active[index - 1] == true) {
 				for (let j = 5; j < 22; j++) {
@@ -1165,23 +1155,15 @@ async function everyhour_data () {
 		let plant4_active4 = adapter.config.plant4_active;
 		let plant5_active5 = adapter.config.plant5_active;
 		let plant_active = [plant1_active1, plant2_active2,plant3_active3,plant4_active4,plant5_active5];
-		adapter.log.debug("plant_active: " + plant_active);
+		adapter.log.debug("everhour - plant_active: " + plant_active);
 		let plant1_d_everyhour = adapter.config.plant1_everyhour;
 		let plant2_d_everyhour = adapter.config.plant2_everyhour;
 		let plant3_d_everyhour = adapter.config.plant3_everyhour;
 		let plant4_d_everyhour = adapter.config.plant4_everyhour;
 		let plant5_d_everyhour = adapter.config.plant5_everyhour;
 		let plant_d_everyhour = [plant1_d_everyhour, plant2_d_everyhour, plant3_d_everyhour, plant4_d_everyhour, plant5_d_everyhour];
-
+		adapter.log.debug("everhour - plant_d_everyhour: " + plant_d_everyhour);
 		let apikey = adapter.config.APIK;
-
-		adapter.log.debug('plant_d_everyhour' + plant_d_everyhour);
-		adapter.log.debug('plant_d_everyhour1' + plant_d_everyhour[0]);
-		adapter.log.debug('plant_d_everyhour2' + plant2_d_everyhour[1]);
-		adapter.log.debug('plant_d_everyhour3' + plant3_d_everyhour[2]);
-		adapter.log.debug('plant_d_everyhour4' + plant4_d_everyhour[3]);
-		adapter.log.debug('plant_d_everyhour5' + plant5_d_everyhour[4]);
-
 
 		let uebergabe_power_kw1 = 0;	let uebergabe_power_kw2 = 0;	let uebergabe_power_kw3 = 0;	let uebergabe_power_kw4 = 0;	let uebergabe_power_kw5 = 0;
 		let uebergabe_power_kwh1 = 0;	let uebergabe_power_kwh2 = 0;	let uebergabe_power_kwh3 = 0;	let uebergabe_power_kwh4 = 0;	let uebergabe_power_kwh5 = 0;
@@ -1190,18 +1172,18 @@ async function everyhour_data () {
 		var uebergabe_power_kwh = [uebergabe_power_kwh1,uebergabe_power_kwh2,uebergabe_power_kwh3,uebergabe_power_kwh4,uebergabe_power_kwh5];
 
 		for (let index = 1; index < 6; index++) {
-			if (plant_d_everyhour[index - 1] == true && plant_active[index - 1] == true) {
+			if (plant_d_everyhour[index - 1] === true && plant_active[index - 1] === true) {
 				for (let j = 5; j < 22; j++) {
 					if (apikey !== '') {
-						//adapter.log.debug('mit key');
+						adapter.log.debug("mit key");
 						for (let i = 0; i < 59; i = i + 15) {
-							await adapter.setStateAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+							await adapter.setState(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
 								val: Number(0),
 								ack: true
 							});
 						}
 					} else {
-						//adapter.log.debug('ohne key');
+						adapter.log.debug("ohne key");
 						await adapter.setStateAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 							val: Number(0),
 							ack: true
@@ -1220,6 +1202,9 @@ async function everyhour_data () {
 				}
 			}
 		}
+
+		adapter.log.debug("everhour - uebergabe_power_kw: " + uebergabe_power_kw);
+		adapter.log.debug("everhour - uebergabe_power_kwh: " + uebergabe_power_kwh);
 
 		let watts1 = uebergabe_power_kw[1]; let	watts2 = uebergabe_power_kw[2]; let	watts3 = uebergabe_power_kw[3]; let	watts4 = uebergabe_power_kw[4]; let	watts5 = uebergabe_power_kw[5];
 
@@ -1243,7 +1228,7 @@ async function everyhour_data () {
             adapter.log.debug("time:"+time);
             adapter.log.debug("time.sub: "+time.substr(-8,2));*/
 
-			if(apikey != ''){
+			if(apikey !== ''){
 				//adapter.log.debug('erveryhour_filter_an');
 				pos1 = time.indexOf(time.substr(-8,2)+':00:00');
 				pos2 = time.indexOf(':15:00');
@@ -1254,49 +1239,45 @@ async function everyhour_data () {
 				pos1 = time.indexOf(time.substr(-8,2)+':00:00');
 			}
 
-			/*	adapter.log.debug("pos1"+ pos1);
-                adapter.log.debug("pos2"+ pos2);
-                adapter.log.debug("pos3"+ pos3);
-                adapter.log.debug("pos4"+ pos4);
-                adapter.log.debug("pos5"+ pos5);*/
+				adapter.log.debug("pos1: "+ pos1 + " - pos2: "+ pos2 + "- pos3: " + pos3 + " - pos4: "+ pos4 + " - pos5: "+ pos5);
 
 			if((pos1 !== -1 || pos2 !== -1 || pos3 !== -1 || pos4 !== -1) && (pos5 !== -1)  )  {
 
 				let time2 =time.substr(-8,8);
 
 				//adapter.log.debug("time2"+time2);
-				if (plant_d_everyhour[0] == true && plant_active[0] == true){
+				if (plant_d_everyhour[0] === true && plant_active[0] === true){
 					watts1_data =  JSON.parse(watts1[time]);
 					watts1_data = watts1_data /1000;
 					await adapter.setStateAsync('1.everyhour_kw.' + time2,{val: Number(watts1_data), ack:true});
-					//adapter.log.debug("watts1_data"+ watts1_data);
+					adapter.log.debug("watts1_data"+ watts1_data);
 				}
-				if (plant_d_everyhour[1] == true && plant_active[1] == true){
+				if (plant_d_everyhour[1] === true && plant_active[1] === true){
 					watts2_data =  JSON.parse(watts2[time]);
 					watts2_data = watts2_data /1000;
 					await adapter.setStateAsync('2.everyhour_kw.' + time2,{val: Number(watts2_data), ack:true});
-					//adapter.log.debug("watts2_data"+ watts2_data);
+					adapter.log.debug("watts2_data"+ watts2_data);
 				}
-				if (plant_d_everyhour[2] == true && plant_active[2] == true){
+				if (plant_d_everyhour[2] === true && plant_active[2] === true){
 					watts3_data =  JSON.parse(watts3[time]);
 					watts3_data = watts2_data /1000;
 					await adapter.setStateAsync('3.everyhour_kw.' + time2,{val: Number(watts3_data), ack:true});
 					//adapter.log.debug("watts3_data"+ watts3_data);
 				}
-				if (plant_d_everyhour[3] == true && plant_active[3] == true){
+				if (plant_d_everyhour[3] === true && plant_active[3] === true){
 					watts4_data =  JSON.parse(watts4[time]);
 					watts4_data = watts4_data /1000;
 					await adapter.setStateAsync('4.everyhour_kw.' + time2,{val: Number(watts4_data), ack:true});
 					//adapter.log.debug("watts4_data"+ watts4_data);
 				}
-				if (plant_d_everyhour[4] == true && plant_active[4] == true){
+				if (plant_d_everyhour[4] === true && plant_active[4] === true){
 					watts5_data =  JSON.parse(watts5[time]);
 					watts5_data = watts5_data /1000;
 					await adapter.setStateAsync('5.everyhour_kw.' + time2,{val: Number(watts5_data), ack:true});
 					//adapter.log.debug("watts5_data"+ watts5_data);
 				}
 
-				if (plant_d_everyhour[0] == true || plant_d_everyhour[1] == true || plant_d_everyhour[2] == true || plant_d_everyhour[3] == true || plant_d_everyhour[4] == true) {
+				if (plant_d_everyhour[0] === true || plant_d_everyhour[1] === true || plant_d_everyhour[2] === true || plant_d_everyhour[3] === true || plant_d_everyhour[4] === true) {
 
 					if(watts1_data == null){watts1_data = 0}
 					if(watts2_data == null){watts2_data = 0}
