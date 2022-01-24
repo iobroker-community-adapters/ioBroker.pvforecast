@@ -54,50 +54,54 @@ adapter.on('ready', function () {
 	main();
 });
 
-function main() {
-	create_delete_state();
-	setTimeout(function() { getPV(); }, 2000);
+async function main() {
+	try {
+		await create_delete_state();
+		setTimeout(async  function() {await getPV(); }, 10000);
+		//await getPV();
 
-
-	data_tschedule = adapter.config.tschedule;
-
-	if (data_tschedule != '') {
 		data_tschedule = adapter.config.tschedule;
-		adapter.log.debug("tschedule eingabe: " + data_tschedule + " min");
-		data_tschedule = 60000 * data_tschedule;
-	} else {
-		data_tschedule = 3600000;
-		adapter.log.debug("tschedule standart: " + data_tschedule / 60000 + " min");
-	}
-	var timer = setInterval(datenübertragen, data_tschedule); //360000
 
+		if (data_tschedule != '') {
+			data_tschedule = adapter.config.tschedule;
+			adapter.log.debug("tschedule eingabe: " + data_tschedule + " min");
+			data_tschedule = 60000 * data_tschedule;
+		} else {
+			data_tschedule = 3600000;
+			adapter.log.debug("tschedule standart: " + data_tschedule / 60000 + " min");
+		}
+		var timer = setInterval(datenübertragen, data_tschedule); //360000
 
-	let weather_active = adapter.config.weather_active;
+		let weather_active = adapter.config.weather_active;
 
-	if(weather_active === true) {
-		getweather();
-	}
-}
+		if(weather_active == true) {
+			await getweather();
+		}
+	}catch (e) {
 
-
-async function datenübertragen()
-{
-	await create_delete_state();
-	await getPV();
-
-	let weather_active = adapter.config.weather_active;
-	if(weather_active === true) {
-		await getweather ();
 	}
 }
 
+async function datenübertragen(){
+	try {
+		await create_delete_state();
+		await getPV();
 
+		let weather_active = adapter.config.weather_active;
+		if(weather_active == true) {
+			await getweather ();
+		}
+	} catch (e) {
+
+	}
+
+}
 
 // evaluate data from json to data point every minute
 const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function () {
-
+try {
 	let weather_active = adapter.config.weather_active;
-	if(weather_active === true) {
+	if(weather_active == true) {
 		await weather_data();
 	}
 
@@ -127,7 +131,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 				let watt1 = obj.watts[datum + ' ' + uhrzeit + ':00'];
 				let watth = obj.watt_hours[datum + ' ' + uhrzeit + ':00'];
 
-				adapter.setState(index + '.lastUpdated_data', {val: datetime1, ack: true});
+				await adapter.setStateAsync(index + '.lastUpdated_data', {val: datetime1, ack: true});
 
 				if (watt1 >= 0) {
 
@@ -141,8 +145,8 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 					adapter.log.debug(index + '.power_kW: ' + watt1);
 					adapter.log.debug(index + '.power_kWh: ' + watth);
 
-					adapter.setState(index + '.power_kW', {val: Number(watt1), ack: true});
-					adapter.setState(index + '.power_kWh', {val: Number(watth), ack: true});
+					await adapter.setStateAsync(index + '.power_kW', {val: Number(watt1), ack: true});
+					await adapter.setStateAsync(index + '.power_kWh', {val: Number(watth), ack: true});
 				}
 			}
 		}
@@ -165,12 +169,16 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 		adapter.log.debug("summary.power_kw: " + JSON.stringify(power_kw));
 		adapter.log.debug("summary.power_kwh : " + JSON.stringify(power_kwh));
 
-		adapter.setState('summary.lastUpdated_data', {val: datetime1, ack: true});
-		adapter.setState('summary.power_kW', {val: Number(power_kw_summary), ack: true});
-		adapter.setState('summary.power_kWh', {val: Number(power_kwh_summary), ack: true});
+		await adapter.setStateAsync('summary.lastUpdated_data', {val: datetime1, ack: true});
+		await adapter.setStateAsync('summary.power_kW', {val: Number(power_kw_summary), ack: true});
+		await adapter.setStateAsync('summary.power_kWh', {val: Number(power_kwh_summary), ack: true});
 	}	catch (err) {
 
 	}
+} catch (e) {
+
+}
+
 });
 
 // request pv-data from server
@@ -235,6 +243,8 @@ async function getPV () {
 	let datalabel_rotation = adapter.config.datalabel_rotation1;
 	let pvname = [pvname1,pvname2,pvname3,pvname4,pvname5];
 
+
+
 	let plant1_active1 = true;
 	let plant2_active2 = adapter.config.plant2_active;
 	let plant3_active3 = adapter.config.plant3_active;
@@ -261,30 +271,27 @@ async function getPV () {
 	adapter.log.debug("urls: " + urls[0]);
 	adapter.log.debug("Plant1 -> tilt: " + Neigung1 + " Azimuth: " + Azimuth1 + " Plant-performance: " + Anlagenleistung1 + " plant name: " + pvname1);
 
-	if (plant2_active2 === true){
+	if (plant2_active2 == true){
 		urls[1]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[1]+'/'+azimuth[1]+'/'+kwp[1]
 		adapter.log.debug("urls: " + urls[1]);
 		adapter.log.debug("Plant2 -> tilt: " + Neigung2 + " Azimuth: " + Azimuth2 + " Plant-performance: " + Anlagenleistung2 + " plant name: " + pvname2);
 	}
-	if (plant3_active3 === true){
+	if (plant3_active3 == true){
 		urls[2]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[2]+'/'+azimuth[2]+'/'+kwp[2]
 		adapter.log.debug("urls: " + urls[2]);
 		adapter.log.debug("Plant3 -> tilt: " + Neigung3 + " Azimuth: " + Azimuth3 + " Plant-performance: " + Anlagenleistung3 + " plant name: " + pvname3);
 	}
-	if (plant4_active4 === true){
+	if (plant4_active4 == true){
 		urls[3]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[3]+'/'+azimuth[3]+'/'+kwp[3];
 		adapter.log.debug("urls: " + urls[3]);
 		adapter.log.debug("Plant4 -> tilt: " + Neigung4 + " Azimuth: " + Azimuth4 + " Plant-performance: " + Anlagenleistung4 + " plant name: " + pvname4);
 	}
-	if (plant5_active5 === true){
+	if (plant5_active5 == true){
 		urls[4]  = forcastUrl+apikey+'/estimate/'+lat+'/'+lon+'/'+declination[4]+'/'+azimuth[4]+'/'+kwp[4];
 		adapter.log.debug("urls: " + urls[4]);
 		adapter.log.debug("Plant5 -> tilt: " + Neigung5 + " Azimuth: " + Azimuth5 + " Plant-performance: " + Anlagenleistung5 + " plant name: " + pvname5);
 	}
-
-
-
-	//date from today and tomorrow
+//date from today and tomorrow
 	var d = new Date();
 	var dd = d.getUTCDate();
 	var mm = d.getUTCMonth() + 1;
@@ -380,7 +387,7 @@ async function getPV () {
 						table.push(entry);
 					}
 
-				await adapter.setStateAsync(url_read_index + '.JSONTable',{val:JSON.stringify(table), ack:true});
+					await adapter.setStateAsync(url_read_index + '.JSONTable',{val:JSON.stringify(table), ack:true});
 
 					// GraphTable
 					let graphTimeData = [];
@@ -400,17 +407,19 @@ async function getPV () {
 					graphAllData.push(graphData);
 					graph.graphs=graphAllData;
 
-				await adapter.setStateAsync(url_read_index + '.JSONGraph',{val:JSON.stringify(graph), ack:true});
+					await adapter.setStateAsync(url_read_index + '.JSONGraph',{val:JSON.stringify(graph), ack:true});
 
 				})
 				.catch(function(error) {
-					if (error === "Error: Request failed with status code 429"){
+					if (error == "Error: Request failed with status code 429"){
 						adapter.log.error('too many data requests');
-					} else if (error === "Error: Request failed with status code 400"){
+					//	adapter.stop();
+
+					} else if (error == "Error: Request failed with status code 400"){
 						adapter.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
-					} else if (error === "Error: Request failed with status code 404"){
+					} else if (error == "Error: Request failed with status code 404"){
 						adapter.log.error('Error: Not Found');
-					} else if (error === "Error: Request failed with status code 502"){
+					} else if (error == "Error: Request failed with status code 502"){
 						adapter.log.error('Error: Bad Gateway');
 					} else {
 						adapter.log.error('Axios Error '+ error);
@@ -588,8 +597,8 @@ async function getPV () {
 	graph.graphs=graphAllData;
 	graph.axisLabels = axisLabels;
 
-	adapter.setState('summary.JSONGraph',{val:JSON.stringify(graph), ack:true});
-	adapter.setState('summary.JSONTable',{val:JSON.stringify(table), ack:true});
+	await adapter.setStateAsync('summary.JSONGraph',{val:JSON.stringify(graph), ack:true});
+	await adapter.setStateAsync('summary.JSONTable',{val:JSON.stringify(table), ack:true});
 
 	let plant1_d_everyhour = adapter.config.plant1_everyhour;
 	let plant2_d_everyhour = adapter.config.plant2_everyhour;
@@ -598,23 +607,26 @@ async function getPV () {
 	let plant5_d_everyhour = adapter.config.plant5_everyhour;
 	let plant_d_everyhour = [plant1_d_everyhour, plant2_d_everyhour, plant3_d_everyhour, plant4_d_everyhour, plant5_d_everyhour];
 
-	//adapter.log.debug("write zero to everyhour");
-	const nulldata = 0;
-	for (let index = 1; index < 6; index++){
-		if (plant_d_everyhour[index-1] == true && plant_active[index-1] == true) {
+	try {
+		//adapter.log.debug("write zero to everyhour");
+		// const nulldata = 0;
+		for (let index = 1; index < 6; index++){
+			if (plant_d_everyhour[index-1] == true && plant_active[index-1] == true) {
 
-			adapter.log.debug("index: "+index+" plant_d_everyhour: "+ plant_d_everyhour[index-1] +"plant_active: " +plant_active[index-1]);
-			for (let j = 5; j < 22; j++) {
-				for (let i = 0; i < 59; i = i + 15) {
-					await adapter.setStateAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val: Number(nulldata), ack:true});
-					await adapter.setState(index+'.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val:Number(nulldata) , ack:true});
-
+				adapter.log.debug("index: "+index+" plant_d_everyhour: "+ plant_d_everyhour[index-1] +"plant_active: " +plant_active[index-1]);
+				for (let j = 5; j < 22; j++) {
+					for (let i = 0; i < 59; i = i + 15) {
+						await adapter.setStateAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val: Number(nulldata), ack:true});
+						await adapter.setStateAsync(index+'.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00',{val:Number(nulldata) , ack:true});
+					}
 				}
 			}
 		}
+		await everyhour_data();
+	}catch (e) {
+
 	}
 
- await everyhour_data();
 }
 
 // create or delete states from plants
@@ -952,7 +964,7 @@ async function create_delete_state (){
 					if (apikey !== '') {
 						//adapter.log.debug('mit key');
 						for (let i = 0; i < 59; i = i + 15) {
-							adapter.setObjectNotExists(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+							await adapter.setObjectNotExists(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
 								type: 'state',
 								common: {
 									name: "power_kW",
@@ -972,7 +984,7 @@ async function create_delete_state (){
 								//adapter.log.debug('apiky zeit: ' + i);
 								await adapter.delObjectAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':'+ (i <= 9 ? '0' + i : i) + ':00');
 							}
-						adapter.setObjectNotExists(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+						await adapter.setObjectNotExists(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 							type: 'state',
 							common: {
 								name: "power_kW",
@@ -1002,7 +1014,7 @@ async function create_delete_state (){
 					if (apikey !== '') {
 						//adapter.log.debug('mit key');
 						for (let i = 0; i < 59; i = i + 15) {
-							adapter.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+							await adapter.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
 								type: 'state',
 								common: {
 									name: "power_kW",
@@ -1016,13 +1028,13 @@ async function create_delete_state (){
 								native: {}
 							});
 						}
-					} else if(apikey === '') {
+					} else if(apikey == '') {
 						//adapter.log.debug('ohne key');
 						for (let i = 15; i < 50; i = i + 15) {
 							//adapter.log.debug('apiky zeit: ' + i);
 							await adapter.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':'+ (i <= 9 ? '0' + i : i) + ':00');
 						}
-						adapter.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+						await adapter.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 							type: 'state',
 							common: {
 								name: "power_kW",
@@ -1037,7 +1049,7 @@ async function create_delete_state (){
 						});
 					}
 				}
-			} else if (plant_d_everyhour[index - 1] === false && plant_active[index - 1] === false){
+			} else if (plant_d_everyhour[index - 1] == false && plant_active[index - 1] == false){
 				for (let j = 5; j < 22; j++) {
 					for (let i = 0; i < 59; i = i + 15) {
 						await adapter.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
@@ -1046,256 +1058,261 @@ async function create_delete_state (){
 			}
 		}
 	} catch (err) {
-				// ignore
+		// ignore
 	}
 }
 
 // request weather data from server
 async function getweather () {
+	try {
+		let weather_active = adapter.config.weather_active;
+		let apikey_weater = adapter.config.APIK;
+		let lon = adapter.config.longitude
+		let lat = adapter.config.latitude;
+		let forcastUrl = adapter.config.linkdata;
+		let url_weather1;
 
-	let weather_active = adapter.config.weather_active;
-	let apikey_weater = adapter.config.APIK;
-	let lon = adapter.config.longitude
-	let lat = adapter.config.latitude;
-	let forcastUrl = adapter.config.linkdata;
-	let url_weather1;
+		url_weather1 = forcastUrl + '/' + apikey_weater + '/weather/' + lat + '/' + lon + '/';
+		adapter.log.debug("url_weather1" + url_weather1);
 
-	url_weather1 = forcastUrl + '/' + apikey_weater + '/weather/' + lat + '/' + lon + '/';
-	adapter.log.debug("url_weather1" + url_weather1);
+		if (apikey_weater !== '') {
+			if (weather_active) {
+				if (url_weather1) {
+					await axios
+						.get(url_weather1)
+						.then(async function (response) {
+							adapter.log.debug("axios weather done");
 
-	if (apikey_weater !== '') {
-		if (weather_active) {
-			if (url_weather1) {
-				await axios
-					.get(url_weather1)
-					.then(async function (response) {
-						adapter.log.debug("axios weather done");
+							/*let weather_data1 = [];
+                            weather_data1 = response.data.result;
+                            //adapter.log.debug('Json weather axios ' + JSON.stringify(weather_data1));*/
+							await adapter.setStateAsync('weather.object',{val:JSON.stringify(response.data.result), ack:true});
 
-						/*let weather_data1 = [];
-						weather_data1 = response.data.result;
-						//adapter.log.debug('Json weather axios ' + JSON.stringify(weather_data1));*/
-						adapter.setState('weather.object',{val:JSON.stringify(response.data.result), ack:true});
-
-					})
-					.catch(function (error) {
-						if (error === "Error: Request failed with status code 429") {
-							adapter.log.error("too many data requests");
-						} else if (error === "Error: Request failed with status code 400") {
-							adapter.log.error("entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude");
-						} else {
-							adapter.log.error("Axios Error " + error);
-						}
-					});
+						})
+						.catch(function (error) {
+							if (error == "Error: Request failed with status code 429") {
+								adapter.log.error("too many data requests");
+							} else if (error == "Error: Request failed with status code 400") {
+								adapter.log.error("entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude");
+							} else {
+								adapter.log.error("Axios Error " + error);
+							}
+						});
+				}
 			}
+		} else {
+			adapter.log.error("you don't have an apikey");
 		}
-	} else {
-		adapter.log.error("you don't have an apikey");
+	} catch (e) {
 	}
 }
 
 // analysis weather data
 async function weather_data () {
+	try {
+		const stateValue = await adapter.getStateAsync('weather.object');
+		if (stateValue !== '') {
+			var d = new Date();
+			var dd = d.getUTCDate();
+			var mm = d.getUTCMonth() + 1;
+			var yy= d.getUTCFullYear();
+			var h = d.getHours();
+			var m = d.getMinutes();
+			var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
+			var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
 
+			let a;
+			let obj = JSON.parse(stateValue.val);
 
-	const stateValue = await adapter.getStateAsync('weather.object');
-	if (stateValue !== '') {
+			for(let i=0; i< obj.length; i++) {
+				a = obj[i].datetime.indexOf( datum + ' ' + uhrzeit +':00')
+				if(a !== -1){
+					adapter.log.debug("a" + a);
+					adapter.log.debug("i true" + i);
+					adapter.log.debug("sky" + obj[i].sky);
+					adapter.log.debug("datetime" + obj[i].datetime);
+					adapter.log.debug("visibility" + obj[i].visibility);
+					adapter.log.debug("temperature" + obj[i].temperature);
+					adapter.log.debug("condition" + obj[i].condition);
+					adapter.log.debug("icon" + obj[i].icon);
+					adapter.log.debug("wind_speed" + obj[i].wind_speed);
+					adapter.log.debug("wind_degrees" + obj[i].wind_degrees);
+					adapter.log.debug("wind_direction" + obj[i].wind_direction);
 
-		var d = new Date();
-		var dd = d.getUTCDate();
-		var mm = d.getUTCMonth() + 1;
-		var yy= d.getUTCFullYear();
-		var h = d.getHours();
-		var m = d.getMinutes();
-		var uhrzeit =  (h <= 9 ? '0' + h : h ) + ':' +  (m <= 9 ? '0' + m : m);
-		var datum = yy + '-' + (mm <= 9 ? '0' + mm : mm ) + '-' +  (dd <= 9 ? '0' + dd : dd);
-
-		let a;
-		let obj = JSON.parse(stateValue.val);
-
-		for(let i=0; i< obj.length; i++) {
-			a = obj[i].datetime.indexOf( datum + ' ' + uhrzeit +':00')
-			if(a !== -1){
-				adapter.log.debug("a" + a);
-				adapter.log.debug("i true" + i);
-				adapter.log.debug("sky" + obj[i].sky);
-				adapter.log.debug("datetime" + obj[i].datetime);
-				adapter.log.debug("visibility" + obj[i].visibility);
-				adapter.log.debug("temperature" + obj[i].temperature);
-				adapter.log.debug("condition" + obj[i].condition);
-				adapter.log.debug("icon" + obj[i].icon);
-				adapter.log.debug("wind_speed" + obj[i].wind_speed);
-				adapter.log.debug("wind_degrees" + obj[i].wind_degrees);
-				adapter.log.debug("wind_direction" + obj[i].wind_direction);
-
-				adapter.setState('weather.sky',{val:Number(obj[i].sky), ack:true});
-				adapter.setState('weather.datetime',{val:obj[i].datetime, ack:true});
-				adapter.setState('weather.visibility',{val:Number(obj[i].visibility), ack:true});
-				adapter.setState('weather.temperature',{val:Number(obj[i].temperature), ack:true});
-				adapter.setState('weather.condition',{val:Number(obj[i].condition), ack:true});
-				adapter.setState('weather.icon',{val:obj[i].icon, ack:true});
-				adapter.setState('weather.wind_speed',{val:Number(obj[i].wind_speed), ack:true});
-				adapter.setState('weather.wind_degrees',{val:Number(obj[i].wind_degrees), ack:true});
-				adapter.setState('weather.wind_direction',{val:Number(obj[i].wind_direction), ack:true});
+					await adapter.setStateAsync('weather.sky',{val:Number(obj[i].sky), ack:true});
+					await adapter.setStateAsync('weather.datetime',{val:obj[i].datetime, ack:true});
+					await adapter.setStateAsync('weather.visibility',{val:Number(obj[i].visibility), ack:true});
+					await adapter.setStateAsync('weather.temperature',{val:Number(obj[i].temperature), ack:true});
+					await adapter.setStateAsync('weather.condition',{val:Number(obj[i].condition), ack:true});
+					await adapter.setStateAsync('weather.icon',{val:obj[i].icon, ack:true});
+					await adapter.setStateAsync('weather.wind_speed',{val:Number(obj[i].wind_speed), ack:true});
+					await adapter.setStateAsync('weather.wind_degrees',{val:Number(obj[i].wind_degrees), ack:true});
+					await adapter.setStateAsync('weather.wind_direction',{val:Number(obj[i].wind_direction), ack:true});
+				}
 			}
 		}
+		// eslint-disable-next-line no-empty
+	}catch (e) {
 	}
 }
 
 //datapoint for everytime
 async function everyhour_data () {
+	try {
+		let plant1_active1 = true;
+		let plant2_active2 = adapter.config.plant2_active;
+		let plant3_active3 = adapter.config.plant3_active;
+		let plant4_active4 = adapter.config.plant4_active;
+		let plant5_active5 = adapter.config.plant5_active;
+		let plant_active = [plant1_active1, plant2_active2,plant3_active3,plant4_active4,plant5_active5];
+		adapter.log.debug("plant_active: " + plant_active);
+		let plant1_d_everyhour = adapter.config.plant1_everyhour;
+		let plant2_d_everyhour = adapter.config.plant2_everyhour;
+		let plant3_d_everyhour = adapter.config.plant3_everyhour;
+		let plant4_d_everyhour = adapter.config.plant4_everyhour;
+		let plant5_d_everyhour = adapter.config.plant5_everyhour;
+		let plant_d_everyhour = [plant1_d_everyhour, plant2_d_everyhour, plant3_d_everyhour, plant4_d_everyhour, plant5_d_everyhour];
 
-	let plant1_active1 = true;
-	let plant2_active2 = adapter.config.plant2_active;
-	let plant3_active3 = adapter.config.plant3_active;
-	let plant4_active4 = adapter.config.plant4_active;
-	let plant5_active5 = adapter.config.plant5_active;
-	let plant_active = [plant1_active1, plant2_active2,plant3_active3,plant4_active4,plant5_active5];
- 	adapter.log.debug("plant_active: " + plant_active);
-	let plant1_d_everyhour = adapter.config.plant1_everyhour;
-	let plant2_d_everyhour = adapter.config.plant2_everyhour;
-	let plant3_d_everyhour = adapter.config.plant3_everyhour;
-	let plant4_d_everyhour = adapter.config.plant4_everyhour;
-	let plant5_d_everyhour = adapter.config.plant5_everyhour;
-	let plant_d_everyhour = [plant1_d_everyhour, plant2_d_everyhour, plant3_d_everyhour, plant4_d_everyhour, plant5_d_everyhour];
+		let apikey = adapter.config.APIK;
 
-	let apikey = adapter.config.APIK;
-
-	adapter.log.debug('plant_d_everyhour' + plant_d_everyhour);
-	adapter.log.debug('plant_d_everyhour1' + plant_d_everyhour[0]);
-	adapter.log.debug('plant_d_everyhour2' + plant2_d_everyhour[1]);
-	adapter.log.debug('plant_d_everyhour3' + plant3_d_everyhour[2]);
-	adapter.log.debug('plant_d_everyhour4' + plant4_d_everyhour[3]);
-	adapter.log.debug('plant_d_everyhour5' + plant5_d_everyhour[4]);
+		adapter.log.debug('plant_d_everyhour' + plant_d_everyhour);
+		adapter.log.debug('plant_d_everyhour1' + plant_d_everyhour[0]);
+		adapter.log.debug('plant_d_everyhour2' + plant2_d_everyhour[1]);
+		adapter.log.debug('plant_d_everyhour3' + plant3_d_everyhour[2]);
+		adapter.log.debug('plant_d_everyhour4' + plant4_d_everyhour[3]);
+		adapter.log.debug('plant_d_everyhour5' + plant5_d_everyhour[4]);
 
 
-	let uebergabe_power_kw1 = 0;	let uebergabe_power_kw2 = 0;	let uebergabe_power_kw3 = 0;	let uebergabe_power_kw4 = 0;	let uebergabe_power_kw5 = 0;
-	let uebergabe_power_kwh1 = 0;	let uebergabe_power_kwh2 = 0;	let uebergabe_power_kwh3 = 0;	let uebergabe_power_kwh4 = 0;	let uebergabe_power_kwh5 = 0;
+		let uebergabe_power_kw1 = 0;	let uebergabe_power_kw2 = 0;	let uebergabe_power_kw3 = 0;	let uebergabe_power_kw4 = 0;	let uebergabe_power_kw5 = 0;
+		let uebergabe_power_kwh1 = 0;	let uebergabe_power_kwh2 = 0;	let uebergabe_power_kwh3 = 0;	let uebergabe_power_kwh4 = 0;	let uebergabe_power_kwh5 = 0;
 
-	var uebergabe_power_kw = [uebergabe_power_kw1,uebergabe_power_kw2,uebergabe_power_kw3,uebergabe_power_kw4,uebergabe_power_kw5];
-	var uebergabe_power_kwh = [uebergabe_power_kwh1,uebergabe_power_kwh2,uebergabe_power_kwh3,uebergabe_power_kwh4,uebergabe_power_kwh5];
+		var uebergabe_power_kw = [uebergabe_power_kw1,uebergabe_power_kw2,uebergabe_power_kw3,uebergabe_power_kw4,uebergabe_power_kw5];
+		var uebergabe_power_kwh = [uebergabe_power_kwh1,uebergabe_power_kwh2,uebergabe_power_kwh3,uebergabe_power_kwh4,uebergabe_power_kwh5];
 
-	for (let index = 1; index < 6; index++) {
-		if (plant_d_everyhour[index - 1] === true && plant_active[index - 1] === true) {
-			for (let j = 5; j < 22; j++) {
-				if (apikey !== '') {
-					//adapter.log.debug('mit key');
-					for (let i = 0; i < 59; i = i + 15) {
-						adapter.setState(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+		for (let index = 1; index < 6; index++) {
+			if (plant_d_everyhour[index - 1] == true && plant_active[index - 1] == true) {
+				for (let j = 5; j < 22; j++) {
+					if (apikey !== '') {
+						//adapter.log.debug('mit key');
+						for (let i = 0; i < 59; i = i + 15) {
+							await adapter.setStateAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+								val: Number(0),
+								ack: true
+							});
+						}
+					} else {
+						//adapter.log.debug('ohne key');
+						await adapter.setStateAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 							val: Number(0),
 							ack: true
 						});
 					}
-				} else {
-					//adapter.log.debug('ohne key');
-					adapter.setState(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
-						val: Number(0),
-						ack: true
-					});
 				}
 			}
 		}
-	}
-	for (let index = 1; index < 6; index++) {
-		if (plant_d_everyhour[index-1] === true && plant_active[index-1] === true) {
-			const stateValue = await adapter.getStateAsync(index + '.object');
-			if (stateValue.val !== '') {
-				var obj2 = JSON.parse(stateValue.val).result;
-				uebergabe_power_kw[index] = obj2.watts;
-				uebergabe_power_kwh[index] = obj2.watt_hours;
+		for (let index = 1; index < 6; index++) {
+			if (plant_d_everyhour[index-1] == true && plant_active[index-1] == true) {
+				const stateValue = await adapter.getStateAsync(index + '.object');
+				if (stateValue.val !== '') {
+					var obj2 = JSON.parse(stateValue.val).result;
+					uebergabe_power_kw[index] = obj2.watts;
+					uebergabe_power_kwh[index] = obj2.watt_hours;
+				}
 			}
 		}
-	}
 
-	let watts1 = uebergabe_power_kw[1]; let	watts2 = uebergabe_power_kw[2]; let	watts3 = uebergabe_power_kw[3]; let	watts4 = uebergabe_power_kw[4]; let	watts5 = uebergabe_power_kw[5];
+		let watts1 = uebergabe_power_kw[1]; let	watts2 = uebergabe_power_kw[2]; let	watts3 = uebergabe_power_kw[3]; let	watts4 = uebergabe_power_kw[4]; let	watts5 = uebergabe_power_kw[5];
 
-	let watts1_data;	let watts2_data;	let watts3_data;	let watts4_data;	let watts5_data;
+		let watts1_data;	let watts2_data;	let watts3_data;	let watts4_data;	let watts5_data;
 
+		let pos1;	let pos2;	let pos3;	let pos4;
 
+		for(let time in watts1) {
 
-	let pos1;	let pos2;	let pos3;	let pos4;
+			let today = new Date();
+			let month = today.getUTCMonth() +1;
+			let year = today.getUTCFullYear();
+			let day = today.getUTCDate();
+			month = (month <= 9 ? '0' + month : month);
+			day = (day <= 9 ? '0'+ day : day);
+			let pos5 = time.indexOf(year+'-'+ month  + '-'+day);
 
-	for(let time in watts1) {
+			/*adapter.log.debug("month:"+ month);
+            adapter.log.debug("year:"+year);
+            adapter.log.debug("day:"+ day);
+            adapter.log.debug("time:"+time);
+            adapter.log.debug("time.sub: "+time.substr(-8,2));*/
 
-		let today = new Date();
-		let month = today.getUTCMonth() +1;
-		let year = today.getUTCFullYear();
-		let day = today.getUTCDate();
-		month = (month <= 9 ? '0' + month : month);
-		day = (day <= 9 ? '0'+ day : day);
-		let pos5 = time.indexOf(year+'-'+ month  + '-'+day);
-
-		/*adapter.log.debug("month:"+ month);
-		adapter.log.debug("year:"+year);
-		adapter.log.debug("day:"+ day);
-		adapter.log.debug("time:"+time);
-		adapter.log.debug("time.sub: "+time.substr(-8,2));*/
-
-		if(apikey != ''){
-			//adapter.log.debug('erveryhour_filter_an');
-			pos1 = time.indexOf(time.substr(-8,2)+':00:00');
-			pos2 = time.indexOf(':15:00');
-			pos3 = time.indexOf(':30:00');
-			pos4 = time.indexOf(':45:00');
-		} else {
-			//adapter.log.debug('erveryhour_filter_aus');
-			pos1 = time.indexOf(time.substr(-8,2)+':00:00');
-		}
-
-	/*	adapter.log.debug("pos1"+ pos1);
-		adapter.log.debug("pos2"+ pos2);
-		adapter.log.debug("pos3"+ pos3);
-		adapter.log.debug("pos4"+ pos4);
-	    adapter.log.debug("pos5"+ pos5);*/
-
-		if((pos1 !== -1 || pos2 !== -1 || pos3 !== -1 || pos4 !== -1) && (pos5 !== -1)  )  {
-
-			let time2 =time.substr(-8,8);
-
-			//adapter.log.debug("time2"+time2);
-			if (plant_d_everyhour[0] == true && plant_active[0] == true){
-				watts1_data =  JSON.parse(watts1[time]);
-				watts1_data = watts1_data /1000;
-				await adapter.setStateAsync('1.everyhour_kw.' + time2,{val: Number(watts1_data), ack:true});
-				//adapter.log.debug("watts1_data"+ watts1_data);
-			}
-			if (plant_d_everyhour[1] == true && plant_active[1] == true){
-				watts2_data =  JSON.parse(watts2[time]);
-				watts2_data = watts2_data /1000;
-				await adapter.setStateAsync('2.everyhour_kw.' + time2,{val: Number(watts2_data), ack:true});
-				//adapter.log.debug("watts2_data"+ watts2_data);
-			}
-			if (plant_d_everyhour[2] == true && plant_active[2] == true){
-				watts3_data =  JSON.parse(watts3[time]);
-				watts3_data = watts2_data /1000;
-				await adapter.setStateAsync('3.everyhour_kw.' + time2,{val: Number(watts3_data), ack:true});
-				//adapter.log.debug("watts3_data"+ watts3_data);
-			}
-			if (plant_d_everyhour[3] === true && plant_active[3] === true){
-				watts4_data =  JSON.parse(watts4[time]);
-				watts4_data = watts4_data /1000;
-				await adapter.setStateAsync('4.everyhour_kw.' + time2,{val: Number(watts4_data), ack:true});
-				//adapter.log.debug("watts4_data"+ watts4_data);
-			}
-			if (plant_d_everyhour[4] === true && plant_active[4] === true){
-				watts5_data =  JSON.parse(watts5[time]);
-				watts5_data = watts5_data /1000;
-				await adapter.setStateAsync('5.everyhour_kw.' + time2,{val: Number(watts5_data), ack:true});
-				//adapter.log.debug("watts5_data"+ watts5_data);
+			if(apikey != ''){
+				//adapter.log.debug('erveryhour_filter_an');
+				pos1 = time.indexOf(time.substr(-8,2)+':00:00');
+				pos2 = time.indexOf(':15:00');
+				pos3 = time.indexOf(':30:00');
+				pos4 = time.indexOf(':45:00');
+			} else {
+				//adapter.log.debug('erveryhour_filter_aus');
+				pos1 = time.indexOf(time.substr(-8,2)+':00:00');
 			}
 
-			if (plant_d_everyhour[0] === true || plant_d_everyhour[1] === true || plant_d_everyhour[2] === true || plant_d_everyhour[3] === true || plant_d_everyhour[4] === true) {
+			/*	adapter.log.debug("pos1"+ pos1);
+                adapter.log.debug("pos2"+ pos2);
+                adapter.log.debug("pos3"+ pos3);
+                adapter.log.debug("pos4"+ pos4);
+                adapter.log.debug("pos5"+ pos5);*/
 
-				if(watts1_data == null){watts1_data = 0}
-				if(watts2_data == null){watts2_data = 0}
-				if(watts3_data == null){watts3_data = 0}
-				if(watts4_data == null){watts4_data = 0}
-				if(watts5_data == null){watts5_data = 0}
+			if((pos1 !== -1 || pos2 !== -1 || pos3 !== -1 || pos4 !== -1) && (pos5 !== -1)  )  {
 
-				let a = watts1_data + watts2_data + watts3_data + watts4_data + watts5_data;
-				adapter.log.debug("everyhour_summary" + a);
+				let time2 =time.substr(-8,8);
 
-				await adapter.setStateAsync('summary.everyhour_kw.' + time2, {val: Number(a), ack: true});
+				//adapter.log.debug("time2"+time2);
+				if (plant_d_everyhour[0] == true && plant_active[0] == true){
+					watts1_data =  JSON.parse(watts1[time]);
+					watts1_data = watts1_data /1000;
+					await adapter.setStateAsync('1.everyhour_kw.' + time2,{val: Number(watts1_data), ack:true});
+					//adapter.log.debug("watts1_data"+ watts1_data);
+				}
+				if (plant_d_everyhour[1] == true && plant_active[1] == true){
+					watts2_data =  JSON.parse(watts2[time]);
+					watts2_data = watts2_data /1000;
+					await adapter.setStateAsync('2.everyhour_kw.' + time2,{val: Number(watts2_data), ack:true});
+					//adapter.log.debug("watts2_data"+ watts2_data);
+				}
+				if (plant_d_everyhour[2] == true && plant_active[2] == true){
+					watts3_data =  JSON.parse(watts3[time]);
+					watts3_data = watts2_data /1000;
+					await adapter.setStateAsync('3.everyhour_kw.' + time2,{val: Number(watts3_data), ack:true});
+					//adapter.log.debug("watts3_data"+ watts3_data);
+				}
+				if (plant_d_everyhour[3] == true && plant_active[3] == true){
+					watts4_data =  JSON.parse(watts4[time]);
+					watts4_data = watts4_data /1000;
+					await adapter.setStateAsync('4.everyhour_kw.' + time2,{val: Number(watts4_data), ack:true});
+					//adapter.log.debug("watts4_data"+ watts4_data);
+				}
+				if (plant_d_everyhour[4] == true && plant_active[4] == true){
+					watts5_data =  JSON.parse(watts5[time]);
+					watts5_data = watts5_data /1000;
+					await adapter.setStateAsync('5.everyhour_kw.' + time2,{val: Number(watts5_data), ack:true});
+					//adapter.log.debug("watts5_data"+ watts5_data);
+				}
+
+				if (plant_d_everyhour[0] == true || plant_d_everyhour[1] == true || plant_d_everyhour[2] == true || plant_d_everyhour[3] == true || plant_d_everyhour[4] == true) {
+
+					if(watts1_data == null){watts1_data = 0}
+					if(watts2_data == null){watts2_data = 0}
+					if(watts3_data == null){watts3_data = 0}
+					if(watts4_data == null){watts4_data = 0}
+					if(watts5_data == null){watts5_data = 0}
+
+					let a = watts1_data + watts2_data + watts3_data + watts4_data + watts5_data;
+					adapter.log.debug("everyhour_summary" + a);
+
+					await adapter.setStateAsync('summary.everyhour_kw.' + time2, {val: Number(a), ack: true});
+				}
 			}
 		}
+	} catch (e) {
+
 	}
+
 }
