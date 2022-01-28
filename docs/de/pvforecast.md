@@ -17,6 +17,8 @@ Einstellungen:
 3. Link zu Seite
 4. Api Schlüssel
 5. Diagramm Y-Achse Stufe
+6. Zeitplan Datenabfrage(min) - Zeitplan aller x Minuten die Daten vom Server abgerufen werden sollen.
+7. Zeitüberschreitung Daten(sec) - Zeit nach der die Daten in das Object geschrieben werden (Aufruf nach dem Start).
 
 Für die Anlage 1-5 stehen folgende Einstellungen zu Verfügung(Nur Anlage 1 muss Angegeben werden):
 
