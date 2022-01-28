@@ -68,6 +68,9 @@
 					if ($('#tschedule').val() === '') {
 						$('#tschedule').val('60').trigger('change');
 					}
+					if ($('#timeout').val() === '') {
+						$('#timeout').val('15').trigger('change');
+					}
 				});
 			}
 
@@ -214,6 +217,11 @@
 								<input type="text" class="value" id="tschedule" />
 								<span for="tschedule">Schedule data query(min)</span>
 								<label for="tschedule" class="translate">Zeitplan Datenabfrage(min)</label>
+							</div>
+							<div class="col s3 input-field">
+								<input type="text" class="value" id="timeout" />
+								<span for="timeout">timeout data(sec)</span>
+								<label for="timeout" class="translate">Zeitüberschreitung Daten(sec)</label>
 							</div>
 						</div>
 

@@ -57,7 +57,16 @@ adapter.on('ready', function () {
 async function main() {
 	try {
 		await create_delete_state();
-		setTimeout(async  function() {await getPV(); }, 10000);
+		let data_adapter_timeout = adapter.config.timeout;
+		let data_timeout;
+		if(data_adapter_timeout !=''){
+			data_timeout =data_adapter_timeout * 1000;
+		}else{
+			data_timeout = 10000;
+		}
+
+		adapter.log.debug("timeout eingabe: " + data_timeout /1000 + " sec");
+		setTimeout(async  function() {await getPV(); }, data_timeout);
 		//await getPV();
 
 		data_tschedule = adapter.config.tschedule;
