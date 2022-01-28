@@ -13,6 +13,12 @@ forecast your pv earnings
 
 
 ## Changelog
+### 0.1.6
+* (Patrick Walther)add timeout, fix bugs and add schedule in settings
+
+### 0.1.5
+* (Patrick Walther)repair failure everyhour 
+
 ### 0.1.4
 * (Patrick Walther)add hourly forecast
 
