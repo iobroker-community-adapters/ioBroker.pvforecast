@@ -718,7 +718,7 @@ async function create_delete_state (){
 				type: 'state',
 				common: {
 					name: "condition",
-					type: 'number',
+					type: 'string',
 					role: 'value.condition',
 					read: true,
 					write: false,
