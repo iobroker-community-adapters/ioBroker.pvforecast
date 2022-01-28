@@ -1142,11 +1142,11 @@ async function weather_data () {
 					await adapter.setStateAsync('weather.datetime',{val:obj[i].datetime, ack:true});
 					await adapter.setStateAsync('weather.visibility',{val:Number(obj[i].visibility), ack:true});
 					await adapter.setStateAsync('weather.temperature',{val:Number(obj[i].temperature), ack:true});
-					await adapter.setStateAsync('weather.condition',{val:Number(obj[i].condition), ack:true});
+					await adapter.setStateAsync('weather.condition',{val:obj[i].condition, ack:true});
 					await adapter.setStateAsync('weather.icon',{val:obj[i].icon, ack:true});
 					await adapter.setStateAsync('weather.wind_speed',{val:Number(obj[i].wind_speed), ack:true});
 					await adapter.setStateAsync('weather.wind_degrees',{val:Number(obj[i].wind_degrees), ack:true});
-					await adapter.setStateAsync('weather.wind_direction',{val:Number(obj[i].wind_direction), ack:true});
+					await adapter.setStateAsync('weather.wind_direction',{val:obj[i].wind_direction, ack:true});
 				}
 			}
 		//}
