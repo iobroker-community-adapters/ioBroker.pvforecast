@@ -1110,7 +1110,7 @@ async function getweather () {
 async function weather_data () {
 	try {
 		const stateValue = await adapter.getStateAsync('weather.object');
-		if (stateValue !== '') {
+		if (stateValue != '') {
 			var d = new Date();
 			var dd = d.getUTCDate();
 			var mm = d.getUTCMonth() + 1;
