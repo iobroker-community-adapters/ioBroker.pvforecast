@@ -722,7 +722,7 @@ async function create_delete_state (){
 					role: 'value.condition',
 					read: true,
 					write: false,
-					def: 0
+					def: ''
 				},
 				native: {}
 			});
