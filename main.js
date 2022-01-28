@@ -768,11 +768,11 @@ async function create_delete_state (){
 				type: 'state',
 				common: {
 					name: "wind_direction",
-					type: 'number',
+					type: 'string',
 					role: 'value',
 					read: true,
 					write: false,
-					def: 0
+					def: ''
 				},
 				native: {}
 			});
