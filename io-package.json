@@ -1,8 +1,14 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "news": {
+
+      "0.1.7": {
+        "en": "add database write function",
+        "de": "Schreibe Funktion für Datenbanken eingefügt"
+      },
+
       "0.1.6": {
         "en": "fix failure",
         "de": "Fehler beheben",
@@ -178,6 +184,8 @@
     ],
     "readme": "https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/master/README.md",
     "loglevel": "info",
+    "messagebox": true,
+    "subscribe": "messagebox",
     "type": "general",
     "restartAdapters": [
       "vis"

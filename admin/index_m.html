@@ -51,10 +51,34 @@
 					});
 
 					fillPosition();
+
+					getAdapterInstances('influxdb', function (instances) {
+						fillInstances('influxdb1', instances, settings['influxdb1']);
+						//fillInstances('sql1', instances, settings['sql1']);
+					});
+					getAdapterInstances('sql', function (instances) {
+						fillInstances('sql1', instances, settings['sql1']);
+
+					});
+
+
 					$('#linkdata').val('https://api.forecast.solar').trigger('change');
 
 
 					onChange(false);
+				}
+
+				function fillInstances(id, arr, val) {
+					var $sel = $('#' + id);
+					$sel.html('<option value="">' + _('none') + '</option>');
+					for (var i = 0; i < arr.length; i++) {
+						var _id = arr[i]._id.replace('system.adapter.', '');
+						$sel.append('<option value="' + _id + '"' + (_id === val ? ' selected' : '') + '>' + _id + '</option>');
+					}
+					var _id2 = arr[0]._id.replace('system.adapter.', '');
+					_id2= _id2.slice(0, -2);
+					$sel.append('<option value="' + _id2 + '"' + (_id2 === val ? ' selected' : '') + '>' + _id2 + '</option>');
+					$sel.select();
 				}
 
 				function fillPosition() {
@@ -69,8 +93,65 @@
 						$('#tschedule').val('60').trigger('change');
 					}
 					if ($('#timeout').val() === '') {
-						$('#timeout').val('15').trigger('change');
+						$('#timeout').val('30').trigger('change');
 					}
+
+
+					if ($('#graphcolor1').val() === '') {
+						$('#graphcolor1').val('red').trigger('change');
+					}
+
+					if ($('#datalabelColor1').val() === '') {
+						$('#datalabelColor1').val('red').trigger('change');
+					}
+
+					if ($('#datalabel_rotation1').val() === '') {
+						$('#datalabel_rotation1').val('0').trigger('change');
+					}
+
+					if ($('#axisy_step1').val() === '') {
+						$('#axisy_step1').val('0').trigger('change');
+					}
+
+
+
+					if ($('#graphcolor2').val() === '') {
+						$('#graphcolor2').val('blue').trigger('change');
+					}
+
+					if ($('#datalabelColor2').val() === '') {
+						$('#datalabelColor2').val('blue').trigger('change');
+					}
+
+
+					if ($('#graphcolor3').val() === '') {
+						$('#graphcolor3').val('yellow').trigger('change');
+					}
+
+					if ($('#datalabelColor3').val() === '') {
+						$('#datalabelColor3').val('yellow').trigger('change');
+					}
+
+
+
+					if ($('#graphcolor4').val() === '') {
+						$('#graphcolor4').val('pink').trigger('change');
+					}
+
+					if ($('#datalabelColor4').val() === '') {
+						$('#datalabelColor4').val('pink').trigger('change');
+					}
+
+
+
+					if ($('#graphcolor5').val() === '') {
+						$('#graphcolor5').val('green').trigger('change');
+					}
+
+					if ($('#datalabelColor5').val() === '') {
+						$('#datalabelColor5').val('green').trigger('change');
+					}
+
 				});
 			}
 
@@ -181,9 +262,7 @@
 								<span for="APIK">API Schlüssel</span>
 								<label for="APIK" class="translate">API Key</label>
 							</div>
-
 						</div>
-
 
 						<div class="row">
 							<div class="col s2 input-field">
@@ -225,6 +304,30 @@
 							</div>
 						</div>
 
+
+						<div class="row">
+
+							<div class="input-field col s2 influxdb1">
+								<label>Influx</label>
+
+								<select class="value" id="influxdb1">
+									<option value="Choose a Instance" class="translate">Choose a Instance</option>
+								</select>
+								<label for="influxdb1" class="translate"></label>
+								<span class="translate">Choose a Instance</span>
+							</div>
+
+							<div class="input-field col s2 sql1">
+								<label>Influx</label>
+
+								<select class="value" id="sql1">
+									<option value="Choose a Instance" class="translate">Choose a Instance</option>
+								</select>
+								<label for="sql1" class="translate"></label>
+								<span class="translate">Choose a Instance</span>
+							</div>
+
+						</div>
 					</div>
 				</li>
 				<!--weather-->

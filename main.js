@@ -625,7 +625,22 @@ async function getPV () {
 	}catch (e) {
 
 	}
+
+
 	await everyhour_data();
+
+// add Json Table to database
+		const stateValue = await adapter.getStateAsync('summary.JSONTable');
+		let result = JSON.parse(stateValue.val);
+		adapter.log.debug("Summary JsonTable: " + JSON.stringify(result));
+		for(let i=0; i < result.length; i++){
+
+			let ts = new Date(result[i].Uhrzeit);
+
+			adapter.log.debug("Store Prognose: " + ts.toLocaleDateString() + " with " + result[i].summe);
+
+			await addToInfluxDB('summary.prognose',ts.getTime(),result[i].summe);
+		}
 }
 
 // create or delete states from plants
@@ -1007,6 +1022,21 @@ async function create_delete_state (){
 				}
 			}
 	//	adapter.log.debug("summary");
+
+		await adapter.setObjectNotExists('summary.prognose', {
+			type: 'state',
+			common: {
+				name: "prognose",
+				type: 'JSON',
+				role: 'value',
+				read: true,
+				write: false,
+				def: 0
+			},
+			native: {}
+		});
+
+
 		for (let index = 1; index < 6; index++) {
 			if (plant_d_everyhour[0] || plant_d_everyhour[1] ||plant_d_everyhour[2]||plant_d_everyhour[3]||plant_d_everyhour[4]) {
 				for (let j = 5; j < 22; j++) {
@@ -1303,6 +1333,41 @@ async function everyhour_data () {
 		}
 	} catch (e) {
 
+	}
+}
+
+
+async function addToInfluxDB(datapoint,timestamp,value) {
+	try {
+		let data_sql = adapter.config.sql1;
+		let data_influxdb = adapter.config.influxdb1;
+
+		if (data_sql != '') {
+			adapter.sendTo('data_sql','storeState', {
+				id: datapoint,
+				state: {
+					ts: timestamp,
+					val: value,
+					ack: true,
+					from: 'pvforecast',
+					q: 0
+				}
+			});
+		} else if (data_influxdb != '') {
+			adapter.sendTo('data_influxdb','storeState', {
+				id: datapoint,
+				state: {
+					ts: timestamp,
+					val: value,
+					ack: true,
+					from: 'pvforecast',
+					q: 0
+				}
+			});
+		}
+
+	} catch (e) {
+		adapter.log.error("Datenbank: " + e);
 	}
 
 }
