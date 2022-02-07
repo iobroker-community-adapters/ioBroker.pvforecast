@@ -629,7 +629,11 @@ async function getPV () {
 
 	await everyhour_data();
 
+	let data_sql = adapter.config.sql1;
+	let data_influxdb = adapter.config.influxdb1;
+
 // add Json Table to database
+	if (data_sql != '' || data_influxdb != '') {
 		const stateValue = await adapter.getStateAsync('summary.JSONTable');
 		let result = JSON.parse(stateValue.val);
 		adapter.log.debug("Summary JsonTable: " + JSON.stringify(result));
@@ -641,6 +645,8 @@ async function getPV () {
 
 			await addToInfluxDB('summary.prognose',ts.getTime(),result[i].summe);
 		}
+	}
+
 }
 
 // create or delete states from plants
