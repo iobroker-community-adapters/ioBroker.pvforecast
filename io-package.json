@@ -189,8 +189,7 @@
     "type": "general",
     "restartAdapters": [
       "vis"
-    ],
-    "installedFrom": "Patrick-Walther/ioBroker.pvforecast#f33c4055698c0d2acddae4925130929c2cb9b995"
+    ]
   },
   "native": {},
   "objects": [],
