@@ -13,9 +13,12 @@ forecast your pv earnings
 
 
 ## Changelog
+
+### 0.1.8
+* (Patrick Walther) fixed writing to database, log failure
+
 ### 0.1.7
 * (Patrick Walther)add write to Database function
-
 
 ### 0.1.6
 * (Patrick Walther)add timeout, fix bugs and add schedule in settings
