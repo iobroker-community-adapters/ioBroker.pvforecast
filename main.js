@@ -633,9 +633,12 @@ async function getPV () {
 
 	let data_sql = adapter.config.sql1;
 	let data_influxdb = adapter.config.influxdb1;
+	let data_sql1 = adapter.config.actived_sql;
+	let data_influxdb1 = adapter.config.actived_influxdb;
+
 	adapter.log.debug("data_influxdb: " + data_influxdb);
 // add Json Table to database
-	if (data_sql != '' || data_influxdb != '') {
+	if ((data_sql != '' && data_sql1 == true) || (data_influxdb != '' && data_influxdb1 == true)) {
 		const stateValue = await adapter.getStateAsync('summary.JSONTable');
 		let result = JSON.parse(stateValue.val);
 		adapter.log.debug("Summary JsonTable: " + JSON.stringify(result));
