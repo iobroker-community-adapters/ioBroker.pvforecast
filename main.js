@@ -40,6 +40,7 @@ adapter.on('unload', function (callback) {
 	try {
 		adapter.log.debug('cleaned everything up...');
 		schedule.cancelJob('datenauswerten');
+		clearTimeout(timeout);
 		clearInterval(timer2);
 		callback();
 	} catch (e) {
@@ -65,7 +66,9 @@ async function main() {
 		}
 
 		adapter.log.debug("timeout eingabe: " + data_timeout /1000 + " sec");
-		setTimeout(async  function() {await getPV(); }, data_timeout);
+
+
+		const timeout = setTimeout(async  function() {await getPV(); }, data_timeout);
 		//await getPV();
 
 		data_tschedule = adapter.config.tschedule;
