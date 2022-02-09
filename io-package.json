@@ -1,12 +1,31 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.7",
+    "version": "0.1.8",
     "news": {
-
+      "0.1.8": {
+        "en": "fixed writing failure to database and log failure.",
+        "de": "Schreibfehler in Datenbank und Protokollfehler behoben.",
+        "ru": "исправлена ошибка записи в базу данных и ошибка журнала.",
+        "pt": "corrigida falha de gravação no banco de dados e falha de log.",
+        "nl": "vaste schrijffout naar database en logfout.",
+        "fr": "échec d'écriture fixe dans la base de données et échec du journal.",
+        "it": "corretto errore di scrittura nel database e errore di registro.",
+        "es": "Se corrigió el error de escritura en la base de datos y el error de registro.",
+        "pl": "naprawiono błąd zapisu do bazy danych i błąd dziennika.",
+        "zh-cn": "修复了数据库写入失败和日志失败的问题。"
+      },
       "0.1.7": {
         "en": "add database write function",
-        "de": "Schreibe Funktion für Datenbanken eingefügt"
+        "de": "Datenbankschreibfunktion hinzufügen",
+        "ru": "добавить функцию записи в БД",
+        "pt": "adicionar função de gravação de banco de dados",
+        "nl": "database-schrijffunctie toevoegen",
+        "fr": "ajouter une fonction d'écriture de base de données",
+        "it": "aggiungi la funzione di scrittura del database",
+        "es": "agregar función de escritura de base de datos",
+        "pl": "dodaj funkcję zapisu bazy danych",
+        "zh-cn": "添加数据库写入功能"
       },
 
       "0.1.6": {
@@ -171,6 +190,7 @@
     "connectionType": "cloud",
     "dataSource": "push",
     "mode": "daemon",
+    "compact": true,
     "allowInit": true,
     "materialize": true,
     "enabled": false,

@@ -38,13 +38,16 @@
 						if ($key.attr('type') === 'checkbox') {
 						// do not call onChange direct, because onChange could expect some arguments
 							$key.prop('checked', settings[id]).change(function() {
+								hideshow();
 								onChange();
 							});
 						} else {
 							// do not call onChange direct, because onChange could expect some arguments
 							$key.val(settings[id]).change(function() {
+							hideshow();
 							onChange();
 							}).keyup(function() {
+
 								onChange();
 							});
 						}
@@ -68,6 +71,21 @@
 					onChange(false);
 				}
 
+
+				function hideshow(){
+					if ($('#actived_sql').prop('checked')) {
+						$('.sql1').show();
+					} else {
+						$('.sql1').hide();
+					}
+
+					if ($('#actived_influxdb').prop('checked')) {
+						$('.influxdb1').show();
+					} else {
+						$('.influxdb1').hide();
+					}
+				}
+
 				function fillInstances(id, arr, val) {
 					var $sel = $('#' + id);
 					$sel.html('<option value="">' + _('none') + '</option>');
@@ -75,9 +93,7 @@
 						var _id = arr[i]._id.replace('system.adapter.', '');
 						$sel.append('<option value="' + _id + '"' + (_id === val ? ' selected' : '') + '>' + _id + '</option>');
 					}
-					var _id2 = arr[0]._id.replace('system.adapter.', '');
-					_id2= _id2.slice(0, -2);
-					$sel.append('<option value="' + _id2 + '"' + (_id2 === val ? ' selected' : '') + '>' + _id2 + '</option>');
+
 					$sel.select();
 				}
 
@@ -304,22 +320,29 @@
 							</div>
 						</div>
 
+						<div class="row">
+								<div class="input-field col s3">
+									<input type="checkbox" class="value" id="actived_influxdb" />
+									<span class="translate">actived influxdb</span>
+								</div>
+
+								<div class="input-field col s2 influxdb1">
+									<select class="value" id="influxdb1">
+										<option value="Choose a Instance" class="translate">Choose a Instance</option>
+									</select>
+									<label for="influxdb1" class="translate"></label>
+									<span class="translate">Choose a Instance</span>
+								</div>
+							</div>
+
 
 						<div class="row">
-
-							<div class="input-field col s2 influxdb1">
-
-
-								<select class="value" id="influxdb1">
-									<option value="Choose a Instance" class="translate">Choose a Instance</option>
-								</select>
-								<label for="influxdb1" class="translate"></label>
-								<span class="translate">Choose a Instance</span>
+							<div class="input-field col s3">
+								<input type="checkbox" class="value" id="actived_sql" />
+								<span class="translate">actived sql</span>
 							</div>
 
 							<div class="input-field col s2 sql1">
-							
-
 								<select class="value" id="sql1">
 									<option value="Choose a Instance" class="translate">Choose a Instance</option>
 								</select>

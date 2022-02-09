@@ -39,9 +39,8 @@ let data_tschedule = '';
 adapter.on('unload', function (callback) {
 	try {
 		adapter.log.debug('cleaned everything up...');
-		clearTimeout(timer);
 		schedule.cancelJob('datenauswerten');
-
+		clearInterval(timer2);
 		callback();
 	} catch (e) {
 		callback();
@@ -79,7 +78,7 @@ async function main() {
 			data_tschedule = 3600000;
 			adapter.log.debug("tschedule standart: " + data_tschedule / 60000 + " min");
 		}
-		var timer = setInterval(datenübertragen, data_tschedule); //360000
+		var timer2 = setInterval(datenübertragen, data_tschedule); //360000
 
 		let weather_active = adapter.config.weather_active;
 
@@ -631,7 +630,7 @@ async function getPV () {
 
 	let data_sql = adapter.config.sql1;
 	let data_influxdb = adapter.config.influxdb1;
-
+	adapter.log.debug("data_influxdb: " + data_influxdb);
 // add Json Table to database
 	if (data_sql != '' || data_influxdb != '') {
 		const stateValue = await adapter.getStateAsync('summary.JSONTable');
@@ -1033,14 +1032,15 @@ async function create_delete_state (){
 			type: 'state',
 			common: {
 				name: "prognose",
-				type: 'JSON',
+				type: 'json',
 				role: 'value',
 				read: true,
-				write: false,
-				def: 0
+				write: false
+				//def: ''
 			},
 			native: {}
 		});
+
 
 
 		for (let index = 1; index < 6; index++) {
@@ -1220,7 +1220,7 @@ async function everyhour_data () {
 			if (plant_d_everyhour[index - 1] === true && plant_active[index - 1] === true) {
 				for (let j = 5; j < 22; j++) {
 					if (apikey !== '') {
-						adapter.log.debug("mit key");
+						//adapter.log.debug("mit key");
 						for (let i = 0; i < 59; i = i + 15) {
 							await adapter.setState(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
 								val: Number(0),
@@ -1228,7 +1228,7 @@ async function everyhour_data () {
 							});
 						}
 					} else {
-						adapter.log.debug("ohne key");
+					//	adapter.log.debug("ohne key");
 						await adapter.setStateAsync(index + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 							val: Number(0),
 							ack: true
@@ -1255,17 +1255,18 @@ async function everyhour_data () {
 
 		let watts1_data;	let watts2_data;	let watts3_data;	let watts4_data;	let watts5_data;
 
-		let pos1;	let pos2;	let pos3;	let pos4;
-
+		let pos1;	let pos2;	let pos3;	let pos4;let  pos5;
+		let year;	let month;	let day;	let today
 		for(let time in watts1) {
-
-			let today = new Date();
-			let month = today.getUTCMonth() +1;
-			let year = today.getUTCFullYear();
-			let day = today.getUTCDate();
+			pos1 = -1; pos2 = -1; pos3 = -1; pos4 = -1; pos5 = -1;
+			year = -1; month = -1; day = -1; today = -1;
+			today = new Date();
+			month = today.getUTCMonth() +1;
+			year = today.getUTCFullYear();
+			day = today.getUTCDate();
 			month = (month <= 9 ? '0' + month : month);
 			day = (day <= 9 ? '0'+ day : day);
-			let pos5 = time.indexOf(year+'-'+ month  + '-'+day);
+			pos5 = time.indexOf(year+'-'+ month  + '-'+day);
 
 			/*adapter.log.debug("month:"+ month);
             adapter.log.debug("year:"+year);
@@ -1286,7 +1287,7 @@ async function everyhour_data () {
 
 				adapter.log.debug("pos1: "+ pos1 + " - pos2: "+ pos2 + "- pos3: " + pos3 + " - pos4: "+ pos4 + " - pos5: "+ pos5);
 
-			if((pos1 !== -1 || pos2 !== -1 || pos3 !== -1 || pos4 !== -1) && (pos5 !== -1)  )  {
+			if ((pos1 != -1 && pos5 != -1) || (pos2 != -1 && pos5 != -1) || (pos3 != -1 && pos5 != -1) || (pos4 != -1 && pos5 != -1))  {
 
 				let time2 =time.substr(-8,8);
 
@@ -1341,7 +1342,7 @@ async function everyhour_data () {
 
 	}
 }
-
+//await addToInfluxDB('summary.prognose',ts.getTime(),result[i].summe);
 
 async function addToInfluxDB(datapoint,timestamp,value) {
 	try {
@@ -1349,25 +1350,25 @@ async function addToInfluxDB(datapoint,timestamp,value) {
 		let data_influxdb = adapter.config.influxdb1;
 
 		if (data_sql != '') {
-			adapter.sendTo('data_sql','storeState', {
+			adapter.sendTo(data_sql,'storeState', {
 				id: datapoint,
 				state: {
 					ts: timestamp,
 					val: value,
 					ack: true,
 					from: 'pvforecast',
-					q: 0
+					//q: 0
 				}
 			});
 		} else if (data_influxdb != '') {
-			adapter.sendTo('data_influxdb','storeState', {
+			adapter.sendTo(data_influxdb,'storeState', {
 				id: datapoint,
 				state: {
 					ts: timestamp,
 					val: value,
 					ack: true,
 					from: 'pvforecast',
-					q: 0
+					//q: 0
 				}
 			});
 		}
