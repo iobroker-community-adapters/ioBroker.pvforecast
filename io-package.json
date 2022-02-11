@@ -13,7 +13,7 @@
       "it": "corretta la scrittura nel database sql",
       "es": "escritura fija en la base de datos sql",
       "pl": "naprawiono zapis do bazy danych sql",
-      "zh-cn": "修复了对数据库 sql 的写入",
+      "zh-cn": "修复了对数据库 sql 的写入"
       },
       "0.1.8": {
         "en": "fixed writing failure to database and log failure.",
