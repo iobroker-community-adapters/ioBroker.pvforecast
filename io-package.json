@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.8",
+    "version": "0.1.9",
     "news": {
+      "0.1.9": {
+      "en": "fixed writing to database sql",
+      "de": "Behoben: Schreiben in Datenbank sql",
+      "ru": "исправлена запись в базу данных sql",
+      "pt": "escrita fixa no banco de dados sql",
+      "nl": "vast schrijven naar database sql",
+      "fr": "écriture fixe dans la base de données sql",
+      "it": "corretta la scrittura nel database sql",
+      "es": "escritura fija en la base de datos sql",
+      "pl": "naprawiono zapis do bazy danych sql",
+      "zh-cn": "修复了对数据库 sql 的写入",
+      },
       "0.1.8": {
         "en": "fixed writing failure to database and log failure.",
         "de": "Schreibfehler in Datenbank und Protokollfehler behoben.",
