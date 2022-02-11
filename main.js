@@ -638,7 +638,7 @@ async function getPV () {
 
 	adapter.log.debug("data_influxdb: " + data_influxdb);
 // add Json Table to database
-	if ((data_sql != '' && data_sql1 == true) || (data_influxdb != '' && data_influxdb1 == true)) {
+	if (data_influxdb != '' && data_influxdb1 == true) {
 		const stateValue = await adapter.getStateAsync('summary.JSONTable');
 		let result = JSON.parse(stateValue.val);
 		adapter.log.debug("Summary JsonTable: " + JSON.stringify(result));
@@ -648,9 +648,37 @@ async function getPV () {
 
 			adapter.log.debug("Store Prognose: " + ts.toLocaleDateString() + " with " + result[i].summe);
 
-			await addToInfluxDB('summary.prognose',ts.getTime(),result[i].summe);
+            await addToInfluxDB('summary.prognose',ts.getTime(),result[i].summe);
 		}
 	}
+    if (data_sql != '' && data_sql1 == true) {
+        const stateValue = await adapter.getStateAsync('summary.JSONTable');
+        let result = JSON.parse(stateValue.val);
+        adapter.log.debug("Summary JsonTable: " + JSON.stringify(result));
+        for(let i=0; i < result.length; i++){
+
+            let ts = new Date(result[i].Uhrzeit);
+
+            adapter.log.debug("Store Prognose SQL: " + ts.toLocaleDateString() + " with " + result[i].summe);
+
+         //  await addToSQL('summary.prognose',ts.getTime(),result[i].summe);
+
+            let data_sql = adapter.config.sql1;
+            adapter.sendTo(data_sql,'storeState', {
+                id: 'pvforecast.0.summary.prognose',
+               // rules: true,
+                state: {
+                    ts: ts.getTime(),
+                    val: Number(result[i].summe),
+                    ack: true,
+                    from: 'pvforecast',
+                    //q: 0
+                }
+            });
+        }
+    }
+
+
 
 }
 
@@ -1352,21 +1380,7 @@ async function everyhour_data () {
 
 async function addToInfluxDB(datapoint,timestamp,value) {
 	try {
-		let data_sql = adapter.config.sql1;
-		let data_influxdb = adapter.config.influxdb1;
-
-		if (data_sql != '') {
-			adapter.sendTo(data_sql,'storeState', {
-				id: datapoint,
-				state: {
-					ts: timestamp,
-					val: value,
-					ack: true,
-					from: 'pvforecast',
-					//q: 0
-				}
-			});
-		} else if (data_influxdb != '') {
+        let data_influxdb = adapter.config.influxdb1;
 			adapter.sendTo(data_influxdb,'storeState', {
 				id: datapoint,
 				state: {
@@ -1377,10 +1391,36 @@ async function addToInfluxDB(datapoint,timestamp,value) {
 					//q: 0
 				}
 			});
-		}
-
 	} catch (e) {
 		adapter.log.error("Datenbank: " + e);
 	}
+
+}
+
+async function addToSQL(datapoint,timestamp,value) {
+    try {
+
+        let data_sql = adapter.config.sql1;
+            adapter.sendTo(data_sql,'storeState', {
+                id: datapoint,
+                rules: true,
+                state: {
+                    ts: timestamp,
+                    val: Number(value),
+                    ack: true,
+                    from: 'pvforecast',
+                    //q: 0
+                }
+            });
+
+            /*adapter.sendTo(data_sql,'storeState', {
+                id: datapoint,
+                rules: true,
+                state: {val: Number(value), ts: timestamp}
+            });*/
+
+    } catch (e) {
+        adapter.log.error("Datenbank SQL: " + e);
+    }
 
 }
