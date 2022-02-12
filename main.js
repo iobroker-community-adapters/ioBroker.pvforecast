@@ -665,7 +665,7 @@ async function getPV () {
 
             let data_sql = adapter.config.sql1;
             adapter.sendTo(data_sql,'storeState', {
-                id: 'pvforecast.0.summary.prognose',
+                id: 'summary.prognose',
                // rules: true,
                 state: {
                     ts: ts.getTime(),
