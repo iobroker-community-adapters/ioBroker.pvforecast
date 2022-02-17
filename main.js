@@ -73,7 +73,7 @@ async function main() {
 
 		data_tschedule = adapter.config.tschedule;
 
-		if (data_tschedule != '') {
+		if (data_tschedule != '' && typeof data_tschedule !== 'undefined') {
 			data_tschedule = adapter.config.tschedule;
 			adapter.log.debug('tschedule eingabe: ' + data_tschedule + ' min');
 			data_tschedule = 60000 * data_tschedule;
@@ -196,6 +196,7 @@ const calc2 = schedule.scheduleJob('datenauswerten', '* * * * *', async function
 async function getPV () {
 
 	adapter.log.debug('getpv');
+	if(typeof adapter.config.longitude == 'undefined') { return; }
 	//Variablen zur Übergabe und Prüfen der Einträge im Admin
 	//main
 	const forcastUrl = adapter.config.linkdata; //var account = adapter.config.account;
