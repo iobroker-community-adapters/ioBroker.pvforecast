@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "0.1.9",
+    "version": "0.2.0",
     "news": {
+      "0.2.0": {
+        "en": " add jsonConfig (No admin4 support), fixed bugs and errors, total code rewrite",
+        "de": " fügen Sie jsonConfig hinzu (keine Admin4-Unterstützung), behobene Fehler und Fehler, vollständiges Umschreiben des Codes",
+        "ru": " добавлен jsonConfig (без поддержки admin4), исправлены ошибки и ошибки, полностью переписан код",
+        "pt": " adicione jsonConfig (sem suporte admin4), bugs e erros corrigidos, reescrita total do código",
+        "nl": " jsonConfig toevoegen (geen admin4-ondersteuning), bugs en fouten verholpen, totale code herschrijven",
+        "fr": " ajouter jsonConfig (pas de support admin4), bugs et erreurs corrigés, réécriture totale du code",
+        "it": " aggiungi jsonConfig (nessun supporto admin4), bug ed errori corretti, riscrittura totale del codice",
+        "es": " agregue jsonConfig (sin soporte admin4), errores y errores corregidos, reescritura total del código",
+        "pl": " dodaj jsonConfig (brak obsługi admin4), poprawione błędy i błędy, całkowite przepisanie kodu",
+        "zh-cn": " 添加 jsonConfig（无 admin4 支持），修复错误和错误，总代码重写"
+      },
       "0.1.9": {
       "en": "fixed writing to database sql",
       "de": "Behoben: Schreiben in Datenbank sql",
@@ -190,7 +202,7 @@
     },
     "dependencies": [
       {
-        "admin": ">=3.0.0"
+        "admin": ">=5.0.0"
       },
       {
         "js-controller": ">=3.2.0"
@@ -206,6 +218,9 @@
     "allowInit": true,
     "materialize": true,
     "enabled": false,
+    "adminUI": {
+      "config": "json"
+    },
     "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/pvforecast.png",
     "keywords": [
       "Photovoltaik",
@@ -223,7 +238,11 @@
       "vis"
     ]
   },
-  "native": {},
+  "native": {
+    "linkdata": "https://api.forecast.solar",
+    "influxinstace": 0
+
+  },
   "objects": [],
   "instanceObjects": [
     {
