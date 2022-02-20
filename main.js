@@ -10,7 +10,7 @@ const utils = require('@iobroker/adapter-core');
 const { threadId } = require('worker_threads');
 const moment = require('moment');
 const axios = require('axios');
-const { testAdapterWithMocks } = require('@iobroker/testing/build/tests/unit');
+//const { testAdapterWithMocks } = require('@iobroker/testing/build/tests/unit');
 
 const tooltip_AppendText= ' Watt';
 let apikey = false;
