@@ -68,7 +68,7 @@ class Pvforecast extends utils.Adapter {
 		}, this.config.tschedule * 1000 * 60);
 	}
 	async getAllDataIntervall(){
-		this.clearTimeout(getdatatimeout);
+		clearTimeout(getdatatimeout);
 		await this.getPv();
 		if(apikey && this.config.weather_active) await this.getweather();
 		getdatatimeout = setTimeout(async () => {
@@ -77,7 +77,7 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async updateActualDataIntervall () {
-		this.clearTimeout(updatetimeout);
+		clearTimeout(updatetimeout);
 		const plantArray = this.config.devices;
 		let summerywatt=0;
 		let summerywatth=0;
@@ -118,8 +118,8 @@ class Pvforecast extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			this.clearTimeout(getdatatimeout);
-			this.clearTimeout(updatetimeout);
+			clearTimeout(getdatatimeout);
+			clearTimeout(updatetimeout);
 			callback();
 		} catch (e) {
 			callback();

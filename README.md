@@ -27,6 +27,8 @@ forecast your pv earnings
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (MeisterTR) fixed timer warning
 
 ### 0.2.1 (2022-02-21)
 
