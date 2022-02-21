@@ -28,7 +28,7 @@ forecast your pv earnings
     ### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.2.1 (2022-02-21)
 
 * (MeisterTR) fix typo
 * (MeisterTR) fix no every hour folder in summary
