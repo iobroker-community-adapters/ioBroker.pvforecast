@@ -21,11 +21,13 @@ vorhersage eurer PV Erträge
 forecast your pv earnings
 [English Description here](docs/en/pvforecast.md)
 
+# Changelog
+
 <!--
     Placeholder for the next version (at the beginning of the line):
     ## **WORK IN PROGRESS**
 -->
-# Changelog
+
 ## **WORK IN PROGRESS**
 * (MeisterTR) fix typo
 * (MeisterTR) fix no every hour folder in summary
