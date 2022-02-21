@@ -1,0 +1,263 @@
+{
+    "i18n": true,
+    "type": "tabs",
+    "items": {
+        "_options": {
+            "type": "panel",
+            "label": "options",
+            "items": {
+                "linkdata": {
+                    "type": "text",
+                    "sm": 8,
+                    "md": 4,
+                    "lg": 4,
+                    "default": "https://api.forecast.solar",
+                    "label": "Link from Solar Forecas"
+                },
+                "apikey": {
+                    "type": "text",
+                    "sm": 8,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "API Key"
+                },
+                "latitude": {
+                    "newLine": true,
+                    "type": "text",
+                    "sm": 6,
+                    "md": 3,
+                    "lg": 3,
+                    "label": "latitude"
+                },
+                "longitude": {
+                    "type": "text",
+                    "sm": 6,
+                    "md": 3,
+                    "lg": 3,
+                    "label": "longitude"
+                },
+                "intervall": {
+                    "type": "number",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "Poll intervall in minutes"
+                },
+                "_devider": {
+                    "type": "deivder"
+                },
+                "actived_influxdb": {
+                    "newLine": true,
+                    "type": "checkbox",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "save to influxdb"
+                },
+                "influxinstace": {
+                    "hidden": "!actived_influxdb",
+                    "type": "number",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "options": [
+                        {
+                          "label": "0",
+                          "value": 0
+                        },
+                        {
+                          "label": "1",
+                          "value": 1
+                        },
+                        {
+                          "label": "2",
+                          "value": 2
+                        },
+                        {
+                          "label": "3",
+                          "value": 3
+                        },
+                        {
+                          "label": "4",
+                          "value": 4
+                        },
+                        {
+                          "label": "5",
+                          "value": 5
+                        },
+                        {
+                          "label": "6",
+                          "value": 6
+                        }
+                      ],
+                    "label": "influx instance"
+                },
+                "weather_active": {
+                    "type": "checkbox",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "weather (only with apikey)"
+                },
+                "everyhour_active": {
+                    "type": "checkbox",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "states for every hour"
+                },
+                "_devider1": {
+                    "type": "deivder"
+                },
+                "actived_echart": {
+                    "newLine": true,
+                    "type": "checkbox",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "e-chart"
+                },
+                "datalabel_rotation1": {
+                    "hidden": "!data.actived_echart",
+                    "type": "number",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "datalabel rotation (Echart)"
+                },
+                "axisy_step1": {
+                    "hidden": "!data.actived_echart",
+                    "type": "number",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "Y-Achse Step (Echart)"
+                }
+            }
+        },
+        "_advanced": {
+            "type": "panel",
+            "label": "PV-Systems",
+            "items": {
+                "devices": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "label": "PV-Systems",
+                    "items": [
+                        {
+                            "type": "text",
+                            "attr": "name",
+                            "width": "20%",
+                            "title": {
+                                "en": "name",
+                                "de": "Name",
+                                "ru": "имя",
+                                "pt": "nome",
+                                "nl": "naam",
+                                "fr": "Nom",
+                                "it": "nome",
+                                "es": "nombre",
+                                "pl": "Nazwa",
+                                "zh-cn": "姓名"
+                            },
+                            "filter": true,
+                            "sort": true,
+                            "default": ""
+                        },
+                        {
+                            "type": "number",
+                            "attr": "azimuth",
+                            "width": "20%",
+                            "title": "Azimuth",
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        },
+                        {
+                            "type": "number",
+                            "attr": "tilt",
+                            "width": "20%",
+                            "title": {
+                                "en": "tilt",
+                                "de": "Neigung",
+                                "ru": "наклон",
+                                "pt": "inclinar",
+                                "nl": "kantelen",
+                                "fr": "inclinaison",
+                                "it": "inclinazione",
+                                "es": "inclinación",
+                                "pl": "przechylenie",
+                                "zh-cn": "倾斜"
+                              },
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        },
+                        {
+                            "type": "number",
+                            "attr": "peakpower",
+                            "width": "20%",
+                            "title":  {
+                                "en": "peak power",
+                                "de": "Spitzenleistung",
+                                "ru": "Пиковая мощность",
+                                "pt": "pico de energia",
+                                "nl": "piekvermogen",
+                                "fr": "puissance de crête",
+                                "it": "picco di potenza",
+                                "es": "la punta del Poder",
+                                "pl": "moc szczytowa",
+                                "zh-cn": "峰值功率"
+                              },
+                            "filter": false,
+                            "sort": false,
+                            "default": ""
+                        },
+                        {
+                            "type": "color",
+                            "attr": "graphcolor",
+                            "width": "10%",
+                            "title": {
+                                "en": "graph color",
+                                "de": "Diagrammfarbe",
+                                "ru": "цвет графика",
+                                "pt": "cor do gráfico",
+                                "nl": "grafiek kleur",
+                                "fr": "couleur du graphique",
+                                "it": "colore del grafico",
+                                "es": "color del gráfico",
+                                "pl": "kolor wykresu",
+                                "zh-cn": "图形颜色"
+                              },
+                            "filter": false,
+                            "sort": false,
+                            "default": "#000000"
+                        },
+                        {
+                            "type": "color",
+                            "attr": "labelcolor",
+                            "width": "10%",
+                            "title": {
+                                "en": "label color",
+                                "de": "Etikettenfarbe",
+                                "ru": "цвет этикетки",
+                                "pt": "cor da etiqueta",
+                                "nl": "label kleur",
+                                "fr": "couleur de l'étiquette",
+                                "it": "colore dell'etichetta",
+                                "es": "color de la etiqueta",
+                                "pl": "kolor etykiety",
+                                "zh-cn": "标签颜色"
+                              },
+                            "filter": false,
+                            "sort": false,
+                            "default": "#000000"
+                        }
+                    ]
+                }
+            }
+        }
+    }
+}

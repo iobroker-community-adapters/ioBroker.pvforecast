@@ -23,6 +23,10 @@ forecast your pv earnings
 
 
 ## Changelog
+### 0.2.0
+* (MeisterTR) add jsonConfig (No admin4 support)
+* (MeisterTR) fixed bugs and errors
+* (MeisterTR) total code refactoring
 
 ### 0.1.8
 * (Patrick Walther) fixed writing to database, log failure
