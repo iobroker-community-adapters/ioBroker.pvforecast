@@ -228,7 +228,7 @@ class Pvforecast extends utils.Adapter {
 
 		plantArray.forEach( async (plant) => {
 			const url = this.config.linkdata + akey + '/estimate/'+this.config.latitude +'/'+this.config.longitude +'/'+plant.tilt+'/'+ plant.azimuth+'/'+ plant.peakpower;
-			this.log.info('url for platn '+ plant.name+  ' : '+ url);
+			this.log.info('url for plant '+ plant.name+  ' : '+ url);
 			requesArray.push (axios.get(url));
 		});
 
@@ -260,7 +260,7 @@ class Pvforecast extends utils.Adapter {
 						graphTimeData.push({t: time, y: data.watts[time]});
 
 						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time]);
-
+						this.log.debug('watt?: ' + data.watts[time]);
 						// add to InfluxDB
 						if(this.config.actived_influxdb) {
 							await this.addToInfluxDB(plantArray[index].name + '.watts',moment(time).valueOf(),data.watts[time]);
@@ -292,6 +292,8 @@ class Pvforecast extends utils.Adapter {
 				});
 
 				this.log.debug('recived all data');
+
+				this.config.everyhour_active && await this.fillEverySummery();
 
 				await this.setStateAsync('summary.power_day_kWh',{val:Number(todaytotalwatt), ack:true});
 				await this.setStateAsync('summary.power_day_tomorrow_kWh',{val: Number(tomorrowtotalwatt), ack:true});
@@ -329,6 +331,45 @@ class Pvforecast extends utils.Adapter {
 		}
 
 	}
+	async fillEverySummery() {
+		const plantArray = this.config.devices;
+
+		for (let j = 5; j < 22; j++) {
+			if (apikey) {
+				//adapter.log.debug("mit key");
+				for (let i = 0; i < 59; i = i + 15) {
+					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
+					let wattsummery = 0;
+					await asyncForEach(plantArray, async (plant) => {
+						const found = globaleveryhour[plant.name].find(element => element.time === timetext);
+						if (found) {
+							wattsummery = wattsummery + found.value;
+						}
+
+					});
+					await this.setStateAsync('summary.everyhour_kw.' + timetext, {
+						val: Number(wattsummery),
+						ack: true
+					});
+				}
+			}
+			else {
+				const timetext = (j <= 9 ? '0' + j : j) + ':00:00';
+				let wattsummery = 0;
+				await asyncForEach(plantArray, async (plant) => {
+					const found = globaleveryhour[plant.name].find(element => element.time === timetext);
+					if (found) {
+						wattsummery = wattsummery + found.value;
+					}
+
+				});
+				await this.setStateAsync('summary.everyhour_kw.' + timetext, {
+					val: Number(wattsummery),
+					ack: true
+				});
+			}
+		}
+	}
 	async fillEveryHourRestEmpty(name) {
 
 
@@ -361,6 +402,7 @@ class Pvforecast extends utils.Adapter {
 			}
 		}
 	}
+
 	async addToInfluxDB(datapoint,timestamp,value) {
 		try {
 			const influxinstance = this.config.influxinstace;
@@ -377,7 +419,6 @@ class Pvforecast extends utils.Adapter {
 		} catch (e) {
 			this.log.error('Datenbank: ' + e);
 		}
-	
 	}
 
 	async create_delete_state (){
@@ -678,43 +719,35 @@ class Pvforecast extends utils.Adapter {
 				});
 
 				if (typeof(this.config.everyhour_active) !== 'undefined' && this.config.everyhour_active === true) {
+					const obj= {
+						type: 'state',
+						common: {
+							name: 'power_kW',
+							type: 'number',
+							role: 'value',
+							unit: 'kW',
+							read: true,
+							write: false,
+							def: 0
+						},
+						native: {}
+					};
 					for (let j = 5; j < 22; j++) {
 						if (apikey) {
 							//adapter.log.debug('mit key');
 							for (let i = 0; i < 59; i = i + 15) {
-								await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
-									type: 'state',
-									common: {
-										name: 'power_kW',
-										type: 'number',
-										role: 'value',
-										unit: 'kW',
-										read: true,
-										write: false,
-										def: 0
-									},
-									native: {}
-								});
+								await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
+								await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
 							}
 						} else {
 							//adapter.log.debug('ohne key');
 							for (let i = 15; i < 50; i = i + 15) {
 								//adapter.log.debug('apiky zeit: ' + i);
 								await this.delObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':'+ (i <= 9 ? '0' + i : i) + ':00');
+								await this.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':'+ (i <= 9 ? '0' + i : i) + ':00');
 							}
-							await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
-								type: 'state',
-								common: {
-									name: 'power_kW',
-									type: 'number',
-									role: 'value',
-									unit: 'kW',
-									read: true,
-									write: false,
-									def: 0
-								},
-								native: {}
-							});
+							await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
+							await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
 						}
 					}
 				}
@@ -722,6 +755,7 @@ class Pvforecast extends utils.Adapter {
 					for (let j = 5; j < 22; j++) {
 						for (let i = 0; i < 59; i = i + 15) {
 							await this.delObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
+							await this.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
 						}
 					}
 				}
