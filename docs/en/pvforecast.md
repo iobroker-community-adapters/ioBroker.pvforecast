@@ -11,22 +11,14 @@ This Adapter replaced the javascript from the iobroker forum https://forum.iobro
 
 # The adapter take the roh data from https://api.forecast.solar and need this information:
 
-settings:
-1. longitude
-2. latiude
-3. link to hompage
-4. Api key
-5. graph y-axis step
+1. longitude (-180 (west) … 180 (east))
+2. latiude (-90 (south) … 90 (nord))
+4. link to hompage
+5. Api key
+6. graph y-axis step
+7. 
+![pvforecast options](https://user-images.githubusercontent.com/76852173/155196821-61d26563-48cc-4ddd-a37f-417088c60951.JPG)
 
-For plants 1-5 you can make the following settings (only plant1 has to fill out):
-
-1. tilt
-2. Azimuth
-3. plant power (kWh)
-4. plat name
-5. graph legend name
-9. graph color
-10. graph label color 
 
 # With an api-key, you can recive optional the weather data with follwing points:
 higher time resolution
@@ -39,6 +31,17 @@ wind_speed -  [km/h]
 wind_degrees - north at 0°[clockwise]. (windSpeed is zero, value will not be defined)
 wind_direction - Short name 
 
+#For plants you can make the following settings:
+
+1. tilt (0°-90°)
+2. Azimuth (-180 = north, -90 = east, 0 = south, 90 = west, 180 = north)
+3. plant power (kWh)
+4. plat name
+5. graph legend name
+9. graph color
+10. graph label color 
+
+![pvforecast pvsystem](https://user-images.githubusercontent.com/76852173/155196852-62b928ca-4c8b-407e-8947-a45c7b31972a.JPG)
 
 
 all this information are needed, that the adapter runs perfect.
