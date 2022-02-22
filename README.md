@@ -21,8 +21,22 @@ vorhersage eurer PV Erträge
 forecast your pv earnings
 [English Description here](docs/en/pvforecast.md)
 
-
 ## Changelog
+
+<!--
+    Placeholder for the next version (at the beginning of the line):
+    ### **WORK IN PROGRESS**
+-->
+### 0.2.2 (2022-02-22)
+* (MeisterTR) fixed timer warning
+* (MeisterTR) fixed bootloop in some cases
+
+### 0.2.1 (2022-02-21)
+
+* (MeisterTR) fix typo
+* (MeisterTR) fix no every hour folder in summary
+* BREAKING CHANGES FROM 0.1.X PLEASE DELETE AND REINSTALL
+
 ### 0.2.0
 * (MeisterTR) add jsonConfig (No admin4 support)
 * (MeisterTR) fixed bugs and errors
