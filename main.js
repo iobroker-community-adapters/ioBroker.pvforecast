@@ -17,6 +17,7 @@ let apikey = false;
 let globaleveryhour = {};
 let globalweatherdata = {};
 const updateIntervall = 60 * 1000 * 10; // 10 Minuten
+let reqintervall = 60;
 let getdatatimeout, updatetimeout;
 
 class Pvforecast extends utils.Adapter {
@@ -48,8 +49,8 @@ class Pvforecast extends utils.Adapter {
 			this.log.error('Please set at least one device in the adapter configuration!');
 			return;
 		}
-		if(typeof(this.config.intervall) == 'undefined' || this.config.intervall == '' || this.config.intervall < 60) {
-			this.config.tschedule = 60;
+		if(typeof(this.config.intervall) !== 'undefined' || this.config.intervall !== '' || this.config.intervall > 60) {
+			reqintervall = this.config.tschedule = 60;
 		}
 
 		if(typeof(this.config.apikey) != 'undefined' && this.config.apikey != '') {
@@ -63,13 +64,17 @@ class Pvforecast extends utils.Adapter {
 		this.updateActualDataIntervall ();
 
 		// get all data next time x minutes
-		getdatatimeout = setTimeout( this.getAllDataIntervall , this.config.tschedule * 1000 * 60);
+		getdatatimeout = setTimeout(async () => {
+			this.getAllDataIntervall();
+		}, reqintervall * 1000 * 60);
 	}
 	async getAllDataIntervall(){
 		clearTimeout(getdatatimeout);
 		await this.getPv();
 		if(apikey && this.config.weather_active) await this.getweather();
-		getdatatimeout = setTimeout( this.getAllDataIntervall , this.config.tschedule * 1000 * 60);
+		getdatatimeout = setTimeout(async () => {
+			this.getAllDataIntervall();
+		}, reqintervall * 1000 * 60);
 	}
 
 	async updateActualDataIntervall () {
@@ -103,7 +108,9 @@ class Pvforecast extends utils.Adapter {
 
 		if(apikey && this.config.weather_active) await this.updateWeatherData();
 
-		updatetimeout = setTimeout( this.updateActualDataIntervall , updateIntervall);
+		updatetimeout = setTimeout(async () => {
+			this.updateActualDataIntervall();
+		}, updateIntervall);
 	}
 
 	/**
