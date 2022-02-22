@@ -29,6 +29,7 @@ forecast your pv earnings
 -->
 ### **WORK IN PROGRESS**
 * (MeisterTR) fixed timer warning
+* (MeisterTR) fixed bootloop in some cases
 
 ### 0.2.1 (2022-02-21)
 
