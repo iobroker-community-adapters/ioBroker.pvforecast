@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "pvforecast",
-        "version": "0.2.1",
+        "version": "0.2.2",
         "news": {
+            "0.2.2": {
+                "en": "fixed timer warning\nfixed bootloop in some cases",
+                "de": "Timer-Warnung behoben\nBootloop in einigen Fällen behoben",
+                "ru": "фиксированное предупреждение таймера\nисправлен бутлуп в некоторых случаях",
+                "pt": "aviso de temporizador fixo\nbootloop fixo em alguns casos",
+                "nl": "waarschuwing vaste timer\nvaste bootloop in sommige gevallen",
+                "fr": "avertissement de minuterie fixe\nbootloop fixe dans certains cas",
+                "it": "avviso timer fisso\nbootloop fisso in alcuni casi",
+                "es": "advertencia de temporizador fijo\nbootloop fijo en algunos casos",
+                "pl": "naprawiono ostrzeżenie timera\nnaprawiono bootloop w niektórych przypadkach",
+                "zh-cn": "固定计时器警告\n在某些情况下修复了引导循环"
+            },
             "0.2.1": {
                 "en": "fix typo\nfix no every hour folder in summary\nBREAKING CHANGES FROM 0.1.X PLEASE DELETE AND REINSTALL",
                 "de": "Tippfehler beheben\nReparieren Sie keinen stündlichen Ordner in der Zusammenfassung\nBreaking Changes von 0.1.X BITTE LÖSCHEN UND NEU INSTALLIEREN",
