@@ -63,17 +63,13 @@ class Pvforecast extends utils.Adapter {
 		this.updateActualDataIntervall ();
 
 		// get all data next time x minutes
-		getdatatimeout = setTimeout(async () => {
-			this.getAllDataIntervall();
-		}, this.config.tschedule * 1000 * 60);
+		getdatatimeout = setTimeout( this.getAllDataIntervall , this.config.tschedule * 1000 * 60);
 	}
 	async getAllDataIntervall(){
 		clearTimeout(getdatatimeout);
 		await this.getPv();
 		if(apikey && this.config.weather_active) await this.getweather();
-		getdatatimeout = setTimeout(async () => {
-			this.getAllDataIntervall();
-		}, this.config.tschedule * 1000 * 60);
+		getdatatimeout = setTimeout( this.getAllDataIntervall , this.config.tschedule * 1000 * 60);
 	}
 
 	async updateActualDataIntervall () {
@@ -107,9 +103,7 @@ class Pvforecast extends utils.Adapter {
 
 		if(apikey && this.config.weather_active) await this.updateWeatherData();
 
-		updatetimeout = setTimeout(async () => {
-			this.updateActualDataIntervall();
-		}, updateIntervall);
+		updatetimeout = setTimeout( this.updateActualDataIntervall , updateIntervall);
 	}
 
 	/**
