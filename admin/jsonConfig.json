@@ -7,12 +7,22 @@
             "label": "options",
             "items": {
                 "linkdata": {
-                    "type": "text",
+                    "type": "select",
                     "sm": 8,
                     "md": 4,
                     "lg": 4,
+                    "options": [
+                        {
+                          "label": "Forecast.solar",
+                          "value": "https://api.forecast.solar"
+                        },
+                        {
+                          "label": "Solcast",
+                          "value": "https://api.solcast.com.au"
+                        }
+                      ],
                     "default": "https://api.forecast.solar",
-                    "label": "Link from Solar Forecas"
+                    "label": "Link from Forecast service"
                 },
                 "apikey": {
                     "type": "text",
@@ -55,11 +65,11 @@
                     "label": "save to influxdb"
                 },
                 "influxinstace": {
-                    "hidden": "!actived_influxdb",
-                    "type": "number",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
+                    "hidden": "!data.actived_influxdb",
+                    "type": "select",
+                    "sm": 2,
+                    "md": 1,
+                    "lg": 1,
                     "options": [
                         {
                           "label": "0",
@@ -105,6 +115,13 @@
                     "md": 2,
                     "lg": 2,
                     "label": "states for every hour"
+                },
+                "watt_kw": {
+                    "type": "checkbox",
+                    "sm": 3,
+                    "md": 2,
+                    "lg": 2,
+                    "label": "values in watt instead of kw"
                 },
                 "_devider1": {
                     "type": "deivder"
