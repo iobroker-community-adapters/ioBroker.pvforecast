@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "pvforecast",
-        "version": "0.2.2",
+        "version": "0.2.3",
         "news": {
+            "0.2.3": {
+                "en": "add Unit selection in Config (W/kW)\nfixed units in tables\nimplement Solcast api (next version)",
+                "de": "Einheitenauswahl in Config hinzufügen (W/kW)\nfeste Einheiten in Tabellen\nImplementierung der Solcast-API (nächste Version)",
+                "ru": "добавить выбор единиц измерения в Config (Вт/кВт)\nфиксированные единицы в таблицах\nреализовать Solcast API (следующая версия)",
+                "pt": "adicionar seleção de unidade em Config (W/kW)\nunidades fixas em tabelas\nimplementar a API Solcast (próxima versão)",
+                "nl": "toevoegen Unit selectie in Config (W/kW)\nvaste eenheden in tabellen\nimplementeer Solcast api (volgende versie)",
+                "fr": "add Sélection d'unité dans Config (W/kW)\nunités fixes dans les tableaux\nimplémenter l'API Solcast (version suivante)",
+                "it": "aggiungi Selezione unità in Config (W/kW)\nunità fisse nelle tabelle\nimplementare Solcast API (versione successiva)",
+                "es": "agregar selección de unidad en configuración (W/kW)\nunidades fijas en tablas\nimplementar Solcast api (próxima versión)",
+                "pl": "dodaj wybór jednostki w konfiguracji (W/kW)\nstałe jednostki w tabelach\nzaimplementuj Solcast api (następna wersja)",
+                "zh-cn": "在配置中添加单位选择 (W/kW)\n表格中的固定单位\n实现 Solcast api（下一个版本）"
+            },
             "0.2.2": {
                 "en": "fixed timer warning\nfixed bootloop in some cases",
                 "de": "Timer-Warnung behoben\nBootloop in einigen Fällen behoben",
