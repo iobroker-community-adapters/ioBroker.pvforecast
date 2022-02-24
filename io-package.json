@@ -263,7 +263,8 @@
     },
     "native": {
         "linkdata": "https://api.forecast.solar",
-        "influxinstace": 0
+        "influxinstace": 0,
+        "watt_kw": false
     },
     "objects": [],
     "instanceObjects": [

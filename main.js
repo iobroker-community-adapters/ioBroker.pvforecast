@@ -19,6 +19,8 @@ let globalweatherdata = {};
 const updateIntervall = 60 * 1000 * 10; // 10 Minuten
 let reqintervall = 60;
 let getdatatimeout, updatetimeout;
+let globalunit = 1000;
+
 
 class Pvforecast extends utils.Adapter {
 
@@ -52,6 +54,14 @@ class Pvforecast extends utils.Adapter {
 		if(typeof(this.config.intervall) !== 'undefined' || this.config.intervall !== '' || this.config.intervall > 60) {
 			reqintervall = this.config.tschedule = 60;
 		}
+		// disabled Solcast till next major release...
+		if(typeof(this.config.linkdata) !== 'undefined' && this.config.linkdata == 'https://api.solcast.com.au') {
+			this.config.linkdata = 'https://api.forecast.solar';
+			this.log.warn('Solcast Api is comming soon... please use the forecast.solar.com Api');
+		}
+		if(typeof(this.config.watt_kw) !== 'undefined' && this.config.watt_kw == true) {
+			globalunit = 1;
+		}
 
 		if(typeof(this.config.apikey) != 'undefined' && this.config.apikey != '') {
 			apikey = true;
@@ -63,10 +73,48 @@ class Pvforecast extends utils.Adapter {
 		if(apikey && this.config.weather_active) await this.getweather();
 		this.updateActualDataIntervall ();
 
-		// get all data next time x minutes
+		//get all data next time x minutes
 		getdatatimeout = setTimeout(async () => {
 			this.getAllDataIntervall();
 		}, reqintervall * 1000 * 60);
+	}
+	async parseSolcastToForecast(datajson) {
+		let todalkwh = 0;
+		let todalkwhtomorrow = 0;
+		const convertjson = {
+			'watt_hours': {},
+			'watts': {},
+			'watt_hours_day': {}
+		};
+		await asyncForEach(datajson.forecasts, async (plantdata, index) => {
+			const time = plantdata.period_end.replace(/T/g, ' ').replace(/Z/g, '');
+			const newtime = moment(time).format('YYYY-MM-DD HH:mm:ss');
+
+			convertjson.watts[newtime] = plantdata.pv_estimate *1000;
+			this.log.debug('plantdata.pv_estimate: ' + plantdata.pv_estimate + '  saved: ' + convertjson.watts[newtime] + 'name : '+ newtime) ;
+			if(plantdata.pv_estimate !== 0){
+				if(plantdata.pv_estimate > datajson.forecasts[index-1].pv_estimate){
+					convertjson.watt_hours[newtime] = (datajson.forecasts[index-1].pv_estimate + ((plantdata.pv_estimate - datajson.forecasts[index-1].pv_estimate)/2))/2*1000;
+				}
+				if(plantdata.pv_estimate < datajson.forecasts[index-1].pv_estimate){
+					convertjson.watt_hours[newtime] = (plantdata.pv_estimate + ((datajson.forecasts[index-1].pv_estimate - plantdata.pv_estimate)/2))/2*1000;
+				}
+			}
+			else {
+				convertjson.watt_hours[newtime] =0;
+			}
+
+			if((moment().format('dd') == moment(time).format('dd'))) {
+				todalkwh +=  convertjson.watt_hours[newtime];
+			}else if((moment().add(1,'days').format('dd') == moment(time).format('dd'))){
+				todalkwhtomorrow +=  convertjson.watt_hours[newtime];
+			}
+		});
+		convertjson.watt_hours_day[moment().format('YYYY-MM-DD')] = todalkwh;
+		convertjson.watt_hours_day[moment().add(1,'days').format('YYYY-MM-DD')] = todalkwhtomorrow;
+		this.log.debug('convertjson: ' + JSON.stringify(convertjson));
+		return convertjson;
+
 	}
 	async getAllDataIntervall(){
 		clearTimeout(getdatatimeout);
@@ -95,16 +143,16 @@ class Pvforecast extends utils.Adapter {
 				if(moment().valueOf() - (updateIntervall/2) < moment(time).valueOf() && moment().valueOf() + (updateIntervall/2) > moment(time).valueOf() ) {
 					summerywatt += valuearray.watts[time];
 					summerywatth += valuearray.watt_hours[time];
-					await this.setStateAsync(plant.name + '.power_kW', {val: Number(valuearray.watts[time]), ack: true});
-					await this.setStateAsync(plant.name + '.power_kWh', {val: Number(valuearray.watt_hours[time]), ack: true});
+					await this.setStateAsync(plant.name + '.power_kW', {val: Number(valuearray.watts[time] / globalunit), ack: true});
+					await this.setStateAsync(plant.name + '.power_kWh', {val: Number(valuearray.watt_hours[time] / globalunit), ack: true});
 				}
 			}
 			this.log.debug('finished plant update ' + plant.name);
 		});
 		this.log.debug('finished plants update');
 		await this.setStateAsync('summary.lastUpdated_data', {val: moment().format('YYYY-MM-DD HH:mm'), ack: true});
-		await this.setStateAsync('summary.power_kW', {val: Number(summerywatt/1000), ack: true});
-		await this.setStateAsync('summary.power_kWh', {val: Number(summerywatth/1000), ack: true});
+		await this.setStateAsync('summary.power_kW', {val: Number(summerywatt/ globalunit ), ack: true});
+		await this.setStateAsync('summary.power_kWh', {val: Number(summerywatth/ globalunit ), ack: true});
 
 		if(apikey && this.config.weather_active) await this.updateWeatherData();
 
@@ -242,41 +290,41 @@ class Pvforecast extends utils.Adapter {
 					const message = plantdata.data.message;
 
 					await this.setStateAsync(plantArray[index].name + '.object',{val:JSON.stringify(data), ack:true});
-					await this.setStateAsync(plantArray[index].name + '.power_day_kWh',{val:Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/1000), ack:true});
-					await this.setStateAsync(plantArray[index].name + '.power_day_tomorrow_kWh',{val:Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')]/1000), ack:true});
+					await this.setStateAsync(plantArray[index].name + '.power_day_kWh',{val:Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/ globalunit), ack:true});
+					await this.setStateAsync(plantArray[index].name + '.power_day_tomorrow_kWh',{val:Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')]/ globalunit), ack:true});
 					await this.setStateAsync(plantArray[index].name + '.plantname',{val:plantArray[index].name, ack:true});
 					await this.setStateAsync(plantArray[index].name + '.lastUpdated_object',{val:moment().format('YYYY-MM-DD HH:mm'), ack:true});
 					await this.setStateAsync(plantArray[index].name + '.transfer', {val: message.type, ack: true});
 					await this.setStateAsync(plantArray[index].name + '.place', {val: message.info.place, ack: true});
 
 					//count total watt
-					todaytotalwatt = todaytotalwatt + Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/1000);
-					tomorrowtotalwatt = tomorrowtotalwatt + Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')]/1000);
+					todaytotalwatt = todaytotalwatt + Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/ globalunit);
+					tomorrowtotalwatt = tomorrowtotalwatt + Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')]/ globalunit);
 
 					//jsongraph
 					const table = [], graphTimeData = [];
 					let wattindex = 0;
 					for(const time in data.watts) {
-						table.push({Uhrzeit: time, Leistung: data.watts[time]});
-						graphTimeData.push({t: time, y: data.watts[time]});
+						table.push({Uhrzeit: time, Leistung: data.watts[time] /globalunit});
+						graphTimeData.push({t: time, y: data.watts[time] /globalunit});
 
-						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time]);
+						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time] /globalunit );
 						this.log.debug('watt?: ' + data.watts[time]);
 						// add to InfluxDB
 						if(this.config.actived_influxdb) {
-							await this.addToInfluxDB(plantArray[index].name + '.watts',moment(time).valueOf(),data.watts[time]);
+							await this.addToInfluxDB(plantArray[index].name + '.watts',moment(time).valueOf(),data.watts[time] /globalunit);
 						}
 
 						//data for alltable
 						if(index === 0) {
 							allgraphlabel.push(time); // for JSONgraph
 							alltable[wattindex]= {'Uhrzeit': time};
-							alltable[wattindex]['Gesamt'] = data.watts[time];
+							alltable[wattindex]['Gesamt'] = data.watts[time]  /globalunit;
 						}
 						else{
-							alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time];
+							alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time]  /globalunit;
 						}
-						alltable[wattindex][plantArray[index].name] = data.watts[time];
+						alltable[wattindex][plantArray[index].name] = data.watts[time]  /globalunit;
 						wattindex++;
 					}
 					await this.setStateAsync(plantArray[index].name + '.JSONTable',{val:JSON.stringify(table), ack:true});
@@ -719,6 +767,28 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
+				//passe einheiten an
+				await this.extendObjectAsync(element.name + '.power_kWh', {
+					common: {
+						unit: this.config.watt_kw ? 'Wh' : 'kWh'
+					}
+				});
+				await this.extendObjectAsync(element.name + '.power_kW', {
+					common: {
+						unit: this.config.watt_kw ? 'W' : 'kW'
+					}
+				});
+				await this.extendObjectAsync(element.name + '.power_day_tomorrow_kWh', {
+					common: {
+						unit: this.config.watt_kw ? 'Wh' : 'kWh'
+					}
+				});
+				await this.extendObjectAsync(element.name + '.power_day_kWh', {
+					common: {
+						unit: this.config.watt_kw ? 'Wh' : 'kWh'
+					}
+				});
+
 				if (typeof(this.config.everyhour_active) !== 'undefined' && this.config.everyhour_active === true) {
 					const obj= {
 						type: 'state',
@@ -739,6 +809,16 @@ class Pvforecast extends utils.Adapter {
 							for (let i = 0; i < 59; i = i + 15) {
 								await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
 								await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
+								await this.extendObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+									common: {
+										unit: this.config.watt_kw ? 'W' : 'kW'
+									}
+								});
+								await this.extendObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+									common: {
+										unit: this.config.watt_kw ? 'W' : 'kW'
+									}
+								});
 							}
 						} else {
 							//adapter.log.debug('ohne key');
@@ -749,6 +829,16 @@ class Pvforecast extends utils.Adapter {
 							}
 							await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
 							await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
+							await this.extendObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+								common: {
+									unit: this.config.watt_kw ? 'W' : 'kW'
+								}
+							});
+							await this.extendObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+								common: {
+									unit: this.config.watt_kw ? 'W' : 'kW'
+								}
+							});
 						}
 					}
 				}
@@ -776,6 +866,29 @@ class Pvforecast extends utils.Adapter {
 				},
 				native: {}
 			});
+
+			//passe einheiten an
+			await this.extendObjectAsync('summary.power_kWh', {
+				common: {
+					unit: this.config.watt_kw ? 'Wh' : 'kWh'
+				}
+			});
+			await this.extendObjectAsync('summary.power_kW', {
+				common: {
+					unit: this.config.watt_kw ? 'W' : 'kW'
+				}
+			});
+			await this.extendObjectAsync('summary.power_day_tomorrow_kWh', {
+				common: {
+					unit: this.config.watt_kw ? 'Wh' : 'kWh'
+				}
+			});
+			await this.extendObjectAsync('summary.power_day_kWh', {
+				common: {
+					unit: this.config.watt_kw ? 'Wh' : 'kWh'
+				}
+			});
+
 		} catch (err) {
 			this.log.error('Error on init: ' + err);
 		}

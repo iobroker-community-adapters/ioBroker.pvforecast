@@ -27,6 +27,10 @@ forecast your pv earnings
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (MeisterTR) add Unit selection in Config (W/kW)
+* (MeisterTR) fixed units in tables
+* (MeisterTR) implement Solcast api (next version)
 ### 0.2.2 (2022-02-22)
 * (MeisterTR) fixed timer warning
 * (MeisterTR) fixed bootloop in some cases
