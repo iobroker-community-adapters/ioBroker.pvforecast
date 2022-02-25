@@ -11,26 +11,18 @@ Dieser Adapter ersetz das Javascript vom Iobroker Forum https://forum.iobroker.n
 
 # Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Daten:
 
-Einstellungen:
-1. Längengrad 
-2. Breitengrad
+
+#Einstellungen:
+1. Längengrad (-180 (West) … 180 (Ost))
+2. Breitengrad -90 (Süd) … 90 (Nord)
 3. Link zu Seite
 4. Api Schlüssel
 5. Diagramm Y-Achse Stufe
 6. Zeitplan Datenabfrage(min) - Zeitplan aller x Minuten die Daten vom Server abgerufen werden sollen.
-7. Zeitüberschreitung Daten(sec) - Zeit nach der die Daten in das Object geschrieben werden (Aufruf nach dem Start).
 
-Für die Anlage 1-5 stehen folgende Einstellungen zu Verfügung(Nur Anlage 1 muss Angegeben werden):
+![pvforecast options](https://user-images.githubusercontent.com/76852173/155196476-8c8210d9-bdb2-456b-a0aa-1dd411efea5e.JPG)
 
-1. Neigung
-2. Azimuth
-3. Anlagenleistung (kWh)
-4. Anlagenname
-5. Diagramm Legenden Name
-9. Diagramm Farbe
-10. Diagramm Label Farbe 
-
-# Mit einem Api-Schlüssel kann zusätzlich das Wetter bezogen werden.
+Mit einem Api-Schlüssel kann zusätzlich das Wetter bezogen werden.
 
 1. datetime - Datum und Uhrzeit
 2. sky - Wert zwischen 0 und 1 prozentual für klaren Himmel [1 =  klarer Himmel].
@@ -41,6 +33,18 @@ Für die Anlage 1-5 stehen folgende Einstellungen zu Verfügung(Nur Anlage 1 mus
 7. Wind winkel - Norden 0°[Uhrzeigersinn]. (Wenn die Windgeschwindigkeit ist Null, wird der werd nicht definiert)
 8. Wind richtung - Short name 
 9. Höhere Zeitauflösung
+
+#Für die Anlage stehen folgende Einstellungen zu Verfügung:
+
+1. Neigung (0°-90°)
+2. Azimuth (-180 = north, -90 = east, 0 = south, 90 = west, 180 = north)
+3. Anlagenleistung (kWh)
+4. Anlagenname
+5. Diagramm Legenden Name
+9. Diagramm Farbe
+10. Diagramm Label Farbe 
+
+![pvforecast pvsystem](https://user-images.githubusercontent.com/76852173/155196535-6828775a-8234-4a6a-b2a3-03d7fd88c80d.JPG)
 
 
 All diese Information werden benötigt um eine saubere Funtkion des Adapters gewährleisten zu können.
