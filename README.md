@@ -81,14 +81,15 @@ If you want to take the json graph and table you can use this ![exmaple](docs/ex
 [Here](https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/main/docs/example/system.adapter.pvforecast.0.json) you can find a test configuration.
 
 have fun with the adapter
-## Changelog
 
+## Changelog
 <!--
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
- ### **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
  * (MeisterTR) added support for Solcast
+
 ### 0.2.3 (2022-02-24)
 * (MeisterTR) add Unit selection in Config (W/kW)
 * (MeisterTR) fixed units in tables
