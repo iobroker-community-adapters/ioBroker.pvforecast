@@ -57,9 +57,10 @@ class Pvforecast extends utils.Adapter {
 		}
 		// disabled Solcast till next major release...
 		if(typeof(this.config.linkdata) !== 'undefined' && this.config.linkdata == 'https://api.solcast.com.au') {
-			//this.config.linkdata = 'https://api.forecast.solar';
 			api= 'solcast';
-			//this.log.warn('Solcast Api is comming soon... please use the forecast.solar.com Api');
+			if(typeof(this.config.apikey) == 'undefined' || this.config.apikey == '') {
+				this.log.error('Please set the API key for Solcast in the adapter configuration!');
+			}
 		}
 		if(typeof(this.config.watt_kw) !== 'undefined' && this.config.watt_kw == true) {
 			globalunit = 1;

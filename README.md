@@ -50,7 +50,7 @@ wind_degrees - north at 0°[clockwise]. (windSpeed is zero, value will not be de
 wind_direction - Short name 
 
 # solcast
-the apikey for solcast is for free and you can recieve data with a 30min interval instead of 1hour at forecast.solar. To use Solcast you need a api key
+the apikey for solcast is for free and you can recieve data with a 30min intervall instead of 1hour at forecast.solar. To use Solcast you need a api key
 
 # plants config:
 
