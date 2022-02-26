@@ -20,6 +20,7 @@ const updateIntervall = 60 * 1000 * 10; // 10 Minuten
 let reqintervall = 60;
 let getdatatimeout, updatetimeout;
 let globalunit = 1000;
+let api = 'forecastsolar';
 
 
 class Pvforecast extends utils.Adapter {
@@ -56,8 +57,9 @@ class Pvforecast extends utils.Adapter {
 		}
 		// disabled Solcast till next major release...
 		if(typeof(this.config.linkdata) !== 'undefined' && this.config.linkdata == 'https://api.solcast.com.au') {
-			this.config.linkdata = 'https://api.forecast.solar';
-			this.log.warn('Solcast Api is comming soon... please use the forecast.solar.com Api');
+			//this.config.linkdata = 'https://api.forecast.solar';
+			api= 'solcast';
+			//this.log.warn('Solcast Api is comming soon... please use the forecast.solar.com Api');
 		}
 		if(typeof(this.config.watt_kw) !== 'undefined' && this.config.watt_kw == true) {
 			globalunit = 1;
@@ -89,10 +91,11 @@ class Pvforecast extends utils.Adapter {
 		await asyncForEach(datajson.forecasts, async (plantdata, index) => {
 			const time = plantdata.period_end.replace(/T/g, ' ').replace(/Z/g, '');
 			const newtime = moment(time).format('YYYY-MM-DD HH:mm:ss');
+			this.log.debug(moment(time).format('HH'));
 
-			convertjson.watts[newtime] = plantdata.pv_estimate *1000;
+			if(Number(moment(time).format('HH')) < 22) convertjson.watts[newtime] = plantdata.pv_estimate *1000;
 			this.log.debug('plantdata.pv_estimate: ' + plantdata.pv_estimate + '  saved: ' + convertjson.watts[newtime] + 'name : '+ newtime) ;
-			if(plantdata.pv_estimate !== 0){
+			if(plantdata.pv_estimate !== 0 && index !== 0){
 				if(plantdata.pv_estimate > datajson.forecasts[index-1].pv_estimate){
 					convertjson.watt_hours[newtime] = (datajson.forecasts[index-1].pv_estimate + ((plantdata.pv_estimate - datajson.forecasts[index-1].pv_estimate)/2))/2*1000;
 				}
@@ -276,7 +279,14 @@ class Pvforecast extends utils.Adapter {
 		globaleveryhour = {};
 
 		plantArray.forEach( async (plant) => {
-			const url = this.config.linkdata + akey + '/estimate/'+this.config.latitude +'/'+this.config.longitude +'/'+plant.tilt+'/'+ plant.azimuth+'/'+ plant.peakpower;
+			let url = '';
+			if(api == 'forecastsolar') {
+				url = this.config.linkdata + akey + '/estimate/'+this.config.latitude +'/'+this.config.longitude +'/'+plant.tilt+'/'+ plant.azimuth+'/'+ plant.peakpower;
+			}
+			else if(api == 'solcast') {
+				url = this.config.linkdata +'/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude='+this.config.latitude +'&longitude='+this.config.longitude +'&tilt='+plant.tilt+'&azimuth='+ convertAzimuth(plant.azimuth)+'&capacity='+ plant.peakpower + '&api_key='+ this.config.apikey;
+
+			}
 			this.log.info('url for plant '+ plant.name+  ' : '+ url);
 			requesArray.push (axios.get(url));
 		});
@@ -286,8 +296,16 @@ class Pvforecast extends utils.Adapter {
 				//this.log.debug(JSON.stringify(responses));
 				await asyncForEach(responses, async (plantdata, index) => {
 					this.log.info('Recive data for '+ plantArray[index].name+': ' + JSON.stringify(plantdata.data));
-					const data = plantdata.data.result;
-					const message = plantdata.data.message;
+					let  data;
+					let  message;
+					if(api == 'forecastsolar') {
+						data = plantdata.data.result;
+						message = plantdata.data.message;
+					}
+					else if(api == 'solcast') {
+						data = await this.parseSolcastToForecast(plantdata.data);
+						message = {'info':{'place': '-'},'type':'Solcast'};
+					}
 
 					await this.setStateAsync(plantArray[index].name + '.object',{val:JSON.stringify(data), ack:true});
 					await this.setStateAsync(plantArray[index].name + '.power_day_kWh',{val:Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/ globalunit), ack:true});
@@ -373,7 +391,7 @@ class Pvforecast extends utils.Adapter {
 		if(found && (moment().format('dd') == moment(time).format('dd'))) {
 			const timeval = moment(time).format('HH:mm:ss');
 			this.log.debug('saveEveryHour: ' + timeval + 'value: ' + value);
-			await this.setStateAsync(name + '.everyhour_kw.' + timeval,{val: Number(value/1000), ack:true});
+			await this.setStateAsync(name + '.everyhour_kw.' + timeval,{val: Number(value), ack:true});
 
 			if(!globaleveryhour[name]) globaleveryhour[name] =[];
 			globaleveryhour[name].push({'time': timeval, 'value': Number(value)});
@@ -386,7 +404,8 @@ class Pvforecast extends utils.Adapter {
 		for (let j = 5; j < 22; j++) {
 			if (apikey) {
 				//adapter.log.debug("mit key");
-				for (let i = 0; i < 59; i = i + 15) {
+				const hourintervall = 	api === 'solcast' ? 30 : 15;
+				for (let i = 0; i < 59; i = i + hourintervall) {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					let wattsummery = 0;
 					await asyncForEach(plantArray, async (plant) => {
@@ -425,7 +444,8 @@ class Pvforecast extends utils.Adapter {
 		for (let j = 5; j < 22; j++) {
 			if (apikey) {
 				//adapter.log.debug("mit key");
-				for (let i = 0; i < 59; i = i + 15) {
+				const hourintervall = 	api === 'solcast' ? 30 : 15;
+				for (let i = 0; i < 59; i = i + hourintervall) {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					const found = globaleveryhour[name].find(element => element.time === timetext);
 
@@ -805,8 +825,9 @@ class Pvforecast extends utils.Adapter {
 					};
 					for (let j = 5; j < 22; j++) {
 						if (apikey) {
+							const hourintervall = 	api === 'solcast' ? 30 : 15;
 							//adapter.log.debug('mit key');
-							for (let i = 0; i < 59; i = i + 15) {
+							for (let i = 0; i < 59; i = i + hourintervall) {
 								await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
 								await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
 								await this.extendObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
@@ -899,6 +920,14 @@ async function asyncForEach(array, callback) {
 	for (let index = 0; index < array.length; index++) {
 		await callback(array[index], index, array);
 	}
+}
+function convertAzimuth(angle) {
+	//from south to north
+	let newangle = (angle + 180) * -1;
+	if (newangle < -180) {
+		newangle = 180 + 180 + newangle;
+	}
+	return newangle;
 }
 
 function getNextDaysArray (date){
