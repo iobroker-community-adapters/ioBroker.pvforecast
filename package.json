@@ -1,6 +1,6 @@
 {
   "name": "iobroker.pvforecast",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "pvforecast",
   "author": {
     "name": "Patrick Walther",
@@ -45,7 +45,7 @@
     "typescript": "~4.5.5"
   },
   "main": "main.js",
-    "files": [
+  "files": [
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "lib/",
