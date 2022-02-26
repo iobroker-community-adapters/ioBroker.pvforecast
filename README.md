@@ -87,7 +87,7 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.2.4 (2022-02-26)
  * (MeisterTR) added support for Solcast
 
 ### 0.2.3 (2022-02-24)
