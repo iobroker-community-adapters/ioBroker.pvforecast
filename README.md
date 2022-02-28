@@ -87,7 +87,7 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.2.5 (2022-02-28)
  * (MeisterTR) fix request time
  * (MeisterTR) fix error with weather and solcast
  * (MeisterTR) solcast request only after midnight
