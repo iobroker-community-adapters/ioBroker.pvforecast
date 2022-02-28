@@ -47,6 +47,7 @@
                     "label": "longitude"
                 },
                 "intervall": {
+                    "hidden": "data.linkdata === 'https://api.solcast.com.au'? true: false",
                     "type": "number",
                     "sm": 3,
                     "md": 2,

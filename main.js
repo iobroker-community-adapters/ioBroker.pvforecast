@@ -52,15 +52,22 @@ class Pvforecast extends utils.Adapter {
 			this.log.error('Please set at least one device in the adapter configuration!');
 			return;
 		}
-		if(typeof(this.config.intervall) !== 'undefined' || this.config.intervall !== '' || this.config.intervall > 60) {
-			reqintervall = this.config.tschedule = 60;
+		if(typeof(this.config.intervall) == 'undefined' || this.config.intervall == '' || this.config.intervall < 60) {
+			reqintervall = 60 * 1000 * 60;
+			this.log.warn('The intervall is set to 60 minutes. Please set a value higher than 60 minutes in the adapter configuration!');
 		}
+		else {
+			this.log.info('The intervall is set to ' + this.config.intervall + ' minutes.');
+			reqintervall = this.config.intervall * 1000 * 60;}
+
 		// disabled Solcast till next major release...
 		if(typeof(this.config.linkdata) !== 'undefined' && this.config.linkdata == 'https://api.solcast.com.au') {
 			api= 'solcast';
 			if(typeof(this.config.apikey) == 'undefined' || this.config.apikey == '') {
 				this.log.error('Please set the API key for Solcast in the adapter configuration!');
 			}
+			// generate next request time:
+			reqintervall = moment().startOf('day').add(1,'days').add(1, 'hours').valueOf() - moment().valueOf();
 		}
 		if(typeof(this.config.watt_kw) !== 'undefined' && this.config.watt_kw == true) {
 			globalunit = 1;
@@ -73,13 +80,13 @@ class Pvforecast extends utils.Adapter {
 		await this.create_delete_state();
 
 		await this.getPv();
-		if(apikey && this.config.weather_active) await this.getweather();
+		if(apikey && this.config.weather_active && api === 'forecastsolar') await this.getweather();
 		this.updateActualDataIntervall ();
 
 		//get all data next time x minutes
 		getdatatimeout = setTimeout(async () => {
 			this.getAllDataIntervall();
-		}, reqintervall * 1000 * 60);
+		}, reqintervall);
 	}
 	async parseSolcastToForecast(datajson) {
 		let todalkwh = 0;
@@ -123,10 +130,14 @@ class Pvforecast extends utils.Adapter {
 	async getAllDataIntervall(){
 		clearTimeout(getdatatimeout);
 		await this.getPv();
-		if(apikey && this.config.weather_active) await this.getweather();
+		if(apikey && this.config.weather_active && api === 'forecastsolar') await this.getweather();
+
+		// generate next request time:
+		if(api === 'solcast') reqintervall = moment().startOf('day').add(1,'days').add(1, 'hours').valueOf() - moment().valueOf();
+
 		getdatatimeout = setTimeout(async () => {
 			this.getAllDataIntervall();
-		}, reqintervall * 1000 * 60);
+		}, reqintervall);
 	}
 
 	async updateActualDataIntervall () {
