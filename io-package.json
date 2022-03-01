@@ -280,7 +280,7 @@
         "adminUI": {
             "config": "json"
         },
-        "extIcon": "https://raw.githubusercontent.com/Patrick-Walther/ioBroker.pvforecast/master/admin/pvforecast.png",
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/master/admin/pvforecast.png",
         "keywords": [
             "Photovoltaik",
             "PV",
@@ -288,7 +288,7 @@
             "Prognose",
             "Ertrag"
         ],
-        "readme": "https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/master/README.md",
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/master/README.md",
         "loglevel": "info",
         "messagebox": true,
         "subscribe": "messagebox",

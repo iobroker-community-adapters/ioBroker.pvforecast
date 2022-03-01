@@ -78,7 +78,7 @@ If you want to take the json graph and table you can use this ![exmaple](docs/ex
 
 
 ## test setting
-[Here](https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/main/docs/example/system.adapter.pvforecast.0.json) you can find a test configuration.
+[Here](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/docs/example/system.adapter.pvforecast.0.json) you can find a test configuration.
 
 have fun with the adapter
 

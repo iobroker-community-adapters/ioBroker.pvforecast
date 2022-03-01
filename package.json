@@ -6,7 +6,7 @@
     "name": "Patrick Walther",
     "email": "walther-patrick@gmx.net"
   },
-  "homepage": "https://github.com/Patrick-Walther/ioBroker.pvforecast",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast",
   "license": "MIT",
   "keywords": [
     "Photovoltaik",
@@ -17,7 +17,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/Patrick-Walther/ioBroker.pvforecast"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.4.0",
@@ -66,7 +66,7 @@
     "release": "release-script"
   },
   "bugs": {
-    "url": "https://github.com/Patrick-Walther/ioBroker.pvforecast/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/issues"
   },
   "readmeFilename": "README.md"
 }
