@@ -50,7 +50,7 @@ wind_degrees - north at 0°[clockwise]. (windSpeed is zero, value will not be de
 wind_direction - Short name 
 
 # solcast
-the apikey for solcast is for free and you can recieve data with a 30min intervall instead of 1hour at forecast.solar. To use Solcast you need a api key
+the apikey for solcast is for free and you can recieve data with a 30min intervall instead of 1hour at forecast.solar. To use Solcast you need a api key. You dont need a request intervall in config because the solcast data are requested at 1:00 in the night.
 
 # plants config:
 
@@ -87,6 +87,10 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### 0.2.5 (2022-02-28)
+ * (MeisterTR) fix request time
+ * (MeisterTR) fix error with weather and solcast
+ * (MeisterTR) solcast request only after midnight
 ### 0.2.4 (2022-02-26)
  * (MeisterTR) added support for Solcast
 

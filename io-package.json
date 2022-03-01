@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "pvforecast",
-        "version": "0.2.4",
+        "version": "0.2.5",
         "news": {
+            "0.2.5": {
+                "en": "fix request time\nfix error with weather and solcast\nsolcast request only after midnight",
+                "de": "Anfragezeit fixieren\nFehler mit Wetter und Solcast behoben\nSolcast-Anfrage nur nach Mitternacht",
+                "ru": "исправить время запроса\nисправить ошибку с погодой и солкаст\nsolcast запрос только после полуночи",
+                "pt": "corrigir tempo de solicitação\ncorrigir erro com clima e solcast\nsolicitação solcast somente após a meia-noite",
+                "nl": "verzoek tijd repareren\nrepareer fout met weer en solcast\nsolcast-verzoek alleen na middernacht",
+                "fr": "fixer l'heure de la demande\ncorrection d'une erreur avec la météo et le solcast\ndemande solcast uniquement après minuit",
+                "it": "correggere l'ora della richiesta\ncorreggere l'errore con meteo e solcast\nrichiesta solcast solo dopo la mezzanotte",
+                "es": "corregir el tiempo de solicitud\ncorregir error con tiempo y solcast\nsolicitud de solcast solo después de la medianoche",
+                "pl": "napraw czas żądania\nnapraw błąd z pogodą i solcastem\nprośba o solcast dopiero po północy",
+                "zh-cn": "修复请求时间\n修复天气和 solcast 的错误\n仅在午夜之后进行 solcast 请求"
+            },
             "0.2.4": {
                 "en": "added support for Solcast",
                 "de": "Unterstützung für Solcast hinzugefügt",
