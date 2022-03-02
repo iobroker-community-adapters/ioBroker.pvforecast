@@ -8,7 +8,7 @@
 
 [![NPM](https://nodei.co/npm/iobroker.pvforecast.png?downloads=true)](https://nodei.co/npm/iobroker.pvforecast/)
 
-**Tests:** ![Test and Release](https://github.com/Patrick-Walther/ioBroker.pvforecast/workflows/Test%20and%20Release/badge.svg)
+**Tests:** ![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/workflows/Test%20and%20Release/badge.svg)
 
 
 **If you like it, please consider a donation:**
@@ -74,6 +74,11 @@ Please install: [Material Design](https://github.com/Scrounger/ioBroker.vis-mate
 
 If you want to take the json graph and table you can use this ![exmaple](docs/example/img/vis_example.GIF)
 
+## influxDB with Grafarna
+with the option influxDB the forecast will be written in your influxDB and with grafarna you can visualize The Forcast with eg. the actual prodiction
+ ![exmaple](docs/example/img/vorhersage.png)
+
+
 
 
 
@@ -87,6 +92,8 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
 ### 0.2.5 (2022-02-28)
  * (MeisterTR) fix request time
  * (MeisterTR) fix error with weather and solcast
