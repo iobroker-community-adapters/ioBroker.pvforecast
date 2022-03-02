@@ -101,7 +101,7 @@ class Pvforecast extends utils.Adapter {
 			const newtime = moment(time).format('YYYY-MM-DD HH:mm:ss');
 			this.log.debug(moment(time).format('HH'));
 
-			if(Number(moment(time).format('HH')) < 22) convertjson.watts[newtime] = plantdata.pv_estimate *1000;
+			if(Number(moment(time).format('HH')) < 22 && Number(moment(time).format('HH')) > 5) convertjson.watts[newtime] = plantdata.pv_estimate *1000;
 			this.log.debug('plantdata.pv_estimate: ' + plantdata.pv_estimate + '  saved: ' + convertjson.watts[newtime] + 'name : '+ newtime) ;
 			if(plantdata.pv_estimate !== 0 && index !== 0){
 				if(plantdata.pv_estimate > datajson.forecasts[index-1].pv_estimate){
