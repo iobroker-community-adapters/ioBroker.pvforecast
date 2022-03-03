@@ -94,6 +94,7 @@ have fun with the adapter
 -->
 ### **WORK IN PROGRESS**
 * (MeisterTR) fix error with values before 5 oclock
+* (MeisterTR) fix error when starting after 22 oclock
 
 ### 0.2.5 (2022-02-28)
  * (MeisterTR) fix request time

@@ -99,10 +99,11 @@ class Pvforecast extends utils.Adapter {
 		await asyncForEach(datajson.forecasts, async (plantdata, index) => {
 			const time = plantdata.period_end.replace(/T/g, ' ').replace(/Z/g, '');
 			const newtime = moment(time).format('YYYY-MM-DD HH:mm:ss');
-			this.log.debug(moment(time).format('HH'));
 
-			if(Number(moment(time).format('HH')) < 22 && Number(moment(time).format('HH')) > 5) convertjson.watts[newtime] = plantdata.pv_estimate *1000;
-			this.log.debug('plantdata.pv_estimate: ' + plantdata.pv_estimate + '  saved: ' + convertjson.watts[newtime] + 'name : '+ newtime) ;
+			if(Number(moment(time).format('HH')) < 22 && Number(moment(time).format('HH')) > 5){
+				convertjson.watts[newtime] = plantdata.pv_estimate *1000;
+				this.log.debug('plantdata.pv_estimate: ' + plantdata.pv_estimate + '  saved: ' + convertjson.watts[newtime] + 'name : '+ newtime) ;
+			}
 			if(plantdata.pv_estimate !== 0 && index !== 0){
 				if(plantdata.pv_estimate > datajson.forecasts[index-1].pv_estimate){
 					convertjson.watt_hours[newtime] = (datajson.forecasts[index-1].pv_estimate + ((plantdata.pv_estimate - datajson.forecasts[index-1].pv_estimate)/2))/2*1000;
@@ -413,6 +414,7 @@ class Pvforecast extends utils.Adapter {
 	async fillEverySummery() {
 		const plantArray = this.config.devices;
 
+
 		for (let j = 5; j < 22; j++) {
 			if (apikey) {
 				//adapter.log.debug("mit key");
@@ -421,6 +423,7 @@ class Pvforecast extends utils.Adapter {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					let wattsummery = 0;
 					await asyncForEach(plantArray, async (plant) => {
+						if(!globaleveryhour[plant.name]) return;
 						const found = globaleveryhour[plant.name].find(element => element.time === timetext);
 						if (found) {
 							wattsummery = wattsummery + found.value;
@@ -437,6 +440,7 @@ class Pvforecast extends utils.Adapter {
 				const timetext = (j <= 9 ? '0' + j : j) + ':00:00';
 				let wattsummery = 0;
 				await asyncForEach(plantArray, async (plant) => {
+					if(!globaleveryhour[plant.name]) return;
 					const found = globaleveryhour[plant.name].find(element => element.time === timetext);
 					if (found) {
 						wattsummery = wattsummery + found.value;
@@ -452,6 +456,7 @@ class Pvforecast extends utils.Adapter {
 	}
 	async fillEveryHourRestEmpty(name) {
 
+		if(!globaleveryhour[name]) return;
 
 		for (let j = 5; j < 22; j++) {
 			if (apikey) {
