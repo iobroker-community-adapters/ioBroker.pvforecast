@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "pvforecast",
-        "version": "0.2.5",
+        "version": "0.2.6",
         "news": {
+            "0.2.6": {
+                "en": "fix error with values before 5 oclock\nfix error when starting after 22 oclock",
+                "de": "Fehler bei Werten vor 5 Uhr behoben\nFehler beim Starten nach 22 Uhr behoben",
+                "ru": "исправить ошибку со значениями до 5 часов\nисправить ошибку при запуске после 22 часов",
+                "pt": "corrigir erro com valores antes das 5 horas\ncorrigir erro ao iniciar após 22 horas",
+                "nl": "fix fout met waarden voor 5 uur\nfix fout bij starten na 22 uur",
+                "fr": "correction d'erreur avec des valeurs avant 5 heures\ncorrection d'une erreur lors du démarrage après 22 heures",
+                "it": "correggere l'errore con valori prima delle 5\ncorreggere l'errore all'avvio dopo le 22",
+                "es": "corregir error con valores antes de las 5 en punto\ncorregir el error al comenzar después de las 22 en punto",
+                "pl": "napraw błąd z wartościami przed godziną 5\nnapraw błąd podczas uruchamiania po godzinie 22",
+                "zh-cn": "用 5 点之前的值修复错误\n修复 22 点后启动时的错误"
+            },
             "0.2.5": {
                 "en": "fix request time\nfix error with weather and solcast\nsolcast request only after midnight",
                 "de": "Anfragezeit fixieren\nFehler mit Wetter und Solcast behoben\nSolcast-Anfrage nur nach Mitternacht",
