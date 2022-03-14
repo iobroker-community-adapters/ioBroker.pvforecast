@@ -271,10 +271,12 @@
             "en": "docs/en/admin.md",
             "de": "docs/de/admin.md"
         },
-        "dependencies": [
+        "globalDependencies": [
             {
-                "admin": ">=5.0.0"
-            },
+              "admin": ">=5.0.0"
+            }
+          ],
+        "dependencies": [
             {
                 "js-controller": ">=3.2.0"
             }
@@ -384,9 +386,9 @@
             "_id": "summary.JSONGraph",
             "type": "state",
             "common": {
-                "role": "value",
+                "role": "json",
                 "name": "JSONGraph",
-                "type": "json",
+                "type": "string",
                 "read": true,
                 "write": true
             },
@@ -396,9 +398,9 @@
             "_id": "summary.JSONTable",
             "type": "state",
             "common": {
-                "role": "value",
+                "role": "json",
                 "name": "JSONTable",
-                "type": "json",
+                "type": "string",
                 "read": true,
                 "write": true
             },

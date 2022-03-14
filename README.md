@@ -152,7 +152,7 @@ have fun with the adapter
 ### 0.0.1
 * (Patrick Walther) initial release
 
-## LICENSE
+## License
 MIT License
 
 Copyright (c) 2022 Patrick-Walther

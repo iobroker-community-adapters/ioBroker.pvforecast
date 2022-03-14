@@ -498,7 +498,7 @@ class Pvforecast extends utils.Adapter {
 					ts: timestamp,
 					val: value,
 					ack: true,
-					from: 'pvforecast',
+					from: 'system.adapter.' + this.namespace,
 					//q: 0
 				}
 			});
@@ -520,8 +520,8 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: 'object',
-						type: 'json',
-						role: 'value',
+						type: 'string',
+						role: 'weather.json',
 						read: true,
 						write: false,
 						def: ''
@@ -594,7 +594,7 @@ class Pvforecast extends utils.Adapter {
 					common: {
 						name: 'icon',
 						type: 'string',
-						role: 'value',
+						role: 'weather.icon',
 						read: true,
 						write: false,
 						def: ''
@@ -606,7 +606,7 @@ class Pvforecast extends utils.Adapter {
 					common: {
 						name: 'wind_speed',
 						type: 'number',
-						role: 'value',
+						role: 'value.speed.wind',
 						unit: 'km/h',
 						read: true,
 						write: false,
@@ -632,7 +632,7 @@ class Pvforecast extends utils.Adapter {
 					common: {
 						name: 'wind_direction',
 						type: 'string',
-						role: 'value',
+						role: 'value.direction.wind',
 						read: true,
 						write: false,
 						def: ''
