@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "pvforecast",
-        "version": "0.2.6",
+        "version": "0.2.7",
         "news": {
+            "0.2.7": {
+                "en": "fixes for repo",
+                "de": "Korrekturen für Repo",
+                "ru": "исправления для репо",
+                "pt": "correções para repositório",
+                "nl": "fixes voor repo",
+                "fr": "correctifs pour le dépôt",
+                "it": "correzioni per repository",
+                "es": "correcciones para repositorio",
+                "pl": "poprawki do repozytorium",
+                "zh-cn": "回购修复"
+            },
             "0.2.6": {
                 "en": "fix error with values before 5 oclock\nfix error when starting after 22 oclock",
                 "de": "Fehler bei Werten vor 5 Uhr behoben\nFehler beim Starten nach 22 Uhr behoben",
@@ -273,9 +285,9 @@
         },
         "globalDependencies": [
             {
-              "admin": ">=5.0.0"
+                "admin": ">=5.0.0"
             }
-          ],
+        ],
         "dependencies": [
             {
                 "js-controller": ">=3.2.0"

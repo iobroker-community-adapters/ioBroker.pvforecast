@@ -92,7 +92,7 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 0.2.7 (2022-03-15)
 * (MeisterTR) fixes for repo
 ### 0.2.6 (2022-03-03)
 * (MeisterTR) fix error with values before 5 oclock
