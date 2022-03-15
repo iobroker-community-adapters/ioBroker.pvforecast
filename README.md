@@ -92,6 +92,8 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (MeisterTR) fixes for repo
 ### 0.2.6 (2022-03-03)
 * (MeisterTR) fix error with values before 5 oclock
 * (MeisterTR) fix error when starting after 22 oclock
