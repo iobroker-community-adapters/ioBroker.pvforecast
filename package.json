@@ -49,7 +49,6 @@
     "admin{,/!(src)/**}/!(tsconfig|tsconfig.*).json",
     "admin{,/!(src)/**}/*.{html,css,png,svg,jpg,js}",
     "lib/",
-    "www/",
     "io-package.json",
     "LICENSE",
     "main.js"

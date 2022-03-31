@@ -246,44 +246,44 @@
         },
         "title": "PV-Forecast",
         "titleLang": {
-            "en": "pvforecast",
-            "de": "pvforecast",
-            "ru": "pvforecast",
-            "pt": "pvforecast",
-            "nl": "pvprognose",
-            "fr": "pvprévision",
-            "it": "pvforecast",
-            "es": "pvforecast",
-            "pl": "prognoza pv",
-            "zh-cn": "预测"
+            "en": "PV-Forecast",
+            "de": "PV-Prognose",
+            "ru": "PV-прогноз",
+            "pt": "Previsão PV",
+            "nl": "PV-prognose",
+            "fr": "Prévision PV",
+            "it": "PV-Previsione",
+            "es": "Pronóstico de PV",
+            "pl": "PV-Prognoza",
+            "zh-cn": "光伏预测"
         },
         "desc": {
-            "en": "This Adapter can use for read photovoltaics forecast from \"forecast.solar\"",
-            "de": "Dieser Adapter kann zum Lesen der Photovoltaik-Vorhersage von \"Forecast.Solar\" verwendet werden.",
-            "ru": "Этот адаптер можно использовать для считывания прогнозов по фотоэлектрической энергии из \"прогноз.solar\"",
-            "pt": "Este adaptador pode ser usado para ler a previsão fotovoltaica de \"forecast.solar\"",
-            "nl": "Deze adapter kan worden gebruikt voor het lezen van fotovoltaïsche voorspellingen van \"forecast.solar\"",
-            "fr": "Cet adaptateur peut être utilisé pour lire les prévisions photovoltaïques à partir de \"prévisions.solar\"",
-            "it": "Questo adattatore può essere utilizzato per leggere le previsioni del fotovoltaico da \"forecast.solar\"",
-            "es": "Este adaptador se puede utilizar para leer el pronóstico de energía fotovoltaica de \"forecast.solar\"",
-            "pl": "Ten adapter może służyć do odczytywania prognozy fotowoltaiki z „prognozy.solar”",
-            "zh-cn": "该适配器可用于读取来自“ forecast.solar”的光伏预测"
+            "en": "Solar plant production forecast",
+            "de": "Produktionsprognose für Solaranlagen",
+            "ru": "Прогноз производства солнечной электростанции",
+            "pt": "Previsão de produção de usinas solares",
+            "nl": "Productieprognose voor zonne-installaties",
+            "fr": "Prévisions de production des centrales solaires",
+            "it": "Previsioni di produzione di impianti solari",
+            "es": "Previsión de producción de plantas solares",
+            "pl": "Prognoza produkcji elektrowni słonecznych",
+            "zh-cn": "太阳能电站产量预测"
         },
         "authors": [
             "Patrick Walther <walther-patrick@gmx.net>"
         ],
         "docs": {
-            "en": "docs/en/admin.md",
-            "de": "docs/de/admin.md"
+            "en": "docs/en/pvforecast.md",
+            "de": "docs/de/pvforecast.md"
         },
         "globalDependencies": [
             {
-                "admin": ">=5.0.0"
+                "admin": ">=5.2.28"
             }
         ],
         "dependencies": [
             {
-                "js-controller": ">=3.2.0"
+                "js-controller": ">=3.3.0"
             }
         ],
         "license": "MIT",
@@ -301,6 +301,7 @@
         },
         "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/master/admin/pvforecast.png",
         "keywords": [
+            "Solar",
             "Photovoltaik",
             "PV",
             "Forecast",
@@ -309,12 +310,7 @@
         ],
         "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/master/README.md",
         "loglevel": "info",
-        "messagebox": true,
-        "subscribe": "messagebox",
-        "type": "general",
-        "restartAdapters": [
-            "vis"
-        ]
+        "type": "general"
     },
     "native": {
         "linkdata": "https://api.forecast.solar",
