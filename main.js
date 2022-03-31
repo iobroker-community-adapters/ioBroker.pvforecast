@@ -33,6 +33,10 @@ class Pvforecast extends utils.Adapter {
 			...options,
 			name: 'pvforecast',
 		});
+
+		this.longitude = undefined;
+		this.latitude = undefined;
+
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('unload', this.onUnload.bind(this));
@@ -44,10 +48,34 @@ class Pvforecast extends utils.Adapter {
 	async onReady() {
 		this.log.debug('Config: ' + JSON.stringify(this.config));
 
-		if(this.config.longitude == '' || typeof(this.config.longitude) == 'undefined' || this.config.latitude == '' || typeof(this.config.latitude) == 'undefined') {
-			this.log.error('Please set the longitude and latitude in the adapter configuration!');
+		this.longitude = this.config.longitude;
+		this.latitude = this.config.latitude;
+
+		if (
+			(!this.longitude && this.longitude !== 0) || isNaN(this.longitude) ||
+			(!this.latitude && this.latitude !== 0) || isNaN(this.latitude)
+		) {
+			this.log.info('longitude and/or latitude not set, get data from system config');
+
+			try {
+				const systemConfigState = await this.getForeignObjectAsync('system.config');
+				this.longitude = systemConfigState.common.longitude;
+				this.latitude = systemConfigState.common.latitude;
+
+				this.log.info(`using system latitude: ${this.latitude} longitude: ${this.longitude}`);
+			} catch (err) {
+				this.log.error(err);
+			}
+		}
+
+		if (
+			this.longitude == '' || typeof(this.longitude) == 'undefined' || isNaN(this.longitude) ||
+			this.latitude == '' || typeof(this.latitude) == 'undefined' || isNaN(this.latitude)
+		) {
+			this.log.error('Please set the longitude and latitude in the adapter (or system) configuration!');
 			return;
 		}
+
 		if(typeof(this.config.devices) == 'undefined' || this.config.devices.length == 0) {
 			this.log.error('Please set at least one device in the adapter configuration!');
 			return;
@@ -244,7 +272,7 @@ class Pvforecast extends utils.Adapter {
 			const weather_active = this.config.weather_active;
 			const apikey_weater = this.config.APIK;
 
-			const url_weather1 = this.config.linkdata + '/' + apikey_weater + '/weather/' + this.config.latitude + '/' + this.config.longitude; + '/';
+			const url_weather1 = this.config.linkdata + '/' + apikey_weater + '/weather/' + this.latitude + '/' + this.longitude; + '/';
 			this.log.debug('url_weather1' + url_weather1);
 
 			if (apikey) {
@@ -294,10 +322,10 @@ class Pvforecast extends utils.Adapter {
 		plantArray.forEach( async (plant) => {
 			let url = '';
 			if(api == 'forecastsolar') {
-				url = this.config.linkdata + akey + '/estimate/'+this.config.latitude +'/'+this.config.longitude +'/'+plant.tilt+'/'+ plant.azimuth+'/'+ plant.peakpower;
+				url = this.config.linkdata + akey + '/estimate/'+this.latitude +'/'+this.longitude +'/'+plant.tilt+'/'+ plant.azimuth+'/'+ plant.peakpower;
 			}
 			else if(api == 'solcast') {
-				url = this.config.linkdata +'/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude='+this.config.latitude +'&longitude='+this.config.longitude +'&tilt='+plant.tilt+'&azimuth='+ convertAzimuth(plant.azimuth)+'&capacity='+ plant.peakpower + '&api_key='+ this.config.apikey;
+				url = this.config.linkdata +'/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude='+this.latitude +'&longitude='+this.longitude +'&tilt='+plant.tilt+'&azimuth='+ convertAzimuth(plant.azimuth)+'&capacity='+ plant.peakpower + '&api_key='+ this.config.apikey;
 
 			}
 			this.log.info('url for plant '+ plant.name+  ' : '+ url);
@@ -359,7 +387,7 @@ class Pvforecast extends utils.Adapter {
 						wattindex++;
 					}
 					await this.setStateAsync(plantArray[index].name + '.JSONTable',{val:JSON.stringify(table), ack:true});
-					const graphData = [{'data': graphTimeData,'tooltip_AppendText':  tooltip_AppendText,'legendText': plantArray[index].name,'yAxis_id':  index   ,'type': 'bar','displayOrder': index,'barIsStacked': true,'color': plantArray[index].graphcolor,'barStackId':1,'datalabel_rotation':this.config.datalabel_rotation1,'datalabel_color':plantArray[index].labelcolor,'datalabel_fontSize':10}]
+					const graphData = [{'data': graphTimeData,'tooltip_AppendText':  tooltip_AppendText,'legendText': plantArray[index].name,'yAxis_id':  index   ,'type': 'bar','displayOrder': index,'barIsStacked': true,'color': plantArray[index].graphcolor,'barStackId':1,'datalabel_rotation':this.config.datalabel_rotation1,'datalabel_color':plantArray[index].labelcolor,'datalabel_fontSize':10}];
 					allgraph.push(graphData);
 					const graph = {'graphs': graphData};
 					await this.setStateAsync(plantArray[index].name + '.JSONGraph',{val:JSON.stringify(graph), ack:true});
