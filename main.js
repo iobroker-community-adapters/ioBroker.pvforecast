@@ -12,7 +12,6 @@ const moment = require('moment');
 const axios = require('axios');
 //const { testAdapterWithMocks } = require('@iobroker/testing/build/tests/unit');
 
-const tooltip_AppendText= ' Watt';
 let globaleveryhour = {};
 let globalweatherdata = {};
 const updateIntervall = 60 * 1000 * 10; // 10 Minuten
@@ -405,11 +404,35 @@ class Pvforecast extends utils.Adapter {
 						wattindex++;
 					}
 
-					await this.setStateAsync(plantArray[index].name + '.JSONTable',{val:JSON.stringify(table), ack:true});
-					const graphData = [{'data': graphTimeData,'tooltip_AppendText':  tooltip_AppendText,'legendText': plantArray[index].name,'yAxis_id':  index   ,'type': 'bar','displayOrder': index,'barIsStacked': true,'color': plantArray[index].graphcolor,'barStackId':1,'datalabel_rotation':this.config.datalabel_rotation1,'datalabel_color':plantArray[index].labelcolor,'datalabel_fontSize':10}];
+					await this.setStateAsync(plantArray[index].name + '.JSONTable', {val:JSON.stringify(table), ack:true});
+					const graphData = {
+						// graph
+						data: graphTimeData,
+						type: 'bar',
+						legendText: plantArray[index].name,
+						displayOrder: index + 1,
+						color: plantArray[index].graphcolor,
+						tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
+						datalabel_show: true,
+						datalabel_rotation: this.config.datalabel_rotation1 || 270,
+						datalabel_color: plantArray[index].labelcolor,
+						datalabel_fontSize: 12,
+
+						// graph bar chart spfeicifc
+						barIsStacked: true,
+						barStackId: 1,
+
+						// graph y-Axis
+						yAxis_id: 0,
+						yAxis_position: 'left',
+						yAxis_show: true,
+						yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
+						yAxis_step: this.config.watt_kw ? 1000 : 1,
+					};
+
 					allgraph.push(graphData);
-					const graph = {'graphs': graphData};
-					await this.setStateAsync(plantArray[index].name + '.JSONGraph',{val:JSON.stringify(graph), ack:true});
+					const graph = {'graphs': [graphData]};
+					await this.setStateAsync(plantArray[index].name + '.JSONGraph', {val: JSON.stringify(graph), ack:true});
 					succes = true;
 					this.log.debug('succes: ' + succes);
 
@@ -421,7 +444,7 @@ class Pvforecast extends utils.Adapter {
 				this.config.everyhour_active && await this.fillEverySummery();
 
 				await this.setStateAsync('summary.power_day_kWh',{val: Number(todaytotalwatt), ack: true});
-				await this.setStateAsync('summary.power_day_tomorrow_kWh',{val: Number(tomorrowtotalwatt), ack: true});
+				await this.setStateAsync('summary.power_day_tomorrow_kWh', {val: Number(tomorrowtotalwatt), ack: true});
 				await this.setStateAsync('summary.JSONGraph',{val: JSON.stringify({'graphs': allgraph, 'axisLabels': allgraphlabel}), ack: true});
 				await this.setStateAsync('summary.JSONTable',{val: JSON.stringify(alltable), ack: true});
 
