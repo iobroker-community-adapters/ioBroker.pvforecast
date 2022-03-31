@@ -27,6 +27,7 @@
                 "intervall": {
                     "hidden": "data.linkdata === 'https://api.solcast.com.au' ? true : false",
                     "type": "number",
+                    "min": 60,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
@@ -40,6 +41,14 @@
                     "md": 4,
                     "lg": 4,
                     "label": "API-Key"
+                },
+                "weather_active": {
+                    "hidden": "data.linkdata === 'https://api.solcast.com.au' ? true : false",
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Weather (only with API-Key)"
                 },
                 "latitude": {
                     "newLine": true,
@@ -61,15 +70,8 @@
                 "_divider1": {
                     "type": "divider"
                 },
-                "weather_active": {
-                    "newLine": true,
-                    "type": "checkbox",
-                    "sm": 12,
-                    "md": 4,
-                    "lg": 4,
-                    "label": "Weather (only with API-Key)"
-                },
                 "everyhour_active": {
+                    "newLine": true,
                     "type": "checkbox",
                     "sm": 12,
                     "md": 4,

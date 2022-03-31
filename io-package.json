@@ -244,18 +244,7 @@
                 "zh-cn": "初始适配器"
             }
         },
-        "title": {
-            "en": "PV-Forecast",
-            "de": "PV-Prognose",
-            "ru": "PV-прогноз",
-            "pt": "Previsão PV",
-            "nl": "PV-voorspelling",
-            "fr": "Prévisions PV",
-            "it": "Previsione PV",
-            "es": "PV-Forecast",
-            "pl": "Prognoza PV",
-            "zh-cn": "PV预测"
-        },
+        "title": "PV-Forecast",
         "titleLang": {
             "en": "pvforecast",
             "de": "pvforecast",
@@ -330,6 +319,7 @@
     "native": {
         "linkdata": "https://api.forecast.solar",
         "influxinstace": "",
+        "intervall": 60,
         "watt_kw": false
     },
     "objects": [],
