@@ -1,25 +1,14 @@
 'use strict';
 
-/*
- * Created with @iobroker/create-adapter v2.1.0
- */
-
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 const utils = require('@iobroker/adapter-core');
-const { threadId } = require('worker_threads');
 const moment = require('moment');
 const axios = require('axios');
-//const { testAdapterWithMocks } = require('@iobroker/testing/build/tests/unit');
 
 let globaleveryhour = {};
 let globalweatherdata = {};
 const updateIntervall = 60 * 1000 * 10; // 10 Minuten
 let reqintervall = 60;
-let getdatatimeout, updatetimeout;
 let globalunit = 1000;
-let api = 'forecastsolar';
-
 
 class Pvforecast extends utils.Adapter {
 
@@ -33,9 +22,13 @@ class Pvforecast extends utils.Adapter {
 		});
 
 		this.hasApiKey = false;
+		this.api = 'forecastsolar';
 
 		this.longitude = undefined;
 		this.latitude = undefined;
+
+		this.getDataTimeout = null;
+		this.updateTimeout = null;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -96,8 +89,8 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		// disabled Solcast till next major release...
-		if(typeof(this.config.linkdata) !== 'undefined' && this.config.linkdata == 'https://api.solcast.com.au') {
-			api = 'solcast';
+		if (typeof(this.config.linkdata) !== 'undefined' && this.config.linkdata == 'https://api.solcast.com.au') {
+			this.api = 'solcast';
 
 			if (!this.hasApiKey) {
 				this.log.error('Please set the API key for Solcast in the adapter configuration!');
@@ -114,25 +107,29 @@ class Pvforecast extends utils.Adapter {
 		await this.create_delete_state();
 		await this.getPv();
 
-		if (this.hasApiKey && this.config.weather_active && api === 'forecastsolar') {
+		if (this.hasApiKey && this.config.weather_active && this.api === 'forecastsolar') {
 			await this.getweather();
 		}
 
 		this.updateActualDataIntervall();
 
 		//get all data next time x minutes
-		getdatatimeout = setTimeout(async () => {
+		this.getDataTimeout = this.setTimeout(async () => {
+			this.getDataTimeout = null;
 			this.getAllDataIntervall();
 		}, reqintervall);
 	}
+
 	async parseSolcastToForecast(datajson) {
 		let todalkwh = 0;
 		let todalkwhtomorrow = 0;
+
 		const convertjson = {
 			'watt_hours': {},
 			'watts': {},
 			'watt_hours_day': {}
 		};
+
 		await asyncForEach(datajson.forecasts, async (plantdata, index) => {
 			const time = plantdata.period_end.replace(/T/g, ' ').replace(/Z/g, '');
 			const newtime = moment(time).format('YYYY-MM-DD HH:mm:ss');
@@ -165,24 +162,31 @@ class Pvforecast extends utils.Adapter {
 		return convertjson;
 
 	}
-	async getAllDataIntervall(){
-		clearTimeout(getdatatimeout);
+	async getAllDataIntervall() {
+		if (this.getDataTimeout) {
+			this.clearTimeout(this.getDataTimeout);
+		}
+	
 		await this.getPv();
 
-		if (this.hasApiKey && this.config.weather_active && api === 'forecastsolar') {
+		if (this.hasApiKey && this.config.weather_active && this.api === 'forecastsolar') {
 			await this.getweather();
 		}
 
 		// generate next request time:
-		if(api === 'solcast') reqintervall = moment().startOf('day').add(1,'days').add(1, 'hours').valueOf() - moment().valueOf();
+		if (this.api === 'solcast') reqintervall = moment().startOf('day').add(1,'days').add(1, 'hours').valueOf() - moment().valueOf();
 
-		getdatatimeout = setTimeout(async () => {
+		this.getDataTimeout = this.setTimeout(async () => {
+			this.getDataTimeout = null;
 			this.getAllDataIntervall();
 		}, reqintervall);
 	}
 
 	async updateActualDataIntervall () {
-		clearTimeout(updatetimeout);
+		if (this.updateTimeout) {
+			this.clearTimeout(this.updateTimeout);
+		}
+
 		const plantArray = this.config.devices;
 		let summerywatt=0;
 		let summerywatth=0;
@@ -214,7 +218,8 @@ class Pvforecast extends utils.Adapter {
 			await this.updateWeatherData();
 		}
 
-		updatetimeout = setTimeout(async () => {
+		this.updateTimeout = this.setTimeout(async () => {
+			this.updateTimeout = null;
 			this.updateActualDataIntervall();
 		}, updateIntervall);
 	}
@@ -225,8 +230,14 @@ class Pvforecast extends utils.Adapter {
 	 */
 	onUnload(callback) {
 		try {
-			clearTimeout(getdatatimeout);
-			clearTimeout(updatetimeout);
+			if (this.getDataTimeout) {
+				this.clearTimeout(this.getDataTimeout);
+			}
+
+			if (this.updateTimeout) {
+				this.clearTimeout(this.updateTimeout);
+			}
+
 			callback();
 		} catch (e) {
 			callback();
@@ -337,9 +348,9 @@ class Pvforecast extends utils.Adapter {
 
 		plantArray.forEach(async (plant) => {
 			let url = '';
-			if (api == 'forecastsolar') {
+			if (this.api == 'forecastsolar') {
 				url = this.config.linkdata + akey + '/estimate/' + this.latitude + '/' + this.longitude + '/' + plant.tilt + '/' + plant.azimuth + '/' + plant.peakpower;
-			} else if (api == 'solcast') {
+			} else if (this.api == 'solcast') {
 				url = this.config.linkdata + '/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=' + this.latitude + '&longitude=' + this.longitude + '&tilt=' + plant.tilt + '&azimuth=' + convertAzimuth(plant.azimuth)+'&capacity=' + plant.peakpower + '&api_key=' + this.config.apikey;
 			}
 
@@ -358,10 +369,10 @@ class Pvforecast extends utils.Adapter {
 					let data;
 					let message;
 
-					if (api == 'forecastsolar') {
+					if (this.api == 'forecastsolar') {
 						data = plantdata.data.result;
 						message = plantdata.data.message;
-					} else if (api == 'solcast') {
+					} else if (this.api == 'solcast') {
 						data = await this.parseSolcastToForecast(plantdata.data);
 						message = {'info': {'place': '-'}, 'type': 'Solcast'};
 					}
@@ -485,8 +496,7 @@ class Pvforecast extends utils.Adapter {
 
 		for (let j = 5; j < 22; j++) {
 			if (this.hasApiKey) {
-				//adapter.log.debug("mit key");
-				const hourintervall = 	api === 'solcast' ? 30 : 15;
+				const hourintervall = this.api === 'solcast' ? 30 : 15;
 				for (let i = 0; i < 59; i = i + hourintervall) {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					let wattsummery = 0;
@@ -527,8 +537,7 @@ class Pvforecast extends utils.Adapter {
 
 		for (let j = 5; j < 22; j++) {
 			if (this.hasApiKey) {
-				//adapter.log.debug("mit key");
-				const hourintervall = api === 'solcast' ? 30 : 15;
+				const hourintervall = this.api === 'solcast' ? 30 : 15;
 				for (let i = 0; i < 59; i = i + hourintervall) {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					const found = globaleveryhour[name].find(element => element.time === timetext);
@@ -581,7 +590,7 @@ class Pvforecast extends utils.Adapter {
 		}
 	}
 
-	async create_delete_state (){
+	async create_delete_state() {
 		try {
 			const plantArray = this.config.devices;
 
@@ -916,7 +925,7 @@ class Pvforecast extends utils.Adapter {
 					};
 					for (let j = 5; j < 22; j++) {
 						if (this.hasApiKey) {
-							const hourintervall = 	api === 'solcast' ? 30 : 15;
+							const hourintervall = this.api === 'solcast' ? 30 : 15;
 							//adapter.log.debug('mit key');
 							for (let i = 0; i < 59; i = i + hourintervall) {
 								await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
