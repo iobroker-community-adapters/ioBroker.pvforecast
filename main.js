@@ -105,20 +105,8 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		await this.createAndDeleteStates();
-		await this.getPv();
-
-		if (this.hasApiKey && this.config.weather_active && this.api === 'forecastsolar') {
-			await this.getWeather();
-		}
-
-		this.getAllDataIntervall();
-		this.updateActualDataIntervall();
-
-		//get all data next time x minutes
-		this.getDataTimeout = this.setTimeout(async () => {
-			this.getDataTimeout = null;
-			;
-		}, reqintervall);
+		await this.getAllDataIntervall();
+		await this.updateActualDataIntervall();
 	}
 
 	async parseSolcastToForecast(datajson) {
@@ -177,8 +165,9 @@ class Pvforecast extends utils.Adapter {
 			await this.getWeather();
 		}
 
-		// generate next request time:
-		if (this.api === 'solcast') reqintervall = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
+		if (this.api === 'solcast') {
+			reqintervall = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
+		}
 
 		this.getDataTimeout = this.setTimeout(async () => {
 			this.getDataTimeout = null;
