@@ -108,7 +108,7 @@ class Pvforecast extends utils.Adapter {
 			reqintervall = moment().startOf('day').add(1,'days').add(1, 'hours').valueOf() - moment().valueOf();
 		}
 
-		if(typeof(this.config.watt_kw) !== 'undefined' && this.config.watt_kw == true) {
+		if (typeof(this.config.watt_kw) !== 'undefined' && this.config.watt_kw == true) {
 			globalunit = 1;
 		}
 
@@ -194,7 +194,7 @@ class Pvforecast extends utils.Adapter {
 
 			if(typeof(valuearray) == 'undefined') return; // cancel if no data
 
-			await this.setStateAsync(plant.name + '.lastUpdated_data', {val:  moment().format('YYYY-MM-DD HH:mm'), ack: true});
+			await this.setStateAsync(plant.name + '.lastUpdated_data', {val:  moment().valueOf(), ack: true});
 
 			for(const time in valuearray.watts) {
 				if(moment().valueOf() - (updateIntervall/2) < moment(time).valueOf() && moment().valueOf() + (updateIntervall/2) > moment(time).valueOf() ) {
@@ -207,9 +207,9 @@ class Pvforecast extends utils.Adapter {
 			this.log.debug('finished plant update ' + plant.name);
 		});
 		this.log.debug('finished plants update');
-		await this.setStateAsync('summary.lastUpdated_data', {val: moment().format('YYYY-MM-DD HH:mm'), ack: true});
-		await this.setStateAsync('summary.power_kW', {val: Number(summerywatt/ globalunit ), ack: true});
-		await this.setStateAsync('summary.power_kWh', {val: Number(summerywatth/ globalunit ), ack: true});
+		await this.setStateAsync('summary.lastUpdated_data', {val: moment().valueOf(), ack: true});
+		await this.setStateAsync('summary.power_kW', {val: Number(summerywatt/ globalunit), ack: true});
+		await this.setStateAsync('summary.power_kWh', {val: Number(summerywatth/ globalunit), ack: true});
 
 		if (this.hasApiKey && this.config.weather_active) {
 			await this.updateWeatherData();
@@ -371,7 +371,7 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateAsync(plantArray[index].name + '.power_day_kWh',{val: Number(data.watt_hours_day[moment().format('YYYY-MM-DD')] / globalunit), ack: true});
 					await this.setStateAsync(plantArray[index].name + '.power_day_tomorrow_kWh',{val: Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] / globalunit), ack: true});
 					await this.setStateAsync(plantArray[index].name + '.plantname',{val: plantArray[index].name, ack: true});
-					await this.setStateAsync(plantArray[index].name + '.lastUpdated_object',{val: moment().format('YYYY-MM-DD HH:mm'), ack: true});
+					await this.setStateAsync(plantArray[index].name + '.lastUpdated_object',{val: moment().valueOf(), ack: true});
 					await this.setStateAsync(plantArray[index].name + '.transfer', {val: message.type, ack: true});
 					await this.setStateAsync(plantArray[index].name + '.place', {val: message.info.place, ack: true});
 
@@ -382,9 +382,9 @@ class Pvforecast extends utils.Adapter {
 					//jsongraph
 					const table = [], graphTimeData = [];
 					let wattindex = 0;
-					for(const time in data.watts) {
-						table.push({Uhrzeit: time, Leistung: data.watts[time] /globalunit});
-						graphTimeData.push({t: time, y: data.watts[time] /globalunit});
+					for (const time in data.watts) {
+						table.push({Uhrzeit: time, Leistung: data.watts[time] / globalunit});
+						graphTimeData.push({t: time, y: data.watts[time] / globalunit});
 
 						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time] / globalunit);
 						this.log.debug('watt?: ' + data.watts[time]);
@@ -703,7 +703,7 @@ class Pvforecast extends utils.Adapter {
 				await this.delObjectAsync('weather.wind_direction');
 			}
 
-			plantArray.forEach(async element => {
+			await asyncForEach(plantArray, async (element) => {
 				this.log.debug(`Create States for: "${element.name}"`);
 
 				await this.setObjectNotExists(element.name + '.power_day_kWh', {
@@ -748,7 +748,7 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: 'lastUpdated',
-						type: 'string',
+						type: 'number',
 						role: 'value.time',
 						read: true,
 						write: false,
@@ -772,8 +772,8 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: 'object',
-						type: 'json',
-						role: 'value',
+						type: 'string',
+						role: 'json',
 						read: true,
 						write: false,
 						def: ''
@@ -797,7 +797,7 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: 'lastUpdated_data',
-						type: 'string',
+						type: 'number',
 						role: 'value.time',
 						read: true,
 						write: false,
@@ -834,8 +834,8 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: 'JSONGraph',
-						type: 'json',
-						role: 'value',
+						type: 'string',
+						role: 'json',
 						read: true,
 						write: false,
 						def: ''
@@ -846,8 +846,8 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: 'JSONTable',
-						type: 'json',
-						role: 'value',
+						type: 'string',
+						role: 'json',
 						read: true,
 						write: false,
 						def: ''
@@ -948,11 +948,10 @@ class Pvforecast extends utils.Adapter {
 				type: 'state',
 				common: {
 					name: 'prognose',
-					type: 'json',
-					role: 'value',
+					type: 'string',
+					role: 'json',
 					read: true,
 					write: false
-					//def: ''
 				},
 				native: {}
 			});

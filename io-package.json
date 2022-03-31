@@ -392,7 +392,7 @@
             "common": {
                 "role": "value.time",
                 "name": "lastUpdated_data",
-                "type": "string",
+                "type": "number",
                 "read": true,
                 "write": true
             },
