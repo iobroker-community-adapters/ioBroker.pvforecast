@@ -1,0 +1,19 @@
+{
+    "Options": "Opções",
+    "PV-Systems": "Sistemas fotovoltaicos",
+    "Forecast service": "Serviço de previsão",
+    "API-Key": "Chave API",
+    "Latitude": "Latitude",
+    "Longitude": "Longitude",
+    "uses system config if empty": "usa a configuração do sistema se estiver vazio",
+    "Poll intervall": "Intervalo de sondagem",
+    "in minutes": "em minutos",
+    "Save to InfluxDB": "Salvar no InfluxDB",
+    "InfluxDB instance": "Instância do InfluxDB",
+    "Weather (only with API-Key)": "Clima (somente com API-Key)",
+    "States for every hour": "Estados para cada hora",
+    "Values in watt instead of kW": "Valores em watts em vez de kW",
+    "eCharts": "eCharts",
+    "Data label rotation (eCharts)": "Rotação de rótulos de dados (eCharts)",
+    "Y-Axis step (eCharts)": "Etapa do eixo Y (eCharts)"
+}

@@ -55,14 +55,16 @@ class Pvforecast extends utils.Adapter {
 			(!this.longitude && this.longitude !== 0) || isNaN(this.longitude) ||
 			(!this.latitude && this.latitude !== 0) || isNaN(this.latitude)
 		) {
-			this.log.info('longitude and/or latitude not set, get data from system config');
+			this.log.info('longitude and/or latitude not set, get data from system configuration');
 
 			try {
 				const systemConfigState = await this.getForeignObjectAsync('system.config');
 				this.longitude = systemConfigState.common.longitude;
 				this.latitude = systemConfigState.common.latitude;
 
-				this.log.info(`using system latitude: ${this.latitude} longitude: ${this.longitude}`);
+				if (this.longitude && this.latitude) {
+					this.log.info(`using system latitude: ${this.latitude} longitude: ${this.longitude}`);
+				}
 			} catch (err) {
 				this.log.error(err);
 			}
@@ -367,12 +369,10 @@ class Pvforecast extends utils.Adapter {
 						table.push({Uhrzeit: time, Leistung: data.watts[time] /globalunit});
 						graphTimeData.push({t: time, y: data.watts[time] /globalunit});
 
-						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time] /globalunit );
+						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time] / globalunit);
 						this.log.debug('watt?: ' + data.watts[time]);
 						// add to InfluxDB
-						if(this.config.actived_influxdb) {
-							await this.addToInfluxDB(plantArray[index].name + '.watts',moment(time).valueOf(),data.watts[time] /globalunit);
-						}
+						await this.addToInfluxDB(plantArray[index].name + '.watts',moment(time).valueOf(), data.watts[time] / globalunit);
 
 						//data for alltable
 						if(index === 0) {
@@ -519,8 +519,16 @@ class Pvforecast extends utils.Adapter {
 
 	async addToInfluxDB(datapoint,timestamp,value) {
 		try {
-			const influxinstance = this.config.influxinstace;
-			this.sendTo('influxdb.'+ influxinstance,'storeState', {
+			let influxinstance = this.config.influxinstace;
+
+			if (influxinstance === '') return;
+
+			// Fallback for older instance configs
+			if (influxinstance.indexOf('influxdb.') !== 0) {
+				influxinstance = `influxdb.${influxinstance}`;
+			}
+
+			this.sendTo(influxinstance, 'storeState', {
 				id: datapoint,
 				state: {
 					ts: timestamp,

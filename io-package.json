@@ -237,7 +237,11 @@
                 "ru": "Первоначальный адаптер",
                 "pt": "Versão inicial",
                 "fr": "Version initiale",
-                "nl": "Eerste release"
+                "nl": "Eerste release",
+                "it": "adattatore iniziale",
+                "es": "adaptador inicial",
+                "pl": "początkowy adapter",
+                "zh-cn": "初始适配器"
             }
         },
         "title": {
@@ -325,7 +329,7 @@
     },
     "native": {
         "linkdata": "https://api.forecast.solar",
-        "influxinstace": 0,
+        "influxinstace": "",
         "watt_kw": false
     },
     "objects": [],
