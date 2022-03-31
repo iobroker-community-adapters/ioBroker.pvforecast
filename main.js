@@ -92,7 +92,7 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		// Check if API key is configured
-		if (typeof(this.config.apikey) !== 'undefined' || this.config.apikey !== '') {
+		if (typeof(this.config.apikey) !== 'undefined' && this.config.apikey !== '') {
 			this.hasApiKey = true;
 		}
 
@@ -318,62 +318,66 @@ class Pvforecast extends utils.Adapter {
 		}
 	}
 
-	async getPv(){
+	async getPv() {
 		this.log.info('getPv');
 		this.log.info('apikey: ' + this.hasApiKey);
-		const akey = this.hasApiKey ? '/'+ this.config.apikey : '';
+
+		const akey = this.hasApiKey ? '/' + this.config.apikey : '';
 		const plantArray = this.config.devices;
+
 		let succes = false;
 		let todaytotalwatt = 0;
 		let tomorrowtotalwatt = 0;
+
 		const requesArray = [];
 		const alltable = [];
-
 		const allgraph = [];
 		const allgraphlabel = [];
 
 		globaleveryhour = {};
 
-		plantArray.forEach( async (plant) => {
+		plantArray.forEach(async (plant) => {
 			let url = '';
-			if(api == 'forecastsolar') {
-				url = this.config.linkdata + akey + '/estimate/'+this.latitude +'/'+this.longitude +'/'+plant.tilt+'/'+ plant.azimuth+'/'+ plant.peakpower;
+			if (api == 'forecastsolar') {
+				url = this.config.linkdata + akey + '/estimate/' + this.latitude + '/' + this.longitude + '/' + plant.tilt + '/' + plant.azimuth + '/' + plant.peakpower;
+			} else if (api == 'solcast') {
+				url = this.config.linkdata + '/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=' + this.latitude + '&longitude=' + this.longitude + '&tilt=' + plant.tilt + '&azimuth=' + convertAzimuth(plant.azimuth)+'&capacity=' + plant.peakpower + '&api_key=' + this.config.apikey;
 			}
-			else if(api == 'solcast') {
-				url = this.config.linkdata +'/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude='+this.latitude +'&longitude='+this.longitude +'&tilt='+plant.tilt+'&azimuth='+ convertAzimuth(plant.azimuth)+'&capacity='+ plant.peakpower + '&api_key='+ this.config.apikey;
 
+			if (url) {
+				this.log.debug(`url for plant "${plant.name}": ${url}`);
+				requesArray.push(axios.get(url));
 			}
-			this.log.info('url for plant '+ plant.name+  ' : '+ url);
-			requesArray.push (axios.get(url));
 		});
 
 		await axios.all(requesArray)
 			.then(axios.spread(async (...responses) => {
 				//this.log.debug(JSON.stringify(responses));
 				await asyncForEach(responses, async (plantdata, index) => {
-					this.log.info('Recive data for '+ plantArray[index].name+': ' + JSON.stringify(plantdata.data));
-					let  data;
-					let  message;
-					if(api == 'forecastsolar') {
+					this.log.debug(`Recive data for "${plantArray[index].name}": ${JSON.stringify(plantdata.data)}`);
+
+					let data;
+					let message;
+
+					if (api == 'forecastsolar') {
 						data = plantdata.data.result;
 						message = plantdata.data.message;
-					}
-					else if(api == 'solcast') {
+					} else if (api == 'solcast') {
 						data = await this.parseSolcastToForecast(plantdata.data);
-						message = {'info':{'place': '-'},'type':'Solcast'};
+						message = {'info': {'place': '-'}, 'type': 'Solcast'};
 					}
 
-					await this.setStateAsync(plantArray[index].name + '.object',{val:JSON.stringify(data), ack:true});
-					await this.setStateAsync(plantArray[index].name + '.power_day_kWh',{val:Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/ globalunit), ack:true});
-					await this.setStateAsync(plantArray[index].name + '.power_day_tomorrow_kWh',{val:Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')]/ globalunit), ack:true});
-					await this.setStateAsync(plantArray[index].name + '.plantname',{val:plantArray[index].name, ack:true});
-					await this.setStateAsync(plantArray[index].name + '.lastUpdated_object',{val:moment().format('YYYY-MM-DD HH:mm'), ack:true});
+					await this.setStateAsync(plantArray[index].name + '.object',{val: JSON.stringify(data), ack: true});
+					await this.setStateAsync(plantArray[index].name + '.power_day_kWh',{val: Number(data.watt_hours_day[moment().format('YYYY-MM-DD')] / globalunit), ack: true});
+					await this.setStateAsync(plantArray[index].name + '.power_day_tomorrow_kWh',{val: Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] / globalunit), ack: true});
+					await this.setStateAsync(plantArray[index].name + '.plantname',{val: plantArray[index].name, ack: true});
+					await this.setStateAsync(plantArray[index].name + '.lastUpdated_object',{val: moment().format('YYYY-MM-DD HH:mm'), ack: true});
 					await this.setStateAsync(plantArray[index].name + '.transfer', {val: message.type, ack: true});
 					await this.setStateAsync(plantArray[index].name + '.place', {val: message.info.place, ack: true});
 
 					//count total watt
-					todaytotalwatt = todaytotalwatt + Number(data.watt_hours_day[moment().format('YYYY-MM-DD')]/ globalunit);
-					tomorrowtotalwatt = tomorrowtotalwatt + Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')]/ globalunit);
+					todaytotalwatt = todaytotalwatt + Number(data.watt_hours_day[moment().format('YYYY-MM-DD')] / globalunit);
+					tomorrowtotalwatt = tomorrowtotalwatt + Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] / globalunit);
 
 					//jsongraph
 					const table = [], graphTimeData = [];
@@ -384,21 +388,23 @@ class Pvforecast extends utils.Adapter {
 
 						this.config.everyhour_active && this.saveEveryHour(plantArray[index].name, time, data.watts[time] / globalunit);
 						this.log.debug('watt?: ' + data.watts[time]);
+
 						// add to InfluxDB
 						await this.addToInfluxDB(plantArray[index].name + '.watts',moment(time).valueOf(), data.watts[time] / globalunit);
 
 						//data for alltable
-						if(index === 0) {
+						if (index === 0) {
 							allgraphlabel.push(time); // for JSONgraph
-							alltable[wattindex]= {'Uhrzeit': time};
-							alltable[wattindex]['Gesamt'] = data.watts[time]  /globalunit;
+							alltable[wattindex] = {Uhrzeit: time};
+							alltable[wattindex]['Gesamt'] = data.watts[time] / globalunit;
+						} else {
+							alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time] / globalunit;
 						}
-						else{
-							alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time]  /globalunit;
-						}
-						alltable[wattindex][plantArray[index].name] = data.watts[time]  /globalunit;
+
+						alltable[wattindex][plantArray[index].name] = data.watts[time] / globalunit;
 						wattindex++;
 					}
+
 					await this.setStateAsync(plantArray[index].name + '.JSONTable',{val:JSON.stringify(table), ack:true});
 					const graphData = [{'data': graphTimeData,'tooltip_AppendText':  tooltip_AppendText,'legendText': plantArray[index].name,'yAxis_id':  index   ,'type': 'bar','displayOrder': index,'barIsStacked': true,'color': plantArray[index].graphcolor,'barStackId':1,'datalabel_rotation':this.config.datalabel_rotation1,'datalabel_color':plantArray[index].labelcolor,'datalabel_fontSize':10}];
 					allgraph.push(graphData);
@@ -408,18 +414,16 @@ class Pvforecast extends utils.Adapter {
 					this.log.debug('succes: ' + succes);
 
 					this.config.everyhour_active && this.fillEveryHourRestEmpty(plantArray[index].name);
-
-
 				});
 
 				this.log.debug('recived all data');
 
 				this.config.everyhour_active && await this.fillEverySummery();
 
-				await this.setStateAsync('summary.power_day_kWh',{val:Number(todaytotalwatt), ack:true});
-				await this.setStateAsync('summary.power_day_tomorrow_kWh',{val: Number(tomorrowtotalwatt), ack:true});
-				await this.setStateAsync('summary.JSONGraph',{val:JSON.stringify({'graphs': allgraph, 'axisLabels': allgraphlabel}), ack:true});
-				await this.setStateAsync('summary.JSONTable',{val:JSON.stringify(alltable), ack:true});
+				await this.setStateAsync('summary.power_day_kWh',{val: Number(todaytotalwatt), ack: true});
+				await this.setStateAsync('summary.power_day_tomorrow_kWh',{val: Number(tomorrowtotalwatt), ack: true});
+				await this.setStateAsync('summary.JSONGraph',{val: JSON.stringify({'graphs': allgraph, 'axisLabels': allgraphlabel}), ack: true});
+				await this.setStateAsync('summary.JSONTable',{val: JSON.stringify(alltable), ack: true});
 
 				this.log.debug('global time: ' + JSON.stringify(globaleveryhour));
 
@@ -444,8 +448,8 @@ class Pvforecast extends utils.Adapter {
 		const found = this.hasApiKey ? time.match(/:00:00|:15:00|:30:00|:45:00/): time.match(/:00:00/);
 		if(found && (moment().format('dd') == moment(time).format('dd'))) {
 			const timeval = moment(time).format('HH:mm:ss');
-			this.log.debug('saveEveryHour: ' + timeval + 'value: ' + value);
-			await this.setStateAsync(name + '.everyhour_kw.' + timeval,{val: Number(value), ack:true});
+			this.log.debug('saveEveryHour: ' + timeval + ' value: ' + value);
+			await this.setStateAsync(name + '.everyhour_kw.' + timeval,{val: Number(value), ack: true});
 
 			if(!globaleveryhour[name]) globaleveryhour[name] =[];
 			globaleveryhour[name].push({'time': timeval, 'value': Number(value)});
@@ -700,9 +704,9 @@ class Pvforecast extends utils.Adapter {
 			}
 
 			plantArray.forEach(async element => {
-				this.log.debug(`Create States for: ${element.name}`);
+				this.log.debug(`Create States for: "${element.name}"`);
 
-				await  this.setObjectNotExists(element.name + '.power_day_kWh', {
+				await this.setObjectNotExists(element.name + '.power_day_kWh', {
 					type: 'state',
 					common: {
 						name: 'power_day_kWh',
@@ -715,7 +719,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.power_day_tomorrow_kWh',{
+				await this.setObjectNotExists(element.name + '.power_day_tomorrow_kWh',{
 					type: 'state',
 					common: {
 						name: 'power_day_tomorrow_kWh',
@@ -728,7 +732,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.plantname',{
+				await this.setObjectNotExists(element.name + '.plantname',{
 					type: 'state',
 					common: {
 						name: 'plantname',
@@ -740,7 +744,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.lastUpdated_object',{
+				await this.setObjectNotExists(element.name + '.lastUpdated_object',{
 					type: 'state',
 					common: {
 						name: 'lastUpdated',
@@ -752,7 +756,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.place',{
+				await this.setObjectNotExists(element.name + '.place',{
 					type: 'state',
 					common: {
 						name: 'place',
@@ -764,7 +768,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.object',{
+				await this.setObjectNotExists(element.name + '.object',{
 					type: 'state',
 					common: {
 						name: 'object',
@@ -776,7 +780,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.power_kW',{
+				await this.setObjectNotExists(element.name + '.power_kW',{
 					type: 'state',
 					common: {
 						name: 'power_kW',
@@ -789,7 +793,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.lastUpdated_data',{
+				await this.setObjectNotExists(element.name + '.lastUpdated_data',{
 					type: 'state',
 					common: {
 						name: 'lastUpdated_data',
@@ -801,7 +805,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.power_kWh',{
+				await this.setObjectNotExists(element.name + '.power_kWh',{
 					type: 'state',
 					common: {
 						name: 'power_kWh',
@@ -814,7 +818,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.transfer',{
+				await this.setObjectNotExists(element.name + '.transfer',{
 					type: 'state',
 					common: {
 						name: 'transfer',
@@ -826,7 +830,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.JSONGraph',{
+				await this.setObjectNotExists(element.name + '.JSONGraph',{
 					type: 'state',
 					common: {
 						name: 'JSONGraph',
@@ -838,7 +842,7 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await  this.setObjectNotExists(element.name + '.JSONTable',{
+				await this.setObjectNotExists(element.name + '.JSONTable',{
 					type: 'state',
 					common: {
 						name: 'JSONTable',
@@ -851,7 +855,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				//passe einheiten an
+				// passe einheiten an
 				await this.extendObjectAsync(element.name + '.power_kWh', {
 					common: {
 						unit: this.config.watt_kw ? 'Wh' : 'kWh'
@@ -927,6 +931,8 @@ class Pvforecast extends utils.Adapter {
 						}
 					}
 				}
+
+				// Delete states
 				if (typeof(this.config.everyhour_active) !== 'undefined' && this.config.everyhour_active === false){
 					for (let j = 5; j < 22; j++) {
 						for (let i = 0; i < 59; i = i + 15) {
@@ -937,7 +943,6 @@ class Pvforecast extends utils.Adapter {
 				}
 
 			});
-			//	adapter.log.debug("summary");
 
 			await this.setObjectNotExists('summary.prognose', {
 				type: 'state',
@@ -977,6 +982,7 @@ class Pvforecast extends utils.Adapter {
 		} catch (err) {
 			this.log.error('Error on init: ' + err);
 		}
+
 		this.log.debug('init done');
 	}
 }
