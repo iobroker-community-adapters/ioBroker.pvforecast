@@ -329,10 +329,21 @@
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_kW",
+                "name": {
+                    "en": "Estimated power (now)",
+                    "de": "Geschätzte Leistung (jetzt)",
+                    "ru": "Расчетная мощность (сейчас)",
+                    "pt": "Potência estimada (agora)",
+                    "nl": "Geschat vermogen (nu)",
+                    "fr": "Puissance estimée (maintenant)",
+                    "it": "Potenza stimata (ora)",
+                    "es": "Potencia estimada (ahora)",
+                    "pl": "Szacowana moc (teraz)",
+                    "zh-cn": "估计功率（现在）"
+                },
                 "type": "number",
                 "read": true,
-                "write": true,
+                "write": false,
                 "unit": "kW"
             },
             "native": {}
@@ -342,10 +353,21 @@
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_kWh",
+                "name": {
+                    "en": "Estimated energy (now)",
+                    "de": "Geschätzte Energie (jetzt)",
+                    "ru": "Расчетная энергия (сейчас)",
+                    "pt": "Energia estimada (agora)",
+                    "nl": "Geschatte energie (nu)",
+                    "fr": "Énergie estimée (maintenant)",
+                    "it": "Energia stimata (ora)",
+                    "es": "Energía estimada (ahora)",
+                    "pl": "Szacowana energia (teraz)",
+                    "zh-cn": "估计能量（现在）"
+                },
                 "type": "number",
                 "read": true,
-                "write": true,
+                "write": false,
                 "unit": "kWh"
             },
             "native": {}
@@ -355,10 +377,21 @@
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_day_kWh",
+                "name": {
+                    "en": "Estimated energy (today)",
+                    "de": "Geschätzte Energie (heute)",
+                    "ru": "Расчетная энергия (сегодня)",
+                    "pt": "Energia estimada (hoje)",
+                    "nl": "Geschatte energie (vandaag)",
+                    "fr": "Énergie estimée (aujourd'hui)",
+                    "it": "Energia stimata (oggi)",
+                    "es": "Energía estimada (hoy)",
+                    "pl": "Szacowana energia (dzisiaj)",
+                    "zh-cn": "估计能量（今天）"
+                },
                 "type": "number",
                 "read": true,
-                "write": true,
+                "write": false,
                 "unit": "kWh"
             },
             "native": {}
@@ -368,10 +401,21 @@
             "type": "state",
             "common": {
                 "role": "value",
-                "name": "power_day_tomorrow_kWh",
+                "name": {
+                    "en": "Estimated energy (tomorrow)",
+                    "de": "Geschätzte Energie (morgen)",
+                    "ru": "Расчетная энергия (завтра)",
+                    "pt": "Energia estimada (amanhã)",
+                    "nl": "Geschatte energie (morgen)",
+                    "fr": "Énergie estimée (demain)",
+                    "it": "Energia stimata (domani)",
+                    "es": "Energía estimada (mañana)",
+                    "pl": "Szacowana energia (jutro)",
+                    "zh-cn": "估计能量（明天）"
+                },
                 "type": "number",
                 "read": true,
-                "write": true,
+                "write": false,
                 "unit": "kWh"
             },
             "native": {}
@@ -381,10 +425,21 @@
             "type": "state",
             "common": {
                 "role": "value.time",
-                "name": "lastUpdated_data",
+                "name": {
+                    "en": "Last update (data)",
+                    "de": "Letztes Update (Daten)",
+                    "ru": "Последнее обновление (данные)",
+                    "pt": "Última atualização (dados)",
+                    "nl": "Laatste update (gegevens)",
+                    "fr": "Dernière mise à jour (données)",
+                    "it": "Ultimo aggiornamento (dati)",
+                    "es": "Última actualización (datos)",
+                    "pl": "Ostatnia aktualizacja (dane)",
+                    "zh-cn": "上次更新（数据）"
+                },
                 "type": "number",
                 "read": true,
-                "write": true
+                "write": false
             },
             "native": {}
         },
@@ -393,10 +448,21 @@
             "type": "state",
             "common": {
                 "role": "json",
-                "name": "JSONGraph",
+                "name": {
+                    "en": "Graph data in JSON format",
+                    "de": "Diagrammdaten im JSON-Format",
+                    "ru": "Графические данные в формате JSON",
+                    "pt": "Dados do gráfico no formato JSON",
+                    "nl": "Grafiekgegevens in JSON-indeling",
+                    "fr": "Données de graphique au format JSON",
+                    "it": "Dati grafici in formato JSON",
+                    "es": "Graficar datos en formato JSON",
+                    "pl": "Dane wykresu w formacie JSON",
+                    "zh-cn": "JSON格式的图形数据"
+                },
                 "type": "string",
                 "read": true,
-                "write": true
+                "write": false
             },
             "native": {}
         },
@@ -405,10 +471,21 @@
             "type": "state",
             "common": {
                 "role": "json",
-                "name": "JSONTable",
+                "name": {
+                    "en": "Table data in JSON format",
+                    "de": "Tabellendaten im JSON-Format",
+                    "ru": "Табличные данные в формате JSON",
+                    "pt": "Dados da tabela no formato JSON",
+                    "nl": "Tabelgegevens in JSON-indeling",
+                    "fr": "Données de table au format JSON",
+                    "it": "Dati della tabella in formato JSON",
+                    "es": "Tabla de datos en formato JSON",
+                    "pl": "Dane tabeli w formacie JSON",
+                    "zh-cn": "JSON格式的表格数据"
+                },
                 "type": "string",
                 "read": true,
-                "write": true
+                "write": false
             },
             "native": {}
         }

@@ -390,8 +390,9 @@ class Pvforecast extends utils.Adapter {
 						table.push({ Uhrzeit: time, Leistung: data.watts[time] / globalunit });
 						graphTimeData.push({ t: time, y: data.watts[time] / globalunit });
 
-						this.config.everyhour_active && this.saveEveryHour(plantName, time, data.watts[time] / globalunit);
-						this.log.debug('watt?: ' + data.watts[time]);
+						if (this.config.everyhour_active) {
+							this.saveEveryHour(plantName, time, data.watts[time] / globalunit);
+						}
 
 						// add to InfluxDB
 						await this.addToInfluxDB(plantName + '.watts', moment(time).valueOf(), data.watts[time] / globalunit);
@@ -592,11 +593,23 @@ class Pvforecast extends utils.Adapter {
 			const plantArray = this.config.devices;
 
 			if (this.hasApiKey && this.config.weather_active) {
-				this.log.info('Create States for weather');
+				this.log.debug('creating states for weather');
+
 				await this.setObjectNotExistsAsync('weather.object', {
 					type: 'state',
 					common: {
-						name: 'object',
+						name: {
+							en: 'Weather data from service',
+							de: 'Wetterdaten vom Dienst',
+							ru: 'Данные о погоде от сервиса',
+							pt: 'Dados meteorológicos do serviço',
+							nl: 'Weergegevens van service',
+							fr: 'Données météorologiques du service',
+							it: 'Dati meteorologici dal servizio',
+							es: 'Datos meteorológicos del servicio',
+							pl: 'Dane pogodowe z serwisu',
+							'zh-cn': '来自服务的天气数据'
+						},
 						type: 'string',
 						role: 'weather.json',
 						read: true,
@@ -608,8 +621,19 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.datetime', {
 					type: 'state',
 					common: {
-						name: 'date.time',
-						type: 'string',
+						name: {
+							en: 'Timestamp',
+							de: 'Zeitstempel',
+							ru: 'Отметка времени',
+							pt: 'Carimbo de data e hora',
+							nl: 'Tijdstempel',
+							fr: 'Horodatage',
+							it: 'Timestamp',
+							es: 'marca de tiempo',
+							pl: 'Znak czasu',
+							'zh-cn': '时间戳'
+						},
+						type: 'number',
 						role: 'value.time',
 						read: true,
 						write: false,
@@ -620,7 +644,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.sky', {
 					type: 'state',
 					common: {
-						name: 'sky',
+						name: {
+							en: 'Sky',
+							de: 'Himmel',
+							ru: 'Небо',
+							pt: 'Céu',
+							nl: 'Lucht',
+							fr: 'Ciel',
+							it: 'Cielo',
+							es: 'Cielo',
+							pl: 'Niebo',
+							'zh-cn': '天空'
+						},
 						type: 'number',
 						role: 'value',
 						read: true,
@@ -632,7 +667,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.visibility', {
 					type: 'state',
 					common: {
-						name: 'visibility',
+						name: {
+							en: 'Visibility',
+							de: 'Sichtweite',
+							ru: 'Видимость',
+							pt: 'Visibilidade',
+							nl: 'Zichtbaarheid',
+							fr: 'Visibilité',
+							it: 'Visibilità',
+							es: 'Visibilidad',
+							pl: 'Widoczność',
+							'zh-cn': '能见度'
+						},
 						type: 'number',
 						role: 'value',
 						read: true,
@@ -644,7 +690,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.temperature', {
 					type: 'state',
 					common: {
-						name: 'temperature',
+						name: {
+							en: 'Temperature',
+							de: 'Temperatur',
+							ru: 'Температура',
+							pt: 'Temperatura',
+							nl: 'Temperatuur',
+							fr: 'Température',
+							it: 'Temperatura',
+							es: 'Temperatura',
+							pl: 'Temperatura',
+							'zh-cn': '温度'
+						},
 						type: 'number',
 						role: 'value.temperature',
 						unit: '°C',
@@ -657,7 +714,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.condition', {
 					type: 'state',
 					common: {
-						name: 'condition',
+						name: {
+							en: 'Weather condition',
+							de: 'Wetterlage',
+							ru: 'Погодные условия',
+							pt: 'Condições meteorológicas',
+							nl: 'Weerconditie',
+							fr: 'Les conditions météorologiques',
+							it: 'Condizioni metereologiche',
+							es: 'Condición climática',
+							pl: 'Stan pogody',
+							'zh-cn': '气候条件'
+						},
 						type: 'string',
 						role: 'value.condition',
 						read: true,
@@ -669,7 +737,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.icon', {
 					type: 'state',
 					common: {
-						name: 'icon',
+						name: {
+							en: 'Icon',
+							de: 'Symbol',
+							ru: 'Значок',
+							pt: 'Ícone',
+							nl: 'Icoon',
+							fr: 'Icône',
+							it: 'Icona',
+							es: 'Icono',
+							pl: 'Ikona',
+							'zh-cn': '图标'
+						},
 						type: 'string',
 						role: 'weather.icon',
 						read: true,
@@ -681,7 +760,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.wind_speed', {
 					type: 'state',
 					common: {
-						name: 'wind_speed',
+						name: {
+							en: 'Wind speed',
+							de: 'Windgeschwindigkeit',
+							ru: 'Скорость ветра',
+							pt: 'Velocidade do vento',
+							nl: 'Windsnelheid',
+							fr: 'Vitesse du vent',
+							it: 'Velocità del vento',
+							es: 'Velocidad del viento',
+							pl: 'Prędkość wiatru',
+							'zh-cn': '风速'
+						},
 						type: 'number',
 						role: 'value.speed.wind',
 						unit: 'km/h',
@@ -694,7 +784,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.wind_degrees', {
 					type: 'state',
 					common: {
-						name: 'wind_degrees',
+						name: {
+							en: 'Wind direction (degrees)',
+							de: 'Windrichtung (Grad)',
+							ru: 'Направление ветра (градусы)',
+							pt: 'Direção do vento (graus)',
+							nl: 'Windrichting (graden)',
+							fr: 'Direction du vent (degrés)',
+							it: 'Direzione del vento (gradi)',
+							es: 'Dirección del viento (grados)',
+							pl: 'Kierunek wiatru (stopnie)',
+							'zh-cn': '风向（度）'
+						},
 						type: 'number',
 						role: 'value',
 						unit: '°',
@@ -707,7 +808,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExistsAsync('weather.wind_direction', {
 					type: 'state',
 					common: {
-						name: 'wind_direction',
+						name: {
+							en: 'Wind direction',
+							de: 'Windrichtung',
+							ru: 'Направление ветра',
+							pt: 'Direção do vento',
+							nl: 'Windrichting',
+							fr: 'Direction du vent',
+							it: 'La direzione del vento',
+							es: 'Dirección del viento',
+							pl: 'Kierunek wiatru',
+							'zh-cn': '风向'
+						},
 						type: 'string',
 						role: 'value.direction.wind',
 						read: true,
@@ -732,10 +844,69 @@ class Pvforecast extends utils.Adapter {
 			await asyncForEach(plantArray, async (element) => {
 				this.log.debug(`creating states for plant: "${element.name}"`);
 
+				await this.setObjectNotExists(element.name + '.power_kW', {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Estimated power (now)',
+							de: 'Geschätzte Leistung (jetzt)',
+							ru: 'Расчетная мощность (сейчас)',
+							pt: 'Potência estimada (agora)',
+							nl: 'Geschat vermogen (nu)',
+							fr: 'Puissance estimée (maintenant)',
+							it: 'Potenza stimata (ora)',
+							es: 'Potencia estimada (ahora)',
+							pl: 'Szacowana moc (teraz)',
+							'zh-cn': '估计功率（现在）'
+						},
+						type: 'number',
+						role: 'value',
+						unit: 'kW',
+						read: true,
+						write: false,
+						def: 0
+					},
+					native: {}
+				});
+				await this.setObjectNotExists(element.name + '.power_kWh', {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Estimated energy (now)',
+							de: 'Geschätzte Energie (jetzt)',
+							ru: 'Расчетная энергия (сейчас)',
+							pt: 'Energia estimada (agora)',
+							nl: 'Geschatte energie (nu)',
+							fr: 'Énergie estimée (maintenant)',
+							it: 'Energia stimata (ora)',
+							es: 'Energía estimada (ahora)',
+							pl: 'Szacowana energia (teraz)',
+							'zh-cn': '估计能量（现在）'
+						},
+						type: 'number',
+						role: 'value',
+						unit: 'kWh',
+						read: true,
+						write: false,
+						def: 0
+					},
+					native: {}
+				});
 				await this.setObjectNotExists(element.name + '.power_day_kWh', {
 					type: 'state',
 					common: {
-						name: 'power_day_kWh',
+						name: {
+							en: 'Estimated energy (today)',
+							de: 'Geschätzte Energie (heute)',
+							ru: 'Расчетная энергия (сегодня)',
+							pt: 'Energia estimada (hoje)',
+							nl: 'Geschatte energie (vandaag)',
+							fr: 'Énergie estimée (aujourd\'hui)',
+							it: 'Energia stimata (oggi)',
+							es: 'Energía estimada (hoy)',
+							pl: 'Szacowana energia (dzisiaj)',
+							'zh-cn': '估计能量（今天）'
+						},
 						type: 'number',
 						role: 'value',
 						unit: 'kWh',
@@ -748,7 +919,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.power_day_tomorrow_kWh', {
 					type: 'state',
 					common: {
-						name: 'power_day_tomorrow_kWh',
+						name: {
+							en: 'Estimated energy (tomorrow)',
+							de: 'Geschätzte Energie (morgen)',
+							ru: 'Расчетная энергия (завтра)',
+							pt: 'Energia estimada (amanhã)',
+							nl: 'Geschatte energie (morgen)',
+							fr: 'Énergie estimée (demain)',
+							it: 'Energia stimata (domani)',
+							es: 'Energía estimada (mañana)',
+							pl: 'Szacowana energia (jutro)',
+							'zh-cn': '估计能量（明天）'
+						},
 						type: 'number',
 						role: 'value',
 						unit: 'kWh',
@@ -761,7 +943,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.plantname', {
 					type: 'state',
 					common: {
-						name: 'plantname',
+						name: {
+							en: 'Solar plant name',
+							de: 'Name der Solaranlage',
+							ru: 'Название солнечной электростанции',
+							pt: 'Nome da planta solar',
+							nl: 'naam zonne-installatie:',
+							fr: 'Nom de la centrale solaire',
+							it: 'Nome dell\'impianto solare',
+							es: 'nombre de la planta solar',
+							pl: 'Nazwa elektrowni słonecznej',
+							'zh-cn': '太阳能电站名称'
+						},
 						type: 'string',
 						role: 'value',
 						read: true,
@@ -773,7 +966,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.lastUpdated_object', {
 					type: 'state',
 					common: {
-						name: 'lastUpdated',
+						name: {
+							en: 'Last update (object)',
+							de: 'Letzte Aktualisierung (Objekt)',
+							ru: 'Последнее обновление (объект)',
+							pt: 'Última atualização (objeto)',
+							nl: 'Laatste update (object)',
+							fr: 'Dernière mise à jour (objet)',
+							it: 'Ultimo aggiornamento (oggetto)',
+							es: 'Última actualización (objeto)',
+							pl: 'Ostatnia aktualizacja (obiekt)',
+							'zh-cn': '上次更新（对象）'
+						},
 						type: 'number',
 						role: 'value.time',
 						read: true,
@@ -785,7 +989,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.place', {
 					type: 'state',
 					common: {
-						name: 'place',
+						name: {
+							en: 'Location information',
+							de: 'Standortinformationen',
+							ru: 'Информация о местонахождении',
+							pt: 'Informações de localização',
+							nl: 'Locatie informatie',
+							fr: 'Information de Lieu',
+							it: 'Informazioni sulla posizione',
+							es: 'Información sobre la ubicación',
+							pl: 'Informacje lokalne',
+							'zh-cn': '地点信息'
+						},
 						type: 'string',
 						role: 'value',
 						read: true,
@@ -797,7 +1012,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.object', {
 					type: 'state',
 					common: {
-						name: 'object',
+						name: {
+							en: 'Forcast data from service',
+							de: 'Prognosedaten vom Dienst',
+							ru: 'Прогноз данных от сервиса',
+							pt: 'Dados de previsão do serviço',
+							nl: 'Voorspel gegevens van service',
+							fr: 'Prévision des données du service',
+							it: 'Previsione dei dati dal servizio',
+							es: 'Pronosticar datos del servicio',
+							pl: 'Przewiduj dane z usługi',
+							'zh-cn': '来自服务的预测数据'
+						},
 						type: 'string',
 						role: 'json',
 						read: true,
@@ -806,23 +1032,21 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await this.setObjectNotExists(element.name + '.power_kW', {
-					type: 'state',
-					common: {
-						name: 'power_kW',
-						type: 'number',
-						role: 'value',
-						unit: 'kW',
-						read: true,
-						write: false,
-						def: 0
-					},
-					native: {}
-				});
 				await this.setObjectNotExists(element.name + '.lastUpdated_data', {
 					type: 'state',
 					common: {
-						name: 'lastUpdated_data',
+						name: {
+							en: 'Last update (data)',
+							de: 'Letztes Update (Daten)',
+							ru: 'Последнее обновление (данные)',
+							pt: 'Última atualização (dados)',
+							nl: 'Laatste update (gegevens)',
+							fr: 'Dernière mise à jour (données)',
+							it: 'Ultimo aggiornamento (dati)',
+							es: 'Última actualización (datos)',
+							pl: 'Ostatnia aktualizacja (dane)',
+							'zh-cn': '上次更新（数据）'
+						},
 						type: 'number',
 						role: 'value.time',
 						read: true,
@@ -831,23 +1055,21 @@ class Pvforecast extends utils.Adapter {
 					},
 					native: {}
 				});
-				await this.setObjectNotExists(element.name + '.power_kWh', {
-					type: 'state',
-					common: {
-						name: 'power_kWh',
-						type: 'number',
-						role: 'value',
-						unit: 'kWh',
-						read: true,
-						write: false,
-						def: 0
-					},
-					native: {}
-				});
 				await this.setObjectNotExists(element.name + '.transfer', {
 					type: 'state',
 					common: {
-						name: 'transfer',
+						name: {
+							en: 'Transferred message',
+							de: 'Übertragene Nachricht',
+							ru: 'Передано сообщение',
+							pt: 'Mensagem transferida',
+							nl: 'Overgedragen bericht',
+							fr: 'Message transféré',
+							it: 'Messaggio trasferito',
+							es: 'mensaje transferido',
+							pl: 'Przeniesiona wiadomość',
+							'zh-cn': '转移的消息'
+						},
 						type: 'string',
 						role: 'value',
 						read: true,
@@ -859,7 +1081,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.JSONGraph', {
 					type: 'state',
 					common: {
-						name: 'JSONGraph',
+						name: {
+							en: 'Graph data in JSON format',
+							de: 'Diagrammdaten im JSON-Format',
+							ru: 'Графические данные в формате JSON',
+							pt: 'Dados do gráfico no formato JSON',
+							nl: 'Grafiekgegevens in JSON-indeling',
+							fr: 'Données de graphique au format JSON',
+							it: 'Dati grafici in formato JSON',
+							es: 'Graficar datos en formato JSON',
+							pl: 'Dane wykresu w formacie JSON',
+							'zh-cn': 'JSON格式的图形数据'
+						},
 						type: 'string',
 						role: 'json',
 						read: true,
@@ -871,7 +1104,18 @@ class Pvforecast extends utils.Adapter {
 				await this.setObjectNotExists(element.name + '.JSONTable', {
 					type: 'state',
 					common: {
-						name: 'JSONTable',
+						name: {
+							en: 'Table data in JSON format',
+							de: 'Tabellendaten im JSON-Format',
+							ru: 'Табличные данные в формате JSON',
+							pt: 'Dados da tabela no formato JSON',
+							nl: 'Tabelgegevens in JSON-indeling',
+							fr: 'Données de table au format JSON',
+							it: 'Dati della tabella in formato JSON',
+							es: 'Tabla de datos en formato JSON',
+							pl: 'Dane tabeli w formacie JSON',
+							'zh-cn': 'JSON格式的表格数据'
+						},
 						type: 'string',
 						role: 'json',
 						read: true,
@@ -907,7 +1151,18 @@ class Pvforecast extends utils.Adapter {
 					const obj = {
 						type: 'state',
 						common: {
-							name: 'power_kW',
+							name: {
+								en: 'Estimated power',
+								de: 'Geschätzte Leistung',
+								ru: 'Расчетная мощность',
+								pt: 'Potência estimada',
+								nl: 'Geschat vermogen',
+								fr: 'Puissance estimée',
+								it: 'Potenza stimata',
+								es: 'Potencia estimada',
+								pl: 'Szacowana moc',
+								'zh-cn': '估计功率'
+							},
 							type: 'number',
 							role: 'value',
 							unit: 'kW',
@@ -917,6 +1172,7 @@ class Pvforecast extends utils.Adapter {
 						},
 						native: {}
 					};
+
 					for (let j = 5; j < 22; j++) {
 						if (this.hasApiKey) {
 							const hourintervall = this.api === 'solcast' ? 30 : 15;
@@ -969,18 +1225,6 @@ class Pvforecast extends utils.Adapter {
 					}
 				}
 
-			});
-
-			await this.setObjectNotExists('summary.prognose', {
-				type: 'state',
-				common: {
-					name: 'prognose',
-					type: 'string',
-					role: 'json',
-					read: true,
-					write: false
-				},
-				native: {}
 			});
 
 			//passe einheiten an

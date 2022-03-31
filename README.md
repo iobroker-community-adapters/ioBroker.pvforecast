@@ -78,10 +78,6 @@ If you want to take the json graph and table you can use this ![exmaple](docs/ex
 with the option influxDB the forecast will be written in your influxDB and with grafarna you can visualize The Forcast with eg. the actual prodiction
  ![exmaple](docs/example/img/vorhersage.png)
 
-
-
-
-
 ## test setting
 [Here](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/docs/example/system.adapter.pvforecast.0.json) you can find a test configuration.
 
@@ -92,8 +88,18 @@ have fun with the adapter
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Fallback to system location
+* (klein0r) Updated admin config
+* (klein0r) Fixed weather API requests
+* (klein0r) Updated translations
+* (klein0r) Updated roles and types
+* (klein0r) Code cleanup
+* **BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**
+
 ### 0.2.7 (2022-03-15)
 * (MeisterTR) fixes for repo
+
 ### 0.2.6 (2022-03-03)
 * (MeisterTR) fix error with values before 5 oclock
 * (MeisterTR) fix error when starting after 22 oclock
@@ -102,6 +108,7 @@ have fun with the adapter
  * (MeisterTR) fix request time
  * (MeisterTR) fix error with weather and solcast
  * (MeisterTR) solcast request only after midnight
+
 ### 0.2.4 (2022-02-26)
  * (MeisterTR) added support for Solcast
 
@@ -109,15 +116,15 @@ have fun with the adapter
 * (MeisterTR) add Unit selection in Config (W/kW)
 * (MeisterTR) fixed units in tables
 * (MeisterTR) implement Solcast api (next version)
+
 ### 0.2.2 (2022-02-22)
 * (MeisterTR) fixed timer warning
 * (MeisterTR) fixed bootloop in some cases
 
 ### 0.2.1 (2022-02-21)
-
 * (MeisterTR) fix typo
 * (MeisterTR) fix no every hour folder in summary
-* BREAKING CHANGES FROM 0.1.X PLEASE DELETE AND REINSTALL
+* **BREAKING CHANGES FROM 0.1.X PLEASE DELETE AND REINSTALL**
 
 ### 0.2.0
 * (MeisterTR) add jsonConfig (No admin4 support)
