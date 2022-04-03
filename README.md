@@ -84,7 +84,7 @@ Have fun with the adapter!
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.0.0 (2022-04-03)
 * (klein0r) Fallback to system location
 * (klein0r) Updated admin config
 * (klein0r) Fixed weather API requests
@@ -138,16 +138,16 @@ Have fun with the adapter!
 * (Patrick Walther)add timeout, fix bugs and add schedule in settings
 
 ### 0.1.5
-* (Patrick Walther)repair failure everyhour 
+* (Patrick Walther)repair failure everyhour
 
 ### 0.1.4
 * (Patrick Walther)add hourly forecast
 
 ### 0.1.2
-* (Patrick Walther) remove bugfixes, add weather forecast(api), add new logo from forecast.solar 
+* (Patrick Walther) remove bugfixes, add weather forecast(api), add new logo from forecast.solar
 
 ### 0.1.0
-* (Patrick Walther) add  more plants, add summary, add json graph/table 
+* (Patrick Walther) add  more plants, add summary, add json graph/table
 
 ### 0.0.3
 * (Patrick Walther) added datapoint power_day_tomorrow
