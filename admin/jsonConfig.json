@@ -4,11 +4,11 @@
     "items": {
         "_options": {
             "type": "panel",
-            "label": "options",
+            "label": "Options",
             "items": {
                 "linkdata": {
                     "type": "select",
-                    "sm": 8,
+                    "sm": 12,
                     "md": 4,
                     "lg": 4,
                     "options": [
@@ -22,134 +22,106 @@
                         }
                       ],
                     "default": "https://api.forecast.solar",
-                    "label": "Link from Forecast service"
+                    "label": "Forecast service"
                 },
-                "apikey": {
-                    "type": "text",
-                    "sm": 8,
+                "intervall": {
+                    "hidden": "data.linkdata === 'https://api.solcast.com.au' ? true : false",
+                    "type": "number",
+                    "min": 60,
+                    "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "API Key"
+                    "label": "Poll intervall",
+                    "help": "in minutes"
+                },
+                "apikey": {
+                    "newLine": true,
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "API-Key"
+                },
+                "weather_active": {
+                    "hidden": "data.linkdata === 'https://api.solcast.com.au' ? true : false",
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Weather (only with API-Key)"
                 },
                 "latitude": {
                     "newLine": true,
                     "type": "text",
-                    "sm": 6,
-                    "md": 3,
-                    "lg": 3,
-                    "label": "latitude"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Latitude",
+                    "help": "uses system config if empty"
                 },
                 "longitude": {
                     "type": "text",
-                    "sm": 6,
-                    "md": 3,
-                    "lg": 3,
-                    "label": "longitude"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Longitude",
+                    "help": "uses system config if empty"
                 },
-                "intervall": {
-                    "hidden": "data.linkdata === 'https://api.solcast.com.au'? true: false",
-                    "type": "number",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "Poll intervall in minutes"
-                },
-                "_devider": {
-                    "type": "deivder"
-                },
-                "actived_influxdb": {
-                    "newLine": true,
-                    "type": "checkbox",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "save to influxdb"
-                },
-                "influxinstace": {
-                    "hidden": "!data.actived_influxdb",
-                    "type": "select",
-                    "sm": 2,
-                    "md": 1,
-                    "lg": 1,
-                    "options": [
-                        {
-                          "label": "0",
-                          "value": 0
-                        },
-                        {
-                          "label": "1",
-                          "value": 1
-                        },
-                        {
-                          "label": "2",
-                          "value": 2
-                        },
-                        {
-                          "label": "3",
-                          "value": 3
-                        },
-                        {
-                          "label": "4",
-                          "value": 4
-                        },
-                        {
-                          "label": "5",
-                          "value": 5
-                        },
-                        {
-                          "label": "6",
-                          "value": 6
-                        }
-                      ],
-                    "label": "influx instance"
-                },
-                "weather_active": {
-                    "type": "checkbox",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "weather (only with apikey)"
+                "_divider1": {
+                    "type": "divider"
                 },
                 "everyhour_active": {
+                    "newLine": true,
                     "type": "checkbox",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "states for every hour"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "States for every hour"
                 },
                 "watt_kw": {
+                    "newLine": true,
                     "type": "checkbox",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "values in watt instead of kw"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Values in watt instead of kW"
                 },
-                "_devider1": {
-                    "type": "deivder"
+                "_divider2": {
+                    "type": "divider"
+                },
+                "influxinstace": {
+                    "newLine": true,
+                    "type": "instance",
+                    "adapter": "influxdb",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "InfluxDB instance"
                 },
                 "actived_echart": {
                     "newLine": true,
                     "type": "checkbox",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "e-chart"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "eCharts"
                 },
                 "datalabel_rotation1": {
+                    "newLine": true,
                     "hidden": "!data.actived_echart",
                     "type": "number",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "datalabel rotation (Echart)"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Data label rotation (eCharts)"
                 },
                 "axisy_step1": {
                     "hidden": "!data.actived_echart",
                     "type": "number",
-                    "sm": 3,
-                    "md": 2,
-                    "lg": 2,
-                    "label": "Y-Achse Step (Echart)"
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Y-Axis step (eCharts)"
                 }
             }
         },

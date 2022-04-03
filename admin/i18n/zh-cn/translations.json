@@ -1,0 +1,19 @@
+{
+    "Options": "选项",
+    "PV-Systems": "光伏系统",
+    "Forecast service": "预报服务",
+    "API-Key": "API 密钥",
+    "Latitude": "纬度",
+    "Longitude": "经度",
+    "uses system config if empty": "如果为空，则使用系统配置",
+    "Poll intervall": "轮询间隔",
+    "in minutes": "在几分钟内",
+    "Save to InfluxDB": "保存到 InfluxDB",
+    "InfluxDB instance": "InfluxDB 实例",
+    "Weather (only with API-Key)": "天气（仅使用 API-Key）",
+    "States for every hour": "每小时的状态",
+    "Values in watt instead of kW": "以瓦特而不是 kW 为单位的值",
+    "eCharts": "电子图表",
+    "Data label rotation (eCharts)": "数据标签轮换 (eCharts)",
+    "Y-Axis step (eCharts)": "Y 轴步进 (eCharts)"
+}

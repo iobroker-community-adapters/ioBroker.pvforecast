@@ -1,0 +1,19 @@
+{
+    "Options": "Options",
+    "PV-Systems": "PV-Systems",
+    "Forecast service": "Forecast service",
+    "API-Key": "API-Key",
+    "Latitude": "Latitude",
+    "Longitude": "Longitude",
+    "uses system config if empty": "uses system config if empty",
+    "Poll intervall": "Poll intervall",
+    "in minutes": "in minutes",
+    "Save to InfluxDB": "Save to InfluxDB",
+    "InfluxDB instance": "InfluxDB instance",
+    "Weather (only with API-Key)": "Weather (only with API-Key)",
+    "States for every hour": "States for every hour",
+    "Values in watt instead of kW": "Values in watt instead of kW",
+    "eCharts": "eCharts",
+    "Data label rotation (eCharts)": "Data label rotation (eCharts)",
+    "Y-Axis step (eCharts)": "Y-Axis step (eCharts)"
+}
