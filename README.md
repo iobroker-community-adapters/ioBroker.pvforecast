@@ -1,5 +1,5 @@
 ![Logo](docs/de/img/pvforecast.png)
-# pvforecast - Adapter zu vorhersage eurer PV Erträge
+# pvforecast - Adapter for the forecast of PV incomes
 [![NPM version](https://img.shields.io/npm/v/iobroker.pvforecast.svg)](https://www.npmjs.com/package/iobroker.pvforecast)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.pvforecast.svg)](https://www.npmjs.com/package/iobroker.pvforecast)
 ![Number of Installations](https://iobroker.live/badges/pvforecast-installed.svg)
@@ -9,7 +9,6 @@
 [![NPM](https://nodei.co/npm/iobroker.pvforecast.png?downloads=true)](https://nodei.co/npm/iobroker.pvforecast/)
 
 **Tests:** ![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/workflows/Test%20and%20Release/badge.svg)
-
 
 **If you like it, please consider a donation:**
 
@@ -24,23 +23,21 @@ This Adapter replaced the javascript from the iobroker forum https://forum.iobro
 The adapter take the raw forecast data from [forecast.solar](https://api.forecast.solar) or [Solcast](https://solcast.com/)
 
 ## Config
-
 1. longitude (-180 (west) … 180 (east))
-2. latiude (-90 (south) … 90 (nord))
-4. link to hompage (you can select between solcast and forecast.solar)
-5. Api key (not needed for free forecast.solar)
+2. latitude (-90 (south) … 90 (nord))
+4. link to homepage (you can select between `Solcast` and `forecast.solar`)
+5. Api key (not needed for free `forecast.solar`)
 6. graph y-axis step
-7. Influxdb (saves the forecastdata to influxdb)
-8. states for every hour (generates onjects for every forecast hour for today) 
+7. Influxdb (saves the forecast data to influxdb)
+8. states for every hour (generates objects for every forecast hour for today) 
 
 ![pvforecast options](https://user-images.githubusercontent.com/76852173/155196821-61d26563-48cc-4ddd-a37f-417088c60951.JPG)
-
 
 # forecast.solar
 benefit with an api key: 
 
 higher time resolution
-datetime -  date and time
+datetime - date and time
 sky - A numerical value between 0 and 1 percentage of clear sky [1 = clear sky].
 temperature [°C]
 condition - text
@@ -49,11 +46,11 @@ wind_speed -  [km/h]
 wind_degrees - north at 0°[clockwise]. (windSpeed is zero, value will not be defined)
 wind_direction - Short name 
 
-# solcast
-the apikey for solcast is for free and you can recieve data with a 30min intervall instead of 1hour at forecast.solar. To use Solcast you need a api key. You dont need a request intervall in config because the solcast data are requested at 1:00 in the night.
+# Solcast
+the apikey for `Solcast` is for free, and you can receive data with a 30min intervall instead of 1hour at forecast.solar. 
+To use `Solcast` you need an api key. You don't need a request intervall in config because the `Solcast` data are requested at 1:00 in the night.
 
 # plants config:
-
 1. tilt (0°-90°)
 2. Azimuth (-180 = north, -90 = east, 0 = south, 90 = west, 180 = north)
 3. plant power (kWh)
@@ -64,24 +61,23 @@ the apikey for solcast is for free and you can recieve data with a 30min interva
 
 ![pvforecast pvsystem](https://user-images.githubusercontent.com/76852173/155196852-62b928ca-4c8b-407e-8947-a45c7b31972a.JPG)
 
+All this information is needed, that the adapter runs perfect.
 
-all this information are needed, that the adapter runs perfect.
+If longitude and latitude in the iobroker main settings, the adapter will fill out the fields automatic.
 
-If longitde and latitude in the iobroker main settings, the adapter will fill out the fields automatic.
-
-## vis exmaple
+## vis example
 Please install: [Material Design](https://github.com/Scrounger/ioBroker.vis-materialdesign) before you use the example.
 
-If you want to take the json graph and table you can use this ![exmaple](docs/example/img/vis_example.GIF)
+If you want to take the json graph and table you can use this ![example](docs/example/img/vis_example.GIF)
 
-## influxDB with Grafarna
-with the option influxDB the forecast will be written in your influxDB and with grafarna you can visualize The Forcast with eg. the actual prodiction
- ![exmaple](docs/example/img/vorhersage.png)
+## influxDB with Grafana
+With the option influxDB the forecast will be written in your influxDB and with grafana you can visualize the Forecast with e.g. the actual prediction
+ ![example](docs/example/img/vorhersage.png)
 
 ## test setting
 [Here](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/docs/example/system.adapter.pvforecast.0.json) you can find a test configuration.
 
-have fun with the adapter
+Have fun with the adapter!
 
 ## Changelog
 <!--
@@ -96,6 +92,7 @@ have fun with the adapter
 * (klein0r) Updated roles and types
 * (klein0r) Code cleanup
 * **BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**
+* (bluefox) Refactoring
 
 ### 0.2.7 (2022-03-15)
 * (MeisterTR) fixes for repo
