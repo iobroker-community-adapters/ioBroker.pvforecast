@@ -154,7 +154,7 @@
     ],
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/master/README.md",
     "loglevel": "info",
-    "type": "general"
+    "type": "energy"
   },
   "native": {
     "linkdata": "https://api.forecast.solar",
