@@ -88,7 +88,6 @@
         "zh-cn": "固定计时器警告\n在某些情况下修复了引导循环"
       }
     },
-    "title": "PV-Forecast",
     "titleLang": {
       "en": "PV-Forecast",
       "de": "PV-Prognose",
@@ -114,7 +113,8 @@
       "zh-cn": "太阳能电站产量预测"
     },
     "authors": [
-      "Patrick Walther <walther-patrick@gmx.net>"
+      "Patrick Walther <walther-patrick@gmx.net>",
+      "Matthias Kleine <info@haus-automatisierung.com>"
     ],
     "docs": {
       "en": "docs/en/pvforecast.md",
@@ -127,7 +127,7 @@
     ],
     "dependencies": [
       {
-        "js-controller": ">=3.3.0"
+        "js-controller": ">=3.3.22"
       }
     ],
     "license": "MIT",
@@ -143,7 +143,7 @@
     "adminUI": {
       "config": "json"
     },
-    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/master/admin/pvforecast.png",
+    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
     "keywords": [
       "Solar",
       "Photovoltaik",
@@ -152,7 +152,7 @@
       "Prognose",
       "Ertrag"
     ],
-    "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/master/README.md",
+    "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md",
     "loglevel": "info",
     "type": "energy"
   },

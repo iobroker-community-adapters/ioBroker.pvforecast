@@ -6,9 +6,19 @@
     "name": "Patrick Walther",
     "email": "walther-patrick@gmx.net"
   },
+  "contributors": [
+    {
+      "name": "Matthias Kleine",
+      "email": "info@haus-automatisierung.com"
+    }
+  ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast",
   "license": "MIT",
   "keywords": [
+    "ioBroker",
+    "Smart Home",
+    "home automation",
+    "Solar",
     "Photovoltaik",
     "PV",
     "Forecast",
@@ -25,9 +35,9 @@
     "moment": "^2.29.2"
   },
   "devDependencies": {
-    "@alcalzone/release-script": "^3.5.6",
-    "@alcalzone/release-script-plugin-iobroker": "^3.5.7",
-    "@alcalzone/release-script-plugin-license": "^3.5.3",
+    "@alcalzone/release-script": "^3.5.8",
+    "@alcalzone/release-script-plugin-iobroker": "^3.5.8",
+    "@alcalzone/release-script-plugin-license": "^3.5.8",
     "@iobroker/adapter-dev": "^1.0.0",
     "@iobroker/testing": "^2.5.6",
     "@types/chai": "^4.3.0",
