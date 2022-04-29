@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "news": {
+      "1.0.1": {
+        "en": "Updated documentation\nUpdated adapter category (energy)",
+        "de": "Aktualisierte Dokumentation\nAktualisierte Adapterkategorie (Energie)",
+        "ru": "Обновленная документация\nОбновлена категория адаптера (энергия)",
+        "pt": "Documentação atualizada\nCategoria de adaptador atualizada (energia)",
+        "nl": "Bijgewerkte documentatie\nBijgewerkte adaptercategorie (energie)",
+        "fr": "Documentation mise à jour\nCatégorie d'adaptateur mise à jour (énergie)",
+        "it": "Documentazione aggiornata\nCategoria adattatore aggiornata (energia)",
+        "es": "Documentación actualizada\nCategoría de adaptador actualizada (energía)",
+        "pl": "Zaktualizowana dokumentacja\nZaktualizowana kategoria adapterów (energia)",
+        "zh-cn": "更新的文档\n更新的适配器类别（能量）"
+      },
       "1.0.0": {
         "en": "Fallback to system location\nUpdated admin config\nFixed weather API requests\nUpdated translations\nUpdated roles and types\nCode cleanup\n**BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**\nRefactoring",
         "de": "Fallback zum Systemstandort\nAktualisierte Admin-Konfiguration\nWetter-API-Anfragen behoben\nAktualisierte Übersetzungen\nAktualisierte Rollen und Typen\nCode-Bereinigung\n**Breaking Changes von 0.2.X BITTE LÖSCHEN UND NEU INSTALLIEREN**\nRefactoring",
@@ -74,18 +86,6 @@
         "es": "agregar selección de unidad en configuración (W/kW)\nunidades fijas en tablas\nimplementar Solcast api (próxima versión)",
         "pl": "dodaj wybór jednostki w konfiguracji (W/kW)\nstałe jednostki w tabelach\nzaimplementuj Solcast api (następna wersja)",
         "zh-cn": "在配置中添加单位选择 (W/kW)\n表格中的固定单位\n实现 Solcast api（下一个版本）"
-      },
-      "0.2.2": {
-        "en": "fixed timer warning\nfixed bootloop in some cases",
-        "de": "Timer-Warnung behoben\nBootloop in einigen Fällen behoben",
-        "ru": "фиксированное предупреждение таймера\nисправлен бутлуп в некоторых случаях",
-        "pt": "aviso de temporizador fixo\nbootloop fixo em alguns casos",
-        "nl": "waarschuwing vaste timer\nvaste bootloop in sommige gevallen",
-        "fr": "avertissement de minuterie fixe\nbootloop fixe dans certains cas",
-        "it": "avviso timer fisso\nbootloop fisso in alcuni casi",
-        "es": "advertencia de temporizador fijo\nbootloop fijo en algunos casos",
-        "pl": "naprawiono ostrzeżenie timera\nnaprawiono bootloop w niektórych przypadkach",
-        "zh-cn": "固定计时器警告\n在某些情况下修复了引导循环"
       }
     },
     "titleLang": {

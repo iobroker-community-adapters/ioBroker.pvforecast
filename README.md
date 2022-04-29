@@ -31,7 +31,7 @@ The adapter take the raw forecast data from [forecast.solar](https://api.forecas
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 1.0.1 (2022-04-29)
 * (klein0r) Updated documentation
 * (klein0r) Updated adapter category (energy)
 
