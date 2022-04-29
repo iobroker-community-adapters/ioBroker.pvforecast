@@ -1,16 +1,16 @@
 ![Logo](img/pvforecast.png)
 # pvforecast - Adapter zu vorhersage eurer PV Erträge
 
-**If you like it, please consider a donation:**
+**Wenn Dir der Adapter gefällt, freue ich mich über eine Spende:**
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UYB92ZVNEFNF6&source=url)
-
 
 Dieser Adapter ersetzt das Javascript vom Iobroker Forum https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter
 
 Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Daten:
 
-## Einstellungen:
+## Einstellungen
+
 1. Längengrad (-180 (West) … 180 (Ost))
 2. Breitengrad -90 (Süd) … 90 (Nord)
 3. Link zu Seite
@@ -32,7 +32,8 @@ Mit einem Api-Schlüssel kann zusätzlich das Wetter bezogen werden.
 8. Wind richtung - Short name 
 9. Höhere Zeitauflösung
 
-## Für die Anlage stehen folgende Einstellungen zu Verfügung:
+## Für die Anlage stehen folgende Einstellungen zu Verfügung
+
 1. Neigung (0°-90°)
 2. Azimuth (-180 = north, -90 = east, 0 = south, 90 = west, 180 = north)
 3. Anlagenleistung (kWh)
@@ -47,14 +48,7 @@ All diese Information werden benötigt um eine saubere Funktion des Adapters gew
 
 Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das System die Daten automatisch in die Felder ein.
 
-## Vis Beispiel
+## VIS Beispiel
+
 Bevor das Beispiel geladen werden kann, bitte installiert: [Material Design](https://github.com/Scrounger/ioBroker.vis-materialdesign).
 Wenn ihr in der IoBroker Vis die Json Diagramme und Tabellen benutzen möchtet, findet ihr hier ein [Beispiel](https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/main/docs/example/vis/)
-
-
-## Test Einstellung
-Falls ihr die Test-Einstellungen braucht [klickt hier](https://github.com/Patrick-Walther/ioBroker.pvforecast/blob/main/docs/example/system.adapter.pvforecast.0.json).
-
-Habt Spaß mit dem Adapter
-
-
