@@ -20,12 +20,12 @@
                           "label": "Solcast",
                           "value": "solcast"
                         }
-                      ],
+                    ],
                     "default": "forecastsolar",
                     "label": "Forecast service"
                 },
                 "intervall": {
-                    "hidden": "data.service === 'solcast'",
+                    "hidden": "data.service !== 'forecastsolar'",
                     "type": "number",
                     "min": 60,
                     "sm": 12,
@@ -43,7 +43,7 @@
                     "label": "API-Key"
                 },
                 "weatherEnabled": {
-                    "hidden": "data.service === 'solcast'",
+                    "hidden": "data.service !== 'forecastsolar'",
                     "type": "checkbox",
                     "sm": 12,
                     "md": 4,
@@ -97,6 +97,9 @@
                     "md": 4,
                     "lg": 4,
                     "label": "InfluxDB instance"
+                },
+                "_divider3": {
+                    "type": "divider"
                 },
                 "chartingEnabled": {
                     "newLine": true,
