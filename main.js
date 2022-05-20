@@ -1420,21 +1420,22 @@ class Pvforecast extends utils.Adapter {
 	getValidHourKeys() {
 		const hourList = [];
 
+		let hourInterval = 60;
+
+		if (this.config.everyhourStepsize === 'half') {
+			hourInterval = 30;
+		} else if (this.config.everyhourStepsize === 'quarter') {
+			hourInterval = 15;
+		}
+
+		// Solcast doesn't provide 15min forecasts
+		if (this.config.service === 'solcast' && hourInterval < 30) {
+			hourInterval = 30;
+			this.log.info(`Hour interval is set to ${hourInterval} - smaller values not supported by Solcast`);
+		}
+
 		for (let h = 5; h < 22; h++) {
 			if (this.hasApiKey) {
-				let hourInterval = 60;
-
-				if (this.config.everyhourStepsize === 'half') {
-					hourInterval = 30;
-				} else if (this.config.everyhourStepsize === 'quarter') {
-					hourInterval = 15;
-				}
-
-				if (this.config.service === 'solcast' && hourInterval < 30) {
-					hourInterval = 30;
-					this.log.info(`Hour interval is set to ${hourInterval} - smaller values not supported by Solcast`);
-				}
-
 				for (let m = 0; m < 59; m = m + hourInterval) {
 					hourList.push(`${h <= 9 ? '0' + h : h}:${m <= 9 ? '0' + m : m}:00`);
 				}
