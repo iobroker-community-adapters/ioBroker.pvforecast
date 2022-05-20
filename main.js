@@ -158,6 +158,7 @@ class Pvforecast extends utils.Adapter {
 
 		if (this.config.service === 'solcast') {
 			this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
+			this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}`);
 		}
 
 		this.updateServiceDataTimeout = this.setTimeout(async () => {
@@ -173,47 +174,144 @@ class Pvforecast extends utils.Adapter {
 			this.clearTimeout(this.updateActualDataTimeout);
 		}
 
-		const plantArray = this.config.devices;
-		let summaryWatt = 0;
-		let summaryWattHours = 0;
+		const plantArray = this.config.devices || [];
+
+		const alltable = [];
+		const allgraph = [];
+		const allgraphlabel = [];
+
+		let index = 0;
+		globaleveryhour = {};
+
+		let totalPowerNow = 0;
+
+		let totalEnergyNow = 0;
+		let totalEnergyToday = 0;
+		let totalEnergyTomorrow = 0;
 
 		await asyncForEach(plantArray, async plant => {
 			const cleanPlantId = this.cleanNamespace(plant.name);
 
-			const serviceDataState = await this.getStateAsync(`${cleanPlantId}.service.data`);
+			const serviceDataState = await this.getStateAsync(`plants.${cleanPlantId}.service.data`);
 			if (serviceDataState && serviceDataState.val) {
 				try {
-					const valueArray = JSON.parse(serviceDataState.val);
+					const data = JSON.parse(serviceDataState.val);
 
 					// cancel if no data
-					if (typeof valueArray === 'undefined') {
+					if (typeof data === 'undefined') {
 						return;
 					}
 
-					for (const time in valueArray.watts) {
+					for (const time in data.watts) {
 						if (moment().valueOf() - (updateInterval / 2) < moment(time).valueOf() && moment().valueOf() + (updateInterval / 2) > moment(time).valueOf()) {
-							summaryWatt += valueArray.watts[time];
-							summaryWattHours += valueArray.watt_hours[time];
+							totalPowerNow += data.watts[time];
+							totalEnergyNow += data.watt_hours[time];
 
-							await this.setStateAsync(`${cleanPlantId}.power.now`, { val: Number(valueArray.watts[time] / globalunit), ack: true });
-							await this.setStateAsync(`${cleanPlantId}.energy.now`, { val: Number(valueArray.watt_hours[time] / globalunit), ack: true });
+							await this.setStateAsync(`plants.${cleanPlantId}.power.now`, { val: Number(data.watts[time] / globalunit), ack: true });
+							await this.setStateAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(data.watt_hours[time] / globalunit), ack: true });
 						}
 					}
 
-					await this.setStateAsync(`${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
+					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
+					const energyTomorrow = data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')];
+
+					totalEnergyToday += Number(energyToday / globalunit);
+					totalEnergyTomorrow += Number(energyTomorrow / globalunit);
+
+					await this.setStateAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
+					await this.setStateAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
+					await this.setStateAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
+
+					// jsongraph
+					const table = [];
+					const graphTimeData = [];
+
+					let wattindex = 0;
+					for (const time in data.watts) {
+						table.push({ Uhrzeit: time, Leistung: data.watts[time] / globalunit });
+						graphTimeData.push({ t: time, y: data.watts[time] / globalunit });
+
+						if (this.config.everyhour_active) {
+							this.saveEveryHour(cleanPlantId, time, data.watts[time] / globalunit);
+						}
+
+						// add to InfluxDB
+						await this.addToInfluxDB(`${cleanPlantId}.watts`, moment(time).valueOf(), data.watts[time] / globalunit);
+
+						// data for alltable
+						if (index === 0) {
+							allgraphlabel.push(time); // for JSONgraph
+							alltable[wattindex] = { Uhrzeit: time };
+							alltable[wattindex]['Gesamt'] = data.watts[time] / globalunit;
+						} else {
+							alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time] / globalunit;
+						}
+
+						alltable[wattindex][cleanPlantId] = data.watts[time] / globalunit;
+						wattindex++;
+					}
+
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(table), ack: true });
+					const graphData = {
+						// graph
+						data: graphTimeData,
+						type: 'bar',
+						legendText: plant.name,
+						displayOrder: index + 1,
+						color: plantArray[index].graphcolor,
+						tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
+						datalabel_show: true,
+						datalabel_rotation: this.config.chartingRoation || 270,
+						datalabel_color: plantArray[index].labelcolor,
+						datalabel_fontSize: 12,
+
+						// graph bar chart spfeicifc
+						barIsStacked: true,
+						barStackId: 1,
+
+						// graph y-Axis
+						yAxis_id: 0,
+						yAxis_position: 'left',
+						yAxis_show: true,
+						yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
+						yAxis_step: this.config.watt_kw ? 1000 : 1,
+					};
+
+					allgraph.push(graphData);
+					const graph = { 'graphs': [graphData] };
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify(graph), ack: true });
+
+					if (this.config.everyhour_active) {
+						this.saveEveryHourEmptyStates(cleanPlantId);
+					}
+
+					await this.setStateAsync(`plants.${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
 
 					this.log.debug(`finished plant update: "${plant.name}"`);
 				} catch (err) {
 					this.log.debug(`unable to update "${plant.name}": ${err}`);
 				}
 			}
+
+			index++;
 		});
 
 		this.log.debug('finished plants update');
 
+		if (this.config.everyhour_active) {
+			await this.saveEveryHourSummary();
+		}
+
+		await this.setStateAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
+		await this.setStateAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
+		await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': allgraph, 'axisLabels': allgraphlabel }), ack: true });
+		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(alltable), ack: true });
+
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
-		await this.setStateAsync('summary.power.now', { val: Number(summaryWatt / globalunit), ack: true });
-		await this.setStateAsync('summary.energy.now', { val: Number(summaryWattHours / globalunit), ack: true });
+		await this.setStateAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
+		await this.setStateAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
+
+		this.log.debug(`global time: ${JSON.stringify(globaleveryhour)}`);
 
 		if (this.hasApiKey && this.config.weather_active) {
 			await this.updateWeatherData();
@@ -314,15 +412,6 @@ class Pvforecast extends utils.Adapter {
 	async getPv() {
 		const plantArray = this.config.devices || [];
 
-		let totalPowerToday = 0;
-		let totalPowerTomorrow = 0;
-
-		const alltable = [];
-		const allgraph = [];
-		const allgraphlabel = [];
-
-		globaleveryhour = {};
-
 		await asyncForEach(plantArray, async (plant) => {
 			const cleanPlantId = this.cleanNamespace(plant.name);
 
@@ -340,7 +429,7 @@ class Pvforecast extends utils.Adapter {
 			}
 
 			if (url) {
-				const serviceDataLastUpdatedState = await this.getStateAsync(`${cleanPlantId}.service.lastUpdated`);
+				const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
 				const lastUpdate = (serviceDataLastUpdatedState && serviceDataLastUpdatedState.val) ? parseInt(serviceDataLastUpdatedState.val) : 0;
 
 				this.log.debug(`plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
@@ -367,82 +456,10 @@ class Pvforecast extends utils.Adapter {
 							message = { 'info': { 'place': '-' }, 'type': 'Solcast' };
 						}
 
-						const powerToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
-						const powerTomorrow = data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')];
-
-						await this.setStateAsync(`${cleanPlantId}.service.data`, { val: JSON.stringify(data), ack: true });
-						await this.setStateAsync(`${cleanPlantId}.service.lastUpdated`, { val: moment().valueOf(), ack: true });
-						await this.setStateAsync(`${cleanPlantId}.service.message`, { val: message.type, ack: true });
-						await this.setStateAsync(`${cleanPlantId}.place`, { val: message.info.place, ack: true });
-
-						await this.setStateAsync(`${cleanPlantId}.energy.totay`, { val: Number(powerToday / globalunit), ack: true });
-						await this.setStateAsync(`${cleanPlantId}.energy.tomorrow`, { val: Number(powerTomorrow / globalunit), ack: true });
-						await this.setStateAsync(`${cleanPlantId}.name`, { val: plant.name, ack: true });
-
-						// count total watt
-						totalPowerToday += Number(powerToday / globalunit);
-						totalPowerTomorrow += Number(powerTomorrow / globalunit);
-
-						// jsongraph
-						const table = [], graphTimeData = [];
-						let wattindex = 0;
-						for (const time in data.watts) {
-							table.push({ Uhrzeit: time, Leistung: data.watts[time] / globalunit });
-							graphTimeData.push({ t: time, y: data.watts[time] / globalunit });
-
-							if (this.config.everyhour_active) {
-								this.saveEveryHour(plant.name, time, data.watts[time] / globalunit);
-							}
-
-							// add to InfluxDB
-							await this.addToInfluxDB(`${cleanPlantId}.watts`, moment(time).valueOf(), data.watts[time] / globalunit);
-
-							// data for alltable
-							if (index === 0) {
-								allgraphlabel.push(time); // for JSONgraph
-								alltable[wattindex] = { Uhrzeit: time };
-								alltable[wattindex]['Gesamt'] = data.watts[time] / globalunit;
-							} else {
-								alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time] / globalunit;
-							}
-
-							alltable[wattindex][plant.name] = data.watts[time] / globalunit;
-							wattindex++;
-						}
-
-						await this.setStateAsync(`${cleanPlantId}.JSONTable`, { val: JSON.stringify(table), ack: true });
-						const graphData = {
-							// graph
-							data: graphTimeData,
-							type: 'bar',
-							legendText: plant.name,
-							displayOrder: index + 1,
-							color: plantArray[index].graphcolor,
-							tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
-							datalabel_show: true,
-							datalabel_rotation: this.config.chartingRoation || 270,
-							datalabel_color: plantArray[index].labelcolor,
-							datalabel_fontSize: 12,
-
-							// graph bar chart spfeicifc
-							barIsStacked: true,
-							barStackId: 1,
-
-							// graph y-Axis
-							yAxis_id: 0,
-							yAxis_position: 'left',
-							yAxis_show: true,
-							yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
-							yAxis_step: this.config.watt_kw ? 1000 : 1,
-						};
-
-						allgraph.push(graphData);
-						const graph = { 'graphs': [graphData] };
-						await this.setStateAsync(`${cleanPlantId}.JSONGraph`, { val: JSON.stringify(graph), ack: true });
-
-						if (this.config.everyhour_active) {
-							this.fillEveryHourRestEmpty(plant.name);
-						}
+						await this.setStateAsync(`plants.${cleanPlantId}.service.data`, { val: JSON.stringify(data), ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.service.lastUpdated`, { val: moment().valueOf(), ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.service.message`, { val: message.type, ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.place`, { val: message.info.place, ack: true });
 
 					} catch (error) {
 						if (error === 'Error: Request failed with status code 429') {
@@ -463,34 +480,59 @@ class Pvforecast extends utils.Adapter {
 				}
 
 				this.log.debug('received all data');
-
-				if (this.config.everyhour_active) {
-					await this.fillEverySummery();
-				}
-
-				await this.setStateAsync('summary.energy.totay', { val: totalPowerToday, ack: true });
-				await this.setStateAsync('summary.energy.tomorrow', { val: totalPowerTomorrow, ack: true });
-				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': allgraph, 'axisLabels': allgraphlabel }), ack: true });
-				await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(alltable), ack: true });
-
-				this.log.debug(`global time: ${JSON.stringify(globaleveryhour)}`);
 			}
 		});
 	}
 
-	async saveEveryHour(name, time, value) {
-		const found = this.hasApiKey ? time.match(/:00:00|:15:00|:30:00|:45:00/) : time.match(/:00:00/);
-		if (found && (moment().format('dd') === moment(time).format('dd'))) {
-			const timeval = moment(time).format('HH:mm:ss');
-			this.log.debug(`saveEveryHour: ${timeval} value: ${value}`);
-			await this.setStateAsync(`${name}.power.hour.${timeval}`, { val: Number(value), ack: true });
+	async saveEveryHour(cleanPlantId, timeStr, value) {
+		// timeStr example: "2022-05-23 17:30:00"
+		const found = this.hasApiKey ? /:00:00|:15:00|:30:00|:45:00/.test(timeStr) : /:00:00/.test(timeStr);
 
-			if (!globaleveryhour[name]) globaleveryhour[name] = [];
-			globaleveryhour[name].push({time: timeval, value: Number(value) });
+		if (found && moment().date() === moment(timeStr).date()) {
+			const timeval = moment(timeStr).format('HH:mm:ss');
+			this.log.debug(`[saveEveryHour] found time plants.${cleanPlantId}.power.hour.${timeval} - value: ${value}`);
+
+			await this.setStateAsync(`plants.${cleanPlantId}.power.hour.${timeval}`, { val: Number(value), ack: true });
+
+			if (!globaleveryhour[cleanPlantId]) {
+				globaleveryhour[cleanPlantId] = [];
+			}
+
+			globaleveryhour[cleanPlantId].push({time: timeval, value: Number(value) });
+		} else {
+			this.log.debug(`[saveEveryHour] no match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
 		}
 	}
 
-	async fillEverySummery() {
+	async saveEveryHourEmptyStates(cleanPlantId) {
+		if (!globaleveryhour[cleanPlantId]) {
+			return;
+		}
+
+		for (let j = 5; j < 22; j++) {
+			if (this.hasApiKey) {
+				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
+
+				for (let i = 0; i < 59; i = i + hourInterval) {
+					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
+					const found = globaleveryhour[cleanPlantId].find(element => element.time === timetext);
+
+					if (!found) {
+						await this.setStateAsync(`plants.${cleanPlantId}.power.hour.${timetext}`, { val: 0, ack: true });
+					}
+				}
+			} else {
+				const timetext = (j <= 9 ? '0' + j : j) + ':00:00';
+				const found = globaleveryhour[cleanPlantId].find(element => element.time === timetext);
+
+				if (!found) {
+					await this.setStateAsync(`plants.${cleanPlantId}.power.hour.${timetext}`, { val: 0, ack: true });
+				}
+			}
+		}
+	}
+
+	async saveEveryHourSummary() {
 		const plantArray = this.config.devices || [];
 
 		for (let j = 5; j < 22; j++) {
@@ -500,10 +542,12 @@ class Pvforecast extends utils.Adapter {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					let wattsummery = 0;
 					await asyncForEach(plantArray, async plant => {
-						if (!globaleveryhour[plant.name]) {
+						const cleanPlantId = this.cleanNamespace(plant.name);
+
+						if (!globaleveryhour[cleanPlantId]) {
 							return;
 						}
-						const found = globaleveryhour[plant.name].find(element => element.time === timetext);
+						const found = globaleveryhour[cleanPlantId].find(element => element.time === timetext);
 						if (found) {
 							wattsummery = wattsummery + found.value;
 						}
@@ -518,10 +562,12 @@ class Pvforecast extends utils.Adapter {
 				const timetext = (j <= 9 ? '0' + j : j) + ':00:00';
 				let wattsummery = 0;
 				await asyncForEach(plantArray, async (plant) => {
-					if (!globaleveryhour[plant.name]) {
+					const cleanPlantId = this.cleanNamespace(plant.name);
+
+					if (!globaleveryhour[cleanPlantId]) {
 						return;
 					}
-					const found = globaleveryhour[plant.name].find(element => element.time === timetext);
+					const found = globaleveryhour[cleanPlantId].find(element => element.time === timetext);
 					if (found) {
 						wattsummery = wattsummery + found.value;
 					}
@@ -531,40 +577,6 @@ class Pvforecast extends utils.Adapter {
 					val: Number(wattsummery),
 					ack: true
 				});
-			}
-		}
-	}
-
-	async fillEveryHourRestEmpty(name) {
-		if (!globaleveryhour[name]) {
-			return;
-		}
-
-		for (let j = 5; j < 22; j++) {
-			if (this.hasApiKey) {
-				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
-
-				for (let i = 0; i < 59; i = i + hourInterval) {
-					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
-					const found = globaleveryhour[name].find(element => element.time === timetext);
-
-					if (!found) {
-						await this.setState(name + '.power.hour.' + timetext, {
-							val: Number(0),
-							ack: true
-						});
-					}
-				}
-			} else {
-				const timetext = (j <= 9 ? '0' + j : j) + ':00:00';
-				const found = globaleveryhour[name].find(element => element.time === timetext);
-
-				if (!found) {
-					await this.setStateAsync(`${name}.power.hour.${timetext}`, {
-						val: Number(0),
-						ack: true
-					});
-				}
 			}
 		}
 	}
@@ -871,9 +883,9 @@ class Pvforecast extends utils.Adapter {
 			await asyncForEach(plantArray, async (plant) => {
 				const cleanPlantId = this.cleanNamespace(plant.name);
 
-				this.log.debug(`creating states for plant: "${plant.name}"`);
+				this.log.debug(`creating states for plant: "${plant.name}" (${cleanPlantId})`);
 
-				await this.extendObjectAsync(cleanPlantId, {
+				await this.extendObjectAsync(`plants.${cleanPlantId}`, {
 					type: 'device',
 					common: {
 						name: plant.name
@@ -881,7 +893,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.power`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.power`, {
 					type: 'channel',
 					common: {
 						name: {
@@ -900,7 +912,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.power.now`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.power.now`, {
 					type: 'state',
 					common: {
 						name: {
@@ -925,7 +937,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.energy`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.energy`, {
 					type: 'channel',
 					common: {
 						name: {
@@ -944,7 +956,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.energy.now`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.energy.now`, {
 					type: 'state',
 					common: {
 						name: {
@@ -969,7 +981,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.energy.totay`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.energy.today`, {
 					type: 'state',
 					common: {
 						name: {
@@ -994,7 +1006,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.energy.tomorrow`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.energy.tomorrow`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1019,7 +1031,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.name`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.name`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1043,7 +1055,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.service`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.service`, {
 					type: 'channel',
 					common: {
 						name: {
@@ -1062,7 +1074,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.service.data`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.service.data`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1086,7 +1098,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.service.lastUpdated`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.service.lastUpdated`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1110,7 +1122,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.service.message`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.service.message`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1134,7 +1146,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.place`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.place`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1158,7 +1170,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.lastUpdated`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.lastUpdated`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1182,7 +1194,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.JSONGraph`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.JSONGraph`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1206,7 +1218,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync(`${cleanPlantId}.JSONTable`, {
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.JSONTable`, {
 					type: 'state',
 					common: {
 						name: {
@@ -1231,103 +1243,32 @@ class Pvforecast extends utils.Adapter {
 				});
 
 				// update unit by config
-				await this.extendObjectAsync(`${cleanPlantId}.power.now`, {
+				await this.extendObjectAsync(`plants.${cleanPlantId}.power.now`, {
 					common: {
 						unit: this.config.watt_kw ? 'W' : 'kW'
 					}
 				});
-				await this.extendObjectAsync(`${cleanPlantId}.energy.now`, {
+				await this.extendObjectAsync(`plants.${cleanPlantId}.energy.now`, {
 					common: {
 						unit: this.config.watt_kw ? 'Wh' : 'kWh'
 					}
 				});
-				await this.extendObjectAsync(`${cleanPlantId}.energy.totay`, {
+				await this.extendObjectAsync(`plants.${cleanPlantId}.energy.today`, {
 					common: {
 						unit: this.config.watt_kw ? 'Wh' : 'kWh'
 					}
 				});
-				await this.extendObjectAsync(`${cleanPlantId}.energy.tomorrow`, {
+				await this.extendObjectAsync(`plants.${cleanPlantId}.energy.tomorrow`, {
 					common: {
 						unit: this.config.watt_kw ? 'Wh' : 'kWh'
 					}
 				});
 
 				if (this.config.everyhour_active) {
-					const obj = {
-						type: 'state',
-						common: {
-							name: {
-								en: 'Estimated power',
-								de: 'Geschätzte Leistung',
-								ru: 'Расчетная мощность',
-								pt: 'Potência estimada',
-								nl: 'Geschat vermogen',
-								fr: 'Puissance estimée',
-								it: 'Potenza stimata',
-								es: 'Potencia estimada',
-								pl: 'Szacowana moc',
-								'zh-cn': '估计功率'
-							},
-							type: 'number',
-							role: 'value',
-							unit: 'kW',
-							read: true,
-							write: false,
-							def: 0
-						},
-						native: {}
-					};
-
-					for (let j = 5; j < 22; j++) {
-						if (this.hasApiKey) {
-							const hourInterval = this.config.service === 'solcast' ? 30 : 15;
-
-							for (let i = 0; i < 59; i = i + hourInterval) {
-								await this.setObjectNotExistsAsync(cleanPlantId + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
-								await this.extendObjectAsync(cleanPlantId + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
-									common: {
-										unit: this.config.watt_kw ? 'W' : 'kW'
-									}
-								});
-
-								await this.setObjectNotExistsAsync('summary.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
-								await this.extendObjectAsync('summary.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
-									common: {
-										unit: this.config.watt_kw ? 'W' : 'kW'
-									}
-								});
-							}
-						} else {
-							for (let i = 15; i < 50; i = i + 15) {
-								//adapter.log.debug('apiky zeit: ' + i);
-								await this.delObjectAsync(cleanPlantId + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
-								await this.delObjectAsync('summary.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
-							}
-
-							await this.setObjectNotExistsAsync(cleanPlantId + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
-							await this.setObjectNotExistsAsync('summary.power.hour.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
-							await this.extendObjectAsync(cleanPlantId + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':00:00', {
-								common: {
-									unit: this.config.watt_kw ? 'W' : 'kW'
-								}
-							});
-							await this.extendObjectAsync('summary.power.hour.' + (j <= 9 ? '0' + j : j) + ':00:00', {
-								common: {
-									unit: this.config.watt_kw ? 'W' : 'kW'
-								}
-							});
-						}
-					}
-				}
-
-				// Delete states
-				if (!this.config.everyhour_active) {
-					for (let j = 5; j < 22; j++) {
-						for (let i = 0; i < 59; i = i + 15) {
-							await this.delObjectAsync(cleanPlantId + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
-							await this.delObjectAsync('summary.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
-						}
-					}
+					await this.createHoursStates(`plants.${cleanPlantId}`);
+				} else {
+					// Delete states
+					await this.delObjectAsync(`plants.${cleanPlantId}.power.hour`, { recursive: true });
 				}
 			});
 
@@ -1342,7 +1283,7 @@ class Pvforecast extends utils.Adapter {
 					unit: this.config.watt_kw ? 'Wh' : 'kWh'
 				}
 			});
-			await this.extendObjectAsync('summary.energy.totay', {
+			await this.extendObjectAsync('summary.energy.today', {
 				common: {
 					unit: this.config.watt_kw ? 'Wh' : 'kWh'
 				}
@@ -1353,11 +1294,89 @@ class Pvforecast extends utils.Adapter {
 				}
 			});
 
+			if (this.config.everyhour_active) {
+				await this.createHoursStates('summary');
+			} else {
+				await this.delObjectAsync('summary.power.hour', { recursive: true });
+			}
+
 		} catch (err) {
 			this.log.error(`Error on init: ${err}`);
 		}
 
 		this.log.debug('init done');
+	}
+
+	async createHoursStates(prefix) {
+		const defaultHourObj = {
+			type: 'state',
+			common: {
+				name: {
+					en: 'Estimated power',
+					de: 'Geschätzte Leistung',
+					ru: 'Расчетная мощность',
+					pt: 'Potência estimada',
+					nl: 'Geschat vermogen',
+					fr: 'Puissance estimée',
+					it: 'Potenza stimata',
+					es: 'Potencia estimada',
+					pl: 'Szacowana moc',
+					'zh-cn': '估计功率'
+				},
+				type: 'number',
+				role: 'value',
+				unit: 'kW',
+				read: true,
+				write: false,
+				def: 0
+			},
+			native: {}
+		};
+
+		await this.setObjectNotExistsAsync(`${prefix}.power.hour`, {
+			type: 'channel',
+			common: {
+				name: {
+					en: 'By hour',
+					de: 'Stundenweise',
+					ru: 'По часам',
+					pt: 'Por hora',
+					nl: 'Per uur',
+					fr: 'Par heure',
+					it: 'Di ora',
+					es: 'por hora',
+					pl: 'O godzinę',
+					'zh-cn': '按小时'
+				}
+			},
+			native: {}
+		});
+
+		for (let j = 5; j < 22; j++) {
+			if (this.hasApiKey) {
+				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
+
+				for (let i = 0; i < 59; i = i + hourInterval) {
+					await this.setObjectNotExistsAsync(prefix + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', defaultHourObj);
+					await this.extendObjectAsync(prefix + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
+						common: {
+							unit: this.config.watt_kw ? 'W' : 'kW'
+						}
+					});
+				}
+			} else {
+				for (let i = 15; i < 50; i = i + 15) {
+					await this.delObjectAsync(prefix + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
+				}
+
+				await this.setObjectNotExistsAsync(prefix + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':00:00', defaultHourObj);
+				await this.extendObjectAsync(prefix + '.power.hour.' + (j <= 9 ? '0' + j : j) + ':00:00', {
+					common: {
+						unit: this.config.watt_kw ? 'W' : 'kW'
+					}
+				});
+			}
+		}
 	}
 
 	cleanNamespace(id) {

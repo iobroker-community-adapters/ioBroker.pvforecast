@@ -180,6 +180,44 @@
     "objects": [],
     "instanceObjects": [
         {
+            "_id": "plants",
+            "type": "folder",
+            "common": {
+                "name": {
+                    "en": "PV-Plants",
+                    "de": "PV-Anlagen",
+                    "ru": "PV-установки",
+                    "pt": "Usinas fotovoltaicas",
+                    "nl": "PV-installaties",
+                    "fr": "Installations PV",
+                    "it": "Impianti fotovoltaici",
+                    "es": "Plantas fotovoltaicas",
+                    "pl": "Fotowoltaika",
+                    "zh-cn": "光伏电站"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Summary",
+                    "de": "Zusammenfassung",
+                    "ru": "Резюме",
+                    "pt": "Resumo",
+                    "nl": "Samenvatting",
+                    "fr": "Résumé",
+                    "it": "Sommario",
+                    "es": "Resumen",
+                    "pl": "Streszczenie",
+                    "zh-cn": "概括"
+                }
+            },
+            "native": {}
+        },
+        {
             "_id": "summary.power",
             "type": "channel",
             "common": {
