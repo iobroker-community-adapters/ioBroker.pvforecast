@@ -12,6 +12,7 @@
     "InfluxDB instance": "InfluxDB-instantie",
     "Weather (only with API-Key)": "Weer (alleen met API-Key)",
     "States for every hour": "Staten voor elk uur",
+    "Step size for hourly values": "Stapgrootte voor uurwaarden",
     "Values in watt instead of kW": "Waarden in watt in plaats van kW",
     "Charting enabled": "Kaarten inschakelen",
     "Charting label rotation": "Labelrotatie in kaart brengen",

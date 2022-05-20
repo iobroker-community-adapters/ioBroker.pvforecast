@@ -78,6 +78,29 @@
                     "lg": 4,
                     "label": "States for every hour"
                 },
+                "everyhourStepsize": {
+                    "hidden": "!data.everyhourEnabled",
+                    "type": "select",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "options": [
+                        {
+                          "label": "Full hour (:00)",
+                          "value": "full"
+                        },
+                        {
+                          "label": "Half hour (:00, :30)",
+                          "value": "half"
+                        },
+                        {
+                          "label": "Quarter hour (:00, :15, :30, :45)",
+                          "value": "quarter"
+                        }
+                    ],
+                    "default": "full",
+                    "label": "Step size for hourly values"
+                },
                 "watt_kw": {
                     "newLine": true,
                     "type": "checkbox",

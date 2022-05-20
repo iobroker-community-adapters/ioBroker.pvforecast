@@ -210,6 +210,7 @@
         "latitude": "",
         "longitude": "",
         "everyhourEnabled": false,
+        "everyhourStepsize": "full",
         "watt_kw": false,
         "influxinstace": "",
         "chartingEnabled": false,

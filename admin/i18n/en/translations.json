@@ -12,6 +12,7 @@
     "InfluxDB instance": "InfluxDB instance",
     "Weather (only with API-Key)": "Weather (only with API-Key)",
     "States for every hour": "States for every hour",
+    "Step size for hourly values": "Step size for hourly values",
     "Values in watt instead of kW": "Values in watt instead of kW",
     "Charting enabled": "Charting enabled",
     "Charting label rotation": "Charting label rotation",

@@ -12,6 +12,7 @@
     "InfluxDB instance": "Экземпляр InfluxDB",
     "Weather (only with API-Key)": "Погода (только с API-ключом)",
     "States for every hour": "Штаты за каждый час",
+    "Step size for hourly values": "Размер шага для часовых значений",
     "Values in watt instead of kW": "Значения в ваттах вместо кВт",
     "Charting enabled": "Диаграммы включены",
     "Charting label rotation": "Вращение метки диаграммы",

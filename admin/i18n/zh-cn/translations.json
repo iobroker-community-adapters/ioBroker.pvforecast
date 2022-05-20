@@ -12,6 +12,7 @@
     "InfluxDB instance": "InfluxDB 实例",
     "Weather (only with API-Key)": "天气（仅使用 API-Key）",
     "States for every hour": "每小时的状态",
+    "Step size for hourly values": "每小时值的步长",
     "Values in watt instead of kW": "以瓦特而不是 kW 为单位的值",
     "Charting enabled": "启用图表",
     "Charting label rotation": "图表标签旋转",

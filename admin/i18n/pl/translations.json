@@ -12,6 +12,7 @@
     "InfluxDB instance": "instancja InfluxDB",
     "Weather (only with API-Key)": "Pogoda (tylko z kluczem API)",
     "States for every hour": "Stany na każdą godzinę",
+    "Step size for hourly values": "Wielkość kroku dla wartości godzinowych",
     "Values in watt instead of kW": "Wartości w watach zamiast w kW",
     "Charting enabled": "Wykresy włączone",
     "Charting label rotation": "Rotacja etykiet wykresów",

@@ -81,7 +81,7 @@ class Pvforecast extends utils.Adapter {
 				const plantArray = this.config.devices;
 
 				// Validate plants
-				await asyncForEach(plantArray, async (plant, index) => {
+				await asyncForEach(plantArray, async (plant) => {
 					if (!plant.name) {
 						throw new Error(`Invalid device configuration: Found plant without name`);
 					}
@@ -218,9 +218,9 @@ class Pvforecast extends utils.Adapter {
 
 		const plantArray = this.config.devices || [];
 
-		const alltable = [];
-		const allgraph = [];
-		const allgraphlabel = [];
+		const jsonTableAll = [];
+		const jsonGraphAll = [];
+		const jsonGraphLabelAll = [];
 
 		this.globalEveryHour = {};
 
@@ -243,6 +243,7 @@ class Pvforecast extends utils.Adapter {
 						return;
 					}
 
+					let foundNow = false;
 					for (const time in data.watts) {
 						if (moment().valueOf() - (updateInterval / 2) < moment(time).valueOf() && moment().valueOf() + (updateInterval / 2) > moment(time).valueOf()) {
 							totalPowerNow += data.watts[time];
@@ -250,7 +251,14 @@ class Pvforecast extends utils.Adapter {
 
 							await this.setStateAsync(`plants.${cleanPlantId}.power.now`, { val: Number(data.watts[time] / globalunit), ack: true });
 							await this.setStateAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(data.watt_hours[time] / globalunit), ack: true });
+
+							foundNow = true;
 						}
+					}
+
+					if (!foundNow) {
+						await this.setStateAsync(`plants.${cleanPlantId}.power.now`, { val: 0, ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.energy.now`, { val: 0, ack: true });
 					}
 
 					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
@@ -281,14 +289,15 @@ class Pvforecast extends utils.Adapter {
 
 						// data for alltable
 						if (index === 0) {
-							allgraphlabel.push(time); // for JSONgraph
-							alltable[wattindex] = { Uhrzeit: time };
-							alltable[wattindex]['Gesamt'] = data.watts[time] / globalunit;
+							jsonGraphLabelAll.push(time); // for JSONgraph
+
+							jsonTableAll[wattindex] = { Uhrzeit: time };
+							jsonTableAll[wattindex]['Gesamt'] = data.watts[time] / globalunit;
 						} else {
-							alltable[wattindex]['Gesamt'] = alltable[wattindex]['Gesamt'] + data.watts[time] / globalunit;
+							jsonTableAll[wattindex]['Gesamt'] = jsonTableAll[wattindex]['Gesamt'] + data.watts[time] / globalunit;
 						}
 
-						alltable[wattindex][cleanPlantId] = data.watts[time] / globalunit;
+						jsonTableAll[wattindex][cleanPlantId] = data.watts[time] / globalunit;
 						wattindex++;
 					}
 
@@ -318,9 +327,8 @@ class Pvforecast extends utils.Adapter {
 						yAxis_step: this.config.watt_kw ? 1000 : 1,
 					};
 
-					allgraph.push(graphData);
-					const graph = { 'graphs': [graphData] };
-					await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify(graph), ack: true });
+					jsonGraphAll.push(graphData);
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [graphData] }), ack: true });
 
 					if (this.config.everyhourEnabled) {
 						this.saveEveryHourEmptyStates(cleanPlantId);
@@ -339,18 +347,17 @@ class Pvforecast extends utils.Adapter {
 
 		if (this.config.everyhourEnabled) {
 			await this.saveEveryHourSummary();
+			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
 
 		await this.setStateAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
 		await this.setStateAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
-		await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': allgraph, 'axisLabels': allgraphlabel }), ack: true });
-		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(alltable), ack: true });
+		await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphAll, 'axisLabels': jsonGraphLabelAll }), ack: true });
+		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableAll), ack: true });
 
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
 		await this.setStateAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
 		await this.setStateAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
-
-		this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 
 		await this.updateWeatherData();
 
@@ -578,7 +585,7 @@ class Pvforecast extends utils.Adapter {
 				influxInstance = `influxdb.${influxInstance}`;
 			}
 
-			this.log.debug(`[addToInfluxDB] storeState into "${influxInstance}": value "${value}" (${typeof value}) of "${datapoint}" with timestamp ${timestamp}`);
+			this.log.silly(`[addToInfluxDB] storeState into "${influxInstance}": value "${value}" (${typeof value}) of "${datapoint}" with timestamp ${timestamp}`);
 
 			const result = await this.sendToAsync(influxInstance, 'storeState', {
 				id: `${this.namespace}.${datapoint}`,
@@ -1415,7 +1422,18 @@ class Pvforecast extends utils.Adapter {
 
 		for (let h = 5; h < 22; h++) {
 			if (this.hasApiKey) {
-				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
+				let hourInterval = 60;
+
+				if (this.config.everyhourStepsize === 'half') {
+					hourInterval = 30;
+				} else if (this.config.everyhourStepsize === 'quarter') {
+					hourInterval = 15;
+				}
+
+				if (this.config.service === 'solcast' && hourInterval < 30) {
+					hourInterval = 30;
+					this.log.info(`Hour interval is set to ${hourInterval} - smaller values not supported by Solcast`);
+				}
 
 				for (let m = 0; m < 59; m = m + hourInterval) {
 					hourList.push(`${h <= 9 ? '0' + h : h}:${m <= 9 ? '0' + m : m}:00`);
