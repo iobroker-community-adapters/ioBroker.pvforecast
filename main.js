@@ -5,7 +5,6 @@ const moment = require('moment');
 const axios = require('axios').default;
 
 let globaleveryhour = {};
-let globalweatherdata = {};
 const updateInterval = 60 * 10 * 1000; // 10 minutes
 let globalunit = 1000;
 
@@ -151,10 +150,7 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		await this.getPv();
-
-		if (this.hasApiKey && this.config.weather_active) {
-			await this.getWeather();
-		}
+		await this.getWeather();
 
 		if (this.config.service === 'solcast') {
 			this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
@@ -313,10 +309,7 @@ class Pvforecast extends utils.Adapter {
 
 		this.log.debug(`global time: ${JSON.stringify(globaleveryhour)}`);
 
-		if (this.hasApiKey && this.config.weather_active) {
-			await this.updateWeatherData();
-			this.log.debug('finished weather update');
-		}
+		await this.updateWeatherData();
 
 		this.updateActualDataTimeout = this.setTimeout(async () => {
 			this.updateActualDataTimeout = null;
@@ -346,63 +339,76 @@ class Pvforecast extends utils.Adapter {
 
 	// analysis weather data
 	async updateWeatherData() {
-		try {
-			for (let i = 0; i < globalweatherdata.length; i++) {
-				// if value between /2 interval
-				if (moment().valueOf() - (updateInterval / 2) < globalweatherdata[i] && moment().valueOf() + (updateInterval / 2) > globalweatherdata[i]) {
-					this.log.debug('sky' + globalweatherdata[i].sky);
-					this.log.debug('datetime' + globalweatherdata[i].datetime);
-					this.log.debug('visibility' + globalweatherdata[i].visibility);
-					this.log.debug('temperature' + globalweatherdata[i].temperature);
-					this.log.debug('condition' + globalweatherdata[i].condition);
-					this.log.debug('icon' + globalweatherdata[i].icon);
-					this.log.debug('wind_speed' + globalweatherdata[i].wind_speed);
-					this.log.debug('wind_degrees' + globalweatherdata[i].wind_degrees);
-					this.log.debug('wind_direction' + globalweatherdata[i].wind_direction);
+		if (this.hasApiKey && this.config.weather_active) {
+			try {
+				const serviceDataState = await this.getStateAsync('weather.service.data');
+				if (serviceDataState && serviceDataState.val) {
+					const data = JSON.parse(serviceDataState.val);
 
-					await this.setStateAsync('weather.sky', { val: Number(globalweatherdata[i].sky), ack: true });
-					await this.setStateAsync('weather.datetime', { val: globalweatherdata[i].datetime, ack: true });
-					await this.setStateAsync('weather.visibility', { val: Number(globalweatherdata[i].visibility), ack: true });
-					await this.setStateAsync('weather.temperature', { val: Number(globalweatherdata[i].temperature), ack: true });
-					await this.setStateAsync('weather.condition', { val: globalweatherdata[i].condition, ack: true });
-					await this.setStateAsync('weather.icon', { val: globalweatherdata[i].icon, ack: true });
-					await this.setStateAsync('weather.wind_speed', { val: Number(globalweatherdata[i].wind_speed), ack: true });
-					await this.setStateAsync('weather.wind_degrees', { val: Number(globalweatherdata[i].wind_degrees), ack: true });
-					await this.setStateAsync('weather.wind_direction', { val: globalweatherdata[i].wind_direction, ack: true });
+					const lowerTimeLimit = moment().valueOf() - (updateInterval / 2);
+					const upperTimeLimit = moment().valueOf() + (updateInterval / 2);
+
+					this.log.debug(`[updateWeatherData] searching for weather information between ${lowerTimeLimit} and ${upperTimeLimit}`);
+
+					for (let i = 0; i < data.length; i++) {
+
+						const weatherEntryTimestamp = moment(data[i].datetime).valueOf();
+
+						if (lowerTimeLimit < weatherEntryTimestamp && upperTimeLimit > weatherEntryTimestamp) {
+							this.log.debug(`[updateWeatherData] filling states with weather info from: ${JSON.stringify(data[i])}`);
+
+							await this.setStateAsync('weather.sky', { val: Number(data[i].sky), ack: true });
+							await this.setStateAsync('weather.datetime', { val: weatherEntryTimestamp, ack: true });
+							await this.setStateAsync('weather.visibility', { val: Number(data[i].visibility), ack: true });
+							await this.setStateAsync('weather.temperature', { val: Number(data[i].temperature), ack: true });
+							await this.setStateAsync('weather.condition', { val: data[i].condition, ack: true });
+							await this.setStateAsync('weather.icon', { val: data[i].icon, ack: true });
+							await this.setStateAsync('weather.wind_speed', { val: Number(data[i].wind_speed), ack: true });
+							await this.setStateAsync('weather.wind_degrees', { val: Number(data[i].wind_degrees), ack: true });
+							await this.setStateAsync('weather.wind_direction', { val: data[i].wind_direction, ack: true });
+						} else {
+							this.log.debug(`[updateWeatherData] ${weatherEntryTimestamp} is not between ${lowerTimeLimit} and ${upperTimeLimit}`);
+						}
+					}
 				}
+
+			} catch (err) {
+				this.log.error(`Failed to update weather data: ${err}`);
 			}
-		} catch (err) {
-			this.log.error(`Failed to update weather data: ${err}`);
 		}
 	}
 
 	async getWeather() {
 		try {
-			if (this.hasApiKey) {
-				if (this.config.weather_active && this.config.service === 'forecastsolar') {
+			if (this.hasApiKey && this.config.weather_active) {
+				if (this.config.service === 'forecastsolar') {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
 					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.latitude}/${this.longitude}`;
 					this.log.debug(`url for weather (professional account only): ${url}`);
 
-					await axios.get(url)
-						.then(async (response) => {
-							this.log.debug('axios weather done');
-							globalweatherdata = response.data.result;
-							await this.setStateAsync('weather.object', { val: JSON.stringify(response.data.result), ack: true });
-						})
-						.catch((error) => {
-							if (error === 'Error: Request failed with status code 429') {
-								this.log.error('too many data requests');
-							} else if (error === 'Error: Request failed with status code 400') {
-								this.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
-							} else {
-								this.log.error('Axios Error ' + error);
-							}
-						});
+					try {
+						const serviceResponse = await axios.get(url);
+
+						this.log.debug(`received data for weather: ${JSON.stringify(serviceResponse.data)}`);
+
+						if (serviceResponse) {
+							await this.setStateAsync('weather.service.data', { val: JSON.stringify(serviceResponse.data.result), ack: true });
+							await this.setStateAsync(`weather.service.lastUpdated`, { val: moment().valueOf(), ack: true });
+						}
+
+					} catch (error) {
+						if (error === 'Error: Request failed with status code 429') {
+							this.log.error('too many data requests');
+						} else if (error === 'Error: Request failed with status code 400') {
+							this.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
+						} else {
+							this.log.error('Axios Error ' + error);
+						}
+					}
+				} else {
+					this.log.warn(`Weather data is just available for "forecastsolar"`);
 				}
-			} else {
-				this.log.error(`you don't have an apiKey`);
 			}
 		} catch (err) {
 			this.log.error(`Error weather: ${err}`);
@@ -637,7 +643,26 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExistsAsync('weather.object', {
+				await this.setObjectNotExistsAsync('weather.service', {
+					type: 'channel',
+					common: {
+						name: {
+							en: 'API',
+							de: 'API',
+							ru: 'API',
+							pt: 'API',
+							nl: 'API',
+							fr: 'API',
+							it: 'API',
+							es: 'API',
+							pl: 'API',
+							'zh-cn': 'API'
+						}
+					},
+					native: {}
+				});
+
+				await this.setObjectNotExistsAsync('weather.service.data', {
 					type: 'state',
 					common: {
 						name: {
@@ -657,6 +682,30 @@ class Pvforecast extends utils.Adapter {
 						read: true,
 						write: false,
 						def: '{}'
+					},
+					native: {}
+				});
+
+				await this.setObjectNotExistsAsync(`weather.service.lastUpdated`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Last update (service)',
+							de: 'Letztes Update (Service)',
+							ru: 'Последнее обновление (сервис)',
+							pt: 'Última atualização (serviço)',
+							nl: 'Laatste update (service)',
+							fr: 'Dernière mise à jour (service)',
+							it: 'Ultimo aggiornamento (servizio)',
+							es: 'Última actualización (servicio)',
+							pl: 'Ostatnia aktualizacja (usługa)',
+							'zh-cn': '最后更新（服务）'
+						},
+						type: 'number',
+						role: 'value.time',
+						read: true,
+						write: false,
+						def: 0
 					},
 					native: {}
 				});
