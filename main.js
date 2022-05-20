@@ -35,6 +35,7 @@ class Pvforecast extends utils.Adapter {
 		this.updateActualDataTimeout = null;
 
 		this.on('ready', this.onReady.bind(this));
+		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 	}
 
@@ -140,9 +141,38 @@ class Pvforecast extends utils.Adapter {
 			globalunit = 1;
 		}
 
+		this.subscribeStatesAsync('plants.*');
+
 		await this.createAndDeleteStates();
 		await this.updateServiceDataInterval();
 		await this.updateActualDataInterval();
+	}
+
+	/**
+	 * Is called if a subscribed state changes
+	 * @param {string} id
+	 * @param {ioBroker.State | null | undefined} state
+	 */
+	onStateChange(id, state) {
+		if (state && !state.ack) {
+			this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
+
+			if (id.startsWith(this.namespace)) {
+				this.getForeignObjectAsync(id)
+					.then(obj => {
+						if (obj.native.resetId) {
+							this.log.debug(`state "${id}" changed - resetting "${obj.native.resetId}" to 0`);
+							return this.setStateAsync(obj.native.resetId, { val: 0, ack: true });
+						}
+					})
+					.then(() => {
+						this.updateServiceDataInterval();
+					})
+					.catch(err => {
+						this.log.error(err);
+					});
+			}
+		}
 	}
 
 	async parseSolcastToForecast(dataJson) {
@@ -1189,6 +1219,31 @@ class Pvforecast extends utils.Adapter {
 						def: ''
 					},
 					native: {}
+				});
+
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.service.refresh`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Force refresh',
+							de: 'Aktualisieren erzwingen',
+							ru: 'Принудительное обновление',
+							pt: 'Forçar atualização',
+							nl: 'Vernieuwen forceren',
+							fr: 'Forcer l\'actualisation',
+							it: 'Forza l\'aggiornamento',
+							es: 'Forzar actualización',
+							pl: 'Wymuś odświeżenie',
+							'zh-cn': '强制刷新'
+						},
+						type: 'boolean',
+						role: 'button',
+						read: false,
+						write: true
+					},
+					native: {
+						resetId: `plants.${cleanPlantId}.service.lastUpdated`
+					}
 				});
 
 				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.place`, {

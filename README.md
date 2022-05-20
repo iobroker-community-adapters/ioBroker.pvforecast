@@ -32,6 +32,7 @@ The adapter take the raw forecast data from [forecast.solar](https://api.forecas
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (klein0r) Added manual reset for forecast
 * (klein0r) Added step size for hourly values
 * (klein0r) Added hourly forecast for tomorrow
 * (klein0r) Fixed weather information
