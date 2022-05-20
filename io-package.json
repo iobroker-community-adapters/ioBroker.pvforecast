@@ -180,10 +180,28 @@
     "objects": [],
     "instanceObjects": [
         {
-            "_id": "summary.power_kW",
+            "_id": "summary.power",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Estimated power",
+                    "de": "Geschätzte Leistung",
+                    "ru": "Расчетная мощность",
+                    "pt": "Potência estimada",
+                    "nl": "Geschat vermogen",
+                    "fr": "Puissance estimée",
+                    "it": "Potenza stimata",
+                    "es": "Potencia estimada",
+                    "pl": "Szacowana moc",
+                    "zh-cn": "估计功率"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.power.now",
             "type": "state",
             "common": {
-                "role": "value",
                 "name": {
                     "en": "Estimated power (now)",
                     "de": "Geschätzte Leistung (jetzt)",
@@ -197,41 +215,62 @@
                     "zh-cn": "估计功率（现在）"
                 },
                 "type": "number",
+                "role": "value",
                 "read": true,
                 "write": false,
-                "unit": "kW"
+                "unit": "kW",
+                "def": 0
             },
             "native": {}
         },
         {
-            "_id": "summary.power_kWh",
+            "_id": "summary.energy",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Estimated energy",
+                    "de": "Geschätzte Energie",
+                    "ru": "Расчетная энергия",
+                    "pt": "Energia estimada",
+                    "nl": "geschatte energie",
+                    "fr": "Énergie estimée",
+                    "it": "Energia stimata",
+                    "es": "Energía estimada",
+                    "pl": "Szacowana energia",
+                    "zh-cn": "估计能量"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.energy.now",
             "type": "state",
             "common": {
-                "role": "value",
                 "name": {
-                    "en": "Estimated energy (now)",
-                    "de": "Geschätzte Energie (jetzt)",
-                    "ru": "Расчетная энергия (сейчас)",
-                    "pt": "Energia estimada (agora)",
-                    "nl": "Geschatte energie (nu)",
-                    "fr": "Énergie estimée (maintenant)",
-                    "it": "Energia stimata (ora)",
-                    "es": "Energía estimada (ahora)",
-                    "pl": "Szacowana energia (teraz)",
-                    "zh-cn": "估计能量（现在）"
+                    "en": "Estimated energy (today until now)",
+                    "de": "Geschätzte Energie (heute bis jetzt)",
+                    "ru": "Расчетная энергия (сегодня по настоящее время)",
+                    "pt": "Energia estimada (hoje até agora)",
+                    "nl": "Geschatte energie (vandaag tot nu)",
+                    "fr": "Énergie estimée (aujourd'hui jusqu'à maintenant)",
+                    "it": "Energia stimata (da oggi ad oggi)",
+                    "es": "Energía estimada (hoy hasta ahora)",
+                    "pl": "Szacowana energia (dzisiaj do teraz)",
+                    "zh-cn": "估计能量（今天到现在）"
                 },
                 "type": "number",
+                "role": "value",
                 "read": true,
                 "write": false,
-                "unit": "kWh"
+                "unit": "kWh",
+                "def": 0
             },
             "native": {}
         },
         {
-            "_id": "summary.power_day_kWh",
+            "_id": "summary.energy.today",
             "type": "state",
             "common": {
-                "role": "value",
                 "name": {
                     "en": "Estimated energy (today)",
                     "de": "Geschätzte Energie (heute)",
@@ -245,17 +284,18 @@
                     "zh-cn": "估计能量（今天）"
                 },
                 "type": "number",
+                "role": "value",
                 "read": true,
                 "write": false,
-                "unit": "kWh"
+                "unit": "kWh",
+                "def": 0
             },
             "native": {}
         },
         {
-            "_id": "summary.power_day_tomorrow_kWh",
+            "_id": "summary.energy.tomorrow",
             "type": "state",
             "common": {
-                "role": "value",
                 "name": {
                     "en": "Estimated energy (tomorrow)",
                     "de": "Geschätzte Energie (morgen)",
@@ -269,17 +309,18 @@
                     "zh-cn": "估计能量（明天）"
                 },
                 "type": "number",
+                "role": "value",
                 "read": true,
                 "write": false,
-                "unit": "kWh"
+                "unit": "kWh",
+                "def": 0
             },
             "native": {}
         },
         {
-            "_id": "summary.lastUpdated_data",
+            "_id": "summary.lastUpdated",
             "type": "state",
             "common": {
-                "role": "value.time",
                 "name": {
                     "en": "Last update (data)",
                     "de": "Letztes Update (Daten)",
@@ -293,8 +334,10 @@
                     "zh-cn": "上次更新（数据）"
                 },
                 "type": "number",
+                "role": "value.time",
                 "read": true,
-                "write": false
+                "write": false,
+                "def": 0
             },
             "native": {}
         },
@@ -302,7 +345,6 @@
             "_id": "summary.JSONGraph",
             "type": "state",
             "common": {
-                "role": "json",
                 "name": {
                     "en": "Graph data in JSON format",
                     "de": "Diagrammdaten im JSON-Format",
@@ -316,8 +358,10 @@
                     "zh-cn": "JSON格式的图形数据"
                 },
                 "type": "string",
+                "role": "json",
                 "read": true,
-                "write": false
+                "write": false,
+                "def": "{}"
             },
             "native": {}
         },
@@ -325,7 +369,6 @@
             "_id": "summary.JSONTable",
             "type": "state",
             "common": {
-                "role": "json",
                 "name": {
                     "en": "Table data in JSON format",
                     "de": "Tabellendaten im JSON-Format",
@@ -339,8 +382,10 @@
                     "zh-cn": "JSON格式的表格数据"
                 },
                 "type": "string",
+                "role": "json",
                 "read": true,
-                "write": false
+                "write": false,
+                "def": "{}"
             },
             "native": {}
         }
