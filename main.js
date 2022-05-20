@@ -528,50 +528,20 @@ class Pvforecast extends utils.Adapter {
 	async saveEveryHourSummary() {
 		const plantArray = this.config.devices || [];
 
-		for (let j = 5; j < 22; j++) {
-			if (this.hasApiKey) {
-				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
-				for (let i = 0; i < 59; i = i + hourInterval) {
-					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
-					let wattsummery = 0;
-					await asyncForEach(plantArray, async plant => {
-						const cleanPlantId = this.cleanNamespace(plant.name);
+		const validHourKeys = this.getValidHourKeys();
 
-						if (!globaleveryhour[cleanPlantId]) {
-							return;
-						}
-						const found = globaleveryhour[cleanPlantId].find(element => element.time === timetext);
-						if (found) {
-							wattsummery = wattsummery + found.value;
-						}
-					});
+		await asyncForEach(validHourKeys, async (hourKey) => {
+			let totalPower = 0;
 
-					await this.setStateAsync('summary.power.hour.' + timetext, {
-						val: Number(wattsummery),
-						ack: true
-					});
-				}
-			} else {
-				const timetext = (j <= 9 ? '0' + j : j) + ':00:00';
-				let wattsummery = 0;
-				await asyncForEach(plantArray, async (plant) => {
-					const cleanPlantId = this.cleanNamespace(plant.name);
+			await asyncForEach(plantArray, async (plant) => {
+				const cleanPlantId = this.cleanNamespace(plant.name);
+				totalPower += globaleveryhour[cleanPlantId]
+					.filter(e => e.time === hourKey)
+					.reduce((pv, cv) => pv + cv.value, 0);
+			});
 
-					if (!globaleveryhour[cleanPlantId]) {
-						return;
-					}
-					const found = globaleveryhour[cleanPlantId].find(element => element.time === timetext);
-					if (found) {
-						wattsummery = wattsummery + found.value;
-					}
-				});
-
-				await this.setStateAsync('summary.power.hour.' + timetext, {
-					val: Number(wattsummery),
-					ack: true
-				});
-			}
-		}
+			await this.setStateAsync(`summary.power.hour.${hourKey}`, { val: totalPower, ack: true });
+		});
 	}
 
 	async addToInfluxDB(datapoint, timestamp, value) {
