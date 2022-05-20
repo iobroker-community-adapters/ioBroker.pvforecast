@@ -48,7 +48,7 @@ class Pvforecast extends utils.Adapter {
 			(!this.longitude && this.longitude !== 0) || isNaN(this.longitude) ||
 			(!this.latitude && this.latitude !== 0) || isNaN(this.latitude)
 		) {
-			this.log.info('longitude and/or latitude not set, get data from system configuration');
+			this.log.debug('longitude and/or latitude not set, loading system configuration');
 
 			try {
 				const systemConfigState = await this.getForeignObjectAsync('system.config');
@@ -76,6 +76,24 @@ class Pvforecast extends utils.Adapter {
 		if (typeof this.config.devices == 'undefined' || !this.config.devices.length) {
 			this.log.error('Please set at least one device in the adapter configuration!');
 			return;
+		} else {
+			// Get list of valid plants by configuration
+			const plantsKeep = this.config.devices.map(d => `${this.namespace}.plants.${this.cleanNamespace(d.name)}`);
+
+			try {
+				const plantDevices = await this.getDevicesAsync();
+				this.log.debug(`Existing plant devices: ${JSON.stringify(plantDevices)} - configured: ${JSON.stringify(plantsKeep)}`);
+
+				await asyncForEach(plantDevices, async (deviceObj) => {
+					if (plantsKeep.indexOf(deviceObj._id) === -1) {
+						await this.delObjectAsync(deviceObj._id, { recursive: true });
+						this.log.info(`Deleted plant with id: ${deviceObj._id} - (not found in configuration)`);
+					}
+				});
+
+			} catch (err) {
+				this.log.warn(err);
+			}
 		}
 
 		if (!this.config.intervall || this.config.intervall < 60) {
@@ -323,26 +341,6 @@ class Pvforecast extends utils.Adapter {
 		}, updateInterval);
 	}
 
-	/**
-	 * Is called when adapter shuts down - callback has to be called under any circumstances!
-	 * @param {() => void} callback
-	 */
-	onUnload(callback) {
-		try {
-			if (this.updateServiceDataTimeout) {
-				this.clearTimeout(this.updateServiceDataTimeout);
-			}
-
-			if (this.updateActualDataTimeout) {
-				this.clearTimeout(this.updateActualDataTimeout);
-			}
-
-			callback();
-		} catch (e) {
-			callback();
-		}
-	}
-
 	// analysis weather data
 	async updateWeatherData() {
 		if (this.hasApiKey && this.config.weatherEnabled) {
@@ -488,7 +486,7 @@ class Pvforecast extends utils.Adapter {
 					}
 
 				} else {
-					this.log.info(`Last update of "${plant.name}" is within refresh interval - skipping`);
+					this.log.debug(`Last update of "${plant.name}" is within refresh interval - skipping`);
 				}
 
 				this.log.debug('received all data');
@@ -1322,31 +1320,6 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async createHoursStates(prefix) {
-		const defaultHourObj = {
-			type: 'state',
-			common: {
-				name: {
-					en: 'Estimated power',
-					de: 'Geschätzte Leistung',
-					ru: 'Расчетная мощность',
-					pt: 'Potência estimada',
-					nl: 'Geschat vermogen',
-					fr: 'Puissance estimée',
-					it: 'Potenza stimata',
-					es: 'Potencia estimada',
-					pl: 'Szacowana moc',
-					'zh-cn': '估计功率'
-				},
-				type: 'number',
-				role: 'value',
-				unit: 'kW',
-				read: true,
-				write: false,
-				def: 0
-			},
-			native: {}
-		};
-
 		await this.setObjectNotExistsAsync(`${prefix}.power.hour`, {
 			type: 'channel',
 			common: {
@@ -1368,8 +1341,33 @@ class Pvforecast extends utils.Adapter {
 
 		const validHourKeys = this.getValidHourKeys();
 
+		// Create all states for valid hours
 		await asyncForEach(validHourKeys, async (hourKey) => {
-			await this.setObjectNotExistsAsync(`${prefix}.power.hour.${hourKey}`, defaultHourObj);
+			await this.setObjectNotExistsAsync(`${prefix}.power.hour.${hourKey}`, {
+				type: 'state',
+				common: {
+					name: {
+						en: 'Estimated power',
+						de: 'Geschätzte Leistung',
+						ru: 'Расчетная мощность',
+						pt: 'Potência estimada',
+						nl: 'Geschat vermogen',
+						fr: 'Puissance estimée',
+						it: 'Potenza stimata',
+						es: 'Potencia estimada',
+						pl: 'Szacowana moc',
+						'zh-cn': '估计功率'
+					},
+					type: 'number',
+					role: 'value',
+					unit: 'kW',
+					read: true,
+					write: false,
+					def: 0
+				},
+				native: {}
+			});
+
 			await this.extendObjectAsync(`${prefix}.power.hour.${hourKey}`, {
 				common: {
 					unit: this.config.watt_kw ? 'W' : 'kW'
@@ -1432,6 +1430,26 @@ class Pvforecast extends utils.Adapter {
 			newAngle = 180 + 180 + newAngle;
 		}
 		return newAngle;
+	}
+
+	/**
+	 * Is called when adapter shuts down - callback has to be called under any circumstances!
+	 * @param {() => void} callback
+	 */
+	onUnload(callback) {
+		try {
+			if (this.updateServiceDataTimeout) {
+				this.clearTimeout(this.updateServiceDataTimeout);
+			}
+
+			if (this.updateActualDataTimeout) {
+				this.clearTimeout(this.updateActualDataTimeout);
+			}
+
+			callback();
+		} catch (e) {
+			callback();
+		}
 	}
 }
 
