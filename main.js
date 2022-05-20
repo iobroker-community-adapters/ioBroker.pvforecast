@@ -236,7 +236,7 @@ class Pvforecast extends utils.Adapter {
 						}
 
 						// add to InfluxDB
-						await this.addToInfluxDB(`${cleanPlantId}.watts`, moment(time).valueOf(), data.watts[time] / globalunit);
+						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, moment(time).valueOf(), data.watts[time] / globalunit);
 
 						// data for alltable
 						if (index === 0) {
@@ -500,7 +500,7 @@ class Pvforecast extends utils.Adapter {
 
 			globaleveryhour[cleanPlantId].push({time: timeval, value: Number(value) });
 		} else {
-			this.log.debug(`[saveEveryHour] no match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
+			this.log.silly(`[saveEveryHour] no match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
 		}
 	}
 
@@ -583,29 +583,31 @@ class Pvforecast extends utils.Adapter {
 
 	async addToInfluxDB(datapoint, timestamp, value) {
 		try {
-			let influxinstance = this.config.influxinstace;
+			let influxInstance = this.config.influxinstace;
 
-			if (!influxinstance) return;
+			if (!influxInstance) return;
 
 			// Fallback for older instance configs
-			if (!influxinstance.startsWith('influxdb.')) {
-				influxinstance = `influxdb.${influxinstance}`;
+			if (!influxInstance.startsWith('influxdb.')) {
+				influxInstance = `influxdb.${influxInstance}`;
 			}
 
-			this.log.debug(`influxDB storeState into "${influxinstance}": value "${value}" of "${datapoint}" with timestamp ${timestamp}`);
+			this.log.debug(`[addToInfluxDB] storeState into "${influxInstance}": value "${value}" (${typeof value}) of "${datapoint}" with timestamp ${timestamp}`);
 
-			this.sendTo(influxinstance, 'storeState', {
-				id: datapoint,
+			const result = await this.sendToAsync(influxInstance, 'storeState', {
+				id: `${this.namespace}.${datapoint}`,
 				state: {
 					ts: timestamp,
 					val: value,
 					ack: true,
-					from: 'system.adapter.' + this.namespace,
+					from: `system.adapter.${this.namespace}`,
 					//q: 0
 				}
 			});
-		} catch (e) {
-			this.log.error('Datenbank: ' + e);
+
+			this.log.silly(`[addToInfluxDB] storeState result: ${JSON.stringify(result)}`);
+		} catch (err) {
+			this.log.error(`[addToInfluxDB] storeState error: ${err}`);
 		}
 	}
 
