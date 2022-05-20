@@ -4,9 +4,14 @@ const utils = require('@iobroker/adapter-core');
 const moment = require('moment');
 const axios = require('axios').default;
 
-let globaleveryhour = {};
 const updateInterval = 60 * 10 * 1000; // 10 minutes
 let globalunit = 1000;
+
+async function asyncForEach(array, callback) {
+	for (let index = 0; index < array.length; index++) {
+		await callback(array[index], index, array);
+	}
+}
 
 class Pvforecast extends utils.Adapter {
 	/**
@@ -17,6 +22,8 @@ class Pvforecast extends utils.Adapter {
 			...options,
 			name: 'pvforecast',
 		});
+
+		this.globalEveryHour = {};
 
 		this.reqInterval = 60;
 		this.hasApiKey = false;
@@ -99,8 +106,8 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async parseSolcastToForecast(dataJson) {
-		let totalKwh = 0;
-		let totalKwhTomorrow = 0;
+		let totalEnergyToday = 0;
+		let totalEnergyTomorrow = 0;
 
 		const convertJson = {
 			watt_hours: {},
@@ -124,22 +131,21 @@ class Pvforecast extends utils.Adapter {
 				if (plantdata.pv_estimate < dataJson.forecasts[index - 1].pv_estimate) {
 					convertJson.watt_hours[newtime] = (plantdata.pv_estimate + ((dataJson.forecasts[index - 1].pv_estimate - plantdata.pv_estimate) / 2)) / 2 * 1000;
 				}
-			}
-			else {
+			} else {
 				convertJson.watt_hours[newtime] = 0;
 			}
 
 			if ((moment().date() === moment(time).date())) {
-				totalKwh += convertJson.watt_hours[newtime];
+				totalEnergyToday += convertJson.watt_hours[newtime];
 			} else if ((moment().add(1, 'days').date() === moment(time).date())) {
-				totalKwhTomorrow += convertJson.watt_hours[newtime];
+				totalEnergyTomorrow += convertJson.watt_hours[newtime];
 			}
 		});
 
-		convertJson.watt_hours_day[moment().format('YYYY-MM-DD')] = totalKwh;
-		convertJson.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] = totalKwhTomorrow;
+		convertJson.watt_hours_day[moment().format('YYYY-MM-DD')] = totalEnergyToday;
+		convertJson.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] = totalEnergyTomorrow;
 
-		this.log.debug('convertJson: ' + JSON.stringify(convertJson));
+		this.log.debug(`[parseSolcastToForecast] converted JSON: ${JSON.stringify(convertJson)}`);
 
 		return convertJson;
 	}
@@ -177,7 +183,7 @@ class Pvforecast extends utils.Adapter {
 		const allgraphlabel = [];
 
 		let index = 0;
-		globaleveryhour = {};
+		this.globalEveryHour = {};
 
 		let totalPowerNow = 0;
 
@@ -307,7 +313,7 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
 		await this.setStateAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
 
-		this.log.debug(`global time: ${JSON.stringify(globaleveryhour)}`);
+		this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 
 		await this.updateWeatherData();
 
@@ -431,7 +437,7 @@ class Pvforecast extends utils.Adapter {
 					url = `https://api.forecast.solar/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
 				}
 			} else if (this.config.service === 'solcast') {
-				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
+				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
 			}
 
 			if (url) {
@@ -500,23 +506,23 @@ class Pvforecast extends utils.Adapter {
 
 			await this.setStateAsync(`plants.${cleanPlantId}.power.hour.${hourKey}`, { val: Number(value), ack: true });
 
-			if (!globaleveryhour[cleanPlantId]) {
-				globaleveryhour[cleanPlantId] = [];
+			if (!this.globalEveryHour[cleanPlantId]) {
+				this.globalEveryHour[cleanPlantId] = [];
 			}
 
-			globaleveryhour[cleanPlantId].push({time: hourKey, value: Number(value) });
+			this.globalEveryHour[cleanPlantId].push({time: hourKey, value: Number(value) });
 		} else {
 			this.log.silly(`[saveEveryHour] no match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
 		}
 	}
 
 	async saveEveryHourEmptyStates(cleanPlantId) {
-		if (!globaleveryhour[cleanPlantId]) {
+		if (!this.globalEveryHour[cleanPlantId]) {
 			return;
 		}
 
 		const validHourKeys = this.getValidHourKeys();
-		const filledHourKeys = globaleveryhour[cleanPlantId].map(e => e.time);
+		const filledHourKeys = this.globalEveryHour[cleanPlantId].map(e => e.time);
 		const unfilledHourKeys = validHourKeys.filter(hourKey => filledHourKeys.indexOf(hourKey) < 0);
 
 		// Fill all hours with 0 (which were not included in the service data)
@@ -535,7 +541,7 @@ class Pvforecast extends utils.Adapter {
 
 			await asyncForEach(plantArray, async (plant) => {
 				const cleanPlantId = this.cleanNamespace(plant.name);
-				totalPower += globaleveryhour[cleanPlantId]
+				totalPower += this.globalEveryHour[cleanPlantId]
 					.filter(e => e.time === hourKey)
 					.reduce((pv, cv) => pv + cv.value, 0);
 			});
@@ -1418,29 +1424,15 @@ class Pvforecast extends utils.Adapter {
 				return w.toUpperCase();
 			});
 	}
-}
 
-async function asyncForEach(array, callback) {
-	for (let index = 0; index < array.length; index++) {
-		await callback(array[index], index, array);
+	convertAzimuth(angle) {
+		// from south to north
+		let newAngle = (angle + 180) * -1;
+		if (newAngle < -180) {
+			newAngle = 180 + 180 + newAngle;
+		}
+		return newAngle;
 	}
-}
-
-function convertAzimuth(angle) {
-	// from south to north
-	let newAngle = (angle + 180) * -1;
-	if (newAngle < -180) {
-		newAngle = 180 + 180 + newAngle;
-	}
-	return newAngle;
-}
-
-function getNextDaysArray(date) {
-	const nextDays = [];
-	for (let i = 0; i < 7; i++) {
-		nextDays.push(new Date(date.getTime() + i * 24 * 60 * 60 * 1000));
-	}
-	return nextDays;
 }
 
 if (require.main !== module) {
