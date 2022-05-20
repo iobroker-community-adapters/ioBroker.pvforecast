@@ -1,4 +1,5 @@
 ![Logo](img/pvforecast.png)
+
 # pvforecast - Adapter for the forecast of PV incomes
 
 **If you like it, please consider a donation:**
