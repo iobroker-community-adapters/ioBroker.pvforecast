@@ -2,7 +2,7 @@
 
 const utils = require('@iobroker/adapter-core');
 const moment = require('moment');
-const axios = require('axios');
+const axios = require('axios').default;
 
 let globaleveryhour = {};
 let globalweatherdata = {};
@@ -21,7 +21,6 @@ class Pvforecast extends utils.Adapter {
 		});
 
 		this.hasApiKey = false;
-		this.api = 'forecastsolar';
 
 		this.longitude = undefined;
 		this.latitude = undefined;
@@ -30,7 +29,6 @@ class Pvforecast extends utils.Adapter {
 		this.updateTimeout = null;
 
 		this.on('ready', this.onReady.bind(this));
-		this.on('stateChange', this.onStateChange.bind(this));
 		this.on('unload', this.onUnload.bind(this));
 	}
 
@@ -51,14 +49,16 @@ class Pvforecast extends utils.Adapter {
 
 			try {
 				const systemConfigState = await this.getForeignObjectAsync('system.config');
-				this.longitude = systemConfigState.common.longitude;
-				this.latitude = systemConfigState.common.latitude;
+				if (systemConfigState) {
+					this.longitude = systemConfigState.common.longitude;
+					this.latitude = systemConfigState.common.latitude;
 
-				if (this.longitude && this.latitude) {
-					this.log.info(`using system latitude: ${this.latitude} longitude: ${this.longitude}`);
+					if (this.longitude && this.latitude) {
+						this.log.info(`using system latitude: ${this.latitude} longitude: ${this.longitude}`);
+					}
 				}
 			} catch (err) {
-				this.log.error(err);
+				this.log.error(`error white requesting system.config: ${err}`);
 			}
 		}
 
@@ -75,7 +75,7 @@ class Pvforecast extends utils.Adapter {
 			return;
 		}
 
-		if (typeof this.config.intervall === 'undefined' || !this.config.intervall || this.config.intervall < 60) {
+		if (!this.config.intervall || this.config.intervall < 60) {
 			reqInterval = 60 * 60 * 1000;
 			this.log.warn('The interval is set to 60 minutes. Please set a value higher than 60 minutes in the adapter configuration!');
 		} else {
@@ -84,21 +84,16 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		// Check if API key is configured
-		if (typeof this.config.apikey !== 'undefined' && this.config.apikey !== '') {
+		if (this.config.apiKey !== '') {
 			this.hasApiKey = true;
 		}
 
-		// disabled Solcast till next major release...
-		if (typeof this.config.linkdata !== 'undefined' && this.config.linkdata === 'https://api.solcast.com.au') {
-			this.api = 'solcast';
-
-			if (!this.hasApiKey) {
-				this.log.error('Please set the API key for Solcast in the adapter configuration!');
-				return;
-			}
+		if (this.config.service === 'solcast' && !this.hasApiKey) {
+			this.log.error('Please set the API key for Solcast in the adapter configuration!');
+			return;
 		}
 
-		if (typeof this.config.watt_kw !== 'undefined' && this.config.watt_kw) {
+		if (this.config.watt_kw) {
 			globalunit = 1;
 		}
 
@@ -164,7 +159,7 @@ class Pvforecast extends utils.Adapter {
 			await this.getWeather();
 		}
 
-		if (this.api === 'solcast') {
+		if (this.config.service === 'solcast') {
 			reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
 		}
 
@@ -186,7 +181,7 @@ class Pvforecast extends utils.Adapter {
 		let summaryWattHours = 0;
 
 		await asyncForEach(plantArray, async plant => {
-			const stateValue = await this.getStateAsync(plant.name + '.object');
+			const stateValue = await this.getStateAsync(`${plant.name}.object`);
 			const valueArray = JSON.parse(stateValue.val);
 
 			// cancel if no data
@@ -194,15 +189,15 @@ class Pvforecast extends utils.Adapter {
 				return;
 			}
 
-			await this.setStateAsync(plant.name + '.lastUpdated_data', { val: moment().valueOf(), ack: true });
+			await this.setStateAsync(`${plant.name}.lastUpdated_data`, { val: moment().valueOf(), ack: true });
 
 			for (const time in valueArray.watts) {
 				if (moment().valueOf() - (updateInterval / 2) < moment(time).valueOf() && moment().valueOf() + (updateInterval / 2) > moment(time).valueOf()) {
 					summaryWatt += valueArray.watts[time];
 					summaryWattHours += valueArray.watt_hours[time];
 
-					await this.setStateAsync(plant.name + '.power_kW', { val: Number(valueArray.watts[time] / globalunit), ack: true });
-					await this.setStateAsync(plant.name + '.power_kWh', { val: Number(valueArray.watt_hours[time] / globalunit), ack: true });
+					await this.setStateAsync(`${plant.name}.power_kW`, { val: Number(valueArray.watts[time] / globalunit), ack: true });
+					await this.setStateAsync(`${plant.name}.power_kWh`, { val: Number(valueArray.watt_hours[time] / globalunit), ack: true });
 				}
 			}
 
@@ -246,21 +241,6 @@ class Pvforecast extends utils.Adapter {
 		}
 	}
 
-	/**
-	 * Is called if a subscribed state changes
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
-	onStateChange(id, state) {
-		if (state) {
-			// The state was changed
-			this.log.info(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
-		} else {
-			// The state was deleted
-			this.log.info(`state ${id} deleted`);
-		}
-	}
-
 	// analysis weather data
 	async updateWeatherData() {
 		try {
@@ -288,17 +268,18 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateAsync('weather.wind_direction', { val: globalweatherdata[i].wind_direction, ack: true });
 				}
 			}
-		} catch (e) {
+		} catch (err) {
+			this.log.error(`Failed to update weather data: ${err}`);
 		}
 	}
 
 	async getWeather() {
 		try {
 			if (this.hasApiKey) {
-				if (this.config.weather_active && this.api === 'forecastsolar') {
+				if (this.config.weather_active && this.config.service === 'forecastsolar') {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
-					const url = `${this.config.linkdata}/${this.config.apikey}/weather/${this.latitude}/${this.longitude}`;
+					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.latitude}/${this.longitude}`;
 					this.log.debug(`url for weather (professional account only): ${url}`);
 
 					await axios.get(url)
@@ -318,17 +299,16 @@ class Pvforecast extends utils.Adapter {
 						});
 				}
 			} else {
-				this.log.error("you don't have an apikey");
+				this.log.error(`you don't have an apiKey`);
 			}
-		} catch (e) {
-			this.log.error('Error weather ' + e);
+		} catch (err) {
+			this.log.error(`Error weather: ${err}`);
 		}
 	}
 
 	async getPv() {
-		const plantArray = this.config.devices;
+		const plantArray = this.config.devices || [];
 
-		let succes = false;
 		let todaytotalwatt = 0;
 		let tomorrowtotalwatt = 0;
 
@@ -341,16 +321,16 @@ class Pvforecast extends utils.Adapter {
 
 		plantArray.forEach(async plant => {
 			let url = '';
-			if (this.api === 'forecastsolar') {
+			if (this.config.service === 'forecastsolar') {
 				if (this.hasApiKey) {
 					// https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `${this.config.linkdata}/${this.config.apikey}/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
+					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
 				} else {
 					// https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `${this.config.linkdata}/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
+					url = `https://api.forecast.solar/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
 				}
-			} else if (this.api === 'solcast') {
-				url = `${this.config.linkdata}/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apikey}`;
+			} else if (this.config.service === 'solcast') {
+				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
 			}
 
 			if (url) {
@@ -369,13 +349,13 @@ class Pvforecast extends utils.Adapter {
 					let data;
 					let message;
 
-					if (this.api === 'forecastsolar') {
+					if (this.config.service === 'forecastsolar') {
 						data = plantdata.data.result;
 						message = plantdata.data.message;
 
 						this.log.debug(`rate limit for forecastsolar API: ${message.ratelimit.limit} (${message.ratelimit.remaining} left in period)`);
 
-					} else if (this.api === 'solcast') {
+					} else if (this.config.service === 'solcast') {
 						data = await this.parseSolcastToForecast(plantdata.data);
 						message = { 'info': { 'place': '-' }, 'type': 'Solcast' };
 					}
@@ -388,11 +368,11 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateAsync(plantName + '.transfer', { val: message.type, ack: true });
 					await this.setStateAsync(plantName + '.place', { val: message.info.place, ack: true });
 
-					//count total watt
+					// count total watt
 					todaytotalwatt = todaytotalwatt + Number(data.watt_hours_day[moment().format('YYYY-MM-DD')] / globalunit);
 					tomorrowtotalwatt = tomorrowtotalwatt + Number(data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] / globalunit);
 
-					//jsongraph
+					// jsongraph
 					const table = [], graphTimeData = [];
 					let wattindex = 0;
 					for (const time in data.watts) {
@@ -404,7 +384,7 @@ class Pvforecast extends utils.Adapter {
 						}
 
 						// add to InfluxDB
-						await this.addToInfluxDB(plantName + '.watts', moment(time).valueOf(), data.watts[time] / globalunit);
+						await this.addToInfluxDB(`${plantName}.watts`, moment(time).valueOf(), data.watts[time] / globalunit);
 
 						//data for alltable
 						if (index === 0) {
@@ -419,7 +399,7 @@ class Pvforecast extends utils.Adapter {
 						wattindex++;
 					}
 
-					await this.setStateAsync(plantName + '.JSONTable', { val: JSON.stringify(table), ack: true });
+					await this.setStateAsync(`${plantName}.JSONTable`, { val: JSON.stringify(table), ack: true });
 					const graphData = {
 						// graph
 						data: graphTimeData,
@@ -429,7 +409,7 @@ class Pvforecast extends utils.Adapter {
 						color: plantArray[index].graphcolor,
 						tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
 						datalabel_show: true,
-						datalabel_rotation: this.config.datalabel_rotation1 || 270,
+						datalabel_rotation: this.config.chartingRoation || 270,
 						datalabel_color: plantArray[index].labelcolor,
 						datalabel_fontSize: 12,
 
@@ -447,16 +427,14 @@ class Pvforecast extends utils.Adapter {
 
 					allgraph.push(graphData);
 					const graph = { 'graphs': [graphData] };
-					await this.setStateAsync(plantName + '.JSONGraph', { val: JSON.stringify(graph), ack: true });
-					succes = true;
-					this.log.debug('succes: ' + succes);
+					await this.setStateAsync(`${plantName}.JSONGraph`, { val: JSON.stringify(graph), ack: true });
 
 					if (this.config.everyhour_active) {
 						this.fillEveryHourRestEmpty(plantName);
 					}
 				});
 
-				this.log.debug('recived all data');
+				this.log.debug('received all data');
 
 				if (this.config.everyhour_active) {
 					await this.fillEverySummery();
@@ -467,7 +445,7 @@ class Pvforecast extends utils.Adapter {
 				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': allgraph, 'axisLabels': allgraphlabel }), ack: true });
 				await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(alltable), ack: true });
 
-				this.log.debug('global time: ' + JSON.stringify(globaleveryhour));
+				this.log.debug(`global time: ${JSON.stringify(globaleveryhour)}`);
 			}))
 			.catch(error => {
 				if (error === 'Error: Request failed with status code 429') {
@@ -481,7 +459,6 @@ class Pvforecast extends utils.Adapter {
 				} else {
 					this.log.error('Axios Error ' + error);
 				}
-				succes = false;
 			});
 	}
 
@@ -498,11 +475,11 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async fillEverySummery() {
-		const plantArray = this.config.devices;
+		const plantArray = this.config.devices || [];
 
 		for (let j = 5; j < 22; j++) {
 			if (this.hasApiKey) {
-				const hourInterval = this.api === 'solcast' ? 30 : 15;
+				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
 				for (let i = 0; i < 59; i = i + hourInterval) {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					let wattsummery = 0;
@@ -549,7 +526,7 @@ class Pvforecast extends utils.Adapter {
 
 		for (let j = 5; j < 22; j++) {
 			if (this.hasApiKey) {
-				const hourInterval = this.api === 'solcast' ? 30 : 15;
+				const hourInterval = this.config.service === 'solcast' ? 30 : 15;
 				for (let i = 0; i < 59; i = i + hourInterval) {
 					const timetext = (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00';
 					const found = globaleveryhour[name].find(element => element.time === timetext);
@@ -579,10 +556,10 @@ class Pvforecast extends utils.Adapter {
 		try {
 			let influxinstance = this.config.influxinstace;
 
-			if (influxinstance === '') return;
+			if (!influxinstance) return;
 
 			// Fallback for older instance configs
-			if (influxinstance.includes('influxdb.')) {
+			if (!influxinstance.startsWith('influxdb.')) {
 				influxinstance = `influxdb.${influxinstance}`;
 			}
 
@@ -868,7 +845,7 @@ class Pvforecast extends utils.Adapter {
 			await asyncForEach(plantArray, async (element) => {
 				this.log.debug(`creating states for plant: "${element.name}"`);
 
-				await this.setObjectNotExists(element.name + '.power_kW', {
+				await this.setObjectNotExistsAsync(element.name + '.power_kW', {
 					type: 'state',
 					common: {
 						name: {
@@ -893,7 +870,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.power_kWh', {
+				await this.setObjectNotExistsAsync(element.name + '.power_kWh', {
 					type: 'state',
 					common: {
 						name: {
@@ -918,7 +895,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.power_day_kWh', {
+				await this.setObjectNotExistsAsync(element.name + '.power_day_kWh', {
 					type: 'state',
 					common: {
 						name: {
@@ -943,7 +920,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.power_day_tomorrow_kWh', {
+				await this.setObjectNotExistsAsync(element.name + '.power_day_tomorrow_kWh', {
 					type: 'state',
 					common: {
 						name: {
@@ -968,7 +945,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.plantname', {
+				await this.setObjectNotExistsAsync(element.name + '.plantname', {
 					type: 'state',
 					common: {
 						name: {
@@ -992,7 +969,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.lastUpdated_object', {
+				await this.setObjectNotExistsAsync(element.name + '.lastUpdated_object', {
 					type: 'state',
 					common: {
 						name: {
@@ -1016,7 +993,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.place', {
+				await this.setObjectNotExistsAsync(element.name + '.place', {
 					type: 'state',
 					common: {
 						name: {
@@ -1040,7 +1017,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.object', {
+				await this.setObjectNotExistsAsync(element.name + '.object', {
 					type: 'state',
 					common: {
 						name: {
@@ -1064,7 +1041,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.lastUpdated_data', {
+				await this.setObjectNotExistsAsync(element.name + '.lastUpdated_data', {
 					type: 'state',
 					common: {
 						name: {
@@ -1088,7 +1065,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.transfer', {
+				await this.setObjectNotExistsAsync(element.name + '.transfer', {
 					type: 'state',
 					common: {
 						name: {
@@ -1112,7 +1089,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.JSONGraph', {
+				await this.setObjectNotExistsAsync(element.name + '.JSONGraph', {
 					type: 'state',
 					common: {
 						name: {
@@ -1136,7 +1113,7 @@ class Pvforecast extends utils.Adapter {
 					native: {}
 				});
 
-				await this.setObjectNotExists(element.name + '.JSONTable', {
+				await this.setObjectNotExistsAsync(element.name + '.JSONTable', {
 					type: 'state',
 					common: {
 						name: {
@@ -1210,11 +1187,11 @@ class Pvforecast extends utils.Adapter {
 
 					for (let j = 5; j < 22; j++) {
 						if (this.hasApiKey) {
-							const hourInterval = this.api === 'solcast' ? 30 : 15;
+							const hourInterval = this.config.service === 'solcast' ? 30 : 15;
 
 							for (let i = 0; i < 59; i = i + hourInterval) {
-								await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
-								await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
+								await this.setObjectNotExistsAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
+								await this.setObjectNotExistsAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', obj);
 								await this.extendObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00', {
 									common: {
 										unit: this.config.watt_kw ? 'W' : 'kW'
@@ -1233,8 +1210,8 @@ class Pvforecast extends utils.Adapter {
 								await this.delObjectAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':' + (i <= 9 ? '0' + i : i) + ':00');
 							}
 
-							await this.setObjectNotExists(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
-							await this.setObjectNotExists('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
+							await this.setObjectNotExistsAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
+							await this.setObjectNotExistsAsync('summary.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', obj);
 							await this.extendObjectAsync(element.name + '.everyhour_kw.' + (j <= 9 ? '0' + j : j) + ':00:00', {
 								common: {
 									unit: this.config.watt_kw ? 'W' : 'kW'

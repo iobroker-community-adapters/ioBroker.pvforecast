@@ -13,7 +13,7 @@
     "Weather (only with API-Key)": "Погода (только с API-ключом)",
     "States for every hour": "Штаты за каждый час",
     "Values in watt instead of kW": "Значения в ваттах вместо кВт",
-    "eCharts": "электронные диаграммы",
-    "Data label rotation (eCharts)": "Ротация меток данных (eCharts)",
-    "Y-Axis step (eCharts)": "Шаг оси Y (электронные диаграммы)"
+    "Charting enabled": "Диаграммы включены",
+    "Charting label rotation": "Вращение метки диаграммы",
+    "Charting Y-Axis step": "Отображение шага оси Y"
 }

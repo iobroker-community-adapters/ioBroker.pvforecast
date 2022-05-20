@@ -13,7 +13,7 @@
     "Weather (only with API-Key)": "Meteo (solo con API-Key)",
     "States for every hour": "Stati per ogni ora",
     "Values in watt instead of kW": "Valori in watt anziché in kW",
-    "eCharts": "carte elettroniche",
-    "Data label rotation (eCharts)": "Rotazione etichetta dati (eCharts)",
-    "Y-Axis step (eCharts)": "Passo dell'asse Y (eCharts)"
+    "Charting enabled": "Grafici abilitato",
+    "Charting label rotation": "Rotazione delle etichette dei grafici",
+    "Charting Y-Axis step": "Grafici del passo dell'asse Y"
 }

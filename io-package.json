@@ -1,333 +1,348 @@
 {
-  "common": {
-    "name": "pvforecast",
-    "version": "1.0.1",
-    "news": {
-      "1.0.1": {
-        "en": "Updated documentation\nUpdated adapter category (energy)",
-        "de": "Aktualisierte Dokumentation\nAktualisierte Adapterkategorie (Energie)",
-        "ru": "Обновленная документация\nОбновлена категория адаптера (энергия)",
-        "pt": "Documentação atualizada\nCategoria de adaptador atualizada (energia)",
-        "nl": "Bijgewerkte documentatie\nBijgewerkte adaptercategorie (energie)",
-        "fr": "Documentation mise à jour\nCatégorie d'adaptateur mise à jour (énergie)",
-        "it": "Documentazione aggiornata\nCategoria adattatore aggiornata (energia)",
-        "es": "Documentación actualizada\nCategoría de adaptador actualizada (energía)",
-        "pl": "Zaktualizowana dokumentacja\nZaktualizowana kategoria adapterów (energia)",
-        "zh-cn": "更新的文档\n更新的适配器类别（能量）"
-      },
-      "1.0.0": {
-        "en": "Fallback to system location\nUpdated admin config\nFixed weather API requests\nUpdated translations\nUpdated roles and types\nCode cleanup\n**BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**\nRefactoring",
-        "de": "Fallback zum Systemstandort\nAktualisierte Admin-Konfiguration\nWetter-API-Anfragen behoben\nAktualisierte Übersetzungen\nAktualisierte Rollen und Typen\nCode-Bereinigung\n**Breaking Changes von 0.2.X BITTE LÖSCHEN UND NEU INSTALLIEREN**\nRefactoring",
-        "ru": "Возврат к местоположению системы\nОбновлена конфигурация администратора\nИсправлены запросы API погоды.\nОбновленные переводы\nОбновлены роли и типы\nОчистка кода\n**КРУТЫЕ ИЗМЕНЕНИЯ ПО ВЕРСИИ 0.2.X. УДАЛИТЕ И ПЕРЕУСТАНОВИТЕ**\nРефакторинг",
-        "pt": "Fallback para a localização do sistema\nConfiguração de administrador atualizada\nSolicitações de API de clima corrigidas\nTraduções atualizadas\nFunções e tipos atualizados\nLimpeza de código\n**QUEBRA ALTERAÇÕES DE 0.2.X POR FAVOR, EXCLUIR E REINSTALAR**\nReestruturação",
-        "nl": "Terugval naar systeemlocatie\nBijgewerkte beheerdersconfiguratie\nAPI-verzoeken voor vast weer\nBijgewerkte vertalingen\nBijgewerkte rollen en typen\nCode opschonen\n**BREKENDE WIJZIGINGEN VAN 0.2.X GELIEVE TE VERWIJDEREN EN OPNIEUW INSTALLEREN**\nRefactoring",
-        "fr": "Retour à l'emplacement du système\nConfiguration d'administration mise à jour\nDemandes d'API météo fixes\nTraductions mises à jour\nRôles et types mis à jour\nNettoyage de code\n** MODIFICATIONS BRISANTES DE LA 0.2.X VEUILLEZ SUPPRIMER ET RÉINSTALLER **\nRefactoring",
-        "it": "Ritorno alla posizione del sistema\nConfigurazione amministratore aggiornata\nRisolte le richieste dell'API meteo\nTraduzioni aggiornate\nRuoli e tipi aggiornati\nPulizia del codice\n**CAMBIAMENTI DI INTERRUZIONE DA 0.2.X PER FAVORE ELIMINA E REINSTALLA**\nRefactoring",
-        "es": "Regreso a la ubicación del sistema\nConfiguración de administrador actualizada\nSolicitudes de API meteorológicas fijas\nTraducciones actualizadas\nRoles y tipos actualizados\nLimpieza de código\n**CAMBIOS IMPORTANTES DESDE 0.2.X POR FAVOR ELIMINAR Y REINSTALAR**\nrefactorización",
-        "pl": "Powrót do lokalizacji systemu\nZaktualizowana konfiguracja administratora\nNaprawiono żądania API dotyczące pogody\nZaktualizowane tłumaczenia\nZaktualizowane role i typy\nOczyszczanie kodu\n**PRZERWANIE ZMIANY Z 0.2.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**\nRefaktoryzacja",
-        "zh-cn": "回退到系统位置\n更新了管理员配置\n修复了天气 API 请求\n更新的翻译\n更新的角色和类型\n代码清理\n**从 0.2.X 开始的重大更改请删除并重新安装**\n重构"
-      },
-      "0.2.7": {
-        "en": "fixes for repo",
-        "de": "Korrekturen für Repo",
-        "ru": "исправления для репо",
-        "pt": "correções para repositório",
-        "nl": "fixes voor repo",
-        "fr": "correctifs pour le dépôt",
-        "it": "correzioni per repository",
-        "es": "correcciones para repositorio",
-        "pl": "poprawki do repozytorium",
-        "zh-cn": "回购修复"
-      },
-      "0.2.6": {
-        "en": "fix error with values before 5 oclock\nfix error when starting after 22 oclock",
-        "de": "Fehler bei Werten vor 5 Uhr behoben\nFehler beim Starten nach 22 Uhr behoben",
-        "ru": "исправить ошибку со значениями до 5 часов\nисправить ошибку при запуске после 22 часов",
-        "pt": "corrigir erro com valores antes das 5 horas\ncorrigir erro ao iniciar após 22 horas",
-        "nl": "fix fout met waarden voor 5 uur\nfix fout bij starten na 22 uur",
-        "fr": "correction d'erreur avec des valeurs avant 5 heures\ncorrection d'une erreur lors du démarrage après 22 heures",
-        "it": "correggere l'errore con valori prima delle 5\ncorreggere l'errore all'avvio dopo le 22",
-        "es": "corregir error con valores antes de las 5 en punto\ncorregir el error al comenzar después de las 22 en punto",
-        "pl": "napraw błąd z wartościami przed godziną 5\nnapraw błąd podczas uruchamiania po godzinie 22",
-        "zh-cn": "用 5 点之前的值修复错误\n修复 22 点后启动时的错误"
-      },
-      "0.2.5": {
-        "en": "fix request time\nfix error with weather and solcast\nsolcast request only after midnight",
-        "de": "Anfragezeit fixieren\nFehler mit Wetter und Solcast behoben\nSolcast-Anfrage nur nach Mitternacht",
-        "ru": "исправить время запроса\nисправить ошибку с погодой и солкаст\nsolcast запрос только после полуночи",
-        "pt": "corrigir tempo de solicitação\ncorrigir erro com clima e solcast\nsolicitação solcast somente após a meia-noite",
-        "nl": "verzoek tijd repareren\nrepareer fout met weer en solcast\nsolcast-verzoek alleen na middernacht",
-        "fr": "fixer l'heure de la demande\ncorrection d'une erreur avec la météo et le solcast\ndemande solcast uniquement après minuit",
-        "it": "correggere l'ora della richiesta\ncorreggere l'errore con meteo e solcast\nrichiesta solcast solo dopo la mezzanotte",
-        "es": "corregir el tiempo de solicitud\ncorregir error con tiempo y solcast\nsolicitud de solcast solo después de la medianoche",
-        "pl": "napraw czas żądania\nnapraw błąd z pogodą i solcastem\nprośba o solcast dopiero po północy",
-        "zh-cn": "修复请求时间\n修复天气和 solcast 的错误\n仅在午夜之后进行 solcast 请求"
-      },
-      "0.2.4": {
-        "en": "added support for Solcast",
-        "de": "Unterstützung für Solcast hinzugefügt",
-        "ru": "добавлена поддержка Solcast",
-        "pt": "suporte adicionado para Solcast",
-        "nl": "toegevoegde ondersteuning voor Solcast",
-        "fr": "prise en charge supplémentaire de Solcast",
-        "it": "aggiunto il supporto per Solcast",
-        "es": "soporte agregado para Solcast",
-        "pl": "dodano wsparcie dla Solcast",
-        "zh-cn": "增加了对 Solcast 的支持"
-      },
-      "0.2.3": {
-        "en": "add Unit selection in Config (W/kW)\nfixed units in tables\nimplement Solcast api (next version)",
-        "de": "Einheitenauswahl in Config hinzufügen (W/kW)\nfeste Einheiten in Tabellen\nImplementierung der Solcast-API (nächste Version)",
-        "ru": "добавить выбор единиц измерения в Config (Вт/кВт)\nфиксированные единицы в таблицах\nреализовать Solcast API (следующая версия)",
-        "pt": "adicionar seleção de unidade em Config (W/kW)\nunidades fixas em tabelas\nimplementar a API Solcast (próxima versão)",
-        "nl": "toevoegen Unit selectie in Config (W/kW)\nvaste eenheden in tabellen\nimplementeer Solcast api (volgende versie)",
-        "fr": "add Sélection d'unité dans Config (W/kW)\nunités fixes dans les tableaux\nimplémenter l'API Solcast (version suivante)",
-        "it": "aggiungi Selezione unità in Config (W/kW)\nunità fisse nelle tabelle\nimplementare Solcast API (versione successiva)",
-        "es": "agregar selección de unidad en configuración (W/kW)\nunidades fijas en tablas\nimplementar Solcast api (próxima versión)",
-        "pl": "dodaj wybór jednostki w konfiguracji (W/kW)\nstałe jednostki w tabelach\nzaimplementuj Solcast api (następna wersja)",
-        "zh-cn": "在配置中添加单位选择 (W/kW)\n表格中的固定单位\n实现 Solcast api（下一个版本）"
-      }
+    "common": {
+        "name": "pvforecast",
+        "version": "1.0.1",
+        "news": {
+            "1.0.1": {
+                "en": "Updated documentation\nUpdated adapter category (energy)",
+                "de": "Aktualisierte Dokumentation\nAktualisierte Adapterkategorie (Energie)",
+                "ru": "Обновленная документация\nОбновлена категория адаптера (энергия)",
+                "pt": "Documentação atualizada\nCategoria de adaptador atualizada (energia)",
+                "nl": "Bijgewerkte documentatie\nBijgewerkte adaptercategorie (energie)",
+                "fr": "Documentation mise à jour\nCatégorie d'adaptateur mise à jour (énergie)",
+                "it": "Documentazione aggiornata\nCategoria adattatore aggiornata (energia)",
+                "es": "Documentación actualizada\nCategoría de adaptador actualizada (energía)",
+                "pl": "Zaktualizowana dokumentacja\nZaktualizowana kategoria adapterów (energia)",
+                "zh-cn": "更新的文档\n更新的适配器类别（能量）"
+            },
+            "1.0.0": {
+                "en": "Fallback to system location\nUpdated admin config\nFixed weather API requests\nUpdated translations\nUpdated roles and types\nCode cleanup\n**BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**\nRefactoring",
+                "de": "Fallback zum Systemstandort\nAktualisierte Admin-Konfiguration\nWetter-API-Anfragen behoben\nAktualisierte Übersetzungen\nAktualisierte Rollen und Typen\nCode-Bereinigung\n**Breaking Changes von 0.2.X BITTE LÖSCHEN UND NEU INSTALLIEREN**\nRefactoring",
+                "ru": "Возврат к местоположению системы\nОбновлена конфигурация администратора\nИсправлены запросы API погоды.\nОбновленные переводы\nОбновлены роли и типы\nОчистка кода\n**КРУТЫЕ ИЗМЕНЕНИЯ ПО ВЕРСИИ 0.2.X. УДАЛИТЕ И ПЕРЕУСТАНОВИТЕ**\nРефакторинг",
+                "pt": "Fallback para a localização do sistema\nConfiguração de administrador atualizada\nSolicitações de API de clima corrigidas\nTraduções atualizadas\nFunções e tipos atualizados\nLimpeza de código\n**QUEBRA ALTERAÇÕES DE 0.2.X POR FAVOR, EXCLUIR E REINSTALAR**\nReestruturação",
+                "nl": "Terugval naar systeemlocatie\nBijgewerkte beheerdersconfiguratie\nAPI-verzoeken voor vast weer\nBijgewerkte vertalingen\nBijgewerkte rollen en typen\nCode opschonen\n**BREKENDE WIJZIGINGEN VAN 0.2.X GELIEVE TE VERWIJDEREN EN OPNIEUW INSTALLEREN**\nRefactoring",
+                "fr": "Retour à l'emplacement du système\nConfiguration d'administration mise à jour\nDemandes d'API météo fixes\nTraductions mises à jour\nRôles et types mis à jour\nNettoyage de code\n** MODIFICATIONS BRISANTES DE LA 0.2.X VEUILLEZ SUPPRIMER ET RÉINSTALLER **\nRefactoring",
+                "it": "Ritorno alla posizione del sistema\nConfigurazione amministratore aggiornata\nRisolte le richieste dell'API meteo\nTraduzioni aggiornate\nRuoli e tipi aggiornati\nPulizia del codice\n**CAMBIAMENTI DI INTERRUZIONE DA 0.2.X PER FAVORE ELIMINA E REINSTALLA**\nRefactoring",
+                "es": "Regreso a la ubicación del sistema\nConfiguración de administrador actualizada\nSolicitudes de API meteorológicas fijas\nTraducciones actualizadas\nRoles y tipos actualizados\nLimpieza de código\n**CAMBIOS IMPORTANTES DESDE 0.2.X POR FAVOR ELIMINAR Y REINSTALAR**\nrefactorización",
+                "pl": "Powrót do lokalizacji systemu\nZaktualizowana konfiguracja administratora\nNaprawiono żądania API dotyczące pogody\nZaktualizowane tłumaczenia\nZaktualizowane role i typy\nOczyszczanie kodu\n**PRZERWANIE ZMIANY Z 0.2.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**\nRefaktoryzacja",
+                "zh-cn": "回退到系统位置\n更新了管理员配置\n修复了天气 API 请求\n更新的翻译\n更新的角色和类型\n代码清理\n**从 0.2.X 开始的重大更改请删除并重新安装**\n重构"
+            },
+            "0.2.7": {
+                "en": "fixes for repo",
+                "de": "Korrekturen für Repo",
+                "ru": "исправления для репо",
+                "pt": "correções para repositório",
+                "nl": "fixes voor repo",
+                "fr": "correctifs pour le dépôt",
+                "it": "correzioni per repository",
+                "es": "correcciones para repositorio",
+                "pl": "poprawki do repozytorium",
+                "zh-cn": "回购修复"
+            },
+            "0.2.6": {
+                "en": "fix error with values before 5 oclock\nfix error when starting after 22 oclock",
+                "de": "Fehler bei Werten vor 5 Uhr behoben\nFehler beim Starten nach 22 Uhr behoben",
+                "ru": "исправить ошибку со значениями до 5 часов\nисправить ошибку при запуске после 22 часов",
+                "pt": "corrigir erro com valores antes das 5 horas\ncorrigir erro ao iniciar após 22 horas",
+                "nl": "fix fout met waarden voor 5 uur\nfix fout bij starten na 22 uur",
+                "fr": "correction d'erreur avec des valeurs avant 5 heures\ncorrection d'une erreur lors du démarrage après 22 heures",
+                "it": "correggere l'errore con valori prima delle 5\ncorreggere l'errore all'avvio dopo le 22",
+                "es": "corregir error con valores antes de las 5 en punto\ncorregir el error al comenzar después de las 22 en punto",
+                "pl": "napraw błąd z wartościami przed godziną 5\nnapraw błąd podczas uruchamiania po godzinie 22",
+                "zh-cn": "用 5 点之前的值修复错误\n修复 22 点后启动时的错误"
+            },
+            "0.2.5": {
+                "en": "fix request time\nfix error with weather and solcast\nsolcast request only after midnight",
+                "de": "Anfragezeit fixieren\nFehler mit Wetter und Solcast behoben\nSolcast-Anfrage nur nach Mitternacht",
+                "ru": "исправить время запроса\nисправить ошибку с погодой и солкаст\nsolcast запрос только после полуночи",
+                "pt": "corrigir tempo de solicitação\ncorrigir erro com clima e solcast\nsolicitação solcast somente após a meia-noite",
+                "nl": "verzoek tijd repareren\nrepareer fout met weer en solcast\nsolcast-verzoek alleen na middernacht",
+                "fr": "fixer l'heure de la demande\ncorrection d'une erreur avec la météo et le solcast\ndemande solcast uniquement après minuit",
+                "it": "correggere l'ora della richiesta\ncorreggere l'errore con meteo e solcast\nrichiesta solcast solo dopo la mezzanotte",
+                "es": "corregir el tiempo de solicitud\ncorregir error con tiempo y solcast\nsolicitud de solcast solo después de la medianoche",
+                "pl": "napraw czas żądania\nnapraw błąd z pogodą i solcastem\nprośba o solcast dopiero po północy",
+                "zh-cn": "修复请求时间\n修复天气和 solcast 的错误\n仅在午夜之后进行 solcast 请求"
+            },
+            "0.2.4": {
+                "en": "added support for Solcast",
+                "de": "Unterstützung für Solcast hinzugefügt",
+                "ru": "добавлена поддержка Solcast",
+                "pt": "suporte adicionado para Solcast",
+                "nl": "toegevoegde ondersteuning voor Solcast",
+                "fr": "prise en charge supplémentaire de Solcast",
+                "it": "aggiunto il supporto per Solcast",
+                "es": "soporte agregado para Solcast",
+                "pl": "dodano wsparcie dla Solcast",
+                "zh-cn": "增加了对 Solcast 的支持"
+            },
+            "0.2.3": {
+                "en": "add Unit selection in Config (W/kW)\nfixed units in tables\nimplement Solcast api (next version)",
+                "de": "Einheitenauswahl in Config hinzufügen (W/kW)\nfeste Einheiten in Tabellen\nImplementierung der Solcast-API (nächste Version)",
+                "ru": "добавить выбор единиц измерения в Config (Вт/кВт)\nфиксированные единицы в таблицах\nреализовать Solcast API (следующая версия)",
+                "pt": "adicionar seleção de unidade em Config (W/kW)\nunidades fixas em tabelas\nimplementar a API Solcast (próxima versão)",
+                "nl": "toevoegen Unit selectie in Config (W/kW)\nvaste eenheden in tabellen\nimplementeer Solcast api (volgende versie)",
+                "fr": "add Sélection d'unité dans Config (W/kW)\nunités fixes dans les tableaux\nimplémenter l'API Solcast (version suivante)",
+                "it": "aggiungi Selezione unità in Config (W/kW)\nunità fisse nelle tabelle\nimplementare Solcast API (versione successiva)",
+                "es": "agregar selección de unidad en configuración (W/kW)\nunidades fijas en tablas\nimplementar Solcast api (próxima versión)",
+                "pl": "dodaj wybór jednostki w konfiguracji (W/kW)\nstałe jednostki w tabelach\nzaimplementuj Solcast api (następna wersja)",
+                "zh-cn": "在配置中添加单位选择 (W/kW)\n表格中的固定单位\n实现 Solcast api（下一个版本）"
+            }
+        },
+        "titleLang": {
+            "en": "PV-Forecast",
+            "de": "PV-Prognose",
+            "ru": "PV-прогноз",
+            "pt": "Previsão PV",
+            "nl": "PV-prognose",
+            "fr": "Prévision PV",
+            "it": "PV-Previsione",
+            "es": "Pronóstico de PV",
+            "pl": "PV-Prognoza",
+            "zh-cn": "光伏预测"
+        },
+        "desc": {
+            "en": "Solar plant production forecast",
+            "de": "Produktionsprognose für Solaranlagen",
+            "ru": "Прогноз производства солнечной электростанции",
+            "pt": "Previsão de produção de usinas solares",
+            "nl": "Productieprognose voor zonne-installaties",
+            "fr": "Prévisions de production des centrales solaires",
+            "it": "Previsioni di produzione di impianti solari",
+            "es": "Previsión de producción de plantas solares",
+            "pl": "Prognoza produkcji elektrowni słonecznych",
+            "zh-cn": "太阳能电站产量预测"
+        },
+        "authors": [
+            "Patrick Walther <walther-patrick@gmx.net>",
+            "Matthias Kleine <info@haus-automatisierung.com>"
+        ],
+        "docs": {
+            "en": "docs/en/pvforecast.md",
+            "de": "docs/de/pvforecast.md"
+        },
+        "globalDependencies": [
+            {
+                "admin": ">=5.2.28"
+            }
+        ],
+        "dependencies": [
+            {
+                "js-controller": ">=3.3.22"
+            }
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "icon": "pvforecast.png",
+        "connectionType": "cloud",
+        "dataSource": "push",
+        "mode": "daemon",
+        "compact": true,
+        "allowInit": true,
+        "materialize": true,
+        "enabled": false,
+        "adminUI": {
+            "config": "json"
+        },
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
+        "keywords": [
+            "Solar",
+            "Photovoltaik",
+            "PV",
+            "Forecast",
+            "Prognose",
+            "Ertrag"
+        ],
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md",
+        "loglevel": "info",
+        "type": "energy"
     },
-    "titleLang": {
-      "en": "PV-Forecast",
-      "de": "PV-Prognose",
-      "ru": "PV-прогноз",
-      "pt": "Previsão PV",
-      "nl": "PV-prognose",
-      "fr": "Prévision PV",
-      "it": "PV-Previsione",
-      "es": "Pronóstico de PV",
-      "pl": "PV-Prognoza",
-      "zh-cn": "光伏预测"
-    },
-    "desc": {
-      "en": "Solar plant production forecast",
-      "de": "Produktionsprognose für Solaranlagen",
-      "ru": "Прогноз производства солнечной электростанции",
-      "pt": "Previsão de produção de usinas solares",
-      "nl": "Productieprognose voor zonne-installaties",
-      "fr": "Prévisions de production des centrales solaires",
-      "it": "Previsioni di produzione di impianti solari",
-      "es": "Previsión de producción de plantas solares",
-      "pl": "Prognoza produkcji elektrowni słonecznych",
-      "zh-cn": "太阳能电站产量预测"
-    },
-    "authors": [
-      "Patrick Walther <walther-patrick@gmx.net>",
-      "Matthias Kleine <info@haus-automatisierung.com>"
+    "protectedNative": [
+        "apiKey"
     ],
-    "docs": {
-      "en": "docs/en/pvforecast.md",
-      "de": "docs/de/pvforecast.md"
-    },
-    "globalDependencies": [
-      {
-        "admin": ">=5.2.28"
-      }
+    "encryptedNative": [
+        "apiKey"
     ],
-    "dependencies": [
-      {
-        "js-controller": ">=3.3.22"
-      }
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "icon": "pvforecast.png",
-    "connectionType": "cloud",
-    "dataSource": "push",
-    "mode": "daemon",
-    "compact": true,
-    "allowInit": true,
-    "materialize": true,
-    "enabled": false,
-    "adminUI": {
-      "config": "json"
+    "native": {
+        "service": "forecastsolar",
+        "intervall": 60,
+        "apiKey": "",
+        "weather_active": false,
+        "latitude": "",
+        "longitude": "",
+        "everyhour_active": false,
+        "watt_kw": false,
+        "influxinstace": "",
+        "chartingEnabled": false,
+        "chartingRoation": 0,
+        "chartingAxisStepY": 1,
+        "devices": []
     },
-    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
-    "keywords": [
-      "Solar",
-      "Photovoltaik",
-      "PV",
-      "Forecast",
-      "Prognose",
-      "Ertrag"
-    ],
-    "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md",
-    "loglevel": "info",
-    "type": "energy"
-  },
-  "native": {
-    "linkdata": "https://api.forecast.solar",
-    "influxinstace": "",
-    "intervall": 60,
-    "watt_kw": false
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "summary.power_kW",
-      "type": "state",
-      "common": {
-        "role": "value",
-        "name": {
-          "en": "Estimated power (now)",
-          "de": "Geschätzte Leistung (jetzt)",
-          "ru": "Расчетная мощность (сейчас)",
-          "pt": "Potência estimada (agora)",
-          "nl": "Geschat vermogen (nu)",
-          "fr": "Puissance estimée (maintenant)",
-          "it": "Potenza stimata (ora)",
-          "es": "Potencia estimada (ahora)",
-          "pl": "Szacowana moc (teraz)",
-          "zh-cn": "估计功率（现在）"
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "summary.power_kW",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": {
+                    "en": "Estimated power (now)",
+                    "de": "Geschätzte Leistung (jetzt)",
+                    "ru": "Расчетная мощность (сейчас)",
+                    "pt": "Potência estimada (agora)",
+                    "nl": "Geschat vermogen (nu)",
+                    "fr": "Puissance estimée (maintenant)",
+                    "it": "Potenza stimata (ora)",
+                    "es": "Potencia estimada (ahora)",
+                    "pl": "Szacowana moc (teraz)",
+                    "zh-cn": "估计功率（现在）"
+                },
+                "type": "number",
+                "read": true,
+                "write": false,
+                "unit": "kW"
+            },
+            "native": {}
         },
-        "type": "number",
-        "read": true,
-        "write": false,
-        "unit": "kW"
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.power_kWh",
-      "type": "state",
-      "common": {
-        "role": "value",
-        "name": {
-          "en": "Estimated energy (now)",
-          "de": "Geschätzte Energie (jetzt)",
-          "ru": "Расчетная энергия (сейчас)",
-          "pt": "Energia estimada (agora)",
-          "nl": "Geschatte energie (nu)",
-          "fr": "Énergie estimée (maintenant)",
-          "it": "Energia stimata (ora)",
-          "es": "Energía estimada (ahora)",
-          "pl": "Szacowana energia (teraz)",
-          "zh-cn": "估计能量（现在）"
+        {
+            "_id": "summary.power_kWh",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": {
+                    "en": "Estimated energy (now)",
+                    "de": "Geschätzte Energie (jetzt)",
+                    "ru": "Расчетная энергия (сейчас)",
+                    "pt": "Energia estimada (agora)",
+                    "nl": "Geschatte energie (nu)",
+                    "fr": "Énergie estimée (maintenant)",
+                    "it": "Energia stimata (ora)",
+                    "es": "Energía estimada (ahora)",
+                    "pl": "Szacowana energia (teraz)",
+                    "zh-cn": "估计能量（现在）"
+                },
+                "type": "number",
+                "read": true,
+                "write": false,
+                "unit": "kWh"
+            },
+            "native": {}
         },
-        "type": "number",
-        "read": true,
-        "write": false,
-        "unit": "kWh"
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.power_day_kWh",
-      "type": "state",
-      "common": {
-        "role": "value",
-        "name": {
-          "en": "Estimated energy (today)",
-          "de": "Geschätzte Energie (heute)",
-          "ru": "Расчетная энергия (сегодня)",
-          "pt": "Energia estimada (hoje)",
-          "nl": "Geschatte energie (vandaag)",
-          "fr": "Énergie estimée (aujourd'hui)",
-          "it": "Energia stimata (oggi)",
-          "es": "Energía estimada (hoy)",
-          "pl": "Szacowana energia (dzisiaj)",
-          "zh-cn": "估计能量（今天）"
+        {
+            "_id": "summary.power_day_kWh",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": {
+                    "en": "Estimated energy (today)",
+                    "de": "Geschätzte Energie (heute)",
+                    "ru": "Расчетная энергия (сегодня)",
+                    "pt": "Energia estimada (hoje)",
+                    "nl": "Geschatte energie (vandaag)",
+                    "fr": "Énergie estimée (aujourd'hui)",
+                    "it": "Energia stimata (oggi)",
+                    "es": "Energía estimada (hoy)",
+                    "pl": "Szacowana energia (dzisiaj)",
+                    "zh-cn": "估计能量（今天）"
+                },
+                "type": "number",
+                "read": true,
+                "write": false,
+                "unit": "kWh"
+            },
+            "native": {}
         },
-        "type": "number",
-        "read": true,
-        "write": false,
-        "unit": "kWh"
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.power_day_tomorrow_kWh",
-      "type": "state",
-      "common": {
-        "role": "value",
-        "name": {
-          "en": "Estimated energy (tomorrow)",
-          "de": "Geschätzte Energie (morgen)",
-          "ru": "Расчетная энергия (завтра)",
-          "pt": "Energia estimada (amanhã)",
-          "nl": "Geschatte energie (morgen)",
-          "fr": "Énergie estimée (demain)",
-          "it": "Energia stimata (domani)",
-          "es": "Energía estimada (mañana)",
-          "pl": "Szacowana energia (jutro)",
-          "zh-cn": "估计能量（明天）"
+        {
+            "_id": "summary.power_day_tomorrow_kWh",
+            "type": "state",
+            "common": {
+                "role": "value",
+                "name": {
+                    "en": "Estimated energy (tomorrow)",
+                    "de": "Geschätzte Energie (morgen)",
+                    "ru": "Расчетная энергия (завтра)",
+                    "pt": "Energia estimada (amanhã)",
+                    "nl": "Geschatte energie (morgen)",
+                    "fr": "Énergie estimée (demain)",
+                    "it": "Energia stimata (domani)",
+                    "es": "Energía estimada (mañana)",
+                    "pl": "Szacowana energia (jutro)",
+                    "zh-cn": "估计能量（明天）"
+                },
+                "type": "number",
+                "read": true,
+                "write": false,
+                "unit": "kWh"
+            },
+            "native": {}
         },
-        "type": "number",
-        "read": true,
-        "write": false,
-        "unit": "kWh"
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.lastUpdated_data",
-      "type": "state",
-      "common": {
-        "role": "value.time",
-        "name": {
-          "en": "Last update (data)",
-          "de": "Letztes Update (Daten)",
-          "ru": "Последнее обновление (данные)",
-          "pt": "Última atualização (dados)",
-          "nl": "Laatste update (gegevens)",
-          "fr": "Dernière mise à jour (données)",
-          "it": "Ultimo aggiornamento (dati)",
-          "es": "Última actualización (datos)",
-          "pl": "Ostatnia aktualizacja (dane)",
-          "zh-cn": "上次更新（数据）"
+        {
+            "_id": "summary.lastUpdated_data",
+            "type": "state",
+            "common": {
+                "role": "value.time",
+                "name": {
+                    "en": "Last update (data)",
+                    "de": "Letztes Update (Daten)",
+                    "ru": "Последнее обновление (данные)",
+                    "pt": "Última atualização (dados)",
+                    "nl": "Laatste update (gegevens)",
+                    "fr": "Dernière mise à jour (données)",
+                    "it": "Ultimo aggiornamento (dati)",
+                    "es": "Última actualización (datos)",
+                    "pl": "Ostatnia aktualizacja (dane)",
+                    "zh-cn": "上次更新（数据）"
+                },
+                "type": "number",
+                "read": true,
+                "write": false
+            },
+            "native": {}
         },
-        "type": "number",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.JSONGraph",
-      "type": "state",
-      "common": {
-        "role": "json",
-        "name": {
-          "en": "Graph data in JSON format",
-          "de": "Diagrammdaten im JSON-Format",
-          "ru": "Графические данные в формате JSON",
-          "pt": "Dados do gráfico no formato JSON",
-          "nl": "Grafiekgegevens in JSON-indeling",
-          "fr": "Données de graphique au format JSON",
-          "it": "Dati grafici in formato JSON",
-          "es": "Graficar datos en formato JSON",
-          "pl": "Dane wykresu w formacie JSON",
-          "zh-cn": "JSON格式的图形数据"
+        {
+            "_id": "summary.JSONGraph",
+            "type": "state",
+            "common": {
+                "role": "json",
+                "name": {
+                    "en": "Graph data in JSON format",
+                    "de": "Diagrammdaten im JSON-Format",
+                    "ru": "Графические данные в формате JSON",
+                    "pt": "Dados do gráfico no formato JSON",
+                    "nl": "Grafiekgegevens in JSON-indeling",
+                    "fr": "Données de graphique au format JSON",
+                    "it": "Dati grafici in formato JSON",
+                    "es": "Graficar datos en formato JSON",
+                    "pl": "Dane wykresu w formacie JSON",
+                    "zh-cn": "JSON格式的图形数据"
+                },
+                "type": "string",
+                "read": true,
+                "write": false
+            },
+            "native": {}
         },
-        "type": "string",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.JSONTable",
-      "type": "state",
-      "common": {
-        "role": "json",
-        "name": {
-          "en": "Table data in JSON format",
-          "de": "Tabellendaten im JSON-Format",
-          "ru": "Табличные данные в формате JSON",
-          "pt": "Dados da tabela no formato JSON",
-          "nl": "Tabelgegevens in JSON-indeling",
-          "fr": "Données de table au format JSON",
-          "it": "Dati della tabella in formato JSON",
-          "es": "Tabla de datos en formato JSON",
-          "pl": "Dane tabeli w formacie JSON",
-          "zh-cn": "JSON格式的表格数据"
-        },
-        "type": "string",
-        "read": true,
-        "write": false
-      },
-      "native": {}
-    }
-  ]
+        {
+            "_id": "summary.JSONTable",
+            "type": "state",
+            "common": {
+                "role": "json",
+                "name": {
+                    "en": "Table data in JSON format",
+                    "de": "Tabellendaten im JSON-Format",
+                    "ru": "Табличные данные в формате JSON",
+                    "pt": "Dados da tabela no formato JSON",
+                    "nl": "Tabelgegevens in JSON-indeling",
+                    "fr": "Données de table au format JSON",
+                    "it": "Dati della tabella in formato JSON",
+                    "es": "Tabla de datos en formato JSON",
+                    "pl": "Dane tabeli w formacie JSON",
+                    "zh-cn": "JSON格式的表格数据"
+                },
+                "type": "string",
+                "read": true,
+                "write": false
+            },
+            "native": {}
+        }
+    ]
 }

@@ -13,7 +13,7 @@
     "Weather (only with API-Key)": "天气（仅使用 API-Key）",
     "States for every hour": "每小时的状态",
     "Values in watt instead of kW": "以瓦特而不是 kW 为单位的值",
-    "eCharts": "电子图表",
-    "Data label rotation (eCharts)": "数据标签轮换 (eCharts)",
-    "Y-Axis step (eCharts)": "Y 轴步进 (eCharts)"
+    "Charting enabled": "启用图表",
+    "Charting label rotation": "图表标签旋转",
+    "Charting Y-Axis step": "绘制 Y 轴步骤"
 }

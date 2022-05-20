@@ -13,7 +13,7 @@
     "Weather (only with API-Key)": "Weer (alleen met API-Key)",
     "States for every hour": "Staten voor elk uur",
     "Values in watt instead of kW": "Waarden in watt in plaats van kW",
-    "eCharts": "e-kaarten",
-    "Data label rotation (eCharts)": "Rotatie van gegevenslabels (eCharts)",
-    "Y-Axis step (eCharts)": "Y-as stap (eCharts)"
+    "Charting enabled": "Kaarten inschakelen",
+    "Charting label rotation": "Labelrotatie in kaart brengen",
+    "Charting Y-Axis step": "Y-as stap in kaart brengen"
 }

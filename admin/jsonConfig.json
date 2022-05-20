@@ -6,7 +6,7 @@
             "type": "panel",
             "label": "Options",
             "items": {
-                "linkdata": {
+                "service": {
                     "type": "select",
                     "sm": 12,
                     "md": 4,
@@ -14,18 +14,18 @@
                     "options": [
                         {
                           "label": "Forecast.solar",
-                          "value": "https://api.forecast.solar"
+                          "value": "forecastsolar"
                         },
                         {
                           "label": "Solcast",
-                          "value": "https://api.solcast.com.au"
+                          "value": "solcast"
                         }
                       ],
-                    "default": "https://api.forecast.solar",
+                    "default": "forecastsolar",
                     "label": "Forecast service"
                 },
                 "intervall": {
-                    "hidden": "data.linkdata === 'https://api.solcast.com.au' ? true : false",
+                    "hidden": "data.service === 'solcast'",
                     "type": "number",
                     "min": 60,
                     "sm": 12,
@@ -34,7 +34,7 @@
                     "label": "Poll intervall",
                     "help": "in minutes"
                 },
-                "apikey": {
+                "apiKey": {
                     "newLine": true,
                     "type": "text",
                     "sm": 12,
@@ -43,7 +43,7 @@
                     "label": "API-Key"
                 },
                 "weather_active": {
-                    "hidden": "data.linkdata === 'https://api.solcast.com.au' ? true : false",
+                    "hidden": "data.service === 'solcast'",
                     "type": "checkbox",
                     "sm": 12,
                     "md": 4,
@@ -98,30 +98,30 @@
                     "lg": 4,
                     "label": "InfluxDB instance"
                 },
-                "actived_echart": {
+                "chartingEnabled": {
                     "newLine": true,
                     "type": "checkbox",
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "eCharts"
+                    "label": "Charting enabled"
                 },
-                "datalabel_rotation1": {
+                "chartingRoation": {
                     "newLine": true,
-                    "hidden": "!data.actived_echart",
+                    "hidden": "!data.chartingEnabled",
                     "type": "number",
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Data label rotation (eCharts)"
+                    "label": "Charting label rotation"
                 },
-                "axisy_step1": {
-                    "hidden": "!data.actived_echart",
+                "chartingAxisStepY": {
+                    "hidden": "!data.chartingEnabled",
                     "type": "number",
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Y-Axis step (eCharts)"
+                    "label": "Charting Y-Axis step"
                 }
             }
         },
