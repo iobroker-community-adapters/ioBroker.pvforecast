@@ -77,10 +77,31 @@ class Pvforecast extends utils.Adapter {
 			this.log.error('Please set at least one device in the adapter configuration!');
 			return;
 		} else {
-			// Get list of valid plants by configuration
-			const plantsKeep = this.config.devices.map(d => `${this.namespace}.plants.${this.cleanNamespace(d.name)}`);
-
 			try {
+				const plantArray = this.config.devices;
+
+				// Validate plants
+				await asyncForEach(plantArray, async (plant, index) => {
+					if (!plant.name) {
+						throw new Error(`Invalid device configuration: Found plant without name`);
+					}
+
+					if (!plant.azimuth || isNaN(plant.azimuth)) {
+						throw new Error(`Invalid device configuration: Found plant without azimuth`);
+					}
+
+					if (!plant.tilt || isNaN(plant.tilt)) {
+						throw new Error(`Invalid device configuration: Found plant without tilt`);
+					}
+
+					if (!plant.peakpower || isNaN(plant.peakpower)) {
+						throw new Error(`Invalid device configuration: Found plant without peak power`);
+					}
+				});
+
+				// Get list of valid plants by configuration
+				const plantsKeep = plantArray.map(d => `${this.namespace}.plants.${this.cleanNamespace(d.name)}`);
+
 				const plantDevices = await this.getDevicesAsync();
 				this.log.debug(`Existing plant devices: ${JSON.stringify(plantDevices)} - configured: ${JSON.stringify(plantsKeep)}`);
 
@@ -92,7 +113,8 @@ class Pvforecast extends utils.Adapter {
 				});
 
 			} catch (err) {
-				this.log.warn(err);
+				this.log.error(err);
+				return;
 			}
 		}
 
@@ -200,7 +222,6 @@ class Pvforecast extends utils.Adapter {
 		const allgraph = [];
 		const allgraphlabel = [];
 
-		let index = 0;
 		this.globalEveryHour = {};
 
 		let totalPowerNow = 0;
@@ -209,7 +230,7 @@ class Pvforecast extends utils.Adapter {
 		let totalEnergyToday = 0;
 		let totalEnergyTomorrow = 0;
 
-		await asyncForEach(plantArray, async plant => {
+		await asyncForEach(plantArray, async (plant, index) => {
 			const cleanPlantId = this.cleanNamespace(plant.name);
 
 			const serviceDataState = await this.getStateAsync(`plants.${cleanPlantId}.service.data`);
@@ -312,8 +333,6 @@ class Pvforecast extends utils.Adapter {
 					this.log.debug(`unable to update "${plant.name}": ${err}`);
 				}
 			}
-
-			index++;
 		});
 
 		this.log.debug('finished plants update');
@@ -580,8 +599,6 @@ class Pvforecast extends utils.Adapter {
 
 	async createAndDeleteStates() {
 		try {
-			const plantArray = this.config.devices;
-
 			if (this.hasApiKey && this.config.weatherEnabled) {
 				this.log.debug('creating states for weather');
 
@@ -891,6 +908,8 @@ class Pvforecast extends utils.Adapter {
 			} else {
 				await this.delObjectAsync('weather', { recursive: true });
 			}
+
+			const plantArray = this.config.devices;
 
 			await asyncForEach(plantArray, async (plant) => {
 				const cleanPlantId = this.cleanNamespace(plant.name);
