@@ -227,7 +227,7 @@ class Pvforecast extends utils.Adapter {
 						table.push({ Uhrzeit: time, Leistung: data.watts[time] / globalunit });
 						graphTimeData.push({ t: time, y: data.watts[time] / globalunit });
 
-						if (this.config.everyhour_active) {
+						if (this.config.everyhourEnabled) {
 							this.saveEveryHour(cleanPlantId, time, data.watts[time] / globalunit);
 						}
 
@@ -277,7 +277,7 @@ class Pvforecast extends utils.Adapter {
 					const graph = { 'graphs': [graphData] };
 					await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify(graph), ack: true });
 
-					if (this.config.everyhour_active) {
+					if (this.config.everyhourEnabled) {
 						this.saveEveryHourEmptyStates(cleanPlantId);
 					}
 
@@ -294,7 +294,7 @@ class Pvforecast extends utils.Adapter {
 
 		this.log.debug('finished plants update');
 
-		if (this.config.everyhour_active) {
+		if (this.config.everyhourEnabled) {
 			await this.saveEveryHourSummary();
 		}
 
@@ -339,7 +339,7 @@ class Pvforecast extends utils.Adapter {
 
 	// analysis weather data
 	async updateWeatherData() {
-		if (this.hasApiKey && this.config.weather_active) {
+		if (this.hasApiKey && this.config.weatherEnabled) {
 			try {
 				const serviceDataState = await this.getStateAsync('weather.service.data');
 				if (serviceDataState && serviceDataState.val) {
@@ -380,7 +380,7 @@ class Pvforecast extends utils.Adapter {
 
 	async getWeather() {
 		try {
-			if (this.hasApiKey && this.config.weather_active) {
+			if (this.hasApiKey && this.config.weatherEnabled) {
 				if (this.config.service === 'forecastsolar') {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
@@ -578,7 +578,7 @@ class Pvforecast extends utils.Adapter {
 		try {
 			const plantArray = this.config.devices;
 
-			if (this.hasApiKey && this.config.weather_active) {
+			if (this.hasApiKey && this.config.weatherEnabled) {
 				this.log.debug('creating states for weather');
 
 				await this.setObjectNotExistsAsync('weather', {
@@ -1272,7 +1272,7 @@ class Pvforecast extends utils.Adapter {
 					}
 				});
 
-				if (this.config.everyhour_active) {
+				if (this.config.everyhourEnabled) {
 					await this.createHoursStates(`plants.${cleanPlantId}`);
 				} else {
 					// Delete states
@@ -1302,7 +1302,7 @@ class Pvforecast extends utils.Adapter {
 				}
 			});
 
-			if (this.config.everyhour_active) {
+			if (this.config.everyhourEnabled) {
 				await this.createHoursStates('summary');
 			} else {
 				await this.delObjectAsync('summary.power.hour', { recursive: true });
@@ -1427,7 +1427,7 @@ async function asyncForEach(array, callback) {
 }
 
 function convertAzimuth(angle) {
-	//from south to north
+	// from south to north
 	let newAngle = (angle + 180) * -1;
 	if (newAngle < -180) {
 		newAngle = 180 + 180 + newAngle;

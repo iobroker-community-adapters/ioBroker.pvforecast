@@ -42,7 +42,7 @@
                     "lg": 4,
                     "label": "API-Key"
                 },
-                "weather_active": {
+                "weatherEnabled": {
                     "hidden": "data.service === 'solcast'",
                     "type": "checkbox",
                     "sm": 12,
@@ -70,7 +70,7 @@
                 "_divider1": {
                     "type": "divider"
                 },
-                "everyhour_active": {
+                "everyhourEnabled": {
                     "newLine": true,
                     "type": "checkbox",
                     "sm": 12,
