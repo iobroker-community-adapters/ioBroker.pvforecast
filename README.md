@@ -32,6 +32,10 @@ The adapter take the raw forecast data from [forecast.solar](https://api.forecas
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (klein0r) Restructured states (energy and power to seperate channels)
+* (klein0r) Updated object names
+* (klein0r) Fixed several async/await bugs
+* (klein0r) Reduce service requests
 * (klein0r) Updated instance configuration fields (+ encryption of api key)
 
 **BREAKING CHANGES FROM 1.X.X PLEASE DELETE AND REINSTALL**
