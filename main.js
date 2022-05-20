@@ -281,7 +281,7 @@ class Pvforecast extends utils.Adapter {
 						graphTimeData.push({ t: time, y: data.watts[time] / globalunit });
 
 						if (this.config.everyhourEnabled) {
-							this.saveEveryHour(cleanPlantId, time, data.watts[time] / globalunit);
+							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, time, data.watts[time] / globalunit);
 						}
 
 						// add to InfluxDB
@@ -331,7 +331,7 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [graphData] }), ack: true });
 
 					if (this.config.everyhourEnabled) {
-						this.saveEveryHourEmptyStates(cleanPlantId);
+						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`);
 					}
 
 					await this.setStateAsync(`plants.${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
@@ -346,7 +346,7 @@ class Pvforecast extends utils.Adapter {
 		this.log.debug('finished plants update');
 
 		if (this.config.everyhourEnabled) {
-			await this.saveEveryHourSummary();
+			await this.saveEveryHourSummary('summary.power.hoursToday');
 			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
 
@@ -520,15 +520,15 @@ class Pvforecast extends utils.Adapter {
 		});
 	}
 
-	async saveEveryHour(cleanPlantId, timeStr, value) {
+	async saveEveryHour(cleanPlantId, prefix, timeStr, value) {
 		// timeStr example: "2022-05-23 17:30:00"
 		const timeObj = moment(timeStr);
 		const hourKey = timeObj.format('HH:mm:ss');
 
 		if (this.getValidHourKeys().includes(hourKey) && moment().date() === moment(timeStr).date()) {
-			this.log.debug(`[saveEveryHour] found time plants.${cleanPlantId}.power.hour.${hourKey} - value: ${value}`);
+			this.log.debug(`[saveEveryHour] found time ${prefix}.${hourKey} - value: ${value}`);
 
-			await this.setStateAsync(`plants.${cleanPlantId}.power.hour.${hourKey}`, { val: Number(value), ack: true });
+			await this.setStateAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
 
 			if (!this.globalEveryHour[cleanPlantId]) {
 				this.globalEveryHour[cleanPlantId] = [];
@@ -540,7 +540,7 @@ class Pvforecast extends utils.Adapter {
 		}
 	}
 
-	async saveEveryHourEmptyStates(cleanPlantId) {
+	async saveEveryHourEmptyStates(cleanPlantId, prefix) {
 		if (!this.globalEveryHour[cleanPlantId]) {
 			return;
 		}
@@ -549,13 +549,17 @@ class Pvforecast extends utils.Adapter {
 		const filledHourKeys = this.globalEveryHour[cleanPlantId].map(e => e.time);
 		const unfilledHourKeys = validHourKeys.filter(hourKey => filledHourKeys.indexOf(hourKey) < 0);
 
+		if (unfilledHourKeys.length >= 10) {
+			this.log.info(`hourly states missed ${unfilledHourKeys.length} items - please check if your license allows to request all values`);
+		}
+
 		// Fill all hours with 0 (which were not included in the service data)
 		await asyncForEach(unfilledHourKeys, async (hourKey) => {
-			await this.setStateAsync(`plants.${cleanPlantId}.power.hour.${hourKey}`, { val: 0, ack: true });
+			await this.setStateAsync(`${prefix}.${hourKey}`, { val: 0, ack: true });
 		});
 	}
 
-	async saveEveryHourSummary() {
+	async saveEveryHourSummary(prefix) {
 		const plantArray = this.config.devices || [];
 
 		const validHourKeys = this.getValidHourKeys();
@@ -570,7 +574,7 @@ class Pvforecast extends utils.Adapter {
 					.reduce((pv, cv) => pv + cv.value, 0);
 			});
 
-			await this.setStateAsync(`summary.power.hour.${hourKey}`, { val: totalPower, ack: true });
+			await this.setStateAsync(`${prefix}.${hourKey}`, { val: totalPower, ack: true });
 		});
 	}
 
@@ -1303,10 +1307,10 @@ class Pvforecast extends utils.Adapter {
 				});
 
 				if (this.config.everyhourEnabled) {
-					await this.createHoursStates(`plants.${cleanPlantId}`);
+					await this.createHoursStates(`plants.${cleanPlantId}.power.hoursToday`);
 				} else {
 					// Delete states
-					await this.delObjectAsync(`plants.${cleanPlantId}.power.hour`, { recursive: true });
+					await this.delObjectAsync(`plants.${cleanPlantId}.power.hoursToday`, { recursive: true });
 				}
 			});
 
@@ -1333,9 +1337,9 @@ class Pvforecast extends utils.Adapter {
 			});
 
 			if (this.config.everyhourEnabled) {
-				await this.createHoursStates('summary');
+				await this.createHoursStates('summary.power.hoursToday');
 			} else {
-				await this.delObjectAsync('summary.power.hour', { recursive: true });
+				await this.delObjectAsync('summary.power.hoursToday', { recursive: true });
 			}
 
 		} catch (err) {
@@ -1346,7 +1350,7 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async createHoursStates(prefix) {
-		await this.setObjectNotExistsAsync(`${prefix}.power.hour`, {
+		await this.setObjectNotExistsAsync(prefix, {
 			type: 'channel',
 			common: {
 				name: {
@@ -1369,7 +1373,7 @@ class Pvforecast extends utils.Adapter {
 
 		// Create all states for valid hours
 		await asyncForEach(validHourKeys, async (hourKey) => {
-			await this.setObjectNotExistsAsync(`${prefix}.power.hour.${hourKey}`, {
+			await this.setObjectNotExistsAsync(`${prefix}.${hourKey}`, {
 				type: 'state',
 				common: {
 					name: {
@@ -1394,7 +1398,7 @@ class Pvforecast extends utils.Adapter {
 				native: {}
 			});
 
-			await this.extendObjectAsync(`${prefix}.power.hour.${hourKey}`, {
+			await this.extendObjectAsync(`${prefix}.${hourKey}`, {
 				common: {
 					unit: this.config.watt_kw ? 'W' : 'kW'
 				},
@@ -1406,8 +1410,8 @@ class Pvforecast extends utils.Adapter {
 
 		// Delete invalid states for current configuration
 		const allHourStates = await this.getObjectViewAsync('system', 'state', {
-			startkey: `${this.namespace}.${prefix}.power.hour.`,
-			endkey: `${this.namespace}.${prefix}.power.hour.\u9999`
+			startkey: `${this.namespace}.${prefix}.`,
+			endkey: `${this.namespace}.${prefix}.\u9999`
 		});
 
 		await asyncForEach(allHourStates.rows, async (obj) => {
