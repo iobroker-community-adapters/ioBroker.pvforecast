@@ -13,12 +13,12 @@
                     "lg": 4,
                     "options": [
                         {
-                          "label": "Forecast.solar",
-                          "value": "forecastsolar"
+                            "label": "Forecast.solar",
+                            "value": "forecastsolar"
                         },
                         {
-                          "label": "Solcast",
-                          "value": "solcast"
+                            "label": "Solcast",
+                            "value": "solcast"
                         }
                     ],
                     "default": "forecastsolar",
@@ -86,16 +86,49 @@
                     "lg": 4,
                     "options": [
                         {
-                          "label": "Full hour (:00)",
-                          "value": "full"
+                            "label": {
+                                "en": "Full hours (:00)",
+                                "de": "Volle Stunden (:00)",
+                                "ru": "Полные часы (:00)",
+                                "pt": "Horas completas (:00)",
+                                "nl": "Volledige uren (:00)",
+                                "fr": "Heures pleines (:00)",
+                                "it": "Orario intero (:00)",
+                                "es": "Horas completas (:00)",
+                                "pl": "Pełne godziny (:00)",
+                                "zh-cn": "全时 (:00)"
+                            },
+                            "value": "full"
                         },
                         {
-                          "label": "Half hour (:00, :30)",
-                          "value": "half"
+                            "label": {
+                                "en": "Half hours (:00, :30)",
+                                "de": "Halbe Stunden (:00, :30)",
+                                "ru": "Полчаса (:00, :30)",
+                                "pt": "Meia hora (:00, :30)",
+                                "nl": "Halve uren (:00, :30)",
+                                "fr": "Demi-heures (:00, :30)",
+                                "it": "Mezz'ora (:00, :30)",
+                                "es": "Media hora (:00, :30)",
+                                "pl": "Pół godziny (:00, :30)",
+                                "zh-cn": "半小时 (:00, :30)"
+                            },
+                            "value": "half"
                         },
                         {
-                          "label": "Quarter hour (:00, :15, :30, :45)",
-                          "value": "quarter"
+                            "label": {
+                                "en": "Quarter hours (:00, :15, :30, :45)",
+                                "de": "Viertelstunden (:00, :15, :30, :45)",
+                                "ru": "Четверть часа (:00, :15, :30, :45)",
+                                "pt": "Quarto de hora (:00, :15, :30, :45)",
+                                "nl": "Kwartier (:00, :15, :30, :45)",
+                                "fr": "Quarts d'heure (:00, :15, :30, :45)",
+                                "it": "Quarto d'ora (:00, :15, :30, :45)",
+                                "es": "Cuartos de hora (:00, :15, :30, :45)",
+                                "pl": "kwadranse (:00, :15, :30, :45)",
+                                "zh-cn": "一刻钟 (:00, :15, :30, :45)"
+                            },
+                            "value": "quarter"
                         }
                     ],
                     "default": "full",
