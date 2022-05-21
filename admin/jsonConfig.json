@@ -272,6 +272,17 @@
                             "default": "#000000"
                         }
                     ]
+                },
+                "_divider4": {
+                    "type": "divider"
+                },
+                "_azimuthHelp": {
+                    "newLine": true,
+                    "type": "staticImage",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "src": "adapter/pvforecast/img/Azimuth.png"
                 }
             }
         }

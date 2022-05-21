@@ -31,6 +31,9 @@ The adapter take the raw forecast data from [forecast.solar](https://api.forecas
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Added image for azimuth configuraion
+
 ### 2.0.0 (2022-05-20)
 * (klein0r) Added manual reset for forecast
 * (klein0r) Added step size for hourly values
