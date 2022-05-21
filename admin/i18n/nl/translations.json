@@ -16,5 +16,8 @@
     "Values in watt instead of kW": "Waarden in watt in plaats van kW",
     "Charting enabled": "Kaarten inschakelen",
     "Charting label rotation": "Labelrotatie in kaart brengen",
-    "Charting Y-Axis step": "Y-as stap in kaart brengen"
+    "Charting Y-Axis step": "Y-as stap in kaart brengen",
+    "Just include current day": "Voeg gewoon de huidige dag toe",
+    "Charting label format": "Labelformaat in kaart brengen",
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definieer een aangepast formaat zoals DD.MM.YYYY HH:mm:ss"
 }

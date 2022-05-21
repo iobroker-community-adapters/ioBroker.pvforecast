@@ -87,7 +87,7 @@ class Pvforecast extends utils.Adapter {
 						throw new Error(`Invalid device configuration: Found plant without name`);
 					}
 
-					if (!plant.azimuth || isNaN(plant.azimuth)) {
+					if (isNaN(plant.azimuth)) {
 						throw new Error(`Invalid device configuration: Found plant without azimuth`);
 					}
 
@@ -284,6 +284,14 @@ class Pvforecast extends utils.Adapter {
 
 							foundNow = true;
 						}
+
+						if (this.config.everyhourEnabled) {
+							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
+							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
+						}
+
+						// add to InfluxDB
+						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, moment(time).valueOf(), data.watts[time] / globalunit);
 					}
 
 					if (!foundNow) {
@@ -301,27 +309,13 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
 					await this.setStateAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
-					// jsongraph
 					const table = [];
-					const graphTimeData = [];
 
 					let wattindex = 0;
 					for (const time in data.watts) {
 						table.push({ Uhrzeit: time, Leistung: data.watts[time] / globalunit });
-						graphTimeData.push({ t: time, y: data.watts[time] / globalunit });
 
-						if (this.config.everyhourEnabled) {
-							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
-							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
-						}
-
-						// add to InfluxDB
-						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, moment(time).valueOf(), data.watts[time] / globalunit);
-
-						// data for alltable
 						if (index === 0) {
-							jsonGraphLabelAll.push(time); // for JSONgraph
-
 							jsonTableAll[wattindex] = { Uhrzeit: time };
 							jsonTableAll[wattindex]['Gesamt'] = data.watts[time] / globalunit;
 						} else {
@@ -338,34 +332,63 @@ class Pvforecast extends utils.Adapter {
 					}
 
 					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(table), ack: true });
-					const graphData = {
-						// graph
-						data: graphTimeData,
-						type: 'bar',
-						legendText: plant.name,
-						displayOrder: index + 1,
-						color: plantArray[index].graphcolor,
-						tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
-						datalabel_show: true,
-						datalabel_rotation: this.config.chartingRoation || 270,
-						datalabel_color: plantArray[index].labelcolor,
-						datalabel_fontSize: 12,
 
-						// graph bar chart spfeicifc
-						barIsStacked: true,
-						barStackId: 1,
+					// JSON Graph
+					if (this.config.chartingEnabled) {
+						const jsonGraphData = [];
+						const jsonGraphLabels = [];
 
-						// graph y-Axis
-						yAxis_id: 0,
-						yAxis_position: 'left',
-						yAxis_show: true,
-						yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
-						yAxis_step: this.config.watt_kw ? 1000 : 1,
-					};
+						for (const time in data.watts) {
+							const timeMoment = moment(time);
 
-					jsonGraphAll.push(graphData);
+							if (!this.config.chartingJustToday || timeMoment.date() === moment().date()) {
+								const timeInCustomFormat = timeMoment.format(this.config.chartingLabelFormat);
 
-					await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [graphData] }), ack: true });
+								// Add label if not exists
+								if (jsonGraphLabelAll.indexOf(timeInCustomFormat) < 0) {
+									jsonGraphLabelAll.push(timeInCustomFormat);
+								}
+
+								jsonGraphLabels.push(timeInCustomFormat);
+								jsonGraphData.push(data.watts[time] / globalunit);
+							}
+						}
+
+						const graphData = {
+							// graph
+							data: jsonGraphData,
+							type: 'bar',
+							legendText: plant.name,
+							displayOrder: index + 1,
+							color: plantArray[index].graphcolor,
+							tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
+							//datalabel_append: this.config.watt_kw ? 'W' : 'kW',
+							datalabel_show: true,
+							datalabel_rotation: this.config.chartingRoation,
+							datalabel_color: plantArray[index].labelcolor,
+							datalabel_fontSize: 12,
+
+							// graph bar chart spfeicifc
+							barIsStacked: true,
+							barStackId: 1,
+
+							// graph y-Axis
+							yAxis_id: 0,
+							yAxis_position: 'left',
+							yAxis_show: true,
+							yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
+							yAxis_step: this.config.chartingAxisStepY,
+						};
+
+						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(graphData)}`);
+
+						jsonGraphAll.push(graphData);
+
+						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [graphData], 'axisLabels': jsonGraphLabels }), ack: true });
+					} else {
+						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true });
+					}
+
 					await this.setStateAsync(`plants.${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
 
 					this.log.debug(`finished plant update: "${plant.name}"`);
@@ -385,8 +408,14 @@ class Pvforecast extends utils.Adapter {
 
 		await this.setStateAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
 		await this.setStateAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
-		await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphAll, 'axisLabels': jsonGraphLabelAll }), ack: true });
+
 		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableAll), ack: true });
+
+		if (this.config.chartingEnabled) {
+			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphAll, 'axisLabels': jsonGraphLabelAll }), ack: true });
+		} else {
+			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({}), ack: true });
+		}
 
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
 		await this.setStateAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });

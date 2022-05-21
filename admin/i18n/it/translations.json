@@ -16,5 +16,8 @@
     "Values in watt instead of kW": "Valori in watt anziché in kW",
     "Charting enabled": "Grafici abilitato",
     "Charting label rotation": "Rotazione delle etichette dei grafici",
-    "Charting Y-Axis step": "Grafici del passo dell'asse Y"
+    "Charting Y-Axis step": "Grafici del passo dell'asse Y",
+    "Just include current day": "Basta includere il giorno corrente",
+    "Charting label format": "Formato etichetta grafica",
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definisci un formato personalizzato come DD.MM.YYYY HH:mm:ss"
 }

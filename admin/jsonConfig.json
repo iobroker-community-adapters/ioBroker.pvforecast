@@ -165,10 +165,29 @@
                     "lg": 4,
                     "label": "Charting enabled"
                 },
+                "chartingJustToday": {
+                    "newLine": true,
+                    "hidden": "!data.chartingEnabled",
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Just include current day"
+                },
+                "chartingLabelFormat": {
+                    "newLine": true,
+                    "hidden": "!data.chartingEnabled",
+                    "type": "text",
+                    "label": "Charting label format",
+                    "help": "Define a custom format like DD.MM.YYYY HH:mm:ss",
+                    "helpLink": "https://momentjs.com/docs/#/parsing/string-format/"
+                },
                 "chartingRoation": {
                     "newLine": true,
                     "hidden": "!data.chartingEnabled",
                     "type": "number",
+                    "min": -360,
+                    "max": 360,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
@@ -213,19 +232,23 @@
                             },
                             "filter": true,
                             "sort": true,
-                            "default": ""
+                            "default": "PV"
                         },
                         {
                             "type": "number",
+                            "min": -180,
+                            "max": 180,
                             "attr": "azimuth",
                             "width": "20%",
                             "title": "Azimuth",
                             "filter": false,
                             "sort": false,
-                            "default": ""
+                            "default": 0
                         },
                         {
                             "type": "number",
+                            "min": 0,
+                            "max": 90,
                             "attr": "tilt",
                             "width": "20%",
                             "title": {
@@ -242,7 +265,7 @@
                               },
                             "filter": false,
                             "sort": false,
-                            "default": ""
+                            "default": 45
                         },
                         {
                             "type": "number",

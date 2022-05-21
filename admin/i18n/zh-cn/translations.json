@@ -16,5 +16,8 @@
     "Values in watt instead of kW": "以瓦特而不是 kW 为单位的值",
     "Charting enabled": "启用图表",
     "Charting label rotation": "图表标签旋转",
-    "Charting Y-Axis step": "绘制 Y 轴步骤"
+    "Charting Y-Axis step": "绘制 Y 轴步骤",
+    "Just include current day": "只包括当天",
+    "Charting label format": "图表标签格式",
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "定义自定义格式，如 DD.MM.YYYY HH:mm:ss"
 }

@@ -16,5 +16,8 @@
     "Values in watt instead of kW": "Значения в ваттах вместо кВт",
     "Charting enabled": "Диаграммы включены",
     "Charting label rotation": "Вращение метки диаграммы",
-    "Charting Y-Axis step": "Отображение шага оси Y"
+    "Charting Y-Axis step": "Отображение шага оси Y",
+    "Just include current day": "Просто включите текущий день",
+    "Charting label format": "Формат метки диаграммы",
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Определите собственный формат, например DD.MM.YYYY HH:mm:ss"
 }
