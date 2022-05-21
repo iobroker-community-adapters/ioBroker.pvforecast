@@ -32,6 +32,7 @@ The adapter take the raw forecast data from [forecast.solar](https://api.forecas
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (klein0r) Force forecast update when url / config changed
 * (klein0r) Added more options for JSON Graph generation
 * (klein0r) Added image for azimuth configuraion
 * (klein0r) Added missing translations

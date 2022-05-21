@@ -527,12 +527,16 @@ class Pvforecast extends utils.Adapter {
 			}
 
 			if (url) {
+				// Force update when url changed
+				const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
+				const lastUrl = (serviceDataUrlState && serviceDataUrlState.val) ? serviceDataUrlState.val : '';
+
 				const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
 				const lastUpdate = (serviceDataLastUpdatedState && serviceDataLastUpdatedState.val) ? parseInt(serviceDataLastUpdatedState.val) : 0;
 
 				this.log.debug(`plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
 
-				if (!lastUpdate || moment().valueOf() - lastUpdate > this.reqInterval * 60 * 1000) {
+				if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > this.reqInterval * 60 * 1000) {
 					try {
 						this.log.debug(`Starting update of ${plant.name}`);
 
@@ -554,6 +558,7 @@ class Pvforecast extends utils.Adapter {
 							message = { 'info': { 'place': '-' }, 'type': 'Solcast' };
 						}
 
+						await this.setStateAsync(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
 						await this.setStateAsync(`plants.${cleanPlantId}.service.data`, { val: JSON.stringify(data), ack: true });
 						await this.setStateAsync(`plants.${cleanPlantId}.service.lastUpdated`, { val: moment().valueOf(), ack: true });
 						await this.setStateAsync(`plants.${cleanPlantId}.service.message`, { val: message.type, ack: true });
@@ -1174,6 +1179,30 @@ class Pvforecast extends utils.Adapter {
 							pl: 'API',
 							'zh-cn': 'API'
 						}
+					},
+					native: {}
+				});
+
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.service.url`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Service url',
+							de: 'Service-URL',
+							ru: 'URL службы',
+							pt: 'URL de serviço',
+							nl: 'Service-URL',
+							fr: 'URL du service',
+							it: 'URL di servizio',
+							es: 'URL del servicio',
+							pl: 'URL usługi',
+							'zh-cn': '服务网址'
+						},
+						type: 'string',
+						role: 'text',
+						read: true,
+						write: false,
+						def: ''
 					},
 					native: {}
 				});
