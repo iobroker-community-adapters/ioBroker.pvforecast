@@ -263,6 +263,8 @@ class Pvforecast extends utils.Adapter {
 		await asyncForEach(plantArray, async (plant, index) => {
 			const cleanPlantId = this.cleanNamespace(plant.name);
 
+			this.globalEveryHour[cleanPlantId] = [];
+
 			const serviceDataState = await this.getStateAsync(`plants.${cleanPlantId}.service.data`);
 			if (serviceDataState && serviceDataState.val) {
 				try {
@@ -597,10 +599,6 @@ class Pvforecast extends utils.Adapter {
 
 			await this.setStateAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
 
-			if (!this.globalEveryHour[cleanPlantId]) {
-				this.globalEveryHour[cleanPlantId] = [];
-			}
-
 			this.globalEveryHour[cleanPlantId].push({dayOfMonth: dayOfMonth, time: hourKey, value: Number(value) });
 		} else {
 			this.log.silly(`[saveEveryHour] no match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
@@ -608,10 +606,6 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async saveEveryHourEmptyStates(cleanPlantId, prefix, dayOfMonth) {
-		if (!this.globalEveryHour[cleanPlantId]) {
-			return;
-		}
-
 		const validHourKeys = this.getValidHourKeys();
 		const filledHourKeys = this.globalEveryHour[cleanPlantId].filter(e => e.dayOfMonth == dayOfMonth).map(e => e.time);
 		const unfilledHourKeys = validHourKeys.filter(hourKey => filledHourKeys.indexOf(hourKey) < 0);
