@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.1.0",
+    "version": "2.1.1",
     "news": {
+      "2.1.1": {
+        "en": "Improved error handling\nFormat table values based on system.config",
+        "de": "Verbesserte Fehlerbehandlung\nTabellenwerte basierend auf system.config formatieren",
+        "ru": "Улучшенная обработка ошибок\nФорматировать значения таблицы на основе system.config",
+        "pt": "Tratamento de erros aprimorado\nFormate os valores da tabela com base em system.config",
+        "nl": "Verbeterde foutafhandeling\nTabelwaarden opmaken op basis van system.config",
+        "fr": "Amélioration de la gestion des erreurs\nFormater les valeurs du tableau en fonction de system.config",
+        "it": "Gestione degli errori migliorata\nFormatta i valori della tabella in base a system.config",
+        "es": "Manejo de errores mejorado\nDar formato a los valores de la tabla según system.config",
+        "pl": "Ulepszona obsługa błędów\nFormatuj wartości tabeli na podstawie system.config",
+        "zh-cn": "改进的错误处理\n根据 system.config 格式化表值"
+      },
       "2.1.0": {
         "en": "Force forecast update when url / config changed\nAdded more options for JSON Graph generation\nAdded image for azimuth configuraion\nAdded missing translations",
         "de": "Prognoseaktualisierung erzwingen, wenn URL/Konfiguration geändert wird\nWeitere Optionen für die Generierung von JSON-Graphen hinzugefügt\nBild für Azimut-Konfiguration hinzugefügt\nFehlende Übersetzungen hinzugefügt",
@@ -74,18 +86,6 @@
         "es": "corregir error con valores antes de las 5 en punto\ncorregir el error al comenzar después de las 22 en punto",
         "pl": "napraw błąd z wartościami przed godziną 5\nnapraw błąd podczas uruchamiania po godzinie 22",
         "zh-cn": "用 5 点之前的值修复错误\n修复 22 点后启动时的错误"
-      },
-      "0.2.5": {
-        "en": "fix request time\nfix error with weather and solcast\nsolcast request only after midnight",
-        "de": "Anfragezeit fixieren\nFehler mit Wetter und Solcast behoben\nSolcast-Anfrage nur nach Mitternacht",
-        "ru": "исправить время запроса\nисправить ошибку с погодой и солкаст\nsolcast запрос только после полуночи",
-        "pt": "corrigir tempo de solicitação\ncorrigir erro com clima e solcast\nsolicitação solcast somente após a meia-noite",
-        "nl": "verzoek tijd repareren\nrepareer fout met weer en solcast\nsolcast-verzoek alleen na middernacht",
-        "fr": "fixer l'heure de la demande\ncorrection d'une erreur avec la météo et le solcast\ndemande solcast uniquement après minuit",
-        "it": "correggere l'ora della richiesta\ncorreggere l'errore con meteo e solcast\nrichiesta solcast solo dopo la mezzanotte",
-        "es": "corregir el tiempo de solicitud\ncorregir error con tiempo y solcast\nsolicitud de solcast solo después de la medianoche",
-        "pl": "napraw czas żądania\nnapraw błąd z pogodą i solcastem\nprośba o solcast dopiero po północy",
-        "zh-cn": "修复请求时间\n修复天气和 solcast 的错误\n仅在午夜之后进行 solcast 请求"
       }
     },
     "titleLang": {
