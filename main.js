@@ -248,9 +248,9 @@ class Pvforecast extends utils.Adapter {
 
 		const plantArray = this.config.devices || [];
 
-		const jsonTableAll = [];
-		const jsonGraphAll = [];
-		const jsonGraphLabelAll = [];
+		const jsonTableSummary = [];
+		const jsonGraphSummary = [];
+		const jsonGraphLabelSummary = [];
 
 		this.globalEveryHour = {};
 
@@ -311,20 +311,22 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
 					await this.setStateAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
-					const table = [];
-
+					// JSON Table
+					const jsonTable = [];
 					let wattindex = 0;
 					for (const time in data.watts) {
-						table.push({ Uhrzeit: time, Leistung: data.watts[time] / globalunit });
+						const power = data.watts[time] / globalunit;
+
+						jsonTable.push({ 'Time': time, 'Power': power });
 
 						if (index === 0) {
-							jsonTableAll[wattindex] = { Uhrzeit: time };
-							jsonTableAll[wattindex]['Gesamt'] = data.watts[time] / globalunit;
+							jsonTableSummary[wattindex] = { 'Time': time };
+							jsonTableSummary[wattindex]['Total'] = power;
 						} else {
-							jsonTableAll[wattindex]['Gesamt'] = jsonTableAll[wattindex]['Gesamt'] + data.watts[time] / globalunit;
+							jsonTableSummary[wattindex]['Total'] = jsonTableSummary[wattindex]['Total'] + power;
 						}
 
-						jsonTableAll[wattindex][cleanPlantId] = data.watts[time] / globalunit;
+						jsonTableSummary[wattindex][plant.name] = power;
 						wattindex++;
 					}
 
@@ -333,7 +335,7 @@ class Pvforecast extends utils.Adapter {
 						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
 					}
 
-					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(table), ack: true });
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(jsonTable), ack: true });
 
 					// JSON Graph
 					if (this.config.chartingEnabled) {
@@ -347,8 +349,8 @@ class Pvforecast extends utils.Adapter {
 								const timeInCustomFormat = timeMoment.format(this.config.chartingLabelFormat);
 
 								// Add label if not exists
-								if (jsonGraphLabelAll.indexOf(timeInCustomFormat) < 0) {
-									jsonGraphLabelAll.push(timeInCustomFormat);
+								if (jsonGraphLabelSummary.indexOf(timeInCustomFormat) < 0) {
+									jsonGraphLabelSummary.push(timeInCustomFormat);
 								}
 
 								jsonGraphLabels.push(timeInCustomFormat);
@@ -356,7 +358,7 @@ class Pvforecast extends utils.Adapter {
 							}
 						}
 
-						const graphData = {
+						const jsonGraph = {
 							// graph
 							data: jsonGraphData,
 							type: 'bar',
@@ -382,11 +384,11 @@ class Pvforecast extends utils.Adapter {
 							yAxis_step: this.config.chartingAxisStepY,
 						};
 
-						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(graphData)}`);
+						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
 
-						jsonGraphAll.push(graphData);
+						jsonGraphSummary.push(jsonGraph);
 
-						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [graphData], 'axisLabels': jsonGraphLabels }), ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }), ack: true });
 					} else {
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true });
 					}
@@ -411,10 +413,10 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
 		await this.setStateAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
 
-		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableAll), ack: true });
+		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummary), ack: true });
 
 		if (this.config.chartingEnabled) {
-			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphAll, 'axisLabels': jsonGraphLabelAll }), ack: true });
+			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }), ack: true });
 		} else {
 			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({}), ack: true });
 		}
@@ -1554,7 +1556,7 @@ class Pvforecast extends utils.Adapter {
 
 		for (let h = 5; h < 22; h++) {
 			if (this.hasApiKey) {
-				for (let m = 0; m < 59; m = m + hourInterval) {
+				for (let m = 0; m <= 45; m += hourInterval) {
 					hourList.push(`${h <= 9 ? '0' + h : h}:${m <= 9 ? '0' + m : m}:00`);
 				}
 			} else {
