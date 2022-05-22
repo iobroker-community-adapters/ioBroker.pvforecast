@@ -33,6 +33,7 @@ The adapter take the raw forecast data from [forecast.solar](https://api.forecas
 -->
 ### **WORK IN PROGRESS**
 * (klein0r) Improved error handling
+* (klein0r) Format table values based on system.config
 
 ### 2.1.0 (2022-05-21)
 * (klein0r) Force forecast update when url / config changed

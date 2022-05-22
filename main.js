@@ -317,7 +317,12 @@ class Pvforecast extends utils.Adapter {
 					for (const time in data.watts) {
 						const power = data.watts[time] / globalunit;
 
-						jsonTable.push({ 'Time': time, 'Power': power });
+						jsonTable.push(
+							{
+								'Time': time,
+								'Power': this.formatValue(power, this.config.watt_kw ? 0 : 3)
+							}
+						);
 
 						if (index === 0) {
 							jsonTableSummary[wattindex] = { 'Time': time };
@@ -326,7 +331,7 @@ class Pvforecast extends utils.Adapter {
 							jsonTableSummary[wattindex]['Total'] = jsonTableSummary[wattindex]['Total'] + power;
 						}
 
-						jsonTableSummary[wattindex][plant.name] = power;
+						jsonTableSummary[wattindex][plant.name] = this.formatValue(power, this.config.watt_kw ? 0 : 3);
 						wattindex++;
 					}
 
@@ -413,7 +418,12 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
 		await this.setStateAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
 
-		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummary), ack: true });
+		// Format total column
+		const jsonTableSummaryFormat = jsonTableSummary.map(row => {
+			row['Total'] = this.formatValue(row['Total'], this.config.watt_kw ? 0 : 3);
+			return row;
+		});
+		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat), ack: true });
 
 		if (this.config.chartingEnabled) {
 			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }), ack: true });
