@@ -3,6 +3,7 @@
 const utils = require('@iobroker/adapter-core');
 const moment = require('moment');
 const axios = require('axios').default;
+const solcast = require(__dirname + '/lib/solcast');
 
 const updateInterval = 60 * 10 * 1000; // 10 minutes
 let globalunit = 1000;
@@ -175,51 +176,6 @@ class Pvforecast extends utils.Adapter {
 		}
 	}
 
-	async parseSolcastToForecast(dataJson) {
-		let totalEnergyToday = 0;
-		let totalEnergyTomorrow = 0;
-
-		const convertJson = {
-			watt_hours: {},
-			watts: {},
-			watt_hours_day: {}
-		};
-
-		await asyncForEach(dataJson.forecasts, async (plantdata, index) => {
-			const time = plantdata.period_end.replace(/T/g, ' ').replace(/Z/g, '');
-			const newtime = moment(time).format('YYYY-MM-DD HH:mm:ss');
-
-			if (Number(moment(time).format('HH')) < 22 && Number(moment(time).format('HH')) > 5) {
-				convertJson.watts[newtime] = plantdata.pv_estimate * 1000;
-				this.log.debug(`plantdata.pv_estimate: ${plantdata.pv_estimate} saved: ${convertJson.watts[newtime]}, name : ${newtime}`);
-			}
-
-			if (plantdata.pv_estimate !== 0 && index !== 0) {
-				if (plantdata.pv_estimate > dataJson.forecasts[index - 1].pv_estimate) {
-					convertJson.watt_hours[newtime] = (dataJson.forecasts[index - 1].pv_estimate + ((plantdata.pv_estimate - dataJson.forecasts[index - 1].pv_estimate) / 2)) / 2 * 1000;
-				}
-				if (plantdata.pv_estimate < dataJson.forecasts[index - 1].pv_estimate) {
-					convertJson.watt_hours[newtime] = (plantdata.pv_estimate + ((dataJson.forecasts[index - 1].pv_estimate - plantdata.pv_estimate) / 2)) / 2 * 1000;
-				}
-			} else {
-				convertJson.watt_hours[newtime] = 0;
-			}
-
-			if ((moment().date() === moment(time).date())) {
-				totalEnergyToday += convertJson.watt_hours[newtime];
-			} else if ((moment().add(1, 'days').date() === moment(time).date())) {
-				totalEnergyTomorrow += convertJson.watt_hours[newtime];
-			}
-		});
-
-		convertJson.watt_hours_day[moment().format('YYYY-MM-DD')] = totalEnergyToday;
-		convertJson.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] = totalEnergyTomorrow;
-
-		this.log.debug(`[parseSolcastToForecast] converted JSON: ${JSON.stringify(convertJson)}`);
-
-		return convertJson;
-	}
-
 	async updateServiceDataInterval() {
 		if (this.updateServiceDataTimeout) {
 			this.clearTimeout(this.updateServiceDataTimeout);
@@ -281,8 +237,8 @@ class Pvforecast extends utils.Adapter {
 							totalPowerNow += data.watts[time];
 							totalEnergyNow += data.watt_hours[time];
 
-							await this.setStateAsync(`plants.${cleanPlantId}.power.now`, { val: Number(data.watts[time] / globalunit), ack: true });
-							await this.setStateAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(data.watt_hours[time] / globalunit), ack: true });
+							await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(data.watts[time] / globalunit), ack: true });
+							await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(data.watt_hours[time] / globalunit), ack: true });
 
 							foundNow = true;
 						}
@@ -297,8 +253,8 @@ class Pvforecast extends utils.Adapter {
 					}
 
 					if (!foundNow) {
-						await this.setStateAsync(`plants.${cleanPlantId}.power.now`, { val: 0, ack: true });
-						await this.setStateAsync(`plants.${cleanPlantId}.energy.now`, { val: 0, ack: true });
+						await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: 0, ack: true });
+						await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: 0, ack: true });
 					}
 
 					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
@@ -307,9 +263,9 @@ class Pvforecast extends utils.Adapter {
 					totalEnergyToday += Number(energyToday / globalunit);
 					totalEnergyTomorrow += Number(energyTomorrow / globalunit);
 
-					await this.setStateAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
-					await this.setStateAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
-					await this.setStateAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
 					// JSON Table
 					const jsonTable = [];
@@ -415,8 +371,10 @@ class Pvforecast extends utils.Adapter {
 			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
 
-		await this.setStateAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
-		await this.setStateAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
+		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
+		await this.setStateChangedAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
 
 		// Format total column
 		const jsonTableSummaryFormat = jsonTableSummary.map(row => {
@@ -432,8 +390,6 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
-		await this.setStateAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
-		await this.setStateAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
 
 		await this.updateWeatherData();
 
@@ -463,15 +419,15 @@ class Pvforecast extends utils.Adapter {
 						if (lowerTimeLimit < weatherEntryTimestamp && upperTimeLimit > weatherEntryTimestamp) {
 							this.log.debug(`[updateWeatherData] filling states with weather info from: ${JSON.stringify(data[i])}`);
 
-							await this.setStateAsync('weather.sky', { val: Number(data[i].sky), ack: true });
-							await this.setStateAsync('weather.datetime', { val: weatherEntryTimestamp, ack: true });
-							await this.setStateAsync('weather.visibility', { val: Number(data[i].visibility), ack: true });
-							await this.setStateAsync('weather.temperature', { val: Number(data[i].temperature), ack: true });
-							await this.setStateAsync('weather.condition', { val: data[i].condition, ack: true });
-							await this.setStateAsync('weather.icon', { val: data[i].icon, ack: true });
-							await this.setStateAsync('weather.wind_speed', { val: Number(data[i].wind_speed), ack: true });
-							await this.setStateAsync('weather.wind_degrees', { val: Number(data[i].wind_degrees), ack: true });
-							await this.setStateAsync('weather.wind_direction', { val: data[i].wind_direction, ack: true });
+							await this.setStateChangedAsync('weather.sky', { val: Number(data[i].sky), ack: true });
+							await this.setStateChangedAsync('weather.datetime', { val: weatherEntryTimestamp, ack: true });
+							await this.setStateChangedAsync('weather.visibility', { val: Number(data[i].visibility), ack: true });
+							await this.setStateChangedAsync('weather.temperature', { val: Number(data[i].temperature), ack: true });
+							await this.setStateChangedAsync('weather.condition', { val: data[i].condition, ack: true });
+							await this.setStateChangedAsync('weather.icon', { val: data[i].icon, ack: true });
+							await this.setStateChangedAsync('weather.wind_speed', { val: Number(data[i].wind_speed), ack: true });
+							await this.setStateChangedAsync('weather.wind_degrees', { val: Number(data[i].wind_degrees), ack: true });
+							await this.setStateChangedAsync('weather.wind_direction', { val: data[i].wind_direction, ack: true });
 						} else {
 							this.log.debug(`[updateWeatherData] ${weatherEntryTimestamp} is not between ${lowerTimeLimit} and ${upperTimeLimit}`);
 						}
@@ -556,7 +512,7 @@ class Pvforecast extends utils.Adapter {
 
 						const serviceResponse = await axios.get(url);
 
-						this.log.debug(`received data for plant "${plant.name}": ${JSON.stringify(serviceResponse.data)}`);
+						this.log.debug(`received "${this.config.service}" data for plant "${plant.name}": ${JSON.stringify(serviceResponse.data)}`);
 
 						let data;
 						let message;
@@ -568,7 +524,9 @@ class Pvforecast extends utils.Adapter {
 							this.log.debug(`rate limit for forecastsolar API: ${message.ratelimit.limit} (${message.ratelimit.remaining} left in period)`);
 
 						} else if (this.config.service === 'solcast') {
-							data = await this.parseSolcastToForecast(serviceResponse.data);
+							data = solcast.convertToForecast(serviceResponse.data);
+							this.log.debug(`[parseSolcastToForecast] converted JSON: ${JSON.stringify(data)}`);
+
 							message = { 'info': { 'place': '-' }, 'type': 'Solcast' };
 						}
 
