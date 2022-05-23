@@ -18,7 +18,7 @@
 
 This Adapter replaced the javascript from the iobroker forum https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter
 
-The adapter take the raw forecast data from [forecast.solar](https://api.forecast.solar) or [Solcast](https://solcast.com/)
+The adapter take the raw forecast data from [forecast.solar](https://forecast.solar) or [Solcast](https://solcast.com/)
 
 ## Documentation
 
