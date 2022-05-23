@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.1.1",
+    "version": "2.1.2",
     "news": {
+      "2.1.2": {
+        "en": "Fixed refresh bug for solcast data\nFixed null values for now (power and energy)",
+        "de": "Aktualisierungsfehler für Solcast-Daten behoben\nNullwerte vorerst behoben (Leistung und Energie)",
+        "ru": "Исправлена ошибка обновления для данных solcast.\nИсправлены нулевые значения на данный момент (мощность и энергия)",
+        "pt": "Corrigido bug de atualização para dados de solcast\nValores nulos corrigidos por enquanto (potência e energia)",
+        "nl": "Vernieuwingsfout voor solcast-gegevens opgelost\nVaste nulwaarden voor nu (kracht en energie)",
+        "fr": "Correction d'un bug d'actualisation pour les données solcast\nValeurs nulles fixes pour l'instant (puissance et énergie)",
+        "it": "Risolto bug di aggiornamento per i dati solcast\nRisolti i valori nulli per ora (potenza ed energia)",
+        "es": "Se corrigió el error de actualización para los datos de solcast\nValores nulos fijos por ahora (potencia y energía)",
+        "pl": "Naprawiono błąd odświeżania danych solcast\nNaprawiono na razie wartości zerowe (moc i energia)",
+        "zh-cn": "修复了 solcast 数据的刷新错误\n现在固定空值（功率和能量）"
+      },
       "2.1.1": {
         "en": "Improved error handling\nFormat table values based on system.config",
         "de": "Verbesserte Fehlerbehandlung\nTabellenwerte basierend auf system.config formatieren",
@@ -74,18 +86,6 @@
         "es": "correcciones para repositorio",
         "pl": "poprawki do repozytorium",
         "zh-cn": "回购修复"
-      },
-      "0.2.6": {
-        "en": "fix error with values before 5 oclock\nfix error when starting after 22 oclock",
-        "de": "Fehler bei Werten vor 5 Uhr behoben\nFehler beim Starten nach 22 Uhr behoben",
-        "ru": "исправить ошибку со значениями до 5 часов\nисправить ошибку при запуске после 22 часов",
-        "pt": "corrigir erro com valores antes das 5 horas\ncorrigir erro ao iniciar após 22 horas",
-        "nl": "fix fout met waarden voor 5 uur\nfix fout bij starten na 22 uur",
-        "fr": "correction d'erreur avec des valeurs avant 5 heures\ncorrection d'une erreur lors du démarrage après 22 heures",
-        "it": "correggere l'errore con valori prima delle 5\ncorreggere l'errore all'avvio dopo le 22",
-        "es": "corregir error con valores antes de las 5 en punto\ncorregir el error al comenzar después de las 22 en punto",
-        "pl": "napraw błąd z wartościami przed godziną 5\nnapraw błąd podczas uruchamiania po godzinie 22",
-        "zh-cn": "用 5 点之前的值修复错误\n修复 22 点后启动时的错误"
       }
     },
     "titleLang": {
