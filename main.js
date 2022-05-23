@@ -231,41 +231,31 @@ class Pvforecast extends utils.Adapter {
 						return;
 					}
 
-					const lowerTimeLimit = moment().subtract(15, 'minutes');
-					const upperTimeLimit = moment().add(15, 'minutes');
-
-					this.log.debug(`[updateActualDataInterval] searching for power information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
-
-					let foundNow = false;
 					for (const time in data.watts) {
-
-						const powerEntryTimestamp = moment(time).valueOf();
-
-						if (lowerTimeLimit.valueOf() < powerEntryTimestamp && upperTimeLimit.valueOf() > powerEntryTimestamp) {
-							totalPowerNow += data.watts[time];
-							totalEnergyNow += data.watt_hours[time];
-
-							await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(data.watts[time] / globalunit), ack: true });
-							await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(data.watt_hours[time] / globalunit), ack: true });
-
-							foundNow = true;
-						}
-
 						if (this.config.everyhourEnabled) {
 							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
 							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
 						}
 
 						// add to InfluxDB
-						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, powerEntryTimestamp, data.watts[time] / globalunit);
+						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, moment(time).valueOf(), data.watts[time] / globalunit);
 					}
 
-					if (!foundNow) {
-						this.log.debug(`[updateActualDataInterval] unable to find current power information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
+					const powerNow = Object.keys(data.watts)
+						.filter((timeStr) => moment(timeStr).valueOf() < moment().valueOf())
+						.map(key => data.watts[key])
+						.pop();
 
-						await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: 0, ack: true });
-						await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: 0, ack: true });
-					}
+					const energyNow = Object.keys(data.watt_hours)
+						.filter((timeStr) => moment(timeStr).valueOf() < moment().valueOf())
+						.map(key => data.watt_hours[key])
+						.pop();
+
+					totalPowerNow += powerNow;
+					totalEnergyNow += energyNow;
+
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: powerNow, ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: energyNow, ack: true });
 
 					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
 					const energyTomorrow = data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')];

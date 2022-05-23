@@ -31,6 +31,10 @@ The adapter take the raw forecast data from [forecast.solar](https://forecast.so
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Fixed refresh bug for solcast data
+* (klein0r) Fixed null values for now (power and energy)
+
 ### 2.1.1 (2022-05-22)
 * (klein0r) Improved error handling
 * (klein0r) Format table values based on system.config
