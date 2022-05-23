@@ -254,14 +254,14 @@ class Pvforecast extends utils.Adapter {
 					totalPowerNow += powerNow;
 					totalEnergyNow += energyNow;
 
-					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: powerNow, ack: true });
-					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: energyNow, ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(powerNow / globalunit), ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(energyNow / globalunit), ack: true });
 
 					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
 					const energyTomorrow = data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')];
 
-					totalEnergyToday += Number(energyToday / globalunit);
-					totalEnergyTomorrow += Number(energyTomorrow / globalunit);
+					totalEnergyToday += energyToday;
+					totalEnergyTomorrow += energyTomorrow;
 
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
@@ -373,8 +373,8 @@ class Pvforecast extends utils.Adapter {
 
 		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
-		await this.setStateChangedAsync('summary.energy.today', { val: totalEnergyToday, ack: true });
-		await this.setStateChangedAsync('summary.energy.tomorrow', { val: totalEnergyTomorrow, ack: true });
+		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
 
 		// Format total column
 		const jsonTableSummaryFormat = jsonTableSummary.map(row => {
