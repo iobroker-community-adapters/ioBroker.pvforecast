@@ -244,12 +244,12 @@ class Pvforecast extends utils.Adapter {
 					const powerNow = Object.keys(data.watts)
 						.filter((timeStr) => moment(timeStr).valueOf() < moment().valueOf())
 						.map(key => data.watts[key])
-						.pop();
+						.pop() || 0;
 
 					const energyNow = Object.keys(data.watt_hours)
 						.filter((timeStr) => moment(timeStr).valueOf() < moment().valueOf())
 						.map(key => data.watt_hours[key])
-						.pop();
+						.pop() || 0;
 
 					totalPowerNow += powerNow;
 					totalEnergyNow += energyNow;
