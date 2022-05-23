@@ -285,7 +285,7 @@
                               },
                             "filter": false,
                             "sort": false,
-                            "default": ""
+                            "default": 9.9
                         },
                         {
                             "type": "color",
