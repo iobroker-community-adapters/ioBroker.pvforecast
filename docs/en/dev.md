@@ -424,52 +424,37 @@
 {
     "forecasts": [
         {
-            "pv_estimate": 0.959,
-            "period_end": "2022-05-23T07:30:00.0000000Z",
-            "period": "PT30M"
-        },
-        {
-            "pv_estimate": 1.205,
-            "period_end": "2022-05-23T08:00:00.0000000Z",
-            "period": "PT30M"
-        },
-        {
-            "pv_estimate": 1.077,
-            "period_end": "2022-05-23T08:30:00.0000000Z",
-            "period": "PT30M"
-        },
-        {
-            "pv_estimate": 1.14,
+            "pv_estimate": 1.874,
             "period_end": "2022-05-23T09:00:00.0000000Z",
             "period": "PT30M"
         },
         {
-            "pv_estimate": 1.279,
+            "pv_estimate": 1.776,
             "period_end": "2022-05-23T09:30:00.0000000Z",
             "period": "PT30M"
         },
         {
-            "pv_estimate": 1.751,
+            "pv_estimate": 1.548,
             "period_end": "2022-05-23T10:00:00.0000000Z",
             "period": "PT30M"
         },
         {
-            "pv_estimate": 2.113,
+            "pv_estimate": 1.842,
             "period_end": "2022-05-23T10:30:00.0000000Z",
             "period": "PT30M"
         },
         {
-            "pv_estimate": 2.255,
+            "pv_estimate": 2.024,
             "period_end": "2022-05-23T11:00:00.0000000Z",
             "period": "PT30M"
         },
         {
-            "pv_estimate": 2.205,
+            "pv_estimate": 2.136,
             "period_end": "2022-05-23T11:30:00.0000000Z",
             "period": "PT30M"
         },
         {
-            "pv_estimate": 2.093,
+            "pv_estimate": 2.094,
             "period_end": "2022-05-23T12:00:00.0000000Z",
             "period": "PT30M"
         },
@@ -906,6 +891,21 @@
         {
             "pv_estimate": 1.535,
             "period_end": "2022-05-25T07:30:00.0000000Z",
+            "period": "PT30M"
+        },
+        {
+            "pv_estimate": 1.565,
+            "period_end": "2022-05-25T08:00:00.0000000Z",
+            "period": "PT30M"
+        },
+        {
+            "pv_estimate": 1.585,
+            "period_end": "2022-05-25T08:30:00.0000000Z",
+            "period": "PT30M"
+        },
+        {
+            "pv_estimate": 1.603,
+            "period_end": "2022-05-25T09:00:00.0000000Z",
             "period": "PT30M"
         }
     ]

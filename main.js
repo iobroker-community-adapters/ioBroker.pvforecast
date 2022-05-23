@@ -186,7 +186,7 @@ class Pvforecast extends utils.Adapter {
 
 		if (this.config.service === 'solcast') {
 			this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
-			this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}`);
+			this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}ms`);
 		}
 
 		this.updateServiceDataTimeout = this.setTimeout(async () => {
@@ -231,9 +231,17 @@ class Pvforecast extends utils.Adapter {
 						return;
 					}
 
+					const lowerTimeLimit = moment().subtract(15, 'minutes');
+					const upperTimeLimit = moment().add(15, 'minutes');
+
+					this.log.debug(`[updateActualDataInterval] searching for power information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
+
 					let foundNow = false;
 					for (const time in data.watts) {
-						if (moment().valueOf() - (updateInterval / 2) < moment(time).valueOf() && moment().valueOf() + (updateInterval / 2) > moment(time).valueOf()) {
+
+						const powerEntryTimestamp = moment(time).valueOf();
+
+						if (lowerTimeLimit.valueOf() < powerEntryTimestamp && upperTimeLimit.valueOf() > powerEntryTimestamp) {
 							totalPowerNow += data.watts[time];
 							totalEnergyNow += data.watt_hours[time];
 
@@ -249,10 +257,12 @@ class Pvforecast extends utils.Adapter {
 						}
 
 						// add to InfluxDB
-						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, moment(time).valueOf(), data.watts[time] / globalunit);
+						await this.addToInfluxDB(`plants.${cleanPlantId}.power`, powerEntryTimestamp, data.watts[time] / globalunit);
 					}
 
 					if (!foundNow) {
+						this.log.debug(`[updateActualDataInterval] unable to find current power information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
+
 						await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: 0, ack: true });
 						await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: 0, ack: true });
 					}
@@ -407,16 +417,16 @@ class Pvforecast extends utils.Adapter {
 				if (serviceDataState && serviceDataState.val) {
 					const data = JSON.parse(serviceDataState.val);
 
-					const lowerTimeLimit = moment().valueOf() - (updateInterval / 2);
-					const upperTimeLimit = moment().valueOf() + (updateInterval / 2);
+					const lowerTimeLimit = moment().subtract(updateInterval / 2, 'ms');
+					const upperTimeLimit = moment().add(updateInterval / 2, 'ms');
 
-					this.log.debug(`[updateWeatherData] searching for weather information between ${lowerTimeLimit} and ${upperTimeLimit}`);
+					this.log.debug(`[updateWeatherData] searching for weather information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
 
 					for (let i = 0; i < data.length; i++) {
 
 						const weatherEntryTimestamp = moment(data[i].datetime).valueOf();
 
-						if (lowerTimeLimit < weatherEntryTimestamp && upperTimeLimit > weatherEntryTimestamp) {
+						if (lowerTimeLimit.valueOf() < weatherEntryTimestamp && upperTimeLimit.valueOf() > weatherEntryTimestamp) {
 							this.log.debug(`[updateWeatherData] filling states with weather info from: ${JSON.stringify(data[i])}`);
 
 							await this.setStateChangedAsync('weather.sky', { val: Number(data[i].sky), ack: true });
@@ -506,7 +516,7 @@ class Pvforecast extends utils.Adapter {
 
 				this.log.debug(`plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
 
-				if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > this.reqInterval * 60 * 1000) {
+				if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
 					try {
 						this.log.debug(`Starting update of ${plant.name}`);
 
