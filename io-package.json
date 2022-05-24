@@ -215,7 +215,7 @@
     "influxinstace": "",
     "chartingEnabled": false,
     "chartingJustToday": true,
-    "chartingLabelFormat": "HH:mm",
+    "chartingLabelFormat": "DD.MM. HH:mm",
     "chartingRoation": 270,
     "chartingAxisStepY": 1,
     "devices": []
