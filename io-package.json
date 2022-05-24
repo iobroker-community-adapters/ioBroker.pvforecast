@@ -134,7 +134,7 @@
     "platform": "Javascript/Node.js",
     "icon": "pvforecast.png",
     "connectionType": "cloud",
-    "dataSource": "push",
+    "dataSource": "poll",
     "mode": "daemon",
     "compact": true,
     "allowInit": true,

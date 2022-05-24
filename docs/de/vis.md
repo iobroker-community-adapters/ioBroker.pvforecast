@@ -1,3 +1,3 @@
-![Logo](img/pvforecast.png)
+![Logo](../../admin/pvforecast.png)
 
-# pvforecast - VIS
+# ioBroker.pvforecast - VIS

@@ -1,3 +1,7 @@
+![Logo](../../admin/pvforecast.png)
+
+# ioBroker.pvforecast
+
 ## forecast.solar
 
 ### Example forecast.solar response without API key

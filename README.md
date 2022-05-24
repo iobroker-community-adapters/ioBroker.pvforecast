@@ -1,30 +1,44 @@
-![Logo](docs/de/img/pvforecast.png)
-# pvforecast - Adapter for the forecast of PV incomes
-[![NPM version](https://img.shields.io/npm/v/iobroker.pvforecast.svg)](https://www.npmjs.com/package/iobroker.pvforecast)
-[![Downloads](https://img.shields.io/npm/dm/iobroker.pvforecast.svg)](https://www.npmjs.com/package/iobroker.pvforecast)
-![Number of Installations](https://iobroker.live/badges/pvforecast-installed.svg)
-![Current version in stable repository](https://iobroker.live/badges/pvforecast-stable.svg)
-[![Dependency Status](https://img.shields.io/david/Patrick-Walther/iobroker.pvforecast.svg)](https://david-dm.org/Patrick-Walther/iobroker.pvforecast)
+![Logo](admin/pvforecast.png)
 
-[![NPM](https://nodei.co/npm/iobroker.pvforecast.png?downloads=true)](https://nodei.co/npm/iobroker.pvforecast/)
+# ioBroker.pvforecast
 
-**Tests:** ![Test and Release](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/workflows/Test%20and%20Release/badge.svg)
+[![NPM version](https://img.shields.io/npm/v/iobroker.pvforecast?style=flat-square)](https://www.npmjs.com/package/iobroker.pvforecast)
+[![Downloads](https://img.shields.io/npm/dm/iobroker.pvforecast?label=npm%20downloads&style=flat-square)](https://www.npmjs.com/package/iobroker.pvforecast)
+![Snyk Vulnerabilities for npm package](https://img.shields.io/snyk/vulnerabilities/npm/iobroker.pvforecast?label=npm%20vulnerabilities&style=flat-square)
+![node-lts](https://img.shields.io/node/v-lts/iobroker.pvforecast?style=flat-square)
+![Libraries.io dependency status for latest release](https://img.shields.io/librariesio/release/npm/iobroker.pvforecast?label=npm%20dependencies&style=flat-square)
+
+![GitHub](https://img.shields.io/github/license/iobroker-community-adapters/iobroker.pvforecast?style=flat-square)
+![GitHub repo size](https://img.shields.io/github/repo-size/iobroker-community-adapters/iobroker.pvforecast?logo=github&style=flat-square)
+![GitHub commit activity](https://img.shields.io/github/commit-activity/m/iobroker-community-adapters/iobroker.pvforecast?logo=github&style=flat-square)
+![GitHub last commit](https://img.shields.io/github/last-commit/iobroker-community-adapters/iobroker.pvforecast?logo=github&style=flat-square)
+![GitHub issues](https://img.shields.io/github/issues/iobroker-community-adapters/iobroker.pvforecast?logo=github&style=flat-square)
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/iobroker-community-adapters/iobroker.pvforecast/Test%20and%20Release?label=Test%20and%20Release&logo=github&style=flat-square)
+![Snyk Vulnerabilities for GitHub Repo](https://img.shields.io/snyk/vulnerabilities/github/iobroker-community-adapters/iobroker.pvforecast?label=repo%20vulnerabilities&logo=github&style=flat-square)
+
+## Versions
+
+![Beta](https://img.shields.io/npm/v/iobroker.pvforecast.svg?color=red&label=beta)
+![Stable](http://iobroker.live/badges/pvforecast-stable.svg)
+![Installed](http://iobroker.live/badges/pvforecast-installed.svg)
+
+The adapter provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast](https://solcast.com/)
+
+This Adapter replaced the javascript from the [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
 
 **If you like it, please consider a donation:**
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UYB92ZVNEFNF6&source=url)
-
-## Description
-
-This Adapter replaced the javascript from the iobroker forum https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter
-
-The adapter take the raw forecast data from [forecast.solar](https://forecast.solar) or [Solcast](https://solcast.com/)
 
 ## Documentation
 
 [🇺🇸 Documentation](./docs/en/pvforecast.md)
 
 [🇩🇪 Dokumentation](./docs/de/pvforecast.md)
+
+## Credits
+
+- Logo (Sun): https://pixabay.com/de/vectors/sonne-wetter-wettervorhersage-157126/
 
 ## Changelog
 <!--

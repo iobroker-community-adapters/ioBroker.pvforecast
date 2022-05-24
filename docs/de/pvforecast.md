@@ -1,6 +1,6 @@
-![Logo](img/pvforecast.png)
+![Logo](../../admin/pvforecast.png)
 
-# pvforecast - Adapter zu vorhersage eurer PV Erträge
+# ioBroker.pvforecast - Adapter zu vorhersage eurer PV Erträge
 
 **Wenn Dir der Adapter gefällt, freue ich mich über eine Spende:**
 

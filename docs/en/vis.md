@@ -1,6 +1,6 @@
-![Logo](img/pvforecast.png)
+![Logo](../../admin/pvforecast.png)
 
-# pvforecast - VIS
+# ioBroker.pvforecast - VIS
 
 There are two options to display your pv forecast on VIS natively
 
