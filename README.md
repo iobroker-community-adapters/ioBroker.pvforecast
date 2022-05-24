@@ -45,7 +45,7 @@ This Adapter replaced the javascript from the [ioBroker forum](https://forum.iob
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.1.3 (2022-05-24)
 * (klein0r) Reduced info log messages
 
 ### 2.1.2 (2022-05-23)

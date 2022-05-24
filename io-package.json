@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.1.2",
+    "version": "2.1.3",
     "news": {
+      "2.1.3": {
+        "en": "Reduced info log messages",
+        "de": "Reduzierte Infolog-Meldungen",
+        "ru": "Уменьшено количество сообщений информационного журнала",
+        "pt": "Mensagens de log de informações reduzidas",
+        "nl": "Minder infologberichten",
+        "fr": "Messages du journal d'informations réduits",
+        "it": "Messaggi di registro informazioni ridotti",
+        "es": "Mensajes de registro de información reducidos",
+        "pl": "Zredukowane komunikaty dziennika informacji",
+        "zh-cn": "减少信息日志消息"
+      },
       "2.1.2": {
         "en": "Fixed refresh bug for solcast data\nFixed null values for now (power and energy)",
         "de": "Aktualisierungsfehler für Solcast-Daten behoben\nNullwerte vorerst behoben (Leistung und Energie)",
@@ -74,18 +86,6 @@
         "es": "Regreso a la ubicación del sistema\nConfiguración de administrador actualizada\nSolicitudes de API meteorológicas fijas\nTraducciones actualizadas\nRoles y tipos actualizados\nLimpieza de código\n**CAMBIOS IMPORTANTES DESDE 0.2.X POR FAVOR ELIMINAR Y REINSTALAR**\nrefactorización",
         "pl": "Powrót do lokalizacji systemu\nZaktualizowana konfiguracja administratora\nNaprawiono żądania API dotyczące pogody\nZaktualizowane tłumaczenia\nZaktualizowane role i typy\nOczyszczanie kodu\n**PRZERWANIE ZMIANY Z 0.2.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**\nRefaktoryzacja",
         "zh-cn": "回退到系统位置\n更新了管理员配置\n修复了天气 API 请求\n更新的翻译\n更新的角色和类型\n代码清理\n**从 0.2.X 开始的重大更改请删除并重新安装**\n重构"
-      },
-      "0.2.7": {
-        "en": "fixes for repo",
-        "de": "Korrekturen für Repo",
-        "ru": "исправления для репо",
-        "pt": "correções para repositório",
-        "nl": "fixes voor repo",
-        "fr": "correctifs pour le dépôt",
-        "it": "correzioni per repository",
-        "es": "correcciones para repositorio",
-        "pl": "poprawki do repozytorium",
-        "zh-cn": "回购修复"
       }
     },
     "titleLang": {
