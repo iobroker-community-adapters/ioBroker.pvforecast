@@ -45,6 +45,9 @@ This Adapter replaced the javascript from the [ioBroker forum](https://forum.iob
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Reduced info log messages
+
 ### 2.1.2 (2022-05-23)
 * (klein0r) Fixed refresh bug for solcast data
 * (klein0r) Fixed null values for now (power and energy)

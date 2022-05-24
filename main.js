@@ -567,7 +567,7 @@ class Pvforecast extends utils.Adapter {
 		if (this.getValidHourKeys().includes(hourKey) && dayOfMonth === moment(timeStr).date()) {
 			this.log.debug(`[saveEveryHour] found time ${prefix}.${hourKey} - value: ${value}`);
 
-			await this.setStateAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
+			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
 
 			this.globalEveryHour[cleanPlantId].push({dayOfMonth: dayOfMonth, time: hourKey, value: Number(value) });
 		} else {
@@ -580,13 +580,11 @@ class Pvforecast extends utils.Adapter {
 		const filledHourKeys = this.globalEveryHour[cleanPlantId].filter(e => e.dayOfMonth == dayOfMonth).map(e => e.time);
 		const unfilledHourKeys = validHourKeys.filter(hourKey => filledHourKeys.indexOf(hourKey) < 0);
 
-		if (unfilledHourKeys.length >= 10) {
-			this.log.info(`hourly states missed ${unfilledHourKeys.length} items - please check if your license allows to request all values`);
-		}
+		this.log.debug(`[saveEveryHourEmptyStates] ${unfilledHourKeys.length} items missing - please check if your license allows to request all values`);
 
 		// Fill all hours with 0 (which were not included in the service data)
 		await asyncForEach(unfilledHourKeys, async (hourKey) => {
-			await this.setStateAsync(`${prefix}.${hourKey}`, { val: 0, ack: true });
+			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: 0, ack: true, q: 0x02 });
 		});
 	}
 
@@ -605,7 +603,7 @@ class Pvforecast extends utils.Adapter {
 					.reduce((pv, cv) => pv + cv.value, 0);
 			});
 
-			await this.setStateAsync(`${prefix}.${hourKey}`, { val: totalPower, ack: true });
+			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: totalPower, ack: true });
 		});
 	}
 
