@@ -1,474 +1,475 @@
 {
-  "common": {
-    "name": "pvforecast",
-    "version": "2.1.3",
-    "news": {
-      "2.1.3": {
-        "en": "Reduced info log messages",
-        "de": "Reduzierte Infolog-Meldungen",
-        "ru": "Уменьшено количество сообщений информационного журнала",
-        "pt": "Mensagens de log de informações reduzidas",
-        "nl": "Minder infologberichten",
-        "fr": "Messages du journal d'informations réduits",
-        "it": "Messaggi di registro informazioni ridotti",
-        "es": "Mensajes de registro de información reducidos",
-        "pl": "Zredukowane komunikaty dziennika informacji",
-        "zh-cn": "减少信息日志消息"
-      },
-      "2.1.2": {
-        "en": "Fixed refresh bug for solcast data\nFixed null values for now (power and energy)",
-        "de": "Aktualisierungsfehler für Solcast-Daten behoben\nNullwerte vorerst behoben (Leistung und Energie)",
-        "ru": "Исправлена ошибка обновления для данных solcast.\nИсправлены нулевые значения на данный момент (мощность и энергия)",
-        "pt": "Corrigido bug de atualização para dados de solcast\nValores nulos corrigidos por enquanto (potência e energia)",
-        "nl": "Vernieuwingsfout voor solcast-gegevens opgelost\nVaste nulwaarden voor nu (kracht en energie)",
-        "fr": "Correction d'un bug d'actualisation pour les données solcast\nValeurs nulles fixes pour l'instant (puissance et énergie)",
-        "it": "Risolto bug di aggiornamento per i dati solcast\nRisolti i valori nulli per ora (potenza ed energia)",
-        "es": "Se corrigió el error de actualización para los datos de solcast\nValores nulos fijos por ahora (potencia y energía)",
-        "pl": "Naprawiono błąd odświeżania danych solcast\nNaprawiono na razie wartości zerowe (moc i energia)",
-        "zh-cn": "修复了 solcast 数据的刷新错误\n现在固定空值（功率和能量）"
-      },
-      "2.1.1": {
-        "en": "Improved error handling\nFormat table values based on system.config",
-        "de": "Verbesserte Fehlerbehandlung\nTabellenwerte basierend auf system.config formatieren",
-        "ru": "Улучшенная обработка ошибок\nФорматировать значения таблицы на основе system.config",
-        "pt": "Tratamento de erros aprimorado\nFormate os valores da tabela com base em system.config",
-        "nl": "Verbeterde foutafhandeling\nTabelwaarden opmaken op basis van system.config",
-        "fr": "Amélioration de la gestion des erreurs\nFormater les valeurs du tableau en fonction de system.config",
-        "it": "Gestione degli errori migliorata\nFormatta i valori della tabella in base a system.config",
-        "es": "Manejo de errores mejorado\nDar formato a los valores de la tabla según system.config",
-        "pl": "Ulepszona obsługa błędów\nFormatuj wartości tabeli na podstawie system.config",
-        "zh-cn": "改进的错误处理\n根据 system.config 格式化表值"
-      },
-      "2.1.0": {
-        "en": "Force forecast update when url / config changed\nAdded more options for JSON Graph generation\nAdded image for azimuth configuraion\nAdded missing translations",
-        "de": "Prognoseaktualisierung erzwingen, wenn URL/Konfiguration geändert wird\nWeitere Optionen für die Generierung von JSON-Graphen hinzugefügt\nBild für Azimut-Konfiguration hinzugefügt\nFehlende Übersetzungen hinzugefügt",
-        "ru": "Принудительное обновление прогноза при изменении URL/конфигурации\nДобавлены дополнительные параметры для генерации JSON Graph.\nДобавлено изображение для настройки азимута\nДобавлены недостающие переводы",
-        "pt": "Forçar atualização de previsão quando url/config alterado\nAdicionadas mais opções para geração de gráfico JSON\nAdicionada imagem para configuração de azimute\nAdicionadas traduções ausentes",
-        "nl": "Forceer prognose-update wanneer url / configuratie is gewijzigd\nMeer opties toegevoegd voor het genereren van JSON Graph\nAfbeelding toegevoegd voor azimutconfiguratie\nOntbrekende vertalingen toegevoegd",
-        "fr": "Forcer la mise à jour des prévisions lorsque l'url / la configuration a changé\nAjout de plus d'options pour la génération de graphes JSON\nImage ajoutée pour la configuration de l'azimut\nAjout des traductions manquantes",
-        "it": "Forza l'aggiornamento delle previsioni quando url/config è cambiato\nAggiunte più opzioni per la generazione di grafici JSON\nAggiunta immagine per la configurazione azimutale\nAggiunte traduzioni mancanti",
-        "es": "Forzar actualización de pronóstico cuando url / config cambió\nSe agregaron más opciones para la generación de gráficos JSON.\nImagen añadida para la configuración de azimut\nSe agregaron traducciones faltantes",
-        "pl": "Wymuś aktualizację prognozy po zmianie adresu URL/konfiguracji\nDodano więcej opcji generowania wykresów JSON\nDodano obraz do konfiguracji azymutu\nDodano brakujące tłumaczenia",
-        "zh-cn": "当 url / config 改变时强制预测更新\n为 JSON Graph 生成添加了更多选项\n添加了方位角配置的图像\n添加了缺失的翻译"
-      },
-      "2.0.0": {
-        "en": "Added manual reset for forecast\nAdded step size for hourly values\nAdded hourly forecast for tomorrow\nFixed weather information\nRestructured states (energy and power to seperate channels)\nUpdated object names\nFixed several async/await bugs\nReduce service requests\nAdded validation for configured devices\nUpdated instance configuration fields (+ encryption of api key)\n\n*BREAKING CHANGES FROM 1.X.X PLEASE DELETE AND REINSTALL**",
-        "de": "Manuelles Zurücksetzen für die Vorhersage hinzugefügt\nSchrittgröße für Stundenwerte hinzugefügt\nStündliche Vorhersage für morgen hinzugefügt\nFeste Wetterinformationen\nUmstrukturierte Zustände (Energie und Kraft, um Kanäle zu trennen)\nAktualisierte Objektnamen\nMehrere async/await-Fehler behoben\nReduzieren Sie Serviceanfragen\nValidierung für konfigurierte Geräte hinzugefügt\nAktualisierte Instanzkonfigurationsfelder (+ Verschlüsselung des API-Schlüssels)\n\n*Breaking Changes von 1.X.X BITTE LÖSCHEN UND NEU INSTALLIEREN**",
-        "ru": "Добавлен ручной сброс прогноза\nДобавлен размер шага для часовых значений\nДобавлен почасовой прогноз на завтра\nИсправлена информация о погоде\nРеструктурированные состояния (энергия и мощность по отдельным каналам)\nОбновлены имена объектов\nИсправлено несколько ошибок async/await.\nСокращение запросов на обслуживание\nДобавлена проверка настроенных устройств\nОбновлены поля конфигурации экземпляра (+ шифрование ключа API)\n\n*НАРУШАЮЩИЕ ИЗМЕНЕНИЯ ИЗ 1.X.X ПОЖАЛУЙСТА, УДАЛИТЕ И ПЕРЕУСТАНОВИТЕ**",
-        "pt": "Adicionado redefinição manual para previsão\nTamanho do passo adicionado para valores por hora\nAdicionada previsão horária para amanhã\nInformações meteorológicas fixas\nEstados reestruturados (energia e potência para canais separados)\nNomes de objetos atualizados\nCorrigidos vários bugs assíncronos/aguardados\nReduza as solicitações de serviço\nValidação adicionada para dispositivos configurados\nCampos de configuração de instância atualizados (+ criptografia da chave de API)\n\n*ALTERANDO AS MUDANÇAS DE 1.X.X POR FAVOR, EXCLUIR E REINSTALAR**",
-        "nl": "Handmatige reset toegevoegd voor voorspelling\nStapgrootte toegevoegd voor uurwaarden\nUurvoorspelling voor morgen toegevoegd\nVaste weersinformatie\nGeherstructureerde toestanden (energie en kracht om kanalen te scheiden)\nBijgewerkte objectnamen\nVerschillende asynchrone/wacht-bugs opgelost\nServiceverzoeken verminderen\nValidatie toegevoegd voor geconfigureerde apparaten\nBijgewerkte instantieconfiguratievelden (+ codering van api-sleutel)\n\n*BREKENDE WIJZIGINGEN VAN 1.X.X GELIEVE TE VERWIJDEREN EN OPNIEUW INSTALLEREN**",
-        "fr": "Ajout d'une réinitialisation manuelle pour les prévisions\nTaille de pas ajoutée pour les valeurs horaires\nAjout des prévisions horaires pour demain\nInformations météorologiques fixes\nÉtats restructurés (énergie et puissance vers des canaux séparés)\nNoms d'objet mis à jour\nCorrection de plusieurs bugs async/wait\nRéduire les demandes de service\nValidation ajoutée pour les appareils configurés\nChamps de configuration de l'instance mis à jour (+ cryptage de la clé api)\n\n* MODIFICATIONS BRISANTES DE 1.X.X VEUILLEZ SUPPRIMER ET RÉINSTALLER **",
-        "it": "Aggiunto reset manuale per le previsioni\nAggiunta la dimensione del passo per i valori orari\nAggiunte previsioni orarie per domani\nInformazioni meteo fisse\nStati ristrutturati (energia e potenza a canali separati)\nNomi oggetti aggiornati\nRisolti diversi bug di asincrono/attesa\nRiduci le richieste di servizio\nAggiunta la convalida per i dispositivi configurati\nCampi di configurazione dell'istanza aggiornati (+ crittografia della chiave API)\n\n*CAMBIAMENTI DI ROTTURA DA 1.X.X PER FAVORE ELIMINA E REINSTALLA**",
-        "es": "Reinicio manual agregado para pronóstico\nTamaño de paso agregado para valores por hora\nPronóstico por hora agregado para mañana\nInformación meteorológica fija\nEstados reestructurados (energía y poder para separar canales)\nNombres de objetos actualizados\nSe corrigieron varios errores asíncronos/en espera\nReducir las solicitudes de servicio\nValidación agregada para dispositivos configurados\nCampos de configuración de instancia actualizados (+ cifrado de clave api)\n\n*BREAKING CAMBIOS DE 1.X.X POR FAVOR ELIMINAR Y REINSTALAR**",
-        "pl": "Dodano ręczny reset prognozy\nDodano wielkość kroku dla wartości godzinowych\nDodano prognozę godzinową na jutro\nNaprawiono informacje o pogodzie\nStany zrestrukturyzowane (energia i moc do wydzielenia kanałów)\nZaktualizowane nazwy obiektów\nNaprawiono kilka błędów asynchroniczności/oczekiwania\nZmniejsz liczbę zgłoszeń serwisowych\nDodano walidację dla skonfigurowanych urządzeń\nZaktualizowane pola konfiguracji instancji (+ szyfrowanie klucza API)\n\n*PRZERWANIE ZMIANY Z 1.X.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**",
-        "zh-cn": "为预测添加了手动重置\n增加了每小时值的步长\n添加了明天的每小时预报\n固定天气信息\n重组状态（分离通道的能量和功率）\n更新了对象名称\n修复了几个异步/等待错误\n减少服务请求\n添加了对已配置设备的验证\n更新了实例配置字段（+ api 密钥加密）\n\n*从 1.X.X 开始的重大更改请删除并重新安装**"
-      },
-      "1.0.1": {
-        "en": "Updated documentation\nUpdated adapter category (energy)",
-        "de": "Aktualisierte Dokumentation\nAktualisierte Adapterkategorie (Energie)",
-        "ru": "Обновленная документация\nОбновлена категория адаптера (энергия)",
-        "pt": "Documentação atualizada\nCategoria de adaptador atualizada (energia)",
-        "nl": "Bijgewerkte documentatie\nBijgewerkte adaptercategorie (energie)",
-        "fr": "Documentation mise à jour\nCatégorie d'adaptateur mise à jour (énergie)",
-        "it": "Documentazione aggiornata\nCategoria adattatore aggiornata (energia)",
-        "es": "Documentación actualizada\nCategoría de adaptador actualizada (energía)",
-        "pl": "Zaktualizowana dokumentacja\nZaktualizowana kategoria adapterów (energia)",
-        "zh-cn": "更新的文档\n更新的适配器类别（能量）"
-      },
-      "1.0.0": {
-        "en": "Fallback to system location\nUpdated admin config\nFixed weather API requests\nUpdated translations\nUpdated roles and types\nCode cleanup\n**BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**\nRefactoring",
-        "de": "Fallback zum Systemstandort\nAktualisierte Admin-Konfiguration\nWetter-API-Anfragen behoben\nAktualisierte Übersetzungen\nAktualisierte Rollen und Typen\nCode-Bereinigung\n**Breaking Changes von 0.2.X BITTE LÖSCHEN UND NEU INSTALLIEREN**\nRefactoring",
-        "ru": "Возврат к местоположению системы\nОбновлена конфигурация администратора\nИсправлены запросы API погоды.\nОбновленные переводы\nОбновлены роли и типы\nОчистка кода\n**КРУТЫЕ ИЗМЕНЕНИЯ ПО ВЕРСИИ 0.2.X. УДАЛИТЕ И ПЕРЕУСТАНОВИТЕ**\nРефакторинг",
-        "pt": "Fallback para a localização do sistema\nConfiguração de administrador atualizada\nSolicitações de API de clima corrigidas\nTraduções atualizadas\nFunções e tipos atualizados\nLimpeza de código\n**QUEBRA ALTERAÇÕES DE 0.2.X POR FAVOR, EXCLUIR E REINSTALAR**\nReestruturação",
-        "nl": "Terugval naar systeemlocatie\nBijgewerkte beheerdersconfiguratie\nAPI-verzoeken voor vast weer\nBijgewerkte vertalingen\nBijgewerkte rollen en typen\nCode opschonen\n**BREKENDE WIJZIGINGEN VAN 0.2.X GELIEVE TE VERWIJDEREN EN OPNIEUW INSTALLEREN**\nRefactoring",
-        "fr": "Retour à l'emplacement du système\nConfiguration d'administration mise à jour\nDemandes d'API météo fixes\nTraductions mises à jour\nRôles et types mis à jour\nNettoyage de code\n** MODIFICATIONS BRISANTES DE LA 0.2.X VEUILLEZ SUPPRIMER ET RÉINSTALLER **\nRefactoring",
-        "it": "Ritorno alla posizione del sistema\nConfigurazione amministratore aggiornata\nRisolte le richieste dell'API meteo\nTraduzioni aggiornate\nRuoli e tipi aggiornati\nPulizia del codice\n**CAMBIAMENTI DI INTERRUZIONE DA 0.2.X PER FAVORE ELIMINA E REINSTALLA**\nRefactoring",
-        "es": "Regreso a la ubicación del sistema\nConfiguración de administrador actualizada\nSolicitudes de API meteorológicas fijas\nTraducciones actualizadas\nRoles y tipos actualizados\nLimpieza de código\n**CAMBIOS IMPORTANTES DESDE 0.2.X POR FAVOR ELIMINAR Y REINSTALAR**\nrefactorización",
-        "pl": "Powrót do lokalizacji systemu\nZaktualizowana konfiguracja administratora\nNaprawiono żądania API dotyczące pogody\nZaktualizowane tłumaczenia\nZaktualizowane role i typy\nOczyszczanie kodu\n**PRZERWANIE ZMIANY Z 0.2.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**\nRefaktoryzacja",
-        "zh-cn": "回退到系统位置\n更新了管理员配置\n修复了天气 API 请求\n更新的翻译\n更新的角色和类型\n代码清理\n**从 0.2.X 开始的重大更改请删除并重新安装**\n重构"
-      }
+    "common": {
+        "name": "pvforecast",
+        "version": "2.1.3",
+        "news": {
+            "2.1.3": {
+                "en": "Reduced info log messages",
+                "de": "Reduzierte Infolog-Meldungen",
+                "ru": "Уменьшено количество сообщений информационного журнала",
+                "pt": "Mensagens de log de informações reduzidas",
+                "nl": "Minder infologberichten",
+                "fr": "Messages du journal d'informations réduits",
+                "it": "Messaggi di registro informazioni ridotti",
+                "es": "Mensajes de registro de información reducidos",
+                "pl": "Zredukowane komunikaty dziennika informacji",
+                "zh-cn": "减少信息日志消息"
+            },
+            "2.1.2": {
+                "en": "Fixed refresh bug for solcast data\nFixed null values for now (power and energy)",
+                "de": "Aktualisierungsfehler für Solcast-Daten behoben\nNullwerte vorerst behoben (Leistung und Energie)",
+                "ru": "Исправлена ошибка обновления для данных solcast.\nИсправлены нулевые значения на данный момент (мощность и энергия)",
+                "pt": "Corrigido bug de atualização para dados de solcast\nValores nulos corrigidos por enquanto (potência e energia)",
+                "nl": "Vernieuwingsfout voor solcast-gegevens opgelost\nVaste nulwaarden voor nu (kracht en energie)",
+                "fr": "Correction d'un bug d'actualisation pour les données solcast\nValeurs nulles fixes pour l'instant (puissance et énergie)",
+                "it": "Risolto bug di aggiornamento per i dati solcast\nRisolti i valori nulli per ora (potenza ed energia)",
+                "es": "Se corrigió el error de actualización para los datos de solcast\nValores nulos fijos por ahora (potencia y energía)",
+                "pl": "Naprawiono błąd odświeżania danych solcast\nNaprawiono na razie wartości zerowe (moc i energia)",
+                "zh-cn": "修复了 solcast 数据的刷新错误\n现在固定空值（功率和能量）"
+            },
+            "2.1.1": {
+                "en": "Improved error handling\nFormat table values based on system.config",
+                "de": "Verbesserte Fehlerbehandlung\nTabellenwerte basierend auf system.config formatieren",
+                "ru": "Улучшенная обработка ошибок\nФорматировать значения таблицы на основе system.config",
+                "pt": "Tratamento de erros aprimorado\nFormate os valores da tabela com base em system.config",
+                "nl": "Verbeterde foutafhandeling\nTabelwaarden opmaken op basis van system.config",
+                "fr": "Amélioration de la gestion des erreurs\nFormater les valeurs du tableau en fonction de system.config",
+                "it": "Gestione degli errori migliorata\nFormatta i valori della tabella in base a system.config",
+                "es": "Manejo de errores mejorado\nDar formato a los valores de la tabla según system.config",
+                "pl": "Ulepszona obsługa błędów\nFormatuj wartości tabeli na podstawie system.config",
+                "zh-cn": "改进的错误处理\n根据 system.config 格式化表值"
+            },
+            "2.1.0": {
+                "en": "Force forecast update when url / config changed\nAdded more options for JSON Graph generation\nAdded image for azimuth configuraion\nAdded missing translations",
+                "de": "Prognoseaktualisierung erzwingen, wenn URL/Konfiguration geändert wird\nWeitere Optionen für die Generierung von JSON-Graphen hinzugefügt\nBild für Azimut-Konfiguration hinzugefügt\nFehlende Übersetzungen hinzugefügt",
+                "ru": "Принудительное обновление прогноза при изменении URL/конфигурации\nДобавлены дополнительные параметры для генерации JSON Graph.\nДобавлено изображение для настройки азимута\nДобавлены недостающие переводы",
+                "pt": "Forçar atualização de previsão quando url/config alterado\nAdicionadas mais opções para geração de gráfico JSON\nAdicionada imagem para configuração de azimute\nAdicionadas traduções ausentes",
+                "nl": "Forceer prognose-update wanneer url / configuratie is gewijzigd\nMeer opties toegevoegd voor het genereren van JSON Graph\nAfbeelding toegevoegd voor azimutconfiguratie\nOntbrekende vertalingen toegevoegd",
+                "fr": "Forcer la mise à jour des prévisions lorsque l'url / la configuration a changé\nAjout de plus d'options pour la génération de graphes JSON\nImage ajoutée pour la configuration de l'azimut\nAjout des traductions manquantes",
+                "it": "Forza l'aggiornamento delle previsioni quando url/config è cambiato\nAggiunte più opzioni per la generazione di grafici JSON\nAggiunta immagine per la configurazione azimutale\nAggiunte traduzioni mancanti",
+                "es": "Forzar actualización de pronóstico cuando url / config cambió\nSe agregaron más opciones para la generación de gráficos JSON.\nImagen añadida para la configuración de azimut\nSe agregaron traducciones faltantes",
+                "pl": "Wymuś aktualizację prognozy po zmianie adresu URL/konfiguracji\nDodano więcej opcji generowania wykresów JSON\nDodano obraz do konfiguracji azymutu\nDodano brakujące tłumaczenia",
+                "zh-cn": "当 url / config 改变时强制预测更新\n为 JSON Graph 生成添加了更多选项\n添加了方位角配置的图像\n添加了缺失的翻译"
+            },
+            "2.0.0": {
+                "en": "Added manual reset for forecast\nAdded step size for hourly values\nAdded hourly forecast for tomorrow\nFixed weather information\nRestructured states (energy and power to seperate channels)\nUpdated object names\nFixed several async/await bugs\nReduce service requests\nAdded validation for configured devices\nUpdated instance configuration fields (+ encryption of api key)\n\n*BREAKING CHANGES FROM 1.X.X PLEASE DELETE AND REINSTALL**",
+                "de": "Manuelles Zurücksetzen für die Vorhersage hinzugefügt\nSchrittgröße für Stundenwerte hinzugefügt\nStündliche Vorhersage für morgen hinzugefügt\nFeste Wetterinformationen\nUmstrukturierte Zustände (Energie und Kraft, um Kanäle zu trennen)\nAktualisierte Objektnamen\nMehrere async/await-Fehler behoben\nReduzieren Sie Serviceanfragen\nValidierung für konfigurierte Geräte hinzugefügt\nAktualisierte Instanzkonfigurationsfelder (+ Verschlüsselung des API-Schlüssels)\n\n*Breaking Changes von 1.X.X BITTE LÖSCHEN UND NEU INSTALLIEREN**",
+                "ru": "Добавлен ручной сброс прогноза\nДобавлен размер шага для часовых значений\nДобавлен почасовой прогноз на завтра\nИсправлена информация о погоде\nРеструктурированные состояния (энергия и мощность по отдельным каналам)\nОбновлены имена объектов\nИсправлено несколько ошибок async/await.\nСокращение запросов на обслуживание\nДобавлена проверка настроенных устройств\nОбновлены поля конфигурации экземпляра (+ шифрование ключа API)\n\n*НАРУШАЮЩИЕ ИЗМЕНЕНИЯ ИЗ 1.X.X ПОЖАЛУЙСТА, УДАЛИТЕ И ПЕРЕУСТАНОВИТЕ**",
+                "pt": "Adicionado redefinição manual para previsão\nTamanho do passo adicionado para valores por hora\nAdicionada previsão horária para amanhã\nInformações meteorológicas fixas\nEstados reestruturados (energia e potência para canais separados)\nNomes de objetos atualizados\nCorrigidos vários bugs assíncronos/aguardados\nReduza as solicitações de serviço\nValidação adicionada para dispositivos configurados\nCampos de configuração de instância atualizados (+ criptografia da chave de API)\n\n*ALTERANDO AS MUDANÇAS DE 1.X.X POR FAVOR, EXCLUIR E REINSTALAR**",
+                "nl": "Handmatige reset toegevoegd voor voorspelling\nStapgrootte toegevoegd voor uurwaarden\nUurvoorspelling voor morgen toegevoegd\nVaste weersinformatie\nGeherstructureerde toestanden (energie en kracht om kanalen te scheiden)\nBijgewerkte objectnamen\nVerschillende asynchrone/wacht-bugs opgelost\nServiceverzoeken verminderen\nValidatie toegevoegd voor geconfigureerde apparaten\nBijgewerkte instantieconfiguratievelden (+ codering van api-sleutel)\n\n*BREKENDE WIJZIGINGEN VAN 1.X.X GELIEVE TE VERWIJDEREN EN OPNIEUW INSTALLEREN**",
+                "fr": "Ajout d'une réinitialisation manuelle pour les prévisions\nTaille de pas ajoutée pour les valeurs horaires\nAjout des prévisions horaires pour demain\nInformations météorologiques fixes\nÉtats restructurés (énergie et puissance vers des canaux séparés)\nNoms d'objet mis à jour\nCorrection de plusieurs bugs async/wait\nRéduire les demandes de service\nValidation ajoutée pour les appareils configurés\nChamps de configuration de l'instance mis à jour (+ cryptage de la clé api)\n\n* MODIFICATIONS BRISANTES DE 1.X.X VEUILLEZ SUPPRIMER ET RÉINSTALLER **",
+                "it": "Aggiunto reset manuale per le previsioni\nAggiunta la dimensione del passo per i valori orari\nAggiunte previsioni orarie per domani\nInformazioni meteo fisse\nStati ristrutturati (energia e potenza a canali separati)\nNomi oggetti aggiornati\nRisolti diversi bug di asincrono/attesa\nRiduci le richieste di servizio\nAggiunta la convalida per i dispositivi configurati\nCampi di configurazione dell'istanza aggiornati (+ crittografia della chiave API)\n\n*CAMBIAMENTI DI ROTTURA DA 1.X.X PER FAVORE ELIMINA E REINSTALLA**",
+                "es": "Reinicio manual agregado para pronóstico\nTamaño de paso agregado para valores por hora\nPronóstico por hora agregado para mañana\nInformación meteorológica fija\nEstados reestructurados (energía y poder para separar canales)\nNombres de objetos actualizados\nSe corrigieron varios errores asíncronos/en espera\nReducir las solicitudes de servicio\nValidación agregada para dispositivos configurados\nCampos de configuración de instancia actualizados (+ cifrado de clave api)\n\n*BREAKING CAMBIOS DE 1.X.X POR FAVOR ELIMINAR Y REINSTALAR**",
+                "pl": "Dodano ręczny reset prognozy\nDodano wielkość kroku dla wartości godzinowych\nDodano prognozę godzinową na jutro\nNaprawiono informacje o pogodzie\nStany zrestrukturyzowane (energia i moc do wydzielenia kanałów)\nZaktualizowane nazwy obiektów\nNaprawiono kilka błędów asynchroniczności/oczekiwania\nZmniejsz liczbę zgłoszeń serwisowych\nDodano walidację dla skonfigurowanych urządzeń\nZaktualizowane pola konfiguracji instancji (+ szyfrowanie klucza API)\n\n*PRZERWANIE ZMIANY Z 1.X.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**",
+                "zh-cn": "为预测添加了手动重置\n增加了每小时值的步长\n添加了明天的每小时预报\n固定天气信息\n重组状态（分离通道的能量和功率）\n更新了对象名称\n修复了几个异步/等待错误\n减少服务请求\n添加了对已配置设备的验证\n更新了实例配置字段（+ api 密钥加密）\n\n*从 1.X.X 开始的重大更改请删除并重新安装**"
+            },
+            "1.0.1": {
+                "en": "Updated documentation\nUpdated adapter category (energy)",
+                "de": "Aktualisierte Dokumentation\nAktualisierte Adapterkategorie (Energie)",
+                "ru": "Обновленная документация\nОбновлена категория адаптера (энергия)",
+                "pt": "Documentação atualizada\nCategoria de adaptador atualizada (energia)",
+                "nl": "Bijgewerkte documentatie\nBijgewerkte adaptercategorie (energie)",
+                "fr": "Documentation mise à jour\nCatégorie d'adaptateur mise à jour (énergie)",
+                "it": "Documentazione aggiornata\nCategoria adattatore aggiornata (energia)",
+                "es": "Documentación actualizada\nCategoría de adaptador actualizada (energía)",
+                "pl": "Zaktualizowana dokumentacja\nZaktualizowana kategoria adapterów (energia)",
+                "zh-cn": "更新的文档\n更新的适配器类别（能量）"
+            },
+            "1.0.0": {
+                "en": "Fallback to system location\nUpdated admin config\nFixed weather API requests\nUpdated translations\nUpdated roles and types\nCode cleanup\n**BREAKING CHANGES FROM 0.2.X PLEASE DELETE AND REINSTALL**\nRefactoring",
+                "de": "Fallback zum Systemstandort\nAktualisierte Admin-Konfiguration\nWetter-API-Anfragen behoben\nAktualisierte Übersetzungen\nAktualisierte Rollen und Typen\nCode-Bereinigung\n**Breaking Changes von 0.2.X BITTE LÖSCHEN UND NEU INSTALLIEREN**\nRefactoring",
+                "ru": "Возврат к местоположению системы\nОбновлена конфигурация администратора\nИсправлены запросы API погоды.\nОбновленные переводы\nОбновлены роли и типы\nОчистка кода\n**КРУТЫЕ ИЗМЕНЕНИЯ ПО ВЕРСИИ 0.2.X. УДАЛИТЕ И ПЕРЕУСТАНОВИТЕ**\nРефакторинг",
+                "pt": "Fallback para a localização do sistema\nConfiguração de administrador atualizada\nSolicitações de API de clima corrigidas\nTraduções atualizadas\nFunções e tipos atualizados\nLimpeza de código\n**QUEBRA ALTERAÇÕES DE 0.2.X POR FAVOR, EXCLUIR E REINSTALAR**\nReestruturação",
+                "nl": "Terugval naar systeemlocatie\nBijgewerkte beheerdersconfiguratie\nAPI-verzoeken voor vast weer\nBijgewerkte vertalingen\nBijgewerkte rollen en typen\nCode opschonen\n**BREKENDE WIJZIGINGEN VAN 0.2.X GELIEVE TE VERWIJDEREN EN OPNIEUW INSTALLEREN**\nRefactoring",
+                "fr": "Retour à l'emplacement du système\nConfiguration d'administration mise à jour\nDemandes d'API météo fixes\nTraductions mises à jour\nRôles et types mis à jour\nNettoyage de code\n** MODIFICATIONS BRISANTES DE LA 0.2.X VEUILLEZ SUPPRIMER ET RÉINSTALLER **\nRefactoring",
+                "it": "Ritorno alla posizione del sistema\nConfigurazione amministratore aggiornata\nRisolte le richieste dell'API meteo\nTraduzioni aggiornate\nRuoli e tipi aggiornati\nPulizia del codice\n**CAMBIAMENTI DI INTERRUZIONE DA 0.2.X PER FAVORE ELIMINA E REINSTALLA**\nRefactoring",
+                "es": "Regreso a la ubicación del sistema\nConfiguración de administrador actualizada\nSolicitudes de API meteorológicas fijas\nTraducciones actualizadas\nRoles y tipos actualizados\nLimpieza de código\n**CAMBIOS IMPORTANTES DESDE 0.2.X POR FAVOR ELIMINAR Y REINSTALAR**\nrefactorización",
+                "pl": "Powrót do lokalizacji systemu\nZaktualizowana konfiguracja administratora\nNaprawiono żądania API dotyczące pogody\nZaktualizowane tłumaczenia\nZaktualizowane role i typy\nOczyszczanie kodu\n**PRZERWANIE ZMIANY Z 0.2.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**\nRefaktoryzacja",
+                "zh-cn": "回退到系统位置\n更新了管理员配置\n修复了天气 API 请求\n更新的翻译\n更新的角色和类型\n代码清理\n**从 0.2.X 开始的重大更改请删除并重新安装**\n重构"
+            }
+        },
+        "titleLang": {
+            "en": "PV-Forecast",
+            "de": "PV-Prognose",
+            "ru": "PV-прогноз",
+            "pt": "Previsão PV",
+            "nl": "PV-prognose",
+            "fr": "Prévision PV",
+            "it": "PV-Previsione",
+            "es": "Pronóstico de PV",
+            "pl": "PV-Prognoza",
+            "zh-cn": "光伏预测"
+        },
+        "desc": {
+            "en": "Solar plant production forecast",
+            "de": "Produktionsprognose für Solaranlagen",
+            "ru": "Прогноз производства солнечной электростанции",
+            "pt": "Previsão de produção de usinas solares",
+            "nl": "Productieprognose voor zonne-installaties",
+            "fr": "Prévisions de production des centrales solaires",
+            "it": "Previsioni di produzione di impianti solari",
+            "es": "Previsión de producción de plantas solares",
+            "pl": "Prognoza produkcji elektrowni słonecznych",
+            "zh-cn": "太阳能电站产量预测"
+        },
+        "authors": [
+            "Patrick Walther <walther-patrick@gmx.net>",
+            "Matthias Kleine <info@haus-automatisierung.com>"
+        ],
+        "docs": {
+            "en": "docs/en/pvforecast.md",
+            "de": "docs/de/pvforecast.md"
+        },
+        "globalDependencies": [
+            {
+                "admin": ">=5.2.28"
+            }
+        ],
+        "dependencies": [
+            {
+                "js-controller": ">=3.3.22"
+            }
+        ],
+        "license": "MIT",
+        "platform": "Javascript/Node.js",
+        "icon": "pvforecast.png",
+        "connectionType": "cloud",
+        "dataSource": "poll",
+        "mode": "daemon",
+        "compact": true,
+        "allowInit": true,
+        "materialize": true,
+        "enabled": false,
+        "adminUI": {
+            "config": "json"
+        },
+        "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
+        "keywords": [
+            "Solar",
+            "Photovoltaik",
+            "PV",
+            "Forecast",
+            "Prognose",
+            "Ertrag"
+        ],
+        "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md",
+        "loglevel": "info",
+        "type": "energy"
     },
-    "titleLang": {
-      "en": "PV-Forecast",
-      "de": "PV-Prognose",
-      "ru": "PV-прогноз",
-      "pt": "Previsão PV",
-      "nl": "PV-prognose",
-      "fr": "Prévision PV",
-      "it": "PV-Previsione",
-      "es": "Pronóstico de PV",
-      "pl": "PV-Prognoza",
-      "zh-cn": "光伏预测"
-    },
-    "desc": {
-      "en": "Solar plant production forecast",
-      "de": "Produktionsprognose für Solaranlagen",
-      "ru": "Прогноз производства солнечной электростанции",
-      "pt": "Previsão de produção de usinas solares",
-      "nl": "Productieprognose voor zonne-installaties",
-      "fr": "Prévisions de production des centrales solaires",
-      "it": "Previsioni di produzione di impianti solari",
-      "es": "Previsión de producción de plantas solares",
-      "pl": "Prognoza produkcji elektrowni słonecznych",
-      "zh-cn": "太阳能电站产量预测"
-    },
-    "authors": [
-      "Patrick Walther <walther-patrick@gmx.net>",
-      "Matthias Kleine <info@haus-automatisierung.com>"
-    ],
-    "docs": {
-      "en": "docs/en/pvforecast.md",
-      "de": "docs/de/pvforecast.md"
-    },
-    "globalDependencies": [
-      {
-        "admin": ">=5.2.28"
-      }
-    ],
-    "dependencies": [
-      {
-        "js-controller": ">=3.3.22"
-      }
-    ],
-    "license": "MIT",
-    "platform": "Javascript/Node.js",
-    "icon": "pvforecast.png",
-    "connectionType": "cloud",
-    "dataSource": "poll",
-    "mode": "daemon",
-    "compact": true,
-    "allowInit": true,
-    "materialize": true,
-    "enabled": false,
-    "adminUI": {
-      "config": "json"
-    },
-    "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
-    "keywords": [
-      "Solar",
-      "Photovoltaik",
-      "PV",
-      "Forecast",
-      "Prognose",
-      "Ertrag"
-    ],
-    "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md",
-    "loglevel": "info",
-    "type": "energy"
-  },
-  "messages": [
-    {
-      "condition": {
-        "operand": "and",
-        "rules": [
-          "oldVersion<2.0.0",
-          "newVersion>=2.0.0"
-        ]
-      },
-      "title": {
-        "en": "Instance requires new configuration after update",
-        "de": "Die Instanz erfordert nach dem Update eine neue Konfiguration",
-        "ru": "Экземпляр требует новой конфигурации после обновления",
-        "pt": "A instância requer uma nova configuração após a atualização",
-        "nl": "Instantie vereist nieuwe configuratie na update",
-        "fr": "L'instance nécessite une nouvelle configuration après la mise à jour",
-        "it": "L'istanza richiede una nuova configurazione dopo l'aggiornamento",
-        "es": "La instancia requiere una nueva configuración después de la actualización",
-        "pl": "Instancja wymaga nowej konfiguracji po aktualizacji",
-        "zh-cn": "实例更新后需要新配置"
-      },
-      "text": {
-        "en": "After upgrading to Version 2.0.0 or later you need to reconfigure the instance (double check your config). All objects have been restructured. It is recommended to delete all objects and restart the instance afterwards.",
-        "de": "Nach dem Upgrade auf Version 2.0.0 oder höher müssen Sie die Instanz neu konfigurieren (überprüfen Sie Ihre Konfiguration). Alle Objekte wurden neu strukturiert. Es wird empfohlen, alle Objekte zu löschen und die Instanz anschließend neu zu starten.",
-        "ru": "После обновления до версии 2.0.0 или более поздней вам необходимо перенастроить экземпляр (дважды проверьте свою конфигурацию). Все объекты реструктурированы. Рекомендуется удалить все объекты и перезапустить экземпляр после этого.",
-        "pt": "Após atualizar para a versão 2.0.0 ou posterior, você precisa reconfigurar a instância (verifique novamente sua configuração). Todos os objetos foram reestruturados. Recomenda-se excluir todos os objetos e reiniciar a instância posteriormente.",
-        "nl": "Na het upgraden naar versie 2.0.0 of hoger moet u de instantie opnieuw configureren (controleer uw configuratie). Alle objecten zijn geherstructureerd. Het wordt aanbevolen om alle objecten te verwijderen en de instantie daarna opnieuw te starten.",
-        "fr": "Après la mise à niveau vers la version 2.0.0 ou ultérieure, vous devez reconfigurer l'instance (vérifiez votre configuration). Tous les objets ont été restructurés. Il est recommandé de supprimer tous les objets et de redémarrer l'instance ensuite.",
-        "it": "Dopo l'aggiornamento alla versione 2.0.0 o successiva è necessario riconfigurare l'istanza (ricontrollare la configurazione). Tutti gli oggetti sono stati ristrutturati. Si consiglia di eliminare tutti gli oggetti e riavviare l'istanza in seguito.",
-        "es": "Después de actualizar a la versión 2.0.0 o posterior, debe volver a configurar la instancia (verifique dos veces su configuración). Todos los objetos han sido reestructurados. Se recomienda eliminar todos los objetos y reiniciar la instancia después.",
-        "pl": "Po aktualizacji do wersji 2.0.0 lub nowszej musisz ponownie skonfigurować instancję (dwukrotnie sprawdź swoją konfigurację). Wszystkie obiekty zostały przebudowane. Zaleca się usunięcie wszystkich obiektów, a następnie ponowne uruchomienie instancji.",
-        "zh-cn": "升级到 2.0.0 或更高版本后，您需要重新配置实例（仔细检查您的配置）。所有对象都已重组。建议删除所有对象，然后重新启动实例。"
-      },
-      "level": "warn",
-      "buttons": [
-        "agree",
-        "cancel"
-      ]
-    }
-  ],
-  "protectedNative": [
-    "apiKey"
-  ],
-  "encryptedNative": [
-    "apiKey"
-  ],
-  "native": {
-    "service": "forecastsolar",
-    "intervall": 60,
-    "apiKey": "",
-    "weatherEnabled": false,
-    "latitude": "",
-    "longitude": "",
-    "everyhourEnabled": false,
-    "everyhourStepsize": "full",
-    "watt_kw": false,
-    "influxinstace": "",
-    "chartingEnabled": false,
-    "chartingJustToday": true,
-    "chartingLabelFormat": "DD.MM. HH:mm",
-    "chartingRoation": 270,
-    "chartingAxisStepY": 1,
-    "devices": []
-  },
-  "objects": [],
-  "instanceObjects": [
-    {
-      "_id": "plants",
-      "type": "folder",
-      "common": {
-        "name": {
-          "en": "PV-Plants",
-          "de": "PV-Anlagen",
-          "ru": "PV-установки",
-          "pt": "Usinas fotovoltaicas",
-          "nl": "PV-installaties",
-          "fr": "Installations PV",
-          "it": "Impianti fotovoltaici",
-          "es": "Plantas fotovoltaicas",
-          "pl": "Fotowoltaika",
-          "zh-cn": "光伏电站"
+    "messages": [
+        {
+            "condition": {
+                "operand": "and",
+                "rules": [
+                    "oldVersion<2.0.0",
+                    "newVersion>=2.0.0"
+                ]
+            },
+            "title": {
+                "en": "Instance requires new configuration after update",
+                "de": "Die Instanz erfordert nach dem Update eine neue Konfiguration",
+                "ru": "Экземпляр требует новой конфигурации после обновления",
+                "pt": "A instância requer uma nova configuração após a atualização",
+                "nl": "Instantie vereist nieuwe configuratie na update",
+                "fr": "L'instance nécessite une nouvelle configuration après la mise à jour",
+                "it": "L'istanza richiede una nuova configurazione dopo l'aggiornamento",
+                "es": "La instancia requiere una nueva configuración después de la actualización",
+                "pl": "Instancja wymaga nowej konfiguracji po aktualizacji",
+                "zh-cn": "实例更新后需要新配置"
+            },
+            "text": {
+                "en": "After upgrading to Version 2.0.0 or later you need to reconfigure the instance (double check your config). All objects have been restructured. It is recommended to delete all objects and restart the instance afterwards.",
+                "de": "Nach dem Upgrade auf Version 2.0.0 oder höher müssen Sie die Instanz neu konfigurieren (überprüfen Sie Ihre Konfiguration). Alle Objekte wurden neu strukturiert. Es wird empfohlen, alle Objekte zu löschen und die Instanz anschließend neu zu starten.",
+                "ru": "После обновления до версии 2.0.0 или более поздней вам необходимо перенастроить экземпляр (дважды проверьте свою конфигурацию). Все объекты реструктурированы. Рекомендуется удалить все объекты и перезапустить экземпляр после этого.",
+                "pt": "Após atualizar para a versão 2.0.0 ou posterior, você precisa reconfigurar a instância (verifique novamente sua configuração). Todos os objetos foram reestruturados. Recomenda-se excluir todos os objetos e reiniciar a instância posteriormente.",
+                "nl": "Na het upgraden naar versie 2.0.0 of hoger moet u de instantie opnieuw configureren (controleer uw configuratie). Alle objecten zijn geherstructureerd. Het wordt aanbevolen om alle objecten te verwijderen en de instantie daarna opnieuw te starten.",
+                "fr": "Après la mise à niveau vers la version 2.0.0 ou ultérieure, vous devez reconfigurer l'instance (vérifiez votre configuration). Tous les objets ont été restructurés. Il est recommandé de supprimer tous les objets et de redémarrer l'instance ensuite.",
+                "it": "Dopo l'aggiornamento alla versione 2.0.0 o successiva è necessario riconfigurare l'istanza (ricontrollare la configurazione). Tutti gli oggetti sono stati ristrutturati. Si consiglia di eliminare tutti gli oggetti e riavviare l'istanza in seguito.",
+                "es": "Después de actualizar a la versión 2.0.0 o posterior, debe volver a configurar la instancia (verifique dos veces su configuración). Todos los objetos han sido reestructurados. Se recomienda eliminar todos los objetos y reiniciar la instancia después.",
+                "pl": "Po aktualizacji do wersji 2.0.0 lub nowszej musisz ponownie skonfigurować instancję (dwukrotnie sprawdź swoją konfigurację). Wszystkie obiekty zostały przebudowane. Zaleca się usunięcie wszystkich obiektów, a następnie ponowne uruchomienie instancji.",
+                "zh-cn": "升级到 2.0.0 或更高版本后，您需要重新配置实例（仔细检查您的配置）。所有对象都已重组。建议删除所有对象，然后重新启动实例。"
+            },
+            "level": "warn",
+            "buttons": [
+                "agree",
+                "cancel"
+            ]
         }
-      },
-      "native": {}
+    ],
+    "protectedNative": [
+        "apiKey"
+    ],
+    "encryptedNative": [
+        "apiKey"
+    ],
+    "native": {
+        "service": "forecastsolar",
+        "intervall": 60,
+        "apiKey": "",
+        "weatherEnabled": false,
+        "latitude": "",
+        "longitude": "",
+        "everyhourEnabled": false,
+        "everyhourStepsize": "full",
+        "watt_kw": false,
+        "influxinstace": "",
+        "chartingEnabled": false,
+        "chartingJustToday": true,
+        "chartingLabelFormat": "DD.MM. HH:mm",
+        "chartingLabelSize": 12,
+        "chartingRoation": 270,
+        "chartingAxisStepY": 1,
+        "devices": []
     },
-    {
-      "_id": "summary",
-      "type": "channel",
-      "common": {
-        "name": {
-          "en": "Summary",
-          "de": "Zusammenfassung",
-          "ru": "Резюме",
-          "pt": "Resumo",
-          "nl": "Samenvatting",
-          "fr": "Résumé",
-          "it": "Sommario",
-          "es": "Resumen",
-          "pl": "Streszczenie",
-          "zh-cn": "概括"
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "plants",
+            "type": "folder",
+            "common": {
+                "name": {
+                    "en": "PV-Plants",
+                    "de": "PV-Anlagen",
+                    "ru": "PV-установки",
+                    "pt": "Usinas fotovoltaicas",
+                    "nl": "PV-installaties",
+                    "fr": "Installations PV",
+                    "it": "Impianti fotovoltaici",
+                    "es": "Plantas fotovoltaicas",
+                    "pl": "Fotowoltaika",
+                    "zh-cn": "光伏电站"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Summary",
+                    "de": "Zusammenfassung",
+                    "ru": "Резюме",
+                    "pt": "Resumo",
+                    "nl": "Samenvatting",
+                    "fr": "Résumé",
+                    "it": "Sommario",
+                    "es": "Resumen",
+                    "pl": "Streszczenie",
+                    "zh-cn": "概括"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.power",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Estimated power",
+                    "de": "Geschätzte Leistung",
+                    "ru": "Расчетная мощность",
+                    "pt": "Potência estimada",
+                    "nl": "Geschat vermogen",
+                    "fr": "Puissance estimée",
+                    "it": "Potenza stimata",
+                    "es": "Potencia estimada",
+                    "pl": "Szacowana moc",
+                    "zh-cn": "估计功率"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.power.now",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Estimated power (now)",
+                    "de": "Geschätzte Leistung (jetzt)",
+                    "ru": "Расчетная мощность (сейчас)",
+                    "pt": "Potência estimada (agora)",
+                    "nl": "Geschat vermogen (nu)",
+                    "fr": "Puissance estimée (maintenant)",
+                    "it": "Potenza stimata (ora)",
+                    "es": "Potencia estimada (ahora)",
+                    "pl": "Szacowana moc (teraz)",
+                    "zh-cn": "估计功率（现在）"
+                },
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "unit": "kW",
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.energy",
+            "type": "channel",
+            "common": {
+                "name": {
+                    "en": "Estimated energy",
+                    "de": "Geschätzte Energie",
+                    "ru": "Расчетная энергия",
+                    "pt": "Energia estimada",
+                    "nl": "geschatte energie",
+                    "fr": "Énergie estimée",
+                    "it": "Energia stimata",
+                    "es": "Energía estimada",
+                    "pl": "Szacowana energia",
+                    "zh-cn": "估计能量"
+                }
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.energy.now",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Estimated energy (today until now)",
+                    "de": "Geschätzte Energie (heute bis jetzt)",
+                    "ru": "Расчетная энергия (сегодня по настоящее время)",
+                    "pt": "Energia estimada (hoje até agora)",
+                    "nl": "Geschatte energie (vandaag tot nu)",
+                    "fr": "Énergie estimée (aujourd'hui jusqu'à maintenant)",
+                    "it": "Energia stimata (da oggi ad oggi)",
+                    "es": "Energía estimada (hoy hasta ahora)",
+                    "pl": "Szacowana energia (dzisiaj do teraz)",
+                    "zh-cn": "估计能量（今天到现在）"
+                },
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "unit": "kWh",
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.energy.today",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Estimated energy (today)",
+                    "de": "Geschätzte Energie (heute)",
+                    "ru": "Расчетная энергия (сегодня)",
+                    "pt": "Energia estimada (hoje)",
+                    "nl": "Geschatte energie (vandaag)",
+                    "fr": "Énergie estimée (aujourd'hui)",
+                    "it": "Energia stimata (oggi)",
+                    "es": "Energía estimada (hoy)",
+                    "pl": "Szacowana energia (dzisiaj)",
+                    "zh-cn": "估计能量（今天）"
+                },
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "unit": "kWh",
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.energy.tomorrow",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Estimated energy (tomorrow)",
+                    "de": "Geschätzte Energie (morgen)",
+                    "ru": "Расчетная энергия (завтра)",
+                    "pt": "Energia estimada (amanhã)",
+                    "nl": "Geschatte energie (morgen)",
+                    "fr": "Énergie estimée (demain)",
+                    "it": "Energia stimata (domani)",
+                    "es": "Energía estimada (mañana)",
+                    "pl": "Szacowana energia (jutro)",
+                    "zh-cn": "估计能量（明天）"
+                },
+                "type": "number",
+                "role": "value",
+                "read": true,
+                "write": false,
+                "unit": "kWh",
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.lastUpdated",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Last update (data)",
+                    "de": "Letztes Update (Daten)",
+                    "ru": "Последнее обновление (данные)",
+                    "pt": "Última atualização (dados)",
+                    "nl": "Laatste update (gegevens)",
+                    "fr": "Dernière mise à jour (données)",
+                    "it": "Ultimo aggiornamento (dati)",
+                    "es": "Última actualización (datos)",
+                    "pl": "Ostatnia aktualizacja (dane)",
+                    "zh-cn": "上次更新（数据）"
+                },
+                "type": "number",
+                "role": "value.time",
+                "read": true,
+                "write": false,
+                "def": 0
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.JSONGraph",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Graph data in JSON format",
+                    "de": "Diagrammdaten im JSON-Format",
+                    "ru": "Графические данные в формате JSON",
+                    "pt": "Dados do gráfico no formato JSON",
+                    "nl": "Grafiekgegevens in JSON-indeling",
+                    "fr": "Données de graphique au format JSON",
+                    "it": "Dati grafici in formato JSON",
+                    "es": "Graficar datos en formato JSON",
+                    "pl": "Dane wykresu w formacie JSON",
+                    "zh-cn": "JSON格式的图形数据"
+                },
+                "type": "string",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
+            "_id": "summary.JSONTable",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "Table data in JSON format",
+                    "de": "Tabellendaten im JSON-Format",
+                    "ru": "Табличные данные в формате JSON",
+                    "pt": "Dados da tabela no formato JSON",
+                    "nl": "Tabelgegevens in JSON-indeling",
+                    "fr": "Données de table au format JSON",
+                    "it": "Dati della tabella in formato JSON",
+                    "es": "Tabla de datos en formato JSON",
+                    "pl": "Dane tabeli w formacie JSON",
+                    "zh-cn": "JSON格式的表格数据"
+                },
+                "type": "string",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
         }
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.power",
-      "type": "channel",
-      "common": {
-        "name": {
-          "en": "Estimated power",
-          "de": "Geschätzte Leistung",
-          "ru": "Расчетная мощность",
-          "pt": "Potência estimada",
-          "nl": "Geschat vermogen",
-          "fr": "Puissance estimée",
-          "it": "Potenza stimata",
-          "es": "Potencia estimada",
-          "pl": "Szacowana moc",
-          "zh-cn": "估计功率"
-        }
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.power.now",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Estimated power (now)",
-          "de": "Geschätzte Leistung (jetzt)",
-          "ru": "Расчетная мощность (сейчас)",
-          "pt": "Potência estimada (agora)",
-          "nl": "Geschat vermogen (nu)",
-          "fr": "Puissance estimée (maintenant)",
-          "it": "Potenza stimata (ora)",
-          "es": "Potencia estimada (ahora)",
-          "pl": "Szacowana moc (teraz)",
-          "zh-cn": "估计功率（现在）"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "unit": "kW",
-        "def": 0
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.energy",
-      "type": "channel",
-      "common": {
-        "name": {
-          "en": "Estimated energy",
-          "de": "Geschätzte Energie",
-          "ru": "Расчетная энергия",
-          "pt": "Energia estimada",
-          "nl": "geschatte energie",
-          "fr": "Énergie estimée",
-          "it": "Energia stimata",
-          "es": "Energía estimada",
-          "pl": "Szacowana energia",
-          "zh-cn": "估计能量"
-        }
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.energy.now",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Estimated energy (today until now)",
-          "de": "Geschätzte Energie (heute bis jetzt)",
-          "ru": "Расчетная энергия (сегодня по настоящее время)",
-          "pt": "Energia estimada (hoje até agora)",
-          "nl": "Geschatte energie (vandaag tot nu)",
-          "fr": "Énergie estimée (aujourd'hui jusqu'à maintenant)",
-          "it": "Energia stimata (da oggi ad oggi)",
-          "es": "Energía estimada (hoy hasta ahora)",
-          "pl": "Szacowana energia (dzisiaj do teraz)",
-          "zh-cn": "估计能量（今天到现在）"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "unit": "kWh",
-        "def": 0
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.energy.today",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Estimated energy (today)",
-          "de": "Geschätzte Energie (heute)",
-          "ru": "Расчетная энергия (сегодня)",
-          "pt": "Energia estimada (hoje)",
-          "nl": "Geschatte energie (vandaag)",
-          "fr": "Énergie estimée (aujourd'hui)",
-          "it": "Energia stimata (oggi)",
-          "es": "Energía estimada (hoy)",
-          "pl": "Szacowana energia (dzisiaj)",
-          "zh-cn": "估计能量（今天）"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "unit": "kWh",
-        "def": 0
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.energy.tomorrow",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Estimated energy (tomorrow)",
-          "de": "Geschätzte Energie (morgen)",
-          "ru": "Расчетная энергия (завтра)",
-          "pt": "Energia estimada (amanhã)",
-          "nl": "Geschatte energie (morgen)",
-          "fr": "Énergie estimée (demain)",
-          "it": "Energia stimata (domani)",
-          "es": "Energía estimada (mañana)",
-          "pl": "Szacowana energia (jutro)",
-          "zh-cn": "估计能量（明天）"
-        },
-        "type": "number",
-        "role": "value",
-        "read": true,
-        "write": false,
-        "unit": "kWh",
-        "def": 0
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.lastUpdated",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Last update (data)",
-          "de": "Letztes Update (Daten)",
-          "ru": "Последнее обновление (данные)",
-          "pt": "Última atualização (dados)",
-          "nl": "Laatste update (gegevens)",
-          "fr": "Dernière mise à jour (données)",
-          "it": "Ultimo aggiornamento (dati)",
-          "es": "Última actualización (datos)",
-          "pl": "Ostatnia aktualizacja (dane)",
-          "zh-cn": "上次更新（数据）"
-        },
-        "type": "number",
-        "role": "value.time",
-        "read": true,
-        "write": false,
-        "def": 0
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.JSONGraph",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Graph data in JSON format",
-          "de": "Diagrammdaten im JSON-Format",
-          "ru": "Графические данные в формате JSON",
-          "pt": "Dados do gráfico no formato JSON",
-          "nl": "Grafiekgegevens in JSON-indeling",
-          "fr": "Données de graphique au format JSON",
-          "it": "Dati grafici in formato JSON",
-          "es": "Graficar datos en formato JSON",
-          "pl": "Dane wykresu w formacie JSON",
-          "zh-cn": "JSON格式的图形数据"
-        },
-        "type": "string",
-        "role": "json",
-        "read": true,
-        "write": false,
-        "def": "{}"
-      },
-      "native": {}
-    },
-    {
-      "_id": "summary.JSONTable",
-      "type": "state",
-      "common": {
-        "name": {
-          "en": "Table data in JSON format",
-          "de": "Tabellendaten im JSON-Format",
-          "ru": "Табличные данные в формате JSON",
-          "pt": "Dados da tabela no formato JSON",
-          "nl": "Tabelgegevens in JSON-indeling",
-          "fr": "Données de table au format JSON",
-          "it": "Dati della tabella in formato JSON",
-          "es": "Tabla de datos en formato JSON",
-          "pl": "Dane tabeli w formacie JSON",
-          "zh-cn": "JSON格式的表格数据"
-        },
-        "type": "string",
-        "role": "json",
-        "read": true,
-        "write": false,
-        "def": "{}"
-      },
-      "native": {}
-    }
-  ]
+    ]
 }

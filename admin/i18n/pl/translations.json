@@ -19,5 +19,6 @@
     "Charting Y-Axis step": "Rysowanie kroku w osi Y",
     "Just include current day": "Po prostu uwzględnij bieżący dzień",
     "Charting label format": "Format etykiety wykresów",
-    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Zdefiniuj niestandardowy format, taki jak DD.MM.YYYY HH:mm:ss"
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Zdefiniuj niestandardowy format, taki jak DD.MM.YYYY HH:mm:ss",
+    "Charting label size": "Rozmiar etykiety wykresu"
 }

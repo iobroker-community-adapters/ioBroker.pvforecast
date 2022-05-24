@@ -45,6 +45,9 @@ This Adapter replaced the javascript from the [ioBroker forum](https://forum.iob
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Added option for label text size (charting)
+
 ### 2.1.3 (2022-05-24)
 * (klein0r) Reduced info log messages
 

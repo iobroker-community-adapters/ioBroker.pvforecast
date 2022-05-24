@@ -178,9 +178,20 @@
                     "newLine": true,
                     "hidden": "!data.chartingEnabled",
                     "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
                     "label": "Charting label format",
                     "help": "Define a custom format like DD.MM.YYYY HH:mm:ss",
                     "helpLink": "https://momentjs.com/docs/#/parsing/string-format/"
+                },
+                "chartingLabelSize": {
+                    "hidden": "!data.chartingEnabled",
+                    "type": "number",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Charting label size"
                 },
                 "chartingRoation": {
                     "newLine": true,

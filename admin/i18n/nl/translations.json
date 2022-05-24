@@ -19,5 +19,6 @@
     "Charting Y-Axis step": "Y-as stap in kaart brengen",
     "Just include current day": "Voeg gewoon de huidige dag toe",
     "Charting label format": "Labelformaat in kaart brengen",
-    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definieer een aangepast formaat zoals DD.MM.YYYY HH:mm:ss"
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definieer een aangepast formaat zoals DD.MM.YYYY HH:mm:ss",
+    "Charting label size": "Labelgrootte in kaart brengen"
 }

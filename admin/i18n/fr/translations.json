@@ -19,5 +19,6 @@
     "Charting Y-Axis step": "Tracer l'étape de l'axe Y",
     "Just include current day": "Inclure simplement le jour actuel",
     "Charting label format": "Format d'étiquette de graphique",
-    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Définissez un format personnalisé comme DD.MM.YYYY HH:mm:ss"
+    "Define a custom format like DD.MM.YYYY HH:mm:ss": "Définissez un format personnalisé comme DD.MM.YYYY HH:mm:ss",
+    "Charting label size": "Taille de l'étiquette de graphique"
 }

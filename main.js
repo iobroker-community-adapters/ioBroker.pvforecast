@@ -319,6 +319,7 @@ class Pvforecast extends utils.Adapter {
 							}
 						}
 
+						// https://github.com/Scrounger/ioBroker.vis-materialdesign/blob/master/README.md
 						const jsonGraph = {
 							// graph
 							data: jsonGraphData,
@@ -331,7 +332,7 @@ class Pvforecast extends utils.Adapter {
 							datalabel_show: true,
 							datalabel_rotation: this.config.chartingRoation,
 							datalabel_color: plantArray[index].labelcolor,
-							datalabel_fontSize: 12,
+							datalabel_fontSize: this.config.chartingLabelSize,
 
 							// graph bar chart spfeicifc
 							barIsStacked: true,
