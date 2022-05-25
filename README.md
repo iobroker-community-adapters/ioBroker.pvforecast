@@ -22,9 +22,7 @@
 ![Stable](http://iobroker.live/badges/pvforecast-stable.svg)
 ![Installed](http://iobroker.live/badges/pvforecast-installed.svg)
 
-The adapter provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast](https://solcast.com/)
-
-This Adapter replaced the javascript from the [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
+Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast](https://solcast.com/)
 
 **If you like it, please consider a donation:**
 
