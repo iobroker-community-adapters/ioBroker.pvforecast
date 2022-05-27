@@ -43,7 +43,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.1.4 (2022-05-27)
 * (klein0r) Added option for label text size (charting)
 
 ### 2.1.3 (2022-05-24)
