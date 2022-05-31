@@ -312,6 +312,31 @@
       "native": {}
     },
     {
+      "_id": "summary.power.installed",
+      "type": "state",
+      "common": {
+        "name": {
+          "en": "Total power installed",
+          "de": "Gesamtleistung installiert",
+          "ru": "Общая установленная мощность",
+          "pt": "Potência total instalada",
+          "nl": "Totaal geïnstalleerd vermogen",
+          "fr": "Puissance totale installée",
+          "it": "Potenza totale installata",
+          "es": "Potencia total instalada",
+          "pl": "Całkowita moc zainstalowana",
+          "zh-cn": "总装机功率"
+        },
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "unit": "kWp",
+        "def": 0
+      },
+      "native": {}
+    },
+    {
       "_id": "summary.energy",
       "type": "channel",
       "common": {

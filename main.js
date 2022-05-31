@@ -211,6 +211,7 @@ class Pvforecast extends utils.Adapter {
 		this.globalEveryHour = {};
 
 		let totalPowerNow = 0;
+		let totalPowerInstalled = 0;
 
 		let totalEnergyNow = 0;
 		let totalEnergyToday = 0;
@@ -246,23 +247,22 @@ class Pvforecast extends utils.Adapter {
 						.map(key => data.watts[key])
 						.pop() || 0;
 
+					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
+					const energyTomorrow = data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')];
 					const energyNow = Object.keys(data.watt_hours)
 						.filter((timeStr) => moment(timeStr).valueOf() < moment().valueOf())
 						.map(key => data.watt_hours[key])
 						.pop() || 0;
 
 					totalPowerNow += powerNow;
+					totalPowerInstalled += plant.peakpower;
 					totalEnergyNow += energyNow;
-
-					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(powerNow / globalunit), ack: true });
-					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(energyNow / globalunit), ack: true });
-
-					const energyToday = data.watt_hours_day[moment().format('YYYY-MM-DD')];
-					const energyTomorrow = data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')];
-
 					totalEnergyToday += energyToday;
 					totalEnergyTomorrow += energyTomorrow;
 
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(powerNow / globalunit), ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.installed`, { val: plant.peakpower, ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(energyNow / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
@@ -373,6 +373,7 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.power.installed', { val: totalPowerInstalled, ack: true });
 		await this.setStateChangedAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
@@ -1002,6 +1003,31 @@ class Pvforecast extends utils.Adapter {
 						type: 'number',
 						role: 'value',
 						unit: 'kW',
+						read: true,
+						write: false,
+						def: 0
+					},
+					native: {}
+				});
+
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.power.installed`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Total power installed',
+							de: 'Gesamtleistung installiert',
+							ru: 'Общая установленная мощность',
+							pt: 'Potência total instalada',
+							nl: 'Totaal geïnstalleerd vermogen',
+							fr: 'Puissance totale installée',
+							it: 'Potenza totale installata',
+							es: 'Potencia total instalada',
+							pl: 'Całkowita moc zainstalowana',
+							'zh-cn': '总装机功率'
+						},
+						type: 'number',
+						role: 'value',
+						unit: 'kWp',
 						read: true,
 						write: false,
 						def: 0
