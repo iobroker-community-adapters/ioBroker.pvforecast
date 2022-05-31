@@ -117,8 +117,14 @@
       "Matthias Kleine <info@haus-automatisierung.com>"
     ],
     "docs": {
-      "en": "docs/en/pvforecast.md",
-      "de": "docs/de/pvforecast.md"
+      "en": [
+        "docs/en/pvforecast.md",
+        "docs/en/vis.md"
+      ],
+      "de": [
+        "docs/de/pvforecast.md",
+        "docs/de/vis.md"
+      ]
     },
     "globalDependencies": [
       {
@@ -154,48 +160,48 @@
     ],
     "readme": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md",
     "loglevel": "info",
-    "type": "energy"
-  },
-  "messages": [
-    {
-      "condition": {
-        "operand": "and",
-        "rules": [
-          "oldVersion<2.0.0",
-          "newVersion>=2.0.0"
+    "type": "energy",
+    "messages": [
+      {
+        "condition": {
+          "operand": "and",
+          "rules": [
+            "oldVersion<2.0.0",
+            "newVersion>=2.0.0"
+          ]
+        },
+        "title": {
+          "en": "Instance requires new configuration after update",
+          "de": "Die Instanz erfordert nach dem Update eine neue Konfiguration",
+          "ru": "Экземпляр требует новой конфигурации после обновления",
+          "pt": "A instância requer uma nova configuração após a atualização",
+          "nl": "Instantie vereist nieuwe configuratie na update",
+          "fr": "L'instance nécessite une nouvelle configuration après la mise à jour",
+          "it": "L'istanza richiede una nuova configurazione dopo l'aggiornamento",
+          "es": "La instancia requiere una nueva configuración después de la actualización",
+          "pl": "Instancja wymaga nowej konfiguracji po aktualizacji",
+          "zh-cn": "实例更新后需要新配置"
+        },
+        "text": {
+          "en": "After upgrading to Version 2.0.0 or later you need to reconfigure the instance (double check your config). All objects have been restructured. It is recommended to delete all objects and restart the instance afterwards.",
+          "de": "Nach dem Upgrade auf Version 2.0.0 oder höher müssen Sie die Instanz neu konfigurieren (überprüfen Sie Ihre Konfiguration). Alle Objekte wurden neu strukturiert. Es wird empfohlen, alle Objekte zu löschen und die Instanz anschließend neu zu starten.",
+          "ru": "После обновления до версии 2.0.0 или более поздней вам необходимо перенастроить экземпляр (дважды проверьте свою конфигурацию). Все объекты реструктурированы. Рекомендуется удалить все объекты и перезапустить экземпляр после этого.",
+          "pt": "Após atualizar para a versão 2.0.0 ou posterior, você precisa reconfigurar a instância (verifique novamente sua configuração). Todos os objetos foram reestruturados. Recomenda-se excluir todos os objetos e reiniciar a instância posteriormente.",
+          "nl": "Na het upgraden naar versie 2.0.0 of hoger moet u de instantie opnieuw configureren (controleer uw configuratie). Alle objecten zijn geherstructureerd. Het wordt aanbevolen om alle objecten te verwijderen en de instantie daarna opnieuw te starten.",
+          "fr": "Après la mise à niveau vers la version 2.0.0 ou ultérieure, vous devez reconfigurer l'instance (vérifiez votre configuration). Tous les objets ont été restructurés. Il est recommandé de supprimer tous les objets et de redémarrer l'instance ensuite.",
+          "it": "Dopo l'aggiornamento alla versione 2.0.0 o successiva è necessario riconfigurare l'istanza (ricontrollare la configurazione). Tutti gli oggetti sono stati ristrutturati. Si consiglia di eliminare tutti gli oggetti e riavviare l'istanza in seguito.",
+          "es": "Después de actualizar a la versión 2.0.0 o posterior, debe volver a configurar la instancia (verifique dos veces su configuración). Todos los objetos han sido reestructurados. Se recomienda eliminar todos los objetos y reiniciar la instancia después.",
+          "pl": "Po aktualizacji do wersji 2.0.0 lub nowszej musisz ponownie skonfigurować instancję (dwukrotnie sprawdź swoją konfigurację). Wszystkie obiekty zostały przebudowane. Zaleca się usunięcie wszystkich obiektów, a następnie ponowne uruchomienie instancji.",
+          "zh-cn": "升级到 2.0.0 或更高版本后，您需要重新配置实例（仔细检查您的配置）。所有对象都已重组。建议删除所有对象，然后重新启动实例。"
+        },
+        "level": "warn",
+        "buttons": [
+          "agree",
+          "cancel"
         ]
-      },
-      "title": {
-        "en": "Instance requires new configuration after update",
-        "de": "Die Instanz erfordert nach dem Update eine neue Konfiguration",
-        "ru": "Экземпляр требует новой конфигурации после обновления",
-        "pt": "A instância requer uma nova configuração após a atualização",
-        "nl": "Instantie vereist nieuwe configuratie na update",
-        "fr": "L'instance nécessite une nouvelle configuration après la mise à jour",
-        "it": "L'istanza richiede una nuova configurazione dopo l'aggiornamento",
-        "es": "La instancia requiere una nueva configuración después de la actualización",
-        "pl": "Instancja wymaga nowej konfiguracji po aktualizacji",
-        "zh-cn": "实例更新后需要新配置"
-      },
-      "text": {
-        "en": "After upgrading to Version 2.0.0 or later you need to reconfigure the instance (double check your config). All objects have been restructured. It is recommended to delete all objects and restart the instance afterwards.",
-        "de": "Nach dem Upgrade auf Version 2.0.0 oder höher müssen Sie die Instanz neu konfigurieren (überprüfen Sie Ihre Konfiguration). Alle Objekte wurden neu strukturiert. Es wird empfohlen, alle Objekte zu löschen und die Instanz anschließend neu zu starten.",
-        "ru": "После обновления до версии 2.0.0 или более поздней вам необходимо перенастроить экземпляр (дважды проверьте свою конфигурацию). Все объекты реструктурированы. Рекомендуется удалить все объекты и перезапустить экземпляр после этого.",
-        "pt": "Após atualizar para a versão 2.0.0 ou posterior, você precisa reconfigurar a instância (verifique novamente sua configuração). Todos os objetos foram reestruturados. Recomenda-se excluir todos os objetos e reiniciar a instância posteriormente.",
-        "nl": "Na het upgraden naar versie 2.0.0 of hoger moet u de instantie opnieuw configureren (controleer uw configuratie). Alle objecten zijn geherstructureerd. Het wordt aanbevolen om alle objecten te verwijderen en de instantie daarna opnieuw te starten.",
-        "fr": "Après la mise à niveau vers la version 2.0.0 ou ultérieure, vous devez reconfigurer l'instance (vérifiez votre configuration). Tous les objets ont été restructurés. Il est recommandé de supprimer tous les objets et de redémarrer l'instance ensuite.",
-        "it": "Dopo l'aggiornamento alla versione 2.0.0 o successiva è necessario riconfigurare l'istanza (ricontrollare la configurazione). Tutti gli oggetti sono stati ristrutturati. Si consiglia di eliminare tutti gli oggetti e riavviare l'istanza in seguito.",
-        "es": "Después de actualizar a la versión 2.0.0 o posterior, debe volver a configurar la instancia (verifique dos veces su configuración). Todos los objetos han sido reestructurados. Se recomienda eliminar todos los objetos y reiniciar la instancia después.",
-        "pl": "Po aktualizacji do wersji 2.0.0 lub nowszej musisz ponownie skonfigurować instancję (dwukrotnie sprawdź swoją konfigurację). Wszystkie obiekty zostały przebudowane. Zaleca się usunięcie wszystkich obiektów, a następnie ponowne uruchomienie instancji.",
-        "zh-cn": "升级到 2.0.0 或更高版本后，您需要重新配置实例（仔细检查您的配置）。所有对象都已重组。建议删除所有对象，然后重新启动实例。"
-      },
-      "level": "warn",
-      "buttons": [
-        "agree",
-        "cancel"
-      ]
-    }
-  ],
+      }
+    ]
+  },
   "protectedNative": [
     "apiKey"
   ],
