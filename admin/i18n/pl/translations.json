@@ -20,5 +20,8 @@
     "Just include current day": "Po prostu uwzględnij bieżący dzień",
     "Charting label format": "Format etykiety wykresów",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Zdefiniuj niestandardowy format, taki jak DD.MM.YYYY HH:mm:ss",
-    "Charting label size": "Rozmiar etykiety wykresu"
+    "Charting label size": "Rozmiar etykiety wykresu",
+    "Advanced Options": "Zaawansowane opcje",
+    "Active power limitation": "Ograniczenie mocy czynnej",
+    "Limitation in percent": "Ograniczenie w procentach"
 }

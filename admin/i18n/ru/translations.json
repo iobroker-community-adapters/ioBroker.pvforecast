@@ -20,5 +20,8 @@
     "Just include current day": "Просто включите текущий день",
     "Charting label format": "Формат метки диаграммы",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Определите собственный формат, например DD.MM.YYYY HH:mm:ss",
-    "Charting label size": "Размер метки диаграммы"
+    "Charting label size": "Размер метки диаграммы",
+    "Advanced Options": "Расширенные опции",
+    "Active power limitation": "Ограничение активной мощности",
+    "Limitation in percent": "Ограничение в процентах"
 }

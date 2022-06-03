@@ -20,5 +20,8 @@
     "Just include current day": "Nur den aktuellen Tag anzeigen",
     "Charting label format": "Diagrammetikettenformat",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definieren Sie ein benutzerdefiniertes Format wie DD.MM.YYYY HH:mm:ss",
-    "Charting label size": "Diagrammetikettengröße"
+    "Charting label size": "Diagrammetikettengröße",
+    "Advanced Options": "Erweiterte Optionen",
+    "Active power limitation": "Wirkleistungsbegrenzung",
+    "Limitation in percent": "Begrenzung in Prozent"
 }

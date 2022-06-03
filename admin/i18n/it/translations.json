@@ -20,5 +20,8 @@
     "Just include current day": "Basta includere il giorno corrente",
     "Charting label format": "Formato etichetta grafica",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definisci un formato personalizzato come DD.MM.YYYY HH:mm:ss",
-    "Charting label size": "Dimensioni dell'etichetta del grafico"
+    "Charting label size": "Dimensioni dell'etichetta del grafico",
+    "Advanced Options": "Opzioni avanzate",
+    "Active power limitation": "Limitazione della potenza attiva",
+    "Limitation in percent": "Limitazione in percentuale"
 }

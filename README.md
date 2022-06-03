@@ -46,6 +46,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
 ### **WORK IN PROGRESS**
 * (klein0r) Added installed peak power as state
 * (klein0r) Fixed time shift when using solcast
+* (klein0r) Added option for active power limitation
 
 ### 2.1.4 (2022-05-27)
 * (klein0r) Added option for label text size (charting)

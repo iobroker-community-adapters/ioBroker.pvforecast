@@ -367,12 +367,15 @@ class Pvforecast extends utils.Adapter {
 		this.log.debug('finished plants update');
 
 		if (this.config.everyhourEnabled) {
-			await this.saveEveryHourSummary('summary.power.hoursToday', moment().date());
-			await this.saveEveryHourSummary('summary.power.hoursTomorrow', moment().add(1, 'days').date());
+			await this.saveEveryHourSummary('summary.power.hoursToday', moment().date(), totalPowerInstalled);
+			await this.saveEveryHourSummary('summary.power.hoursTomorrow', moment().add(1, 'days').date(), totalPowerInstalled);
 			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
 
-		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.power.now', {
+			val: Number(this.getValueWithActivePowerLimitation(totalPowerNow / globalunit, totalPowerInstalled / globalunit)),
+			ack: true
+		});
 		await this.setStateChangedAsync('summary.power.installed', { val: totalPowerInstalled, ack: true });
 		await this.setStateChangedAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
@@ -590,7 +593,7 @@ class Pvforecast extends utils.Adapter {
 		});
 	}
 
-	async saveEveryHourSummary(prefix, dayOfMonth) {
+	async saveEveryHourSummary(prefix, dayOfMonth, totalPowerInstalled) {
 		const plantArray = this.config.devices || [];
 
 		const validHourKeys = this.getValidHourKeys();
@@ -605,7 +608,10 @@ class Pvforecast extends utils.Adapter {
 					.reduce((pv, cv) => pv + cv.value, 0);
 			});
 
-			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: totalPower, ack: true });
+			await this.setStateChangedAsync(`${prefix}.${hourKey}`, {
+				val: this.getValueWithActivePowerLimitation(totalPower, totalPowerInstalled),
+				ack: true
+			});
 		});
 	}
 
@@ -637,6 +643,20 @@ class Pvforecast extends utils.Adapter {
 		} catch (err) {
 			this.log.error(`[addToInfluxDB] storeState error: ${err}`);
 		}
+	}
+
+	getValueWithActivePowerLimitation(value, totalPowerInstalled) {
+		if (this.config?.powerLimitationEnabled) {
+			const powerLimitationPercent = this.config?.powerLimitationPercent ?? 70;
+			const maxPower = totalPowerInstalled * (powerLimitationPercent / 100);
+			if (value > maxPower) {
+				this.log.debug(`[saveEveryHourSummary] active power limitation (${this.config.powerLimitationPercent}%) reduced ${value} to ${maxPower}`);
+
+				return maxPower;
+			}
+		}
+
+		return value;
 	}
 
 	async createAndDeleteStates() {

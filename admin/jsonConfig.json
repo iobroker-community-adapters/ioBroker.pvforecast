@@ -214,7 +214,7 @@
                 }
             }
         },
-        "_advanced": {
+        "_plants": {
             "type": "panel",
             "label": "PV-Systems",
             "items": {
@@ -350,6 +350,29 @@
                     "md": 4,
                     "lg": 4,
                     "src": "adapter/pvforecast/img/Azimuth.png"
+                }
+            }
+        },
+        "_advanced": {
+            "type": "panel",
+            "label": "Advanced Options",
+            "items": {
+                "powerLimitationEnabled": {
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Active power limitation"
+                },
+                "powerLimitationPercent": {
+                    "hidden": "!data.powerLimitationEnabled",
+                    "type": "number",
+                    "min": 1,
+                    "max": 100,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Limitation in percent"
                 }
             }
         }
