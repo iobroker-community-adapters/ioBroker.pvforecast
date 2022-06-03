@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.1.4",
+    "version": "2.1.5",
     "news": {
+      "2.1.5": {
+        "en": "Added installed peak power as state\nFixed time shift when using solcast",
+        "de": "Installierte Spitzenleistung als Zustand hinzugefügt\nZeitverschiebung bei Verwendung von Solcast behoben",
+        "ru": "Добавлена установленная пиковая мощность как состояние\nИсправлен сдвиг времени при использовании solcast",
+        "pt": "Adicionada potência de pico instalada como estado\nDeslocamento de tempo fixo ao usar solcast",
+        "nl": "Geïnstalleerd piekvermogen toegevoegd als status\nVaste tijdverschuiving bij gebruik van solcast",
+        "fr": "Ajout de la puissance de crête installée en tant qu'état\nDécalage horaire fixe lors de l'utilisation de solcast",
+        "it": "Aggiunta la potenza di picco installata come stato\nRisolto il problema con lo spostamento temporale quando si utilizza solcast",
+        "es": "Se agregó la potencia máxima instalada como estado\nCambio de tiempo fijo cuando se usa solcast",
+        "pl": "Dodano zainstalowaną moc szczytową jako stan\nNaprawiono przesunięcie czasu podczas korzystania z solcast",
+        "zh-cn": "添加安装峰值功率作为状态\n修复了使用 solcast 时的时间偏移"
+      },
       "2.1.4": {
         "en": "Added option for label text size (charting)",
         "de": "Option für Beschriftungstextgröße hinzugefügt (Diagramm)",
@@ -74,18 +86,6 @@
         "es": "Reinicio manual agregado para pronóstico\nTamaño de paso agregado para valores por hora\nPronóstico por hora agregado para mañana\nInformación meteorológica fija\nEstados reestructurados (energía y poder para separar canales)\nNombres de objetos actualizados\nSe corrigieron varios errores asíncronos/en espera\nReducir las solicitudes de servicio\nValidación agregada para dispositivos configurados\nCampos de configuración de instancia actualizados (+ cifrado de clave api)\n\n*BREAKING CAMBIOS DE 1.X.X POR FAVOR ELIMINAR Y REINSTALAR**",
         "pl": "Dodano ręczny reset prognozy\nDodano wielkość kroku dla wartości godzinowych\nDodano prognozę godzinową na jutro\nNaprawiono informacje o pogodzie\nStany zrestrukturyzowane (energia i moc do wydzielenia kanałów)\nZaktualizowane nazwy obiektów\nNaprawiono kilka błędów asynchroniczności/oczekiwania\nZmniejsz liczbę zgłoszeń serwisowych\nDodano walidację dla skonfigurowanych urządzeń\nZaktualizowane pola konfiguracji instancji (+ szyfrowanie klucza API)\n\n*PRZERWANIE ZMIANY Z 1.X.X PROSZĘ USUNĄĆ I ZAINSTALOWAĆ PONOWNIE**",
         "zh-cn": "为预测添加了手动重置\n增加了每小时值的步长\n添加了明天的每小时预报\n固定天气信息\n重组状态（分离通道的能量和功率）\n更新了对象名称\n修复了几个异步/等待错误\n减少服务请求\n添加了对已配置设备的验证\n更新了实例配置字段（+ api 密钥加密）\n\n*从 1.X.X 开始的重大更改请删除并重新安装**"
-      },
-      "1.0.1": {
-        "en": "Updated documentation\nUpdated adapter category (energy)",
-        "de": "Aktualisierte Dokumentation\nAktualisierte Adapterkategorie (Energie)",
-        "ru": "Обновленная документация\nОбновлена категория адаптера (энергия)",
-        "pt": "Documentação atualizada\nCategoria de adaptador atualizada (energia)",
-        "nl": "Bijgewerkte documentatie\nBijgewerkte adaptercategorie (energie)",
-        "fr": "Documentation mise à jour\nCatégorie d'adaptateur mise à jour (énergie)",
-        "it": "Documentazione aggiornata\nCategoria adattatore aggiornata (energia)",
-        "es": "Documentación actualizada\nCategoría de adaptador actualizada (energía)",
-        "pl": "Zaktualizowana dokumentacja\nZaktualizowana kategoria adapterów (energia)",
-        "zh-cn": "更新的文档\n更新的适配器类别（能量）"
       }
     },
     "titleLang": {
