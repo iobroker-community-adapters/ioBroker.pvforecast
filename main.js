@@ -124,7 +124,7 @@ class Pvforecast extends utils.Adapter {
 			this.reqInterval = 60 * 60 * 1000;
 			this.log.warn('The interval is set to less than 60 minutes. Please set a higher value in the adapter configuration!');
 		} else {
-			this.log.debug(`The interval is set to ${this.config.intervall} minutes.`);
+			this.log.debug(`The interval is set to ${this.config.intervall} minutes`);
 			this.reqInterval = this.config.intervall * 60 * 1000;
 		}
 
@@ -181,7 +181,7 @@ class Pvforecast extends utils.Adapter {
 			this.clearTimeout(this.updateServiceDataTimeout);
 		}
 
-		await this.getPv();
+		await this.updateServiceData();
 		await this.getWeather();
 
 		if (this.config.service === 'solcast') {
@@ -196,7 +196,7 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async updateActualDataInterval() {
-		this.log.debug('starting actual data update by interval');
+		this.log.debug('[updateActualDataInterval] starting update');
 
 		if (this.updateActualDataTimeout) {
 			this.clearTimeout(this.updateActualDataTimeout);
@@ -231,6 +231,8 @@ class Pvforecast extends utils.Adapter {
 					if (typeof data === 'undefined') {
 						return;
 					}
+
+					this.log.debug(`[updateActualDataInterval] current service data for plants.${cleanPlantId}.service.data ("${plant.name}"): ${JSON.stringify(data)}`);
 
 					for (const time in data.watts) {
 						if (this.config.everyhourEnabled) {
@@ -437,7 +439,7 @@ class Pvforecast extends utils.Adapter {
 				}
 
 			} catch (err) {
-				this.log.error(`Failed to update weather data: ${err}`);
+				this.log.error(`[updateWeatherData] failed to update weather data: ${err}`);
 			}
 		}
 	}
@@ -449,12 +451,12 @@ class Pvforecast extends utils.Adapter {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
 					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.latitude}/${this.longitude}`;
-					this.log.debug(`url for weather (professional account only): ${url}`);
+					this.log.debug(`[getWeather] url (professional account only): ${url}`);
 
 					try {
 						const serviceResponse = await axios.get(url);
 
-						this.log.debug(`received data for weather: ${JSON.stringify(serviceResponse.data)}`);
+						this.log.debug(`[getWeather] received data: ${JSON.stringify(serviceResponse.data)}`);
 
 						if (serviceResponse) {
 							await this.setStateAsync('weather.service.data', { val: JSON.stringify(serviceResponse.data.result), ack: true });
@@ -471,15 +473,15 @@ class Pvforecast extends utils.Adapter {
 						}
 					}
 				} else {
-					this.log.warn(`Weather data is just available for "forecastsolar"`);
+					this.log.warn(`[getWeather] weather data is just available for "forecastsolar"`);
 				}
 			}
 		} catch (err) {
-			this.log.error(`Error weather: ${err}`);
+			this.log.error(`[getWeather] error: ${err}`);
 		}
 	}
 
-	async getPv() {
+	async updateServiceData() {
 		const plantArray = this.config.devices || [];
 
 		await asyncForEach(plantArray, async (plant) => {

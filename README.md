@@ -43,6 +43,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Improved debug log
+* (klein0r) Updated azimuth image for dark theme
+
 ### 2.1.5 (2022-06-03)
 * (klein0r) Added installed peak power as state
 * (klein0r) Fixed time shift when using solcast
