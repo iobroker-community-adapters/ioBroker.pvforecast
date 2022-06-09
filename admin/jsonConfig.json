@@ -343,6 +343,14 @@
                 "_divider4": {
                     "type": "divider"
                 },
+                "_azimuthHelpTitle": {
+                    "type": "header",
+                    "text": "Azimuth",
+                    "size": 2,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4
+                },
                 "_azimuthHelp": {
                     "newLine": true,
                     "type": "staticImage",
