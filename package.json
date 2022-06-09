@@ -29,6 +29,9 @@
     "type": "git",
     "url": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast"
   },
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.0",
     "axios": "^0.27.2",

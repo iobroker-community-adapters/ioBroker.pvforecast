@@ -44,6 +44,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (klein0r) Added raw JSON data states for own graphs
 * (klein0r) Improved debug log
 * (klein0r) Updated azimuth image for dark theme
 

@@ -204,6 +204,7 @@ class Pvforecast extends utils.Adapter {
 
 		const plantArray = this.config.devices || [];
 
+		const jsonDataSummary = [];
 		const jsonTableSummary = [];
 		const jsonGraphSummary = [];
 		const jsonGraphLabelSummary = [];
@@ -269,6 +270,34 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
+					if (this.config.everyhourEnabled) {
+						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
+						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
+					}
+
+					// JSON Data
+					const jsonData = [];
+					for (const time in data.watts) {
+						const power = data.watts[time] / globalunit;
+						const timestamp = moment(time).valueOf();
+
+						jsonData.push(
+							{
+								t: timestamp,
+								y: power
+							}
+						);
+
+						if (jsonDataSummary?.[timestamp] === undefined) {
+							jsonDataSummary[timestamp] = 0;
+						}
+
+						jsonDataSummary[timestamp] += power;
+					}
+
+					this.log.debug(`generated JSON data of "${plant.name}": ${JSON.stringify(jsonData)}`);
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONData`, { val: JSON.stringify(jsonData), ack: true });
+
 					// JSON Table
 					const jsonTable = [];
 					let wattindex = 0;
@@ -277,8 +306,8 @@ class Pvforecast extends utils.Adapter {
 
 						jsonTable.push(
 							{
-								'Time': time,
-								'Power': this.formatValue(power, this.config.watt_kw ? 0 : 3)
+								Time: time,
+								Power: this.formatValue(power, this.config.watt_kw ? 0 : 3)
 							}
 						);
 
@@ -293,11 +322,7 @@ class Pvforecast extends utils.Adapter {
 						wattindex++;
 					}
 
-					if (this.config.everyhourEnabled) {
-						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
-						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
-					}
-
+					this.log.debug(`generated JSON table of "${plant.name}": ${JSON.stringify(jsonTable)}`);
 					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(jsonTable), ack: true });
 
 					// JSON Graph
@@ -348,10 +373,9 @@ class Pvforecast extends utils.Adapter {
 							yAxis_step: this.config.chartingAxisStepY,
 						};
 
-						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
-
 						jsonGraphSummary.push(jsonGraph);
 
+						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }), ack: true });
 					} else {
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true });
@@ -380,13 +404,23 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
 
-		// Format total column
+		// JSON Data
+		const jsonDataSummaryFormat = Object.keys(jsonDataSummary).map(time => {
+			return {
+				t: Number(time),
+				y: jsonDataSummary[time]
+			};
+		});
+		await this.setStateAsync('summary.JSONData', { val: JSON.stringify(jsonDataSummaryFormat), ack: true });
+
+		// JSON Table
 		const jsonTableSummaryFormat = jsonTableSummary.map(row => {
 			row['Total'] = this.formatValue(row['Total'], this.config.watt_kw ? 0 : 3);
 			return row;
 		});
 		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat), ack: true });
 
+		// JSON Graph
 		if (this.config.chartingEnabled) {
 			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }), ack: true });
 		} else {
@@ -1339,6 +1373,30 @@ class Pvforecast extends utils.Adapter {
 						read: true,
 						write: false,
 						def: 0
+					},
+					native: {}
+				});
+
+				await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.JSONData`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'JSON Data',
+							de: 'JSON Daten',
+							ru: 'ДЖСОН Данные',
+							pt: 'J. Dados',
+							nl: 'JSON Data',
+							fr: 'JSON Données',
+							it: 'JSON Dati',
+							es: 'JSON Datos',
+							pl: 'JSON Data',
+							'zh-cn': '附 件 数据'
+						},
+						type: 'string',
+						role: 'json',
+						read: true,
+						write: false,
+						def: '{}'
 					},
 					native: {}
 				});

@@ -455,6 +455,30 @@
             "native": {}
         },
         {
+            "_id": "summary.JSONData",
+            "type": "state",
+            "common": {
+                "name": {
+                    "en": "JSON Data",
+                    "de": "JSON Daten",
+                    "ru": "ДЖСОН Данные",
+                    "pt": "J. Dados",
+                    "nl": "JSON Data",
+                    "fr": "JSON Données",
+                    "it": "JSON Dati",
+                    "es": "JSON Datos",
+                    "pl": "JSON Data",
+                    "zh-cn": "附 件 数据"
+                },
+                "type": "string",
+                "role": "json",
+                "read": true,
+                "write": false,
+                "def": "{}"
+            },
+            "native": {}
+        },
+        {
             "_id": "summary.JSONGraph",
             "type": "state",
             "common": {
