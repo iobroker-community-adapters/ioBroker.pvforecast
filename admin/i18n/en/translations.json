@@ -21,5 +21,6 @@
     "Charting label format": "Charting label format",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Define a custom format like DD.MM.YYYY HH:mm:ss",
     "Charting label size": "Charting label size",
-    "Azimuth": "Azimuth"
+    "Azimuth": "Azimuth",
+    "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Valid titlt values: 0° (horizontal) to 90° (vertical)"
 }

@@ -21,5 +21,6 @@
     "Charting label format": "Формат метки диаграммы",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Определите собственный формат, например DD.MM.YYYY HH:mm:ss",
     "Charting label size": "Размер метки диаграммы",
-    "Azimuth": "Азимут"
+    "Azimuth": "Азимут",
+    "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Допустимые значения titlt: от 0° (по горизонтали) до 90° (по вертикали)"
 }

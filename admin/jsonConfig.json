@@ -251,7 +251,18 @@
                             "max": 180,
                             "attr": "azimuth",
                             "width": "20%",
-                            "title": "Azimuth",
+                            "title": {
+                                "en": "Azimuth",
+                                "de": "Azimut",
+                                "ru": "Азимут",
+                                "pt": "Azimute",
+                                "nl": "azimut",
+                                "fr": "Azimut",
+                                "it": "Azimut",
+                                "es": "Azimut",
+                                "pl": "Azymut",
+                                "zh-cn": "方位角"
+                            },
                             "filter": false,
                             "sort": false,
                             "default": 0
@@ -339,6 +350,10 @@
                             "default": "#000000"
                         }
                     ]
+                },
+                "_tiltHelp": {
+                    "type": "staticText",
+                    "text": "Valid titlt values: 0° (horizontal) to 90° (vertical)"
                 },
                 "_divider4": {
                     "type": "divider"

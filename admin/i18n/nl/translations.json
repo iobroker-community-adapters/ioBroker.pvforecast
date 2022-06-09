@@ -21,5 +21,6 @@
     "Charting label format": "Labelformaat in kaart brengen",
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definieer een aangepast formaat zoals DD.MM.YYYY HH:mm:ss",
     "Charting label size": "Labelgrootte in kaart brengen",
-    "Azimuth": "azimut"
+    "Azimuth": "azimut",
+    "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Geldige titlt-waarden: 0° (horizontaal) tot 90° (verticaal)"
 }
