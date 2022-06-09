@@ -161,7 +161,7 @@ class Pvforecast extends utils.Adapter {
 			if (id.startsWith(this.namespace)) {
 				this.getForeignObjectAsync(id)
 					.then(obj => {
-						if (obj.native.resetId) {
+						if (obj?.native?.resetId) {
 							this.log.debug(`state "${id}" changed - resetting "${obj.native.resetId}" to 0`);
 							return this.setStateAsync(obj.native.resetId, { val: 0, ack: true });
 						}
@@ -540,7 +540,7 @@ class Pvforecast extends utils.Adapter {
 				const lastUrl = (serviceDataUrlState && serviceDataUrlState.val) ? serviceDataUrlState.val : '';
 
 				const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
-				const lastUpdate = (serviceDataLastUpdatedState && serviceDataLastUpdatedState.val) ? parseInt(serviceDataLastUpdatedState.val) : 0;
+				const lastUpdate = (serviceDataLastUpdatedState && serviceDataLastUpdatedState.val) ? Number(serviceDataLastUpdatedState.val) : 0;
 
 				this.log.debug(`plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
 
