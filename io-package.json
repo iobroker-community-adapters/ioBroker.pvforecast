@@ -1,8 +1,20 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.2.0",
+    "version": "2.2.1",
     "news": {
+      "2.2.1": {
+        "en": "Fixed tilt validation - allow zero tilt (0)",
+        "de": "Behobene Kippvalidierung - Nullneigung (0)",
+        "ru": "Фиксированная проверка наклона - позвольте нулевому наклону (0)",
+        "pt": "Validação de inclinação fixa - permitir zero tilt (0)",
+        "nl": "Gereserveerde tijltbetaling",
+        "fr": "Validation de l'inclinaison fixe - permettre l'inclinaison zéro (0)",
+        "it": "Validazione dell'inclinazione fissa - consentire l'inclinazione zero (0)",
+        "es": "Validación de inclinación fija - permitir cero inclinación (0)",
+        "pl": "Poprawa nachylenia – pozwala na odchylenie zera (0)",
+        "zh-cn": "固定的预制鉴定——允许零(0)"
+      },
       "2.2.0": {
         "en": "Added raw JSON data states for own graphs\nImproved debug log\nUpdated azimuth image for dark theme",
         "de": "Rohe JSON-Datenzustände für eigene Graphen hinzugefügt\nVerbessertes Debug-Log\nAktualisiertes Azimut-Bild für dunkles Thema",
@@ -74,18 +86,6 @@
         "es": "Manejo de errores mejorado\nDar formato a los valores de la tabla según system.config",
         "pl": "Ulepszona obsługa błędów\nFormatuj wartości tabeli na podstawie system.config",
         "zh-cn": "改进的错误处理\n根据 system.config 格式化表值"
-      },
-      "2.1.0": {
-        "en": "Force forecast update when url / config changed\nAdded more options for JSON Graph generation\nAdded image for azimuth configuraion\nAdded missing translations",
-        "de": "Prognoseaktualisierung erzwingen, wenn URL/Konfiguration geändert wird\nWeitere Optionen für die Generierung von JSON-Graphen hinzugefügt\nBild für Azimut-Konfiguration hinzugefügt\nFehlende Übersetzungen hinzugefügt",
-        "ru": "Принудительное обновление прогноза при изменении URL/конфигурации\nДобавлены дополнительные параметры для генерации JSON Graph.\nДобавлено изображение для настройки азимута\nДобавлены недостающие переводы",
-        "pt": "Forçar atualização de previsão quando url/config alterado\nAdicionadas mais opções para geração de gráfico JSON\nAdicionada imagem para configuração de azimute\nAdicionadas traduções ausentes",
-        "nl": "Forceer prognose-update wanneer url / configuratie is gewijzigd\nMeer opties toegevoegd voor het genereren van JSON Graph\nAfbeelding toegevoegd voor azimutconfiguratie\nOntbrekende vertalingen toegevoegd",
-        "fr": "Forcer la mise à jour des prévisions lorsque l'url / la configuration a changé\nAjout de plus d'options pour la génération de graphes JSON\nImage ajoutée pour la configuration de l'azimut\nAjout des traductions manquantes",
-        "it": "Forza l'aggiornamento delle previsioni quando url/config è cambiato\nAggiunte più opzioni per la generazione di grafici JSON\nAggiunta immagine per la configurazione azimutale\nAggiunte traduzioni mancanti",
-        "es": "Forzar actualización de pronóstico cuando url / config cambió\nSe agregaron más opciones para la generación de gráficos JSON.\nImagen añadida para la configuración de azimut\nSe agregaron traducciones faltantes",
-        "pl": "Wymuś aktualizację prognozy po zmianie adresu URL/konfiguracji\nDodano więcej opcji generowania wykresów JSON\nDodano obraz do konfiguracji azymutu\nDodano brakujące tłumaczenia",
-        "zh-cn": "当 url / config 改变时强制预测更新\n为 JSON Graph 生成添加了更多选项\n添加了方位角配置的图像\n添加了缺失的翻译"
       }
     },
     "titleLang": {
