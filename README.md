@@ -43,6 +43,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Fixed tilt validation - allow zero tilt (0)
+
 ### 2.2.0 (2022-06-09)
 * (klein0r) Added raw JSON data states for own graphs
 * (klein0r) Improved debug log

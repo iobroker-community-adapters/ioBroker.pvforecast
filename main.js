@@ -92,11 +92,11 @@ class Pvforecast extends utils.Adapter {
 						throw new Error(`Invalid device configuration: Found plant without azimuth`);
 					}
 
-					if (!plant.tilt || isNaN(plant.tilt)) {
-						throw new Error(`Invalid device configuration: Found plant without tilt`);
+					if (isNaN(plant.tilt)) {
+						throw new Error(`Invalid device configuration: Found plant with incorrect tilt`);
 					}
 
-					if (!plant.peakpower || isNaN(plant.peakpower)) {
+					if (!plant.peakpower || isNaN(plant.peakpower) || plant.peakpower < 0) {
 						throw new Error(`Invalid device configuration: Found plant without peak power`);
 					}
 				});
