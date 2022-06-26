@@ -1,4 +1,7 @@
 # Older changes
+## 2.1.3 (2022-05-24)
+* (klein0r) Reduced info log messages
+
 ## 2.1.2 (2022-05-23)
 * (klein0r) Fixed refresh bug for solcast data
 * (klein0r) Fixed null values for now (power and energy)
