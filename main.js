@@ -201,7 +201,7 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		await this.updateServiceData();
-		await this.getWeather();
+		await this.updateServiceWeatherData();
 
 		if (this.config.service === 'solcast') {
 			this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
@@ -449,11 +449,10 @@ class Pvforecast extends utils.Adapter {
 
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
 
-		await this.updateWeatherData();
+		await this.updateActualWeatherData();
 	}
 
-	// analysis weather data
-	async updateWeatherData() {
+	async updateActualWeatherData() {
 		if (this.hasApiKey && this.config.weatherEnabled) {
 			try {
 				const serviceDataState = await this.getStateAsync('weather.service.data');
@@ -463,14 +462,14 @@ class Pvforecast extends utils.Adapter {
 					const lowerTimeLimit = moment().subtract(updateInterval / 2, 'ms');
 					const upperTimeLimit = moment().add(updateInterval / 2, 'ms');
 
-					this.log.debug(`[updateWeatherData] searching for weather information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
+					this.log.debug(`[updateActualWeatherData] searching for weather information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
 
 					for (let i = 0; i < data.length; i++) {
 
 						const weatherEntryTimestamp = moment(data[i].datetime).valueOf();
 
 						if (lowerTimeLimit.valueOf() < weatherEntryTimestamp && upperTimeLimit.valueOf() > weatherEntryTimestamp) {
-							this.log.debug(`[updateWeatherData] filling states with weather info from: ${JSON.stringify(data[i])}`);
+							this.log.debug(`[updateActualWeatherData] filling states with weather info from: ${JSON.stringify(data[i])}`);
 
 							await this.setStateChangedAsync('weather.sky', { val: Number(data[i].sky), ack: true });
 							await this.setStateChangedAsync('weather.datetime', { val: weatherEntryTimestamp, ack: true });
@@ -482,30 +481,30 @@ class Pvforecast extends utils.Adapter {
 							await this.setStateChangedAsync('weather.wind_degrees', { val: Number(data[i].wind_degrees), ack: true });
 							await this.setStateChangedAsync('weather.wind_direction', { val: data[i].wind_direction, ack: true });
 						} else {
-							this.log.debug(`[updateWeatherData] ${weatherEntryTimestamp} is not between ${lowerTimeLimit} and ${upperTimeLimit}`);
+							this.log.debug(`[updateActualWeatherData] ${weatherEntryTimestamp} is not between ${lowerTimeLimit} and ${upperTimeLimit}`);
 						}
 					}
 				}
 
 			} catch (err) {
-				this.log.error(`[updateWeatherData] failed to update weather data: ${err}`);
+				this.log.error(`[updateActualWeatherData] failed to update weather data: ${err}`);
 			}
 		}
 	}
 
-	async getWeather() {
+	async updateServiceWeatherData() {
 		try {
 			if (this.hasApiKey && this.config.weatherEnabled) {
 				if (this.config.service === 'forecastsolar') {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
 					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.latitude}/${this.longitude}`;
-					this.log.debug(`[getWeather] url (professional account only): ${url}`);
+					this.log.debug(`[updateServiceWeatherData] url (professional account only): ${url}`);
 
 					try {
 						const serviceResponse = await axios.get(url);
 
-						this.log.debug(`[getWeather] received data: ${JSON.stringify(serviceResponse.data)}`);
+						this.log.debug(`[updateServiceWeatherData] received data: ${JSON.stringify(serviceResponse.data)}`);
 
 						if (serviceResponse) {
 							await this.setStateAsync('weather.service.data', { val: JSON.stringify(serviceResponse.data.result), ack: true });
@@ -522,11 +521,11 @@ class Pvforecast extends utils.Adapter {
 						}
 					}
 				} else {
-					this.log.warn(`[getWeather] weather data is just available for "forecastsolar"`);
+					this.log.warn(`[updateServiceWeatherData] weather data is just available for "forecastsolar"`);
 				}
 			}
 		} catch (err) {
-			this.log.error(`[getWeather] error: ${err}`);
+			this.log.error(`[updateServiceWeatherData] error: ${err}`);
 		}
 	}
 
@@ -1667,6 +1666,11 @@ class Pvforecast extends utils.Adapter {
 			if (this.updateServiceDataTimeout) {
 				this.clearTimeout(this.updateServiceDataTimeout);
 			}
+
+			if (this.updateActualDataCron) {
+				this.updateActualDataCron.stop();
+			}
+
 			callback();
 		} catch (e) {
 			callback();
