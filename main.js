@@ -6,7 +6,6 @@ const axios = require('axios').default;
 const solcast = require(__dirname + '/lib/solcast');
 const CronJob = require('cron').CronJob;
 
-const updateInterval = 60 * 10 * 1000; // 10 minutes
 let globalunit = 1000;
 
 async function asyncForEach(array, callback) {
@@ -459,30 +458,22 @@ class Pvforecast extends utils.Adapter {
 				if (serviceDataState && serviceDataState.val) {
 					const data = JSON.parse(serviceDataState.val);
 
-					const lowerTimeLimit = moment().subtract(updateInterval / 2, 'ms');
-					const upperTimeLimit = moment().add(updateInterval / 2, 'ms');
+					const weatherNow = data
+						.filter((weather) => moment(weather.datetime).valueOf() < moment().valueOf())
+						.pop();
 
-					this.log.debug(`[updateActualWeatherData] searching for weather information between ${lowerTimeLimit.format('DD.MM.YYYY HH:mm:ss')} and ${upperTimeLimit.format('DD.MM.YYYY HH:mm:ss')}`);
+					if (weatherNow) {
+						this.log.debug(`[updateActualWeatherData] filling states with weather info from: ${JSON.stringify(weatherNow)}`);
 
-					for (let i = 0; i < data.length; i++) {
-
-						const weatherEntryTimestamp = moment(data[i].datetime).valueOf();
-
-						if (lowerTimeLimit.valueOf() < weatherEntryTimestamp && upperTimeLimit.valueOf() > weatherEntryTimestamp) {
-							this.log.debug(`[updateActualWeatherData] filling states with weather info from: ${JSON.stringify(data[i])}`);
-
-							await this.setStateChangedAsync('weather.sky', { val: Number(data[i].sky), ack: true });
-							await this.setStateChangedAsync('weather.datetime', { val: weatherEntryTimestamp, ack: true });
-							await this.setStateChangedAsync('weather.visibility', { val: Number(data[i].visibility), ack: true });
-							await this.setStateChangedAsync('weather.temperature', { val: Number(data[i].temperature), ack: true });
-							await this.setStateChangedAsync('weather.condition', { val: data[i].condition, ack: true });
-							await this.setStateChangedAsync('weather.icon', { val: data[i].icon, ack: true });
-							await this.setStateChangedAsync('weather.wind_speed', { val: Number(data[i].wind_speed), ack: true });
-							await this.setStateChangedAsync('weather.wind_degrees', { val: Number(data[i].wind_degrees), ack: true });
-							await this.setStateChangedAsync('weather.wind_direction', { val: data[i].wind_direction, ack: true });
-						} else {
-							this.log.debug(`[updateActualWeatherData] ${weatherEntryTimestamp} is not between ${lowerTimeLimit} and ${upperTimeLimit}`);
-						}
+						await this.setStateChangedAsync('weather.sky', { val: Number(weatherNow.sky), ack: true });
+						await this.setStateChangedAsync('weather.datetime', { val: moment(weatherNow.datetime).valueOf(), ack: true });
+						await this.setStateChangedAsync('weather.visibility', { val: Number(weatherNow.visibility), ack: true });
+						await this.setStateChangedAsync('weather.temperature', { val: Number(weatherNow.temperature), ack: true });
+						await this.setStateChangedAsync('weather.condition', { val: weatherNow.condition, ack: true });
+						await this.setStateChangedAsync('weather.icon', { val: weatherNow.icon, ack: true });
+						await this.setStateChangedAsync('weather.wind_speed', { val: Number(weatherNow.wind_speed), ack: true });
+						await this.setStateChangedAsync('weather.wind_degrees', { val: Number(weatherNow.wind_degrees), ack: true });
+						await this.setStateChangedAsync('weather.wind_direction', { val: weatherNow.wind_direction, ack: true });
 					}
 				}
 
