@@ -467,7 +467,6 @@ class Pvforecast extends utils.Adapter {
 
 						await this.setStateChangedAsync('weather.sky', { val: Number(weatherNow.sky), ack: true });
 						await this.setStateChangedAsync('weather.datetime', { val: moment(weatherNow.datetime).valueOf(), ack: true });
-						await this.setStateChangedAsync('weather.visibility', { val: Number(weatherNow.visibility), ack: true });
 						await this.setStateChangedAsync('weather.temperature', { val: Number(weatherNow.temperature), ack: true });
 						await this.setStateChangedAsync('weather.condition', { val: weatherNow.condition, ack: true });
 						await this.setStateChangedAsync('weather.icon', { val: weatherNow.icon, ack: true });
@@ -808,30 +807,6 @@ class Pvforecast extends utils.Adapter {
 							es: 'Cielo',
 							pl: 'Niebo',
 							'zh-cn': '天空'
-						},
-						type: 'number',
-						role: 'value',
-						read: true,
-						write: false,
-						def: 0
-					},
-					native: {}
-				});
-
-				await this.setObjectNotExistsAsync('weather.visibility', {
-					type: 'state',
-					common: {
-						name: {
-							en: 'Visibility',
-							de: 'Sichtweite',
-							ru: 'Видимость',
-							pt: 'Visibilidade',
-							nl: 'Zichtbaarheid',
-							fr: 'Visibilité',
-							it: 'Visibilità',
-							es: 'Visibilidad',
-							pl: 'Widoczność',
-							'zh-cn': '能见度'
 						},
 						type: 'number',
 						role: 'value',

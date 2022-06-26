@@ -46,6 +46,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
 ### **WORK IN PROGRESS**
 * (klein0r) Add summary values to InfluxDB
 * (klein0r) Use cron to ensure update on day change
+* (klein0r) Removed visibility from weather data (doesn't exist in response)
 
 ### 2.2.1 (2022-06-23)
 * (klein0r) Fixed tilt validation - allow zero tilt (0)
