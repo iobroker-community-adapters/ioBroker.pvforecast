@@ -404,6 +404,11 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
 
+		// add summary to InfluxDB
+		await asyncForEach(Object.keys(jsonDataSummary), async (time) => {
+			await this.addToInfluxDB(`summary.power`, Number(time), jsonDataSummary[time]);
+		});
+
 		// JSON Data
 		const jsonDataSummaryFormat = Object.keys(jsonDataSummary).map(time => {
 			return {
@@ -656,7 +661,7 @@ class Pvforecast extends utils.Adapter {
 				influxInstance = `influxdb.${influxInstance}`;
 			}
 
-			this.log.silly(`[addToInfluxDB] storeState into "${influxInstance}": value "${value}" (${typeof value}) of "${datapoint}" with timestamp ${timestamp}`);
+			this.log.silly(`[addToInfluxDB] storeState into "${influxInstance}": value "${value}" (${typeof value}) of "${this.namespace}.${datapoint}" with timestamp ${timestamp}`);
 
 			const result = await this.sendToAsync(influxInstance, 'storeState', {
 				id: `${this.namespace}.${datapoint}`,
