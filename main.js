@@ -4,6 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const moment = require('moment');
 const axios = require('axios').default;
 const solcast = require(__dirname + '/lib/solcast');
+const CronJob = require('cron').CronJob;
 
 const updateInterval = 60 * 10 * 1000; // 10 minutes
 let globalunit = 1000;
@@ -33,7 +34,7 @@ class Pvforecast extends utils.Adapter {
 		this.latitude = undefined;
 
 		this.updateServiceDataTimeout = null;
-		this.updateActualDataTimeout = null;
+		this.updateActualDataCron = null;
 
 		this.on('ready', this.onReady.bind(this));
 		this.on('stateChange', this.onStateChange.bind(this));
@@ -142,11 +143,29 @@ class Pvforecast extends utils.Adapter {
 			globalunit = 1;
 		}
 
-		this.subscribeStatesAsync('plants.*');
+		await this.subscribeStatesAsync('plants.*');
 
 		await this.createAndDeleteStates();
 		await this.updateServiceDataInterval();
 		await this.updateActualDataInterval();
+
+		let timeZone = 'Europe/Berlin';
+
+		try {
+			timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			this.log.info(`Starting update cron (every 15 Minutes) for timezone: ${timeZone}`);
+		} catch (err) {
+			this.log.warn(`Unable to get system timezone - fallback to Europe/Berlin`);
+		}
+
+		this.updateActualDataCron = new CronJob(
+			'*/15 * * * *',
+			() => this.updateActualDataInterval(),
+			() => this.log.debug('stopped updateActualDataInterval'),
+			true,
+			timeZone
+		);
+		this.log.debug(`[updateActualDataCron] next execution: ${this.updateActualDataCron.nextDates()}`);
 	}
 
 	/**
@@ -197,10 +216,6 @@ class Pvforecast extends utils.Adapter {
 
 	async updateActualDataInterval() {
 		this.log.debug('[updateActualDataInterval] starting update');
-
-		if (this.updateActualDataTimeout) {
-			this.clearTimeout(this.updateActualDataTimeout);
-		}
 
 		const plantArray = this.config.devices || [];
 
@@ -435,11 +450,6 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
 
 		await this.updateWeatherData();
-
-		this.updateActualDataTimeout = this.setTimeout(async () => {
-			this.updateActualDataTimeout = null;
-			this.updateActualDataInterval();
-		}, updateInterval);
 	}
 
 	// analysis weather data
@@ -1657,11 +1667,6 @@ class Pvforecast extends utils.Adapter {
 			if (this.updateServiceDataTimeout) {
 				this.clearTimeout(this.updateServiceDataTimeout);
 			}
-
-			if (this.updateActualDataTimeout) {
-				this.clearTimeout(this.updateActualDataTimeout);
-			}
-
 			callback();
 		} catch (e) {
 			callback();
