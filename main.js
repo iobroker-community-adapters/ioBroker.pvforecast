@@ -99,7 +99,17 @@ class Pvforecast extends utils.Adapter {
 					if (!plant.peakpower || isNaN(plant.peakpower) || plant.peakpower < 0) {
 						throw new Error(`Invalid device configuration: Found plant without peak power`);
 					}
+
+					if (this.config.influxinstace) {
+						const cleanPlantId = this.cleanNamespace(plant.name);
+
+						this.log.info(`InfluxDB logging is enabled - forecast for plant "${plant.name}" will be available @ "${this.namespace}.plants.${cleanPlantId}.power"`);
+					}
 				});
+
+				if (this.config.influxinstace) {
+					this.log.info(`InfluxDB logging is enabled - forecast summary will be available @ "${this.namespace}.summary.power"`);
+				}
 
 				// Get list of valid plants by configuration
 				const plantsKeep = plantArray.map(d => `${this.namespace}.plants.${this.cleanNamespace(d.name)}`);
