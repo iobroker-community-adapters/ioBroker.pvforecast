@@ -118,11 +118,11 @@
     ],
     "docs": {
       "en": [
-        "docs/en/pvforecast.md",
+        "docs/en/README.md",
         "docs/en/vis.md"
       ],
       "de": [
-        "docs/de/pvforecast.md",
+        "docs/de/README.md",
         "docs/de/vis.md"
       ]
     },

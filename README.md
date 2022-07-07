@@ -30,9 +30,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
 
 ## Documentation
 
-[🇺🇸 Documentation](./docs/en/pvforecast.md)
+[🇺🇸 Documentation](./docs/en/README.md)
 
-[🇩🇪 Dokumentation](./docs/de/pvforecast.md)
+[🇩🇪 Dokumentation](./docs/de/README.md)
 
 ## Credits
 
@@ -67,6 +67,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
 MIT License
 
 Copyright (c) 2022 Patrick-Walther
+                   Matthias Kleine <info@haus-automatisierung.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
