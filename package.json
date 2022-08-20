@@ -1,6 +1,6 @@
 {
   "name": "iobroker.pvforecast",
-  "version": "2.3.2",
+  "version": "2.3.1",
   "description": "pvforecast",
   "author": {
     "name": "Patrick Walther",
@@ -16,7 +16,7 @@
       "email": "info@haus-automatisierung.com"
     }
   ],
-  "homepage": "https://github.com/energychain/ioBroker.pvforecast",
+  "homepage": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast",
   "license": "MIT",
   "keywords": [
     "ioBroker",
@@ -31,7 +31,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://github.com/energychain/ioBroker.pvforecast"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast"
   },
   "engines": {
     "node": ">=14.0.0"
@@ -87,7 +87,7 @@
     "release-major": "release-script major --yes --no-update-lockfile"
   },
   "bugs": {
-    "url": "https://github.com/energychain/ioBroker.pvforecast/issues"
+    "url": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast/issues"
   },
   "readmeFilename": "README.md"
 }
