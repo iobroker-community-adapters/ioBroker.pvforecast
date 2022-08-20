@@ -591,7 +591,6 @@ class Pvforecast extends utils.Adapter {
 						} else if (this.config.service === 'spa') {
 							data = serviceResponse.data.result;
 							message = serviceResponse.data.message;
-							this.log.debug(`rate limit for spa API: ${message.ratelimit.limit} (${message.ratelimit.remaining} left in period)`);
 						}
 
 						await this.setStateAsync(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });

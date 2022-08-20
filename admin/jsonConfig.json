@@ -25,7 +25,7 @@
                             "value": "solcast"
                         }
                     ],
-                    "default": "forecastsolar",
+                    "default": "spa",
                     "label": "Forecast service"
                 },
                 "intervall": {
