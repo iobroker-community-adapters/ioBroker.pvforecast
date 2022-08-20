@@ -1,6 +1,9 @@
 ![Logo](admin/pvforecast.png)
 
-# ioBroker.pvforecast
+# ioBroker.pvforecast-spa
+
+
+Caution ! Not updated is original README!
 
 [![NPM version](https://img.shields.io/npm/v/iobroker.pvforecast?style=flat-square)](https://www.npmjs.com/package/iobroker.pvforecast)
 [![Downloads](https://img.shields.io/npm/dm/iobroker.pvforecast?label=npm%20downloads&style=flat-square)](https://www.npmjs.com/package/iobroker.pvforecast)

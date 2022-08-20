@@ -546,6 +546,8 @@ class Pvforecast extends utils.Adapter {
 				}
 			} else if (this.config.service === 'solcast') {
 				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
+			} else if (this.config.service === 'spa') {
+				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.latitude}&lon=${this.longitude}&deg=${plant.tilt}&az=${plant.azimuth}&kwp=${plant.peakpower}`;
 			}
 
 			if (url) {
@@ -580,6 +582,10 @@ class Pvforecast extends utils.Adapter {
 							this.log.debug(`[parseSolcastToForecast] converted JSON: ${JSON.stringify(data)}`);
 
 							message = { 'info': { 'place': '-' }, 'type': 'Solcast' };
+						} else if (this.config.service === 'spa') {
+							data = serviceResponse.data.result;
+							message = serviceResponse.data.message;
+							this.log.debug(`rate limit for spa API: ${message.ratelimit.limit} (${message.ratelimit.remaining} left in period)`);
 						}
 
 						await this.setStateAsync(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
