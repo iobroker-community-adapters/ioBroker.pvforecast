@@ -1,7 +1,7 @@
 {
   "common": {
-    "name": "pvforecast-spa",
-    "version": "2.3.1",
+    "name": "pvforecast",
+    "version": "2.3.2",
     "news": {
       "2.3.1": {
         "en": "Initial forg of pvforecast"

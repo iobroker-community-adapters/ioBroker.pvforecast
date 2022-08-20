@@ -1,7 +1,7 @@
 {
-  "name": "iobroker.pvforecast-spa",
-  "version": "2.3.0",
-  "description": "pvforecast-spa",
+  "name": "iobroker.pvforecast",
+  "version": "2.3.2",
+  "description": "pvforecast",
   "author": {
     "name": "Patrick Walther",
     "email": "walther-patrick@gmx.net"
