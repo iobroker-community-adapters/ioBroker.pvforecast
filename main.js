@@ -74,6 +74,12 @@ class Pvforecast extends utils.Adapter {
 			this.log.error('Please set the longitude and latitude in the adapter (or system) configuration!');
 			return;
 		}
+		if (
+			this.service == 'spa' || typeof this.apiKey == 'undefined' || this.apiKey.length < 20
+		) {
+			this.log.error('SolarPredictionAPI requires a API-Key');
+			return;
+		}
 
 		if (typeof this.config.devices == 'undefined' || !this.config.devices.length) {
 			this.log.error('Please set at least one device in the adapter configuration!');
@@ -536,6 +542,8 @@ class Pvforecast extends utils.Adapter {
 			const cleanPlantId = this.cleanNamespace(plant.name);
 
 			let url = '';
+			let requestHeader = {};
+
 			if (this.config.service === 'forecastsolar') {
 				if (this.hasApiKey) {
 					// https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp
@@ -546,8 +554,15 @@ class Pvforecast extends utils.Adapter {
 				}
 			} else if (this.config.service === 'solcast') {
 				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
+			} else if (this.config.service === 'spa') {
+				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.latitude}&lon=${this.longitude}&deg=${plant.tilt}&az=${plant.azimuth}&kwp=${plant.peakpower}`;
+				requestHeader = {
+					headers:{
+						'X-RapidAPI-Key': this.config.apiKey,
+						'X-RapidAPI-Host': 'solarenergyprediction.p.rapidapi.com'
+					}
+				};
 			}
-
 			if (url) {
 				// Force update when url changed
 				const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
@@ -562,7 +577,7 @@ class Pvforecast extends utils.Adapter {
 					try {
 						this.log.debug(`Starting update of ${plant.name}`);
 
-						const serviceResponse = await axios.get(url);
+						const serviceResponse = await axios.get(url,requestHeader);
 
 						this.log.debug(`received "${this.config.service}" data for plant "${plant.name}": ${JSON.stringify(serviceResponse.data)}`);
 
@@ -580,6 +595,9 @@ class Pvforecast extends utils.Adapter {
 							this.log.debug(`[parseSolcastToForecast] converted JSON: ${JSON.stringify(data)}`);
 
 							message = { 'info': { 'place': '-' }, 'type': 'Solcast' };
+						} else if (this.config.service === 'spa') {
+							data = serviceResponse.data.result;
+							message = serviceResponse.data.message;
 						}
 
 						await this.setStateAsync(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });

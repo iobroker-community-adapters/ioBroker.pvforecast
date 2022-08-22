@@ -13,6 +13,10 @@
                     "lg": 4,
                     "options": [
                         {
+                            "label": "SolarPredictionAPI",
+                            "value": "spa"
+                        },
+                        {
                             "label": "Forecast.solar",
                             "value": "forecastsolar"
                         },

@@ -22,7 +22,7 @@
 ![Stable](http://iobroker.live/badges/pvforecast-stable.svg)
 ![Installed](http://iobroker.live/badges/pvforecast-installed.svg)
 
-Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast](https://solcast.com/)
+Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](https://solcast.com/) or [SolarPredictionAPI](https://rapidapi.com/stromdao-stromdao-default/api/solarenergyprediction/)
 
 **If you like it, please consider a donation:**
 
@@ -43,6 +43,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar) or [Solcast
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (stromdao) Added SolarPredictionAPI  
+
 ### 2.3.0 (2022-06-26)
 * (klein0r) Add summary values to InfluxDB
 * (klein0r) Use cron to ensure update on day change
