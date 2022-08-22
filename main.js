@@ -74,6 +74,12 @@ class Pvforecast extends utils.Adapter {
 			this.log.error('Please set the longitude and latitude in the adapter (or system) configuration!');
 			return;
 		}
+		if (
+			this.service == 'spa' || typeof this.apiKey == 'undefined' || this.apiKey.length < 20
+		) {
+			this.log.error('SolarPredictionAPI requires a API-Key');
+			return;
+		}
 
 		if (typeof this.config.devices == 'undefined' || !this.config.devices.length) {
 			this.log.error('Please set at least one device in the adapter configuration!');

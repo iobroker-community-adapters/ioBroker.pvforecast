@@ -1,11 +1,8 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.3.2",
+    "version": "2.3.0",
     "news": {
-      "2.3.1": {
-        "en": "Initial forg of pvforecast"
-      },
       "2.3.0": {
         "en": "Add summary values to InfluxDB\nUse cron to ensure update on day change\nRemoved visibility from weather data (doesn't exist in response)",
         "de": "Zusammenfassungswerte zu InfluxDB hinzufügen\nVerwenden Sie cron, um sicherzustellen, Update auf Tageswechsel\nEntfernung der Sichtbarkeit von Wetterdaten (nicht vorhanden in Antwort)",
