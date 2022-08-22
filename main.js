@@ -555,7 +555,7 @@ class Pvforecast extends utils.Adapter {
 						'X-RapidAPI-Key': this.config.apiKey,
 						'X-RapidAPI-Host': 'solarenergyprediction.p.rapidapi.com'
 					}
-	      };
+				};
 			}
 			if (url) {
 				// Force update when url changed
