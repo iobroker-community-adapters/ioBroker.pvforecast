@@ -550,11 +550,12 @@ class Pvforecast extends utils.Adapter {
 				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
 			} else if (this.config.service === 'spa') {
 				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.latitude}&lon=${this.longitude}&deg=${plant.tilt}&az=${plant.azimuth}&kwp=${plant.peakpower}`;
-				requestHeader = { headers:{
-	        'X-RapidAPI-Key': this.config.apiKey,
-	        'X-RapidAPI-Host': 'solarenergyprediction.p.rapidapi.com'
+				requestHeader = {
+					headers:{
+						'X-RapidAPI-Key': this.config.apiKey,
+						'X-RapidAPI-Host': 'solarenergyprediction.p.rapidapi.com'
 					}
-	      }
+	      };
 			}
 			if (url) {
 				// Force update when url changed
