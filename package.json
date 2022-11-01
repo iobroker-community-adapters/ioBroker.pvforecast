@@ -37,7 +37,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.6.6",
+    "@iobroker/adapter-core": "^2.6.7",
     "axios": "^0.27.2",
     "cron": "^2.0.0",
     "moment": "^2.29.4"
