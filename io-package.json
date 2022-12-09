@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.3.0",
+    "version": "2.4.0",
     "news": {
+      "2.4.0": {
+        "en": "Added SolarPredictionAPI",
+        "de": "SolarPredictionAPI hinzugefügt",
+        "ru": "Добавлено SolarPredictionAPI",
+        "pt": "Adicionado SolarPredictionAPI",
+        "nl": "API",
+        "fr": "Ajout de SolarPredictionAPI",
+        "it": "API di protezione solare",
+        "es": "Añadido Predicción SolarAPI",
+        "pl": "Added SolarPrediction",
+        "uk": "Додано SolarPredictionAPI",
+        "zh-cn": "增加太阳能防疫协会"
+      },
       "2.3.0": {
         "en": "Add summary values to InfluxDB\nUse cron to ensure update on day change\nRemoved visibility from weather data (doesn't exist in response)",
         "de": "Zusammenfassungswerte zu InfluxDB hinzufügen\nVerwenden Sie cron, um sicherzustellen, Update auf Tageswechsel\nEntfernung der Sichtbarkeit von Wetterdaten (nicht vorhanden in Antwort)",
@@ -74,18 +87,6 @@
         "es": "Mensajes de registro de información reducidos",
         "pl": "Zredukowane komunikaty dziennika informacji",
         "zh-cn": "减少信息日志消息"
-      },
-      "2.1.2": {
-        "en": "Fixed refresh bug for solcast data\nFixed null values for now (power and energy)",
-        "de": "Aktualisierungsfehler für Solcast-Daten behoben\nNullwerte vorerst behoben (Leistung und Energie)",
-        "ru": "Исправлена ошибка обновления для данных solcast.\nИсправлены нулевые значения на данный момент (мощность и энергия)",
-        "pt": "Corrigido bug de atualização para dados de solcast\nValores nulos corrigidos por enquanto (potência e energia)",
-        "nl": "Vernieuwingsfout voor solcast-gegevens opgelost\nVaste nulwaarden voor nu (kracht en energie)",
-        "fr": "Correction d'un bug d'actualisation pour les données solcast\nValeurs nulles fixes pour l'instant (puissance et énergie)",
-        "it": "Risolto bug di aggiornamento per i dati solcast\nRisolti i valori nulli per ora (potenza ed energia)",
-        "es": "Se corrigió el error de actualización para los datos de solcast\nValores nulos fijos por ahora (potencia y energía)",
-        "pl": "Naprawiono błąd odświeżania danych solcast\nNaprawiono na razie wartości zerowe (moc i energia)",
-        "zh-cn": "修复了 solcast 数据的刷新错误\n现在固定空值（功率和能量）"
       }
     },
     "titleLang": {

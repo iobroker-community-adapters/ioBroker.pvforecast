@@ -1,4 +1,7 @@
 # Older changes
+## 2.1.4 (2022-05-27)
+* (klein0r) Added option for label text size (charting)
+
 ## 2.1.3 (2022-05-24)
 * (klein0r) Reduced info log messages
 

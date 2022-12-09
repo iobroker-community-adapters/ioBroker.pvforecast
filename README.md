@@ -43,7 +43,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.4.0 (2022-12-09)
 * (stromdao) Added SolarPredictionAPI
 
 ### 2.3.0 (2022-06-26)
@@ -62,9 +62,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 ### 2.1.5 (2022-06-03)
 * (klein0r) Added installed peak power as state
 * (klein0r) Fixed time shift when using solcast
-
-### 2.1.4 (2022-05-27)
-* (klein0r) Added option for label text size (charting)
 
 ## License
 MIT License
