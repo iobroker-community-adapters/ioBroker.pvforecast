@@ -43,6 +43,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Dropped Admin 5 support
+
 ### 2.4.0 (2022-12-09)
 * (stromdao) Added SolarPredictionAPI
 

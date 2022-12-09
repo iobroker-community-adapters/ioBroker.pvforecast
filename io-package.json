@@ -130,12 +130,12 @@
     },
     "globalDependencies": [
       {
-        "admin": ">=5.2.28"
+        "admin": ">=6.0.0"
       }
     ],
     "dependencies": [
       {
-        "js-controller": ">=3.3.22"
+        "js-controller": ">=4.0.15"
       }
     ],
     "license": "MIT",
@@ -146,7 +146,6 @@
     "mode": "daemon",
     "compact": true,
     "allowInit": true,
-    "materialize": true,
     "enabled": false,
     "adminUI": {
       "config": "json"
