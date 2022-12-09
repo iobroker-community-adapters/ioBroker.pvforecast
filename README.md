@@ -44,7 +44,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-* (stromdao) Added SolarPredictionAPI  
+* (stromdao) Added SolarPredictionAPI
 
 ### 2.3.0 (2022-06-26)
 * (klein0r) Add summary values to InfluxDB

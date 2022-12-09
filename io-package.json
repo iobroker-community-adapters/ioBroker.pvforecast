@@ -114,7 +114,8 @@
     },
     "authors": [
       "Patrick Walther <walther-patrick@gmx.net>",
-      "Matthias Kleine <info@haus-automatisierung.com>"
+      "Matthias Kleine <info@haus-automatisierung.com>",
+      "STROMDAO GmbH <dev@stromdao.com>"
     ],
     "docs": {
       "en": [
@@ -210,7 +211,7 @@
   ],
   "native": {
     "service": "forecastsolar",
-    "intervall": 60,
+    "interval": 60,
     "apiKey": "",
     "weatherEnabled": false,
     "latitude": "",

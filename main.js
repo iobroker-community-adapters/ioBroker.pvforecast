@@ -74,12 +74,6 @@ class Pvforecast extends utils.Adapter {
 			this.log.error('Please set the longitude and latitude in the adapter (or system) configuration!');
 			return;
 		}
-		if (
-			this.service == 'spa' || typeof this.apiKey == 'undefined' || this.apiKey.length < 20
-		) {
-			this.log.error('SolarPredictionAPI requires a API-Key');
-			return;
-		}
 
 		if (typeof this.config.devices == 'undefined' || !this.config.devices.length) {
 			this.log.error('Please set at least one device in the adapter configuration!');
@@ -136,21 +130,28 @@ class Pvforecast extends utils.Adapter {
 			}
 		}
 
-		if (!this.config.intervall || this.config.intervall < 60) {
+		if (!this.config.interval || this.config.interval < 60) {
 			this.reqInterval = 60 * 60 * 1000;
 			this.log.warn('The interval is set to less than 60 minutes. Please set a higher value in the adapter configuration!');
 		} else {
-			this.log.debug(`The interval is set to ${this.config.intervall} minutes`);
-			this.reqInterval = this.config.intervall * 60 * 1000;
+			this.log.debug(`The interval is set to ${this.config.interval} minutes`);
+			this.reqInterval = this.config.interval * 60 * 1000;
 		}
 
 		// Check if API key is configured
-		if (this.config.apiKey !== '') {
+		if (typeof this.config.apiKey !== 'undefined' && this.config.apiKey !== '') {
 			this.hasApiKey = true;
 		}
 
 		if (this.config.service === 'solcast' && !this.hasApiKey) {
 			this.log.error('Please set the API key for Solcast in the adapter configuration!');
+			return;
+		}
+
+		if (
+			this.config.service == 'spa' && (!this.hasApiKey || this.config.apiKey.length < 20)
+		) {
+			this.log.error('Please set the API key for SolarPredictionAPI in the adapter configuration!');
 			return;
 		}
 
@@ -555,14 +556,17 @@ class Pvforecast extends utils.Adapter {
 			} else if (this.config.service === 'solcast') {
 				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
 			} else if (this.config.service === 'spa') {
-				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.latitude}&lon=${this.longitude}&deg=${plant.tilt}&az=${plant.azimuth}&kwp=${plant.peakpower}`;
-				requestHeader = {
-					headers:{
-						'X-RapidAPI-Key': this.config.apiKey,
-						'X-RapidAPI-Host': 'solarenergyprediction.p.rapidapi.com'
-					}
-				};
+				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.latitude}&lon=${this.longitude}&deg=${plant.tilt}&az=${plant.azimuth}&wp=${plant.peakpower*1000}`;
+				if (this.hasApiKey) {
+					requestHeader = {
+						headers: {
+							'X-RapidAPI-Key': this.config.apiKey,
+							'X-RapidAPI-Host': 'solarenergyprediction.p.rapidapi.com'
+						}
+					};
+				}
 			}
+
 			if (url) {
 				// Force update when url changed
 				const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
@@ -577,7 +581,7 @@ class Pvforecast extends utils.Adapter {
 					try {
 						this.log.debug(`Starting update of ${plant.name}`);
 
-						const serviceResponse = await axios.get(url,requestHeader);
+						const serviceResponse = await axios.get(url, requestHeader);
 
 						this.log.debug(`received "${this.config.service}" data for plant "${plant.name}": ${JSON.stringify(serviceResponse.data)}`);
 

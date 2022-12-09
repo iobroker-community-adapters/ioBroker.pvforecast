@@ -8,12 +8,12 @@
   },
   "contributors": [
     {
-      "name": "STROMDAO GmbH",
-      "email": "dev@stromdao.com"
-    },
-    {
       "name": "Matthias Kleine",
       "email": "info@haus-automatisierung.com"
+    },
+    {
+      "name": "STROMDAO GmbH",
+      "email": "dev@stromdao.com"
     }
   ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast",
