@@ -13,29 +13,29 @@
                     "lg": 4,
                     "options": [
                         {
-                            "label": "SolarPredictionAPI",
-                            "value": "spa"
-                        },
-                        {
                             "label": "Forecast.solar",
                             "value": "forecastsolar"
                         },
                         {
                             "label": "Solcast",
                             "value": "solcast"
+                        },
+                        {
+                            "label": "SolarPredictionAPI",
+                            "value": "spa"
                         }
                     ],
                     "default": "forecastsolar",
                     "label": "Forecast service"
                 },
-                "intervall": {
+                "interval": {
                     "hidden": "data.service !== 'forecastsolar'",
                     "type": "number",
                     "min": 60,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Poll intervall",
+                    "label": "Poll interval",
                     "help": "in minutes"
                 },
                 "apiKey": {

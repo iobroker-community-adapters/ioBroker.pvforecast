@@ -6,7 +6,7 @@
     "Latitude": "纬度",
     "Longitude": "经度",
     "uses system config if empty": "如果为空，则使用系统配置",
-    "Poll intervall": "轮询间隔",
+    "Poll interval": "轮询间隔",
     "in minutes": "在几分钟内",
     "Save to InfluxDB": "保存到 InfluxDB",
     "InfluxDB instance": "InfluxDB 实例",

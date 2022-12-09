@@ -6,7 +6,7 @@
     "Latitude": "Широта",
     "Longitude": "Долгота",
     "uses system config if empty": "использует системную конфигурацию, если пусто",
-    "Poll intervall": "Интервал опроса",
+    "Poll interval": "Интервал опроса",
     "in minutes": "в минутах",
     "Save to InfluxDB": "Сохранить в InfluxDB",
     "InfluxDB instance": "Экземпляр InfluxDB",

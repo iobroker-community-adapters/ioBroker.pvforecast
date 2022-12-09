@@ -6,7 +6,7 @@
     "Latitude": "Breedtegraad",
     "Longitude": "Lengtegraad",
     "uses system config if empty": "gebruikt systeemconfiguratie indien leeg",
-    "Poll intervall": "Poll-interval",
+    "Poll interval": "Poll-interval",
     "in minutes": "in minuten",
     "Save to InfluxDB": "Opslaan in InfluxDB",
     "InfluxDB instance": "InfluxDB-instantie",

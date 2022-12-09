@@ -6,7 +6,7 @@
     "Latitude": "Latitud",
     "Longitude": "Longitud",
     "uses system config if empty": "usa la configuración del sistema si está vacío",
-    "Poll intervall": "Intervalo de encuesta",
+    "Poll interval": "Intervalo de encuesta",
     "in minutes": "en minutos",
     "Save to InfluxDB": "Guardar en InfluxDB",
     "InfluxDB instance": "Instancia de InfluxDB",
