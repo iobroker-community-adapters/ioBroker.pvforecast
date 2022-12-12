@@ -45,6 +45,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 ### **WORK IN PROGRESS**
 * (klein0r) Dropped Admin 5 support
+* (klein0r) Added Ukrainian language
 
 ### 2.4.0 (2022-12-09)
 * (stromdao) Added SolarPredictionAPI
