@@ -2,10 +2,6 @@
 
 # ioBroker.pvforecast - Adapter zu vorhersage eurer PV Erträge
 
-**Wenn Dir der Adapter gefällt, freue ich mich über eine Spende:**
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UYB92ZVNEFNF6&source=url)
-
 Dieser Adapter ersetzt das JavaScript aus dem [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
 
 Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Daten:

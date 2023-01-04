@@ -211,7 +211,12 @@
                     "cancel"
                 ]
             }
-        ]
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://350439610ebf46d096a4742c98ea5b83@sentry.iobroker.net/230"
+            }
+        }
     },
     "protectedNative": [
         "apiKey"

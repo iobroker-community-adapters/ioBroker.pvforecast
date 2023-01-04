@@ -2,10 +2,6 @@
 
 # ioBroker.pvforecast - Adapter for the forecast of PV incomes
 
-**If you like it, please consider a donation:**
-
-[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=UYB92ZVNEFNF6&source=url)
-
 This Adapter replaced the javascript from the [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
 
 The adapter take the roh data from https://api.forecast.solar and need this information
