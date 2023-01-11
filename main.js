@@ -11,6 +11,10 @@ let globalunit = 1000;
 const TYPE_ENERGY = 'energy';
 const TYPE_POWER = 'power';
 
+const STEP_FULL = 'full';
+const STEP_HALF = 'half';
+const STEP_QUARTER = 'quarter';
+
 async function asyncForEach(array, callback) {
 	for (let index = 0; index < array.length; index++) {
 		await callback(array[index], index, array);
@@ -233,6 +237,47 @@ class Pvforecast extends utils.Adapter {
 		}, this.reqInterval);
 	}
 
+	prepareData(data) {
+		return Object.keys(data)
+			.map(timeStr => {
+				const timeObj = moment(timeStr);
+				const minute = timeObj.minute();
+				let customFormat = 'HH:mm:ss';
+
+				if (this.config.everyhourStepsize === STEP_FULL) { // :00
+					customFormat = 'HH:00:00';
+				} else if (this.config.everyhourStepsize === STEP_HALF) { // :00, :30
+					if (minute >= 30) {
+						customFormat = 'HH:30:00';
+					} else if (minute >= 0) {
+						customFormat = 'HH:00:00';
+					}
+				} else if (this.config.everyhourStepsize === STEP_QUARTER) { // :00, :15, :30, :45
+					if (minute >= 45) {
+						customFormat = 'HH:45:00';
+					} else if (minute >= 30) {
+						customFormat = 'HH:30:00';
+					} else if (minute >= 15) {
+						customFormat = 'HH:15:00';
+					} else if (minute >= 0) {
+						customFormat = 'HH:00:00';
+					}
+				}
+
+				return { date: timeObj.format(`YYYY-DD-MM ${customFormat}`), value: data[timeStr] };
+			})
+			.reduce((resultObj, dateObj) => {
+				const { date, value } = dateObj;
+
+				if (Object.prototype.hasOwnProperty.call(resultObj, date)) {
+					resultObj[date] += value;
+					return resultObj;
+				} else {
+					return {...resultObj, [date]: value};
+				}
+			}, {});
+	}
+
 	async updateActualDataInterval() {
 		this.log.debug('[updateActualDataInterval] starting update');
 
@@ -269,20 +314,24 @@ class Pvforecast extends utils.Adapter {
 
 					this.log.debug(`[updateActualDataInterval] current service data for plants.${cleanPlantId}.service.data ("${plant.name}"): ${JSON.stringify(data)}`);
 
-					for (const time in data.watt_hours_period) {
+					const mappedWattHoursPeriod = this.prepareData(data.watt_hours_period);
+
+					this.log.debug(`[updateActualDataInterval] prepared data for plants.${cleanPlantId}.energy.*: ${JSON.stringify(mappedWattHoursPeriod)}`);
+
+					for (const time in mappedWattHoursPeriod) {
 						if (this.config.everyhourEnabled) {
-							this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date(), time, data.watt_hours_period[time] / globalunit);
-							this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watt_hours_period[time] / globalunit);
+							await this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date(), time, mappedWattHoursPeriod[time] / globalunit);
+							await this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date(), time, mappedWattHoursPeriod[time] / globalunit);
 						}
 
 						// add to InfluxDB
-						await this.addToInfluxDB(`plants.${cleanPlantId}.energy`, moment(time).valueOf(), data.watts[time] / globalunit);
+						// await this.addToInfluxDB(`plants.${cleanPlantId}.energy`, moment(time).valueOf(), mappedWattHoursPeriod[time] / globalunit);
 					}
 
 					for (const time in data.watts) {
 						if (this.config.everyhourEnabled) {
-							this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
-							this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
+							await this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
+							await this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
 						}
 
 						// add to InfluxDB
@@ -315,11 +364,11 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
 					if (this.config.everyhourEnabled) {
-						this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date());
-						this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date());
+						await this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date());
+						await this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date());
 
-						this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
-						this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
+						await this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
+						await this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
 					}
 
 					// JSON Data
@@ -655,8 +704,8 @@ class Pvforecast extends utils.Adapter {
 		const timeObj = moment(timeStr);
 		const hourKey = timeObj.format('HH:mm:ss');
 
-		if (this.getValidHourKeys().includes(hourKey) && dayOfMonth === moment(timeStr).date()) {
-			this.log.debug(`[saveEveryHour] found "${type}" time ${prefix}.${hourKey} - value: ${value}`);
+		if (this.getValidHourKeys().includes(hourKey)) {
+			this.log.debug(`[saveEveryHour] found "${type}" time ${prefix}.${hourKey} (${dayOfMonth}) - value: ${value}`);
 
 			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
 
@@ -1708,9 +1757,9 @@ class Pvforecast extends utils.Adapter {
 
 		let hourInterval = 60;
 
-		if (this.config.everyhourStepsize === 'half') {
+		if (this.config.everyhourStepsize === STEP_HALF) {
 			hourInterval = 30;
-		} else if (this.config.everyhourStepsize === 'quarter') {
+		} else if (this.config.everyhourStepsize === STEP_QUARTER) {
 			hourInterval = 15;
 		}
 
