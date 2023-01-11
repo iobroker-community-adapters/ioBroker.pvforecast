@@ -26,8 +26,8 @@
                 "it": "Aggiungi i valori di sintesi per InfluxDB\nUtilizzare cron per garantire l'aggiornamento sul cambiamento di giorno\nRimozione della visibilità dai dati meteo (non esiste in risposta)",
                 "es": "Añadir valores sumarios a InfluxDB\nUse cron para asegurar la actualización del cambio de día\nLa visibilidad eliminada de los datos meteorológicos (no existe en respuesta)",
                 "pl": "Dokładne wartości do InfluxDB\nZastosowanie crona w celu zapewnienia aktualizacji zmian w dzień\nPrzewiduje widoczność danych pogodowych (nie istnieje w odpowiedzi)",
-                "zh-cn": "增加流感\n为确保更新日内的变化而使用心\n消除天气数据(反应中存在)的可见度",
-                "uk": "Додайте підсумкові значення до InfluxDB\nВикористовуйте cron, щоб забезпечити оновлення при зміні дня\nВилучено видимість із даних про погоду (відповідь не існує)"
+                "uk": "Додайте підсумкові значення до InfluxDB\nВикористовуйте cron, щоб забезпечити оновлення при зміні дня\nВилучено видимість із даних про погоду (відповідь не існує)",
+                "zh-cn": "增加流感\n为确保更新日内的变化而使用心\n消除天气数据(反应中存在)的可见度"
             },
             "2.2.1": {
                 "en": "Fixed tilt validation - allow zero tilt (0)",
@@ -39,8 +39,8 @@
                 "it": "Validazione dell'inclinazione fissa - consentire l'inclinazione zero (0)",
                 "es": "Validación de inclinación fija - permitir cero inclinación (0)",
                 "pl": "Poprawa nachylenia – pozwala na odchylenie zera (0)",
-                "zh-cn": "固定的预制鉴定——允许零(0)",
-                "uk": "Перевірка фіксованого нахилу - дозволити нульовий нахил (0)"
+                "uk": "Перевірка фіксованого нахилу - дозволити нульовий нахил (0)",
+                "zh-cn": "固定的预制鉴定——允许零(0)"
             },
             "2.2.0": {
                 "en": "Added raw JSON data states for own graphs\nImproved debug log\nUpdated azimuth image for dark theme",
@@ -52,8 +52,8 @@
                 "it": "Aggiunto grezzo JSON dati stati per propri grafici\nTronco di debug migliorato\nImmagine azimut aggiornata per tema scuro",
                 "es": "Se agregaron estados de datos JSON crudos para gráficos propios\nLog mejorado de depuración\nImagen azimut actualizada para tema oscuro",
                 "pl": "Dostarczane dane JSON dla własnych grafów\nImprovement debug log (ang.)\nUpdatek azimuth image",
-                "zh-cn": "增加自评数据表\n改进纤维\n二. 对黑暗专题的图像的更新",
-                "uk": "Додано необроблені стани даних JSON для власних графіків\nПокращено журнал налагодження\nОновлене азимутальне зображення для темної теми"
+                "uk": "Додано необроблені стани даних JSON для власних графіків\nПокращено журнал налагодження\nОновлене азимутальне зображення для темної теми",
+                "zh-cn": "增加自评数据表\n改进纤维\n二. 对黑暗专题的图像的更新"
             },
             "2.1.5": {
                 "en": "Added installed peak power as state\nFixed time shift when using solcast",
@@ -65,8 +65,8 @@
                 "it": "Aggiunta la potenza di picco installata come stato\nRisolto il problema con lo spostamento temporale quando si utilizza solcast",
                 "es": "Se agregó la potencia máxima instalada como estado\nCambio de tiempo fijo cuando se usa solcast",
                 "pl": "Dodano zainstalowaną moc szczytową jako stan\nNaprawiono przesunięcie czasu podczas korzystania z solcast",
-                "zh-cn": "添加安装峰值功率作为状态\n修复了使用 solcast 时的时间偏移",
-                "uk": "Додано встановлену пікову потужність як стан\nВиправлено зсув часу при використанні solcast"
+                "uk": "Додано встановлену пікову потужність як стан\nВиправлено зсув часу при використанні solcast",
+                "zh-cn": "添加安装峰值功率作为状态\n修复了使用 solcast 时的时间偏移"
             },
             "2.1.4": {
                 "en": "Added option for label text size (charting)",
@@ -78,8 +78,8 @@
                 "it": "Aggiunta opzione per la dimensione del testo dell'etichetta (grafici)",
                 "es": "Opción agregada para el tamaño del texto de la etiqueta (gráficos)",
                 "pl": "Dodano opcję rozmiaru tekstu etykiety (wykres)",
-                "zh-cn": "添加了标签文本大小的选项（图表）",
-                "uk": "Додано параметр для розміру тексту етикетки (діаграма)"
+                "uk": "Додано параметр для розміру тексту етикетки (діаграма)",
+                "zh-cn": "添加了标签文本大小的选项（图表）"
             },
             "2.1.3": {
                 "en": "Reduced info log messages",
@@ -91,8 +91,8 @@
                 "it": "Messaggi di registro informazioni ridotti",
                 "es": "Mensajes de registro de información reducidos",
                 "pl": "Zredukowane komunikaty dziennika informacji",
-                "zh-cn": "减少信息日志消息",
-                "uk": "Зменшення інформації в журналі повідомлень"
+                "uk": "Зменшення інформації в журналі повідомлень",
+                "zh-cn": "减少信息日志消息"
             }
         },
         "titleLang": {
@@ -105,8 +105,8 @@
             "it": "PV-Previsione",
             "es": "Pronóstico de PV",
             "pl": "PV-Prognoza",
-            "zh-cn": "光伏预测",
-            "uk": "PV-Прогноз"
+            "uk": "PV-Прогноз",
+            "zh-cn": "光伏预测"
         },
         "desc": {
             "en": "Solar plant production forecast",
@@ -118,8 +118,8 @@
             "it": "Previsioni di produzione di impianti solari",
             "es": "Previsión de producción de plantas solares",
             "pl": "Prognoza produkcji elektrowni słonecznych",
-            "zh-cn": "太阳能电站产量预测",
-            "uk": "Прогноз виробництва сонячних електростанцій"
+            "uk": "Прогноз виробництва сонячних електростанцій",
+            "zh-cn": "太阳能电站产量预测"
         },
         "authors": [
             "Patrick Walther <walther-patrick@gmx.net>",
@@ -259,6 +259,7 @@
                     "it": "Impianti fotovoltaici",
                     "es": "Plantas fotovoltaicas",
                     "pl": "Fotowoltaika",
+                    "uk": "ПВ-Планти",
                     "zh-cn": "光伏电站"
                 }
             },
@@ -278,6 +279,7 @@
                     "it": "Sommario",
                     "es": "Resumen",
                     "pl": "Streszczenie",
+                    "uk": "Редакція",
                     "zh-cn": "概括"
                 }
             },
@@ -297,6 +299,7 @@
                     "it": "Potenza stimata",
                     "es": "Potencia estimada",
                     "pl": "Szacowana moc",
+                    "uk": "Орієнтовна потужність",
                     "zh-cn": "估计功率"
                 }
             },
@@ -316,6 +319,7 @@
                     "it": "Potenza stimata (ora)",
                     "es": "Potencia estimada (ahora)",
                     "pl": "Szacowana moc (teraz)",
+                    "uk": "Орієнтовна потужність (нині)",
                     "zh-cn": "估计功率（现在）"
                 },
                 "type": "number",
@@ -341,6 +345,7 @@
                     "it": "Potenza totale installata",
                     "es": "Potencia total instalada",
                     "pl": "Całkowita moc zainstalowana",
+                    "uk": "Загальна потужність встановлена",
                     "zh-cn": "总装机功率"
                 },
                 "type": "number",
@@ -366,6 +371,7 @@
                     "it": "Energia stimata",
                     "es": "Energía estimada",
                     "pl": "Szacowana energia",
+                    "uk": "Оцінена енергія",
                     "zh-cn": "估计能量"
                 }
             },
@@ -385,6 +391,7 @@
                     "it": "Energia stimata (da oggi ad oggi)",
                     "es": "Energía estimada (hoy hasta ahora)",
                     "pl": "Szacowana energia (dzisiaj do teraz)",
+                    "uk": "Оцінена енергія (до сьогодні)",
                     "zh-cn": "估计能量（今天到现在）"
                 },
                 "type": "number",
@@ -410,6 +417,7 @@
                     "it": "Energia stimata (oggi)",
                     "es": "Energía estimada (hoy)",
                     "pl": "Szacowana energia (dzisiaj)",
+                    "uk": "Оцінена енергія (субота)",
                     "zh-cn": "估计能量（今天）"
                 },
                 "type": "number",
@@ -435,6 +443,7 @@
                     "it": "Energia stimata (domani)",
                     "es": "Energía estimada (mañana)",
                     "pl": "Szacowana energia (jutro)",
+                    "uk": "Орієнтовна енергія (домогосподарка)",
                     "zh-cn": "估计能量（明天）"
                 },
                 "type": "number",
@@ -460,6 +469,7 @@
                     "it": "Ultimo aggiornamento (dati)",
                     "es": "Última actualización (datos)",
                     "pl": "Ostatnia aktualizacja (dane)",
+                    "uk": "Останнє оновлення (data)",
                     "zh-cn": "上次更新（数据）"
                 },
                 "type": "number",
@@ -484,6 +494,7 @@
                     "it": "JSON Dati",
                     "es": "JSON Datos",
                     "pl": "JSON Data",
+                    "uk": "Сонце Дані",
                     "zh-cn": "附 件 数据"
                 },
                 "type": "string",
@@ -508,6 +519,7 @@
                     "it": "Dati grafici in formato JSON",
                     "es": "Graficar datos en formato JSON",
                     "pl": "Dane wykresu w formacie JSON",
+                    "uk": "Графічні дані в форматі JSON",
                     "zh-cn": "JSON格式的图形数据"
                 },
                 "type": "string",
@@ -532,6 +544,7 @@
                     "it": "Dati della tabella in formato JSON",
                     "es": "Tabla de datos en formato JSON",
                     "pl": "Dane tabeli w formacie JSON",
+                    "uk": "Дані таблиці в форматі JSON",
                     "zh-cn": "JSON格式的表格数据"
                 },
                 "type": "string",

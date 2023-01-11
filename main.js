@@ -729,6 +729,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Tempo metereologico',
 							es: 'Tiempo',
 							pl: 'Pogoda',
+							uk: 'Погода',
 							'zh-cn': '天气'
 						}
 					},
@@ -748,7 +749,8 @@ class Pvforecast extends utils.Adapter {
 							it: 'API',
 							es: 'API',
 							pl: 'API',
-							'zh-cn': 'API'
+							uk: 'КОНТАКТИ',
+							'zh-cn': '导 言'
 						}
 					},
 					native: {}
@@ -767,6 +769,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Dati meteorologici dal servizio',
 							es: 'Datos meteorológicos del servicio',
 							pl: 'Dane pogodowe z serwisu',
+							uk: 'Погода',
 							'zh-cn': '来自服务的天气数据'
 						},
 						type: 'string',
@@ -791,6 +794,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Ultimo aggiornamento (servizio)',
 							es: 'Última actualización (servicio)',
 							pl: 'Ostatnia aktualizacja (usługa)',
+							uk: 'Останнє оновлення (service)',
 							'zh-cn': '最后更新（服务）'
 						},
 						type: 'number',
@@ -815,6 +819,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Timestamp',
 							es: 'marca de tiempo',
 							pl: 'Znak czasu',
+							uk: 'Таймер',
 							'zh-cn': '时间戳'
 						},
 						type: 'number',
@@ -838,6 +843,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Cielo',
 							es: 'Cielo',
 							pl: 'Niebo',
+							uk: 'Про нас',
 							'zh-cn': '天空'
 						},
 						type: 'number',
@@ -862,6 +868,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Temperatura',
 							es: 'Temperatura',
 							pl: 'Temperatura',
+							uk: 'Погода',
 							'zh-cn': '温度'
 						},
 						type: 'number',
@@ -887,6 +894,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Condizioni metereologiche',
 							es: 'Condición climática',
 							pl: 'Stan pogody',
+							uk: 'Погода',
 							'zh-cn': '气候条件'
 						},
 						type: 'string',
@@ -911,6 +919,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Icona',
 							es: 'Icono',
 							pl: 'Ikona',
+							uk: 'Ікона',
 							'zh-cn': '图标'
 						},
 						type: 'string',
@@ -935,6 +944,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Velocità del vento',
 							es: 'Velocidad del viento',
 							pl: 'Prędkość wiatru',
+							uk: 'Швидкість вітру',
 							'zh-cn': '风速'
 						},
 						type: 'number',
@@ -960,6 +970,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Direzione del vento (gradi)',
 							es: 'Dirección del viento (grados)',
 							pl: 'Kierunek wiatru (stopnie)',
+							uk: 'Напрямок вітру (дегреді)',
 							'zh-cn': '风向（度）'
 						},
 						type: 'number',
@@ -985,6 +996,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'La direzione del vento',
 							es: 'Dirección del viento',
 							pl: 'Kierunek wiatru',
+							uk: 'Напрямок вітру',
 							'zh-cn': '风向'
 						},
 						type: 'string',
@@ -1027,6 +1039,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Potenza stimata',
 							es: 'Potencia estimada',
 							pl: 'Szacowana moc',
+							uk: 'Орієнтовна потужність',
 							'zh-cn': '估计功率'
 						}
 					},
@@ -1046,6 +1059,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Potenza stimata (ora)',
 							es: 'Potencia estimada (ahora)',
 							pl: 'Szacowana moc (teraz)',
+							uk: 'Орієнтовна потужність (нині)',
 							'zh-cn': '估计功率（现在）'
 						},
 						type: 'number',
@@ -1071,6 +1085,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Potenza totale installata',
 							es: 'Potencia total instalada',
 							pl: 'Całkowita moc zainstalowana',
+							uk: 'Загальна потужність встановлена',
 							'zh-cn': '总装机功率'
 						},
 						type: 'number',
@@ -1096,6 +1111,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Energia stimata',
 							es: 'Energía estimada',
 							pl: 'Szacowana energia',
+							uk: 'Оцінена енергія',
 							'zh-cn': '估计能量'
 						}
 					},
@@ -1115,6 +1131,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Energia stimata (da oggi ad oggi)',
 							es: 'Energía estimada (hoy hasta ahora)',
 							pl: 'Szacowana energia (dzisiaj do teraz)',
+							uk: 'Оцінена енергія (до сьогодні)',
 							'zh-cn': '估计能量（今天到现在）'
 						},
 						type: 'number',
@@ -1140,6 +1157,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Energia stimata (oggi)',
 							es: 'Energía estimada (hoy)',
 							pl: 'Szacowana energia (dzisiaj)',
+							uk: 'Оцінена енергія (субота)',
 							'zh-cn': '估计能量（今天）'
 						},
 						type: 'number',
@@ -1165,6 +1183,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Energia stimata (domani)',
 							es: 'Energía estimada (mañana)',
 							pl: 'Szacowana energia (jutro)',
+							uk: 'Орієнтовна енергія (домогосподарка)',
 							'zh-cn': '估计能量（明天）'
 						},
 						type: 'number',
@@ -1190,6 +1209,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Nome dell\'impianto solare',
 							es: 'nombre de la planta solar',
 							pl: 'Nazwa elektrowni słonecznej',
+							uk: 'Назва сонячного заводу',
 							'zh-cn': '太阳能电站名称'
 						},
 						type: 'string',
@@ -1214,7 +1234,8 @@ class Pvforecast extends utils.Adapter {
 							it: 'API',
 							es: 'API',
 							pl: 'API',
-							'zh-cn': 'API'
+							uk: 'КОНТАКТИ',
+							'zh-cn': '导 言'
 						}
 					},
 					native: {}
@@ -1233,6 +1254,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'URL di servizio',
 							es: 'URL del servicio',
 							pl: 'URL usługi',
+							uk: 'Сервіс url',
 							'zh-cn': '服务网址'
 						},
 						type: 'string',
@@ -1248,16 +1270,17 @@ class Pvforecast extends utils.Adapter {
 					type: 'state',
 					common: {
 						name: {
-							en: 'Forcast data from service',
-							de: 'Prognosedaten vom Dienst',
-							ru: 'Прогноз данных от сервиса',
+							en: 'Forecast data from service',
+							de: 'Prognosedaten aus dem Dienst',
+							ru: 'Прогноз данных из сервиса',
 							pt: 'Dados de previsão do serviço',
-							nl: 'Voorspel gegevens van service',
-							fr: 'Prévision des données du service',
+							nl: 'Verboden gegevens van dienst',
+							fr: 'Données prévisionnelles du service',
 							it: 'Previsione dei dati dal servizio',
-							es: 'Pronosticar datos del servicio',
-							pl: 'Przewiduj dane z usługi',
-							'zh-cn': '来自服务的预测数据'
+							es: 'Datos de pronóstico del servicio',
+							pl: 'Dane z serwisu',
+							uk: 'Прогнозні дані з сервісу',
+							'zh-cn': '来自服务中的预测数据'
 						},
 						type: 'string',
 						role: 'json',
@@ -1281,6 +1304,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Ultimo aggiornamento (servizio)',
 							es: 'Última actualización (servicio)',
 							pl: 'Ostatnia aktualizacja (usługa)',
+							uk: 'Останнє оновлення (service)',
 							'zh-cn': '最后更新（服务）'
 						},
 						type: 'number',
@@ -1305,6 +1329,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Messaggio trasferito',
 							es: 'mensaje transferido',
 							pl: 'Przeniesiona wiadomość',
+							uk: 'Передача повідомлення',
 							'zh-cn': '转移的消息'
 						},
 						type: 'string',
@@ -1329,6 +1354,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Forza l\'aggiornamento',
 							es: 'Forzar actualización',
 							pl: 'Wymuś odświeżenie',
+							uk: 'Приниження',
 							'zh-cn': '强制刷新'
 						},
 						type: 'boolean',
@@ -1354,6 +1380,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Informazioni sulla posizione',
 							es: 'Información sobre la ubicación',
 							pl: 'Informacje lokalne',
+							uk: 'Інформація про місцезнаходження',
 							'zh-cn': '地点信息'
 						},
 						type: 'string',
@@ -1378,6 +1405,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Ultimo aggiornamento (dati)',
 							es: 'Última actualización (datos)',
 							pl: 'Ostatnia aktualizacja (dane)',
+							uk: 'Останнє оновлення (data)',
 							'zh-cn': '上次更新（数据）'
 						},
 						type: 'number',
@@ -1402,6 +1430,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'JSON Dati',
 							es: 'JSON Datos',
 							pl: 'JSON Data',
+							uk: 'Сонце Дані',
 							'zh-cn': '附 件 数据'
 						},
 						type: 'string',
@@ -1426,6 +1455,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Dati grafici in formato JSON',
 							es: 'Graficar datos en formato JSON',
 							pl: 'Dane wykresu w formacie JSON',
+							uk: 'Графічні дані в форматі JSON',
 							'zh-cn': 'JSON格式的图形数据'
 						},
 						type: 'string',
@@ -1450,6 +1480,7 @@ class Pvforecast extends utils.Adapter {
 							it: 'Dati della tabella in formato JSON',
 							es: 'Tabla de datos en formato JSON',
 							pl: 'Dane tabeli w formacie JSON',
+							uk: 'Дані таблиці в форматі JSON',
 							'zh-cn': 'JSON格式的表格数据'
 						},
 						type: 'string',
@@ -1544,6 +1575,7 @@ class Pvforecast extends utils.Adapter {
 					it: 'Di ora',
 					es: 'por hora',
 					pl: 'O godzinę',
+					uk: 'Час',
 					'zh-cn': '按小时'
 				}
 			},
@@ -1567,6 +1599,7 @@ class Pvforecast extends utils.Adapter {
 						it: 'Potenza stimata',
 						es: 'Potencia estimada',
 						pl: 'Szacowana moc',
+						uk: 'Орієнтовна потужність',
 						'zh-cn': '估计功率'
 					},
 					type: 'number',

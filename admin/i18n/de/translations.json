@@ -22,5 +22,6 @@
     "Define a custom format like DD.MM.YYYY HH:mm:ss": "Definieren Sie ein benutzerdefiniertes Format wie DD.MM.YYYY HH:mm:ss",
     "Charting label size": "Diagrammetikettengröße",
     "Azimuth": "Azimut",
-    "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Gültige Neigungswerte: 0° (horizontal) bis 90° (vertikal)"
+    "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Gültige Neigungswerte: 0° (horizontal) bis 90° (vertikal)",
+    "(Professional account only)": "(nur professionelles Konto)"
 }

@@ -52,7 +52,8 @@
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
-                    "label": "Weather (only with API-Key)"
+                    "label": "Weather (only with API-Key)",
+                    "help": "(Professional account only)"
                 },
                 "latitude": {
                     "newLine": true,
@@ -100,6 +101,7 @@
                                 "it": "Orario intero (:00)",
                                 "es": "Horas completas (:00)",
                                 "pl": "Pełne godziny (:00)",
+                                "uk": "Повний час (:00)",
                                 "zh-cn": "全时 (:00)"
                             },
                             "value": "full"
@@ -115,6 +117,7 @@
                                 "it": "Mezz'ora (:00, :30)",
                                 "es": "Media hora (:00, :30)",
                                 "pl": "Pół godziny (:00, :30)",
+                                "uk": "Половини години (:00, :30)",
                                 "zh-cn": "半小时 (:00, :30)"
                             },
                             "value": "half"
@@ -130,6 +133,7 @@
                                 "it": "Quarto d'ora (:00, :15, :30, :45)",
                                 "es": "Cuartos de hora (:00, :15, :30, :45)",
                                 "pl": "kwadranse (:00, :15, :30, :45)",
+                                "uk": "Мото-годин (:00, :15, :30, :45)",
                                 "zh-cn": "一刻钟 (:00, :15, :30, :45)"
                             },
                             "value": "quarter"
@@ -234,15 +238,16 @@
                             "attr": "name",
                             "width": "20%",
                             "title": {
-                                "en": "name",
+                                "en": "Name",
                                 "de": "Name",
-                                "ru": "имя",
-                                "pt": "nome",
-                                "nl": "naam",
+                                "ru": "Имя",
+                                "pt": "Nome",
+                                "nl": "Naam",
                                 "fr": "Nom",
-                                "it": "nome",
-                                "es": "nombre",
+                                "it": "Nome",
+                                "es": "Nombre",
                                 "pl": "Nazwa",
+                                "uk": "Ім'я",
                                 "zh-cn": "姓名"
                             },
                             "filter": true,
@@ -265,6 +270,7 @@
                                 "it": "Azimut",
                                 "es": "Azimut",
                                 "pl": "Azymut",
+                                "uk": "Азімута",
                                 "zh-cn": "方位角"
                             },
                             "filter": false,
@@ -287,8 +293,9 @@
                                 "it": "inclinazione",
                                 "es": "inclinación",
                                 "pl": "przechylenie",
+                                "uk": "Напляскване",
                                 "zh-cn": "倾斜"
-                              },
+                            },
                             "filter": false,
                             "sort": false,
                             "default": 45
@@ -298,17 +305,18 @@
                             "attr": "peakpower",
                             "width": "20%",
                             "title":  {
-                                "en": "peak power",
+                                "en": "Peak power",
                                 "de": "Spitzenleistung",
-                                "ru": "Пиковая мощность",
-                                "pt": "pico de energia",
-                                "nl": "piekvermogen",
-                                "fr": "puissance de crête",
-                                "it": "picco di potenza",
-                                "es": "la punta del Poder",
-                                "pl": "moc szczytowa",
-                                "zh-cn": "峰值功率"
-                              },
+                                "ru": "Пик власть",
+                                "pt": "Potência de pico",
+                                "nl": "Peak",
+                                "fr": "Puissance nominale",
+                                "it": "Potenza massima",
+                                "es": "Potencia de pico",
+                                "pl": "Peak power",
+                                "uk": "Потужність Піка",
+                                "zh-cn": "佩克权力"
+                            },
                             "filter": false,
                             "sort": false,
                             "default": 9.9
@@ -318,17 +326,18 @@
                             "attr": "graphcolor",
                             "width": "10%",
                             "title": {
-                                "en": "graph color",
+                                "en": "Graph color",
                                 "de": "Diagrammfarbe",
-                                "ru": "цвет графика",
-                                "pt": "cor do gráfico",
-                                "nl": "grafiek kleur",
-                                "fr": "couleur du graphique",
-                                "it": "colore del grafico",
-                                "es": "color del gráfico",
-                                "pl": "kolor wykresu",
-                                "zh-cn": "图形颜色"
-                              },
+                                "ru": "Граф цвет",
+                                "pt": "Cor do gráfico",
+                                "nl": "Graf kleur",
+                                "fr": "Graph color",
+                                "it": "Colore del grafico",
+                                "es": "Color Gráfico",
+                                "pl": "Kolor",
+                                "uk": "Колір графа",
+                                "zh-cn": "黄色色色"
+                            },
                             "filter": false,
                             "sort": false,
                             "default": "#000000"
@@ -338,17 +347,18 @@
                             "attr": "labelcolor",
                             "width": "10%",
                             "title": {
-                                "en": "label color",
+                                "en": "Label color",
                                 "de": "Etikettenfarbe",
-                                "ru": "цвет этикетки",
-                                "pt": "cor da etiqueta",
-                                "nl": "label kleur",
-                                "fr": "couleur de l'étiquette",
-                                "it": "colore dell'etichetta",
-                                "es": "color de la etiqueta",
-                                "pl": "kolor etykiety",
-                                "zh-cn": "标签颜色"
-                              },
+                                "ru": "Цвет этикетки",
+                                "pt": "Cor da etiqueta",
+                                "nl": "Label kleur",
+                                "fr": "Couleur d ' étiquette",
+                                "it": "Colore dell'etichetta",
+                                "es": "Color de la etiqueta",
+                                "pl": "Label",
+                                "uk": "Колір етикетки",
+                                "zh-cn": "Labeloseph"
+                            },
                             "filter": false,
                             "sort": false,
                             "default": "#000000"

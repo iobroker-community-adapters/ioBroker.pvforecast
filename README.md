@@ -55,10 +55,11 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 * (klein0r) Fixed time shift when using solcast
 
 ## License
+
 MIT License
 
 Copyright (c) 2021-2023 Patrick-Walther
-                   Matthias Kleine <info@haus-automatisierung.com>
+                        Matthias Kleine <info@haus-automatisierung.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
