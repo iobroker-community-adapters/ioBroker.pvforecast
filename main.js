@@ -57,7 +57,7 @@ class Pvforecast extends utils.Adapter {
 			(!this.longitude && this.longitude !== 0) || isNaN(this.longitude) ||
 			(!this.latitude && this.latitude !== 0) || isNaN(this.latitude)
 		) {
-			this.log.debug('longitude and/or latitude not set, loading system configuration');
+			this.log.debug('[onReady] longitude and/or latitude not set, loading system configuration');
 
 			try {
 				const systemConfigState = await this.getForeignObjectAsync('system.config');
@@ -70,7 +70,7 @@ class Pvforecast extends utils.Adapter {
 					}
 				}
 			} catch (err) {
-				this.log.error(`error white requesting system.config: ${err}`);
+				this.log.error(`Error white requesting system.config: ${err}`);
 			}
 		}
 
@@ -127,7 +127,7 @@ class Pvforecast extends utils.Adapter {
 				await asyncForEach(plantDevices, async (deviceObj) => {
 					if (plantsKeep.indexOf(deviceObj._id) === -1) {
 						await this.delObjectAsync(deviceObj._id, { recursive: true });
-						this.log.info(`Deleted plant with id: ${deviceObj._id} - (not found in configuration)`);
+						this.log.info(`Deleted plant with id: "${deviceObj._id}" - (not found in configuration)`);
 					}
 				});
 
@@ -176,7 +176,7 @@ class Pvforecast extends utils.Adapter {
 
 		try {
 			timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			this.log.info(`Starting update cron (every 15 Minutes) for timezone: ${timeZone}`);
+			this.log.info(`Starting internal update cron (every 15 Minutes) for timezone: ${timeZone}`);
 		} catch (err) {
 			this.log.warn(`Unable to get system timezone - fallback to Europe/Berlin`);
 		}
@@ -477,7 +477,7 @@ class Pvforecast extends utils.Adapter {
 						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }), ack: true });
 					} else {
-						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
 					}
 
 					await this.setStateAsync(`plants.${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
@@ -532,7 +532,7 @@ class Pvforecast extends utils.Adapter {
 		if (this.config.chartingEnabled) {
 			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }), ack: true });
 		} else {
-			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({}), ack: true });
+			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
 		}
 
 		await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
