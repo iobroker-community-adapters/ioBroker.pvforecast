@@ -30,6 +30,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (klein0r) Added hourly values for energy
 * (Apollon77) Added Sentry for crash reporting
 * (klein0r) Dropped Admin 5 support
 * (klein0r) Added Ukrainian language

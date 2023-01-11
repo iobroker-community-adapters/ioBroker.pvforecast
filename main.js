@@ -8,6 +8,9 @@ const CronJob = require('cron').CronJob;
 
 let globalunit = 1000;
 
+const TYPE_ENERGY = 'energy';
+const TYPE_POWER = 'power';
+
 async function asyncForEach(array, callback) {
 	for (let index = 0; index < array.length; index++) {
 		await callback(array[index], index, array);
@@ -266,10 +269,20 @@ class Pvforecast extends utils.Adapter {
 
 					this.log.debug(`[updateActualDataInterval] current service data for plants.${cleanPlantId}.service.data ("${plant.name}"): ${JSON.stringify(data)}`);
 
+					for (const time in data.watt_hours_period) {
+						if (this.config.everyhourEnabled) {
+							this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date(), time, data.watt_hours_period[time] / globalunit);
+							this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watt_hours_period[time] / globalunit);
+						}
+
+						// add to InfluxDB
+						await this.addToInfluxDB(`plants.${cleanPlantId}.energy`, moment(time).valueOf(), data.watts[time] / globalunit);
+					}
+
 					for (const time in data.watts) {
 						if (this.config.everyhourEnabled) {
-							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
-							this.saveEveryHour(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
+							this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
+							this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
 						}
 
 						// add to InfluxDB
@@ -302,8 +315,11 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
 					if (this.config.everyhourEnabled) {
-						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
-						this.saveEveryHourEmptyStates(cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
+						this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date());
+						this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date());
+
+						this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
+						this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
 					}
 
 					// JSON Data
@@ -424,8 +440,9 @@ class Pvforecast extends utils.Adapter {
 		this.log.debug('finished plants update');
 
 		if (this.config.everyhourEnabled) {
-			await this.saveEveryHourSummary('summary.power.hoursToday', moment().date());
-			await this.saveEveryHourSummary('summary.power.hoursTomorrow', moment().add(1, 'days').date());
+			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursToday', moment().date());
+			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursTomorrow', moment().add(1, 'days').date());
+
 			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
 
@@ -633,25 +650,27 @@ class Pvforecast extends utils.Adapter {
 		});
 	}
 
-	async saveEveryHour(cleanPlantId, prefix, dayOfMonth, timeStr, value) {
+	async saveEveryHour(type, cleanPlantId, prefix, dayOfMonth, timeStr, value) {
 		// timeStr example: "2022-05-23 17:30:00"
 		const timeObj = moment(timeStr);
 		const hourKey = timeObj.format('HH:mm:ss');
 
 		if (this.getValidHourKeys().includes(hourKey) && dayOfMonth === moment(timeStr).date()) {
-			this.log.debug(`[saveEveryHour] found time ${prefix}.${hourKey} - value: ${value}`);
+			this.log.debug(`[saveEveryHour] found "${type}" time ${prefix}.${hourKey} - value: ${value}`);
 
 			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
 
-			this.globalEveryHour[cleanPlantId].push({dayOfMonth: dayOfMonth, time: hourKey, value: Number(value) });
+			this.globalEveryHour[cleanPlantId].push({ type: type, dayOfMonth: dayOfMonth, time: hourKey, value: Number(value) });
 		} else {
-			this.log.silly(`[saveEveryHour] no match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
+			this.log.silly(`[saveEveryHour] no "${type}" match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
 		}
 	}
 
-	async saveEveryHourEmptyStates(cleanPlantId, prefix, dayOfMonth) {
+	async saveEveryHourEmptyStates(type, cleanPlantId, prefix, dayOfMonth) {
 		const validHourKeys = this.getValidHourKeys();
-		const filledHourKeys = this.globalEveryHour[cleanPlantId].filter(e => e.dayOfMonth == dayOfMonth).map(e => e.time);
+		const filledHourKeys = this.globalEveryHour[cleanPlantId]
+			.filter(e => e.dayOfMonth == dayOfMonth && e.type == type)
+			.map(e => e.time);
 		const unfilledHourKeys = validHourKeys.filter(hourKey => filledHourKeys.indexOf(hourKey) < 0);
 
 		this.log.debug(`[saveEveryHourEmptyStates] ${unfilledHourKeys.length} items missing - please check if your license allows to request all values`);
@@ -662,7 +681,7 @@ class Pvforecast extends utils.Adapter {
 		});
 	}
 
-	async saveEveryHourSummary(prefix, dayOfMonth) {
+	async saveEveryHourSummary(type, prefix, dayOfMonth) {
 		const plantArray = this.config.devices || [];
 
 		const validHourKeys = this.getValidHourKeys();
@@ -673,7 +692,7 @@ class Pvforecast extends utils.Adapter {
 			await asyncForEach(plantArray, async (plant) => {
 				const cleanPlantId = this.cleanNamespace(plant.name);
 				totalPower += this.globalEveryHour[cleanPlantId]
-					.filter(e => e.dayOfMonth == dayOfMonth && e.time === hourKey)
+					.filter(e => e.dayOfMonth == dayOfMonth && e.time === hourKey && e.type == type)
 					.reduce((pv, cv) => pv + cv.value, 0);
 			});
 
@@ -1515,10 +1534,16 @@ class Pvforecast extends utils.Adapter {
 				});
 
 				if (this.config.everyhourEnabled) {
-					await this.createHoursStates(`plants.${cleanPlantId}.power.hoursToday`);
-					await this.createHoursStates(`plants.${cleanPlantId}.power.hoursTomorrow`);
+					await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursToday`);
+					await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursTomorrow`);
+
+					await this.createHoursStates(TYPE_POWER, `plants.${cleanPlantId}.power.hoursToday`);
+					await this.createHoursStates(TYPE_POWER, `plants.${cleanPlantId}.power.hoursTomorrow`);
 				} else {
 					// Delete states
+					await this.delObjectAsync(`plants.${cleanPlantId}.energy.hoursToday`, { recursive: true });
+					await this.delObjectAsync(`plants.${cleanPlantId}.energy.hoursTomorrow`, { recursive: true });
+
 					await this.delObjectAsync(`plants.${cleanPlantId}.power.hoursToday`, { recursive: true });
 					await this.delObjectAsync(`plants.${cleanPlantId}.power.hoursTomorrow`, { recursive: true });
 				}
@@ -1547,9 +1572,15 @@ class Pvforecast extends utils.Adapter {
 			});
 
 			if (this.config.everyhourEnabled) {
-				await this.createHoursStates('summary.power.hoursToday');
-				await this.createHoursStates('summary.power.hoursTomorrow');
+				await this.createHoursStates(TYPE_ENERGY, 'summary.energy.hoursToday');
+				await this.createHoursStates(TYPE_ENERGY, 'summary.energy.hoursTomorrow');
+
+				await this.createHoursStates(TYPE_POWER, 'summary.power.hoursToday');
+				await this.createHoursStates(TYPE_POWER, 'summary.power.hoursTomorrow');
 			} else {
+				await this.delObjectAsync('summary.energy.hoursToday', { recursive: true });
+				await this.delObjectAsync('summary.energy.hoursTomorrow', { recursive: true });
+
 				await this.delObjectAsync('summary.power.hoursToday', { recursive: true });
 				await this.delObjectAsync('summary.power.hoursTomorrow', { recursive: true });
 			}
@@ -1561,7 +1592,7 @@ class Pvforecast extends utils.Adapter {
 		this.log.debug('init done');
 	}
 
-	async createHoursStates(prefix) {
+	async createHoursStates(type, prefix) {
 		await this.setObjectNotExistsAsync(prefix, {
 			type: 'channel',
 			common: {
@@ -1586,40 +1617,77 @@ class Pvforecast extends utils.Adapter {
 
 		// Create all states for valid hours
 		await asyncForEach(validHourKeys, async (hourKey) => {
-			await this.setObjectNotExistsAsync(`${prefix}.${hourKey}`, {
-				type: 'state',
-				common: {
-					name: {
-						en: 'Estimated power',
-						de: 'Geschätzte Leistung',
-						ru: 'Расчетная мощность',
-						pt: 'Potência estimada',
-						nl: 'Geschat vermogen',
-						fr: 'Puissance estimée',
-						it: 'Potenza stimata',
-						es: 'Potencia estimada',
-						pl: 'Szacowana moc',
-						uk: 'Орієнтовна потужність',
-						'zh-cn': '估计功率'
+			if (type === TYPE_POWER) {
+				await this.setObjectNotExistsAsync(`${prefix}.${hourKey}`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Estimated power',
+							de: 'Geschätzte Leistung',
+							ru: 'Расчетная мощность',
+							pt: 'Potência estimada',
+							nl: 'Geschat vermogen',
+							fr: 'Puissance estimée',
+							it: 'Potenza stimata',
+							es: 'Potencia estimada',
+							pl: 'Szacowana moc',
+							uk: 'Орієнтовна потужність',
+							'zh-cn': '估计功率'
+						},
+						type: 'number',
+						role: 'value',
+						unit: 'kW',
+						read: true,
+						write: false,
+						def: 0
 					},
-					type: 'number',
-					role: 'value',
-					unit: 'kW',
-					read: true,
-					write: false,
-					def: 0
-				},
-				native: {}
-			});
+					native: {}
+				});
 
-			await this.extendObjectAsync(`${prefix}.${hourKey}`, {
-				common: {
-					unit: this.config.watt_kw ? 'W' : 'kW'
-				},
-				native: {
-					hourKey: hourKey
-				}
-			});
+				await this.extendObjectAsync(`${prefix}.${hourKey}`, {
+					common: {
+						unit: this.config.watt_kw ? 'W' : 'kW'
+					},
+					native: {
+						hourKey: hourKey
+					}
+				});
+			} else if (type === TYPE_ENERGY) {
+				await this.setObjectNotExistsAsync(`${prefix}.${hourKey}`, {
+					type: 'state',
+					common: {
+						name: {
+							en: 'Estimated energy',
+							de: 'Geschätzte Energie',
+							ru: 'Расчетная энергия',
+							pt: 'Energia estimada',
+							nl: 'geschatte energie',
+							fr: 'Énergie estimée',
+							it: 'Energia stimata',
+							es: 'Energía estimada',
+							pl: 'Szacowana energia',
+							uk: 'Оцінена енергія',
+							'zh-cn': '估计能量'
+						},
+						type: 'number',
+						role: 'value',
+						unit: 'kWh',
+						read: true,
+						write: false,
+						def: 0
+					},
+					native: {}
+				});
+
+				await this.extendObjectAsync(`${prefix}.${hourKey}`, {
+					common: {
+						unit: this.config.watt_kw ? 'Wh' : 'kWh'
+					},
+					native: {
+						hourKey: hourKey
+					}
+				});
+			}
 		});
 
 		// Delete invalid states for current configuration
