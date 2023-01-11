@@ -492,6 +492,9 @@ class Pvforecast extends utils.Adapter {
 		this.log.debug('finished plants update');
 
 		if (this.config.everyhourEnabled) {
+			await this.saveEveryHourSummary(TYPE_ENERGY, 'summary.energy.hoursToday', todaysDate);
+			await this.saveEveryHourSummary(TYPE_ENERGY, 'summary.energy.hoursTomorrow', tomorrowDate);
+
 			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursToday', todaysDate);
 			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursTomorrow', tomorrowDate);
 
