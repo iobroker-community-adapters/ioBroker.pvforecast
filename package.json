@@ -38,7 +38,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^2.6.7",
-    "axios": "^0.27.2",
+    "axios": "^1.2.2",
     "cron": "^2.2.0",
     "moment": "^2.29.4"
   },
