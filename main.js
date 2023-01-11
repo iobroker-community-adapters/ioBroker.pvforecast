@@ -264,7 +264,7 @@ class Pvforecast extends utils.Adapter {
 					}
 				}
 
-				return { date: timeObj.format(`YYYY-DD-MM ${customFormat}`), value: data[timeStr] };
+				return { date: timeObj.format(`YYYY-MM-DD ${customFormat}`), value: data[timeStr] };
 			})
 			.reduce((resultObj, dateObj) => {
 				const { date, value } = dateObj;
@@ -279,7 +279,10 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async updateActualDataInterval() {
-		this.log.debug('[updateActualDataInterval] starting update');
+		const todaysDate = moment().date();
+		const tomorrowDate = moment().add(1, 'days').date();
+
+		this.log.debug(`[updateActualDataInterval] starting update (today: ${todaysDate}, tomorrow: ${tomorrowDate})`);
 
 		const plantArray = this.config.devices || [];
 
@@ -320,8 +323,8 @@ class Pvforecast extends utils.Adapter {
 
 					for (const time in mappedWattHoursPeriod) {
 						if (this.config.everyhourEnabled) {
-							await this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date(), time, mappedWattHoursPeriod[time] / globalunit);
-							await this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date(), time, mappedWattHoursPeriod[time] / globalunit);
+							await this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, todaysDate, time, mappedWattHoursPeriod[time] / globalunit);
+							await this.saveEveryHour(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, tomorrowDate, time, mappedWattHoursPeriod[time] / globalunit);
 						}
 
 						// add to InfluxDB
@@ -330,8 +333,8 @@ class Pvforecast extends utils.Adapter {
 
 					for (const time in data.watts) {
 						if (this.config.everyhourEnabled) {
-							await this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date(), time, data.watts[time] / globalunit);
-							await this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date(), time, data.watts[time] / globalunit);
+							await this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, todaysDate, time, data.watts[time] / globalunit);
+							await this.saveEveryHour(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, tomorrowDate, time, data.watts[time] / globalunit);
 						}
 
 						// add to InfluxDB
@@ -364,11 +367,11 @@ class Pvforecast extends utils.Adapter {
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
 					if (this.config.everyhourEnabled) {
-						await this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, moment().date());
-						await this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, moment().add(1, 'days').date());
+						await this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursToday`, todaysDate);
+						await this.saveEveryHourEmptyStates(TYPE_ENERGY, cleanPlantId, `plants.${cleanPlantId}.energy.hoursTomorrow`, tomorrowDate);
 
-						await this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, moment().date());
-						await this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, moment().add(1, 'days').date());
+						await this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursToday`, todaysDate);
+						await this.saveEveryHourEmptyStates(TYPE_POWER, cleanPlantId, `plants.${cleanPlantId}.power.hoursTomorrow`, tomorrowDate);
 					}
 
 					// JSON Data
@@ -429,7 +432,7 @@ class Pvforecast extends utils.Adapter {
 						for (const time in data.watts) {
 							const timeMoment = moment(time);
 
-							if (!this.config.chartingJustToday || timeMoment.date() === moment().date()) {
+							if (!this.config.chartingJustToday || timeMoment.date() === todaysDate) {
 								const timeInCustomFormat = timeMoment.format(this.config.chartingLabelFormat);
 
 								// Add label if not exists
@@ -489,8 +492,8 @@ class Pvforecast extends utils.Adapter {
 		this.log.debug('finished plants update');
 
 		if (this.config.everyhourEnabled) {
-			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursToday', moment().date());
-			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursTomorrow', moment().add(1, 'days').date());
+			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursToday', todaysDate);
+			await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursTomorrow', tomorrowDate);
 
 			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
@@ -704,14 +707,14 @@ class Pvforecast extends utils.Adapter {
 		const timeObj = moment(timeStr);
 		const hourKey = timeObj.format('HH:mm:ss');
 
-		if (this.getValidHourKeys().includes(hourKey)) {
+		if (this.getValidHourKeys().includes(hourKey) && dayOfMonth === moment(timeStr).date()) {
 			this.log.debug(`[saveEveryHour] found "${type}" time ${prefix}.${hourKey} (${dayOfMonth}) - value: ${value}`);
 
 			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: Number(value), ack: true });
 
 			this.globalEveryHour[cleanPlantId].push({ type: type, dayOfMonth: dayOfMonth, time: hourKey, value: Number(value) });
 		} else {
-			this.log.silly(`[saveEveryHour] no "${type}" match for plant "${cleanPlantId}" at "${timeStr}" (${moment().date()} !== ${moment(timeStr).date()})`);
+			this.log.silly(`[saveEveryHour] no "${type}" match for plant "${cleanPlantId}" at "${timeStr}" (or ${dayOfMonth} !== ${moment(timeStr).date()})`);
 		}
 	}
 
