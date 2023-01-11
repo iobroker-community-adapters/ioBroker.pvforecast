@@ -1,4 +1,8 @@
 # Older changes
+## 2.1.5 (2022-06-03)
+* (klein0r) Added installed peak power as state
+* (klein0r) Fixed time shift when using solcast
+
 ## 2.1.4 (2022-05-27)
 * (klein0r) Added option for label text size (charting)
 

@@ -29,7 +29,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.5.0 (2023-01-11)
 * (klein0r) Added hourly values for energy
 * (Apollon77) Added Sentry for crash reporting
 * (klein0r) Dropped Admin 5 support
@@ -50,10 +50,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 * (klein0r) Added raw JSON data states for own graphs
 * (klein0r) Improved debug log
 * (klein0r) Updated azimuth image for dark theme
-
-### 2.1.5 (2022-06-03)
-* (klein0r) Added installed peak power as state
-* (klein0r) Fixed time shift when using solcast
 
 ## License
 
