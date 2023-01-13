@@ -29,6 +29,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Fixed JSON table when using solcast
+
 ### 2.5.0 (2023-01-11)
 * (klein0r) Added hourly values for energy
 * (Apollon77) Added Sentry for crash reporting

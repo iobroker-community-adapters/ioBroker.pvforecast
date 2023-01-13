@@ -686,7 +686,7 @@ class Pvforecast extends utils.Adapter {
 						if (error === 'Error: Request failed with status code 429') {
 							this.log.error('too many data requests');
 						} else if (error === 'Error: Request failed with status code 400') {
-							this.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude,latitude');
+							this.log.error('entry out of range (check the notes in settings) => check azimuth, tilt, longitude, latitude');
 						} else if (error === 'Error: Request failed with status code 404') {
 							this.log.error('Error: Not Found');
 						} else if (error === 'Error: Request failed with status code 502') {
