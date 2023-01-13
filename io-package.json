@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.5.0",
+    "version": "2.5.1",
     "news": {
+      "2.5.1": {
+        "en": "Fixed JSON table when using solcast",
+        "de": "Behobene JSON-Tabelle bei Verwendung von solcast",
+        "ru": "Исправлена таблица JSON при использовании solcast",
+        "pt": "Mesa JSON fixa ao usar solcast",
+        "nl": "_",
+        "fr": "Table fixe JSON lors de l'utilisation de solcast",
+        "it": "Tabella JSON fissa quando si utilizza solcast",
+        "es": "Mesa fija JSON cuando se utiliza el solcast",
+        "pl": "Tablice JSON przy użyciu solcastu",
+        "uk": "Фіксований стіл JSON при використанні розчинника",
+        "zh-cn": "Fixed JSON 表"
+      },
       "2.5.0": {
         "en": "Added hourly values for energy\nAdded Sentry for crash reporting\nDropped Admin 5 support\nAdded Ukrainian language",
         "de": "Stundenwerte für Energie hinzugefügt\nSentry für Crash Reporting hinzugefügt\nDroped Admin 5 Unterstützung\nUkrainische Sprache",
@@ -80,19 +93,6 @@
         "pl": "Dodano zainstalowaną moc szczytową jako stan\nNaprawiono przesunięcie czasu podczas korzystania z solcast",
         "uk": "Додано встановлену пікову потужність як стан\nВиправлено зсув часу при використанні solcast",
         "zh-cn": "添加安装峰值功率作为状态\n修复了使用 solcast 时的时间偏移"
-      },
-      "2.1.4": {
-        "en": "Added option for label text size (charting)",
-        "de": "Option für Beschriftungstextgröße hinzugefügt (Diagramm)",
-        "ru": "Добавлена опция для размера текста метки (диаграмма)",
-        "pt": "Adicionada opção para tamanho do texto do rótulo (gráficos)",
-        "nl": "Optie toegevoegd voor labeltekstgrootte (grafieken)",
-        "fr": "Ajout d'une option pour la taille du texte de l'étiquette (graphique)",
-        "it": "Aggiunta opzione per la dimensione del testo dell'etichetta (grafici)",
-        "es": "Opción agregada para el tamaño del texto de la etiqueta (gráficos)",
-        "pl": "Dodano opcję rozmiaru tekstu etykiety (wykres)",
-        "uk": "Додано параметр для розміру тексту етикетки (діаграма)",
-        "zh-cn": "添加了标签文本大小的选项（图表）"
       }
     },
     "titleLang": {

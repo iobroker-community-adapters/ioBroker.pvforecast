@@ -1,4 +1,9 @@
 # Older changes
+## 2.2.0 (2022-06-09)
+* (klein0r) Added raw JSON data states for own graphs
+* (klein0r) Improved debug log
+* (klein0r) Updated azimuth image for dark theme
+
 ## 2.1.5 (2022-06-03)
 * (klein0r) Added installed peak power as state
 * (klein0r) Fixed time shift when using solcast
