@@ -15,6 +15,7 @@
     "Step size for hourly values": "Размер шага для часовых значений",
     "Values in watt instead of kW": "Значения в ваттах вместо кВт",
     "Charting enabled": "Диаграммы включены",
+    "Chart summary": "График резюме",
     "Charting label rotation": "Вращение метки диаграммы",
     "Charting Y-Axis step": "Отображение шага оси Y",
     "Just include current day": "Просто включите текущий день",

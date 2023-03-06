@@ -15,6 +15,7 @@
     "Step size for hourly values": "Tamaño de paso para valores horarios",
     "Values in watt instead of kW": "Valores en vatios en lugar de kW",
     "Charting enabled": "Gráficos habilitados",
+    "Chart summary": "Resumen",
     "Charting label rotation": "Rotación de etiquetas de gráficos",
     "Charting Y-Axis step": "Paso del eje Y del gráfico",
     "Just include current day": "Solo incluye el día actual",
