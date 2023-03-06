@@ -442,7 +442,11 @@ class Pvforecast extends utils.Adapter {
 								}
 
 								jsonGraphLabels.push(timeInCustomFormat);
-								jsonGraphData.push(data.watts[time] / globalunit);
+								if (this.config.chartSummary) {
+									jsonGraphData.push(data.watts[time]);
+								} else {
+									jsonGraphData.push(data.watts[time] / globalunit);
+								}
 							}
 						}
 
@@ -486,9 +490,11 @@ class Pvforecast extends utils.Adapter {
 								for (let g = 0; g < anzahlMessung; g++) {
 									let zahl = 0;
 									for (let i = 0; i < jsonForcastSummary.length; i++) {
-										zahl = zahl + jsonForcastSummary[i][g];
+										const pv = jsonForcastSummary[i][g];
+										zahl = zahl + pv;
 									}
-									arrGesammt.push(zahl.toFixed(3));
+
+									arrGesammt.push(zahl / globalunit);
 								}
 
 								jsonGraphSummary = [];
