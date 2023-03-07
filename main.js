@@ -482,9 +482,9 @@ class Pvforecast extends utils.Adapter {
 
 
 						if (this.config.chartSummary) {
-							const arrAnzahl = jsonGraphSummary.length;
-							let arrGesammt = [];
+							const arrAnzahl = jsonGraphSummary.length;					
 							if (arrAnzahl > 1) {
+								let arrGesamt = [];
 								const anzahlMessung = jsonForcastSummary[0].length;
 
 								for (let g = 0; g < anzahlMessung; g++) {
@@ -494,13 +494,13 @@ class Pvforecast extends utils.Adapter {
 										zahl = zahl + pv;
 									}
 
-									arrGesammt.push(zahl / globalunit);
+									arrGesamt.push(zahl / globalunit);
 								}
 
 								jsonGraphSummary = [];
 								const jsonGraph = {
 									// graph
-									data: arrGesammt,
+									data: arrGesamt,
 									type: 'bar',
 									legendText: 'Gesamt',
 									displayOrder: 1,
