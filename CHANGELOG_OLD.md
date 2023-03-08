@@ -1,4 +1,7 @@
 # Older changes
+## 2.2.1 (2022-06-23)
+* (klein0r) Fixed tilt validation - allow zero tilt (0)
+
 ## 2.2.0 (2022-06-09)
 * (klein0r) Added raw JSON data states for own graphs
 * (klein0r) Improved debug log

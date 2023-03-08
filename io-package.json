@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.5.1",
+    "version": "2.5.2",
     "news": {
+      "2.5.2": {
+        "en": "Fixed error when weather data could not be fetched",
+        "de": "Fehler behoben, wenn Wetterdaten nicht abgeholt werden konnten",
+        "ru": "Исправлена ошибка, когда погодные данные не могут быть получены",
+        "pt": "Erro fixo quando os dados meteorológicos não poderiam ser obtidos",
+        "nl": "Vergissing wanneer weergegevens niet kunnen worden opgehaald",
+        "fr": "Erreur fixe lorsque les données météorologiques ne peuvent pas être récupérées",
+        "it": "Errore fisso quando i dati meteo non potrebbero essere recuperati",
+        "es": "Error fijo cuando los datos meteorológicos no se pueden buscar",
+        "pl": "Błękitne błędy, gdy dane pogodowe nie mogą być odczytane",
+        "uk": "Виправлено помилку, коли дані погоди не можуть бути",
+        "zh-cn": "当天气数据不能分期时,固定错误"
+      },
       "2.5.1": {
         "en": "Fixed JSON table when using solcast",
         "de": "Behobene JSON-Tabelle bei Verwendung von solcast",
@@ -80,19 +93,6 @@
         "pl": "Dostarczane dane JSON dla własnych grafów\nImprovement debug log (ang.)\nUpdatek azimuth image",
         "uk": "Додано необроблені стани даних JSON для власних графіків\nПокращено журнал налагодження\nОновлене азимутальне зображення для темної теми",
         "zh-cn": "增加自评数据表\n改进纤维\n二. 对黑暗专题的图像的更新"
-      },
-      "2.1.5": {
-        "en": "Added installed peak power as state\nFixed time shift when using solcast",
-        "de": "Installierte Spitzenleistung als Zustand hinzugefügt\nZeitverschiebung bei Verwendung von Solcast behoben",
-        "ru": "Добавлена установленная пиковая мощность как состояние\nИсправлен сдвиг времени при использовании solcast",
-        "pt": "Adicionada potência de pico instalada como estado\nDeslocamento de tempo fixo ao usar solcast",
-        "nl": "Geïnstalleerd piekvermogen toegevoegd als status\nVaste tijdverschuiving bij gebruik van solcast",
-        "fr": "Ajout de la puissance de crête installée en tant qu'état\nDécalage horaire fixe lors de l'utilisation de solcast",
-        "it": "Aggiunta la potenza di picco installata come stato\nRisolto il problema con lo spostamento temporale quando si utilizza solcast",
-        "es": "Se agregó la potencia máxima instalada como estado\nCambio de tiempo fijo cuando se usa solcast",
-        "pl": "Dodano zainstalowaną moc szczytową jako stan\nNaprawiono przesunięcie czasu podczas korzystania z solcast",
-        "uk": "Додано встановлену пікову потужність як стан\nВиправлено зсув часу при використанні solcast",
-        "zh-cn": "添加安装峰值功率作为状态\n修复了使用 solcast 时的时间偏移"
       }
     },
     "titleLang": {
