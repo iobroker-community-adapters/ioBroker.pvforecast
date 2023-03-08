@@ -29,6 +29,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+* (klein0r) Fixed error when weather data could not be fetched
+
 ### 2.5.1 (2023-01-13)
 * (klein0r) Fixed JSON table when using solcast
 

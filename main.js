@@ -547,21 +547,23 @@ class Pvforecast extends utils.Adapter {
 				if (serviceDataState && serviceDataState.val) {
 					const data = JSON.parse(serviceDataState.val);
 
-					const weatherNow = data
-						.filter((weather) => moment(weather.datetime).valueOf() < moment().valueOf())
-						.pop();
+					if (data?.result) {
+						const weatherNow = data.result
+							.filter((weather) => moment(weather.datetime).valueOf() < moment().valueOf())
+							.pop();
 
-					if (weatherNow) {
-						this.log.debug(`[updateActualWeatherData] filling states with weather info from: ${JSON.stringify(weatherNow)}`);
+						if (weatherNow) {
+							this.log.debug(`[updateActualWeatherData] filling states with weather info from: ${JSON.stringify(weatherNow)}`);
 
-						await this.setStateChangedAsync('weather.sky', { val: Number(weatherNow.sky), ack: true });
-						await this.setStateChangedAsync('weather.datetime', { val: moment(weatherNow.datetime).valueOf(), ack: true });
-						await this.setStateChangedAsync('weather.temperature', { val: Number(weatherNow.temperature), ack: true });
-						await this.setStateChangedAsync('weather.condition', { val: weatherNow.condition, ack: true });
-						await this.setStateChangedAsync('weather.icon', { val: weatherNow.icon, ack: true });
-						await this.setStateChangedAsync('weather.wind_speed', { val: Number(weatherNow.wind_speed), ack: true });
-						await this.setStateChangedAsync('weather.wind_degrees', { val: Number(weatherNow.wind_degrees), ack: true });
-						await this.setStateChangedAsync('weather.wind_direction', { val: weatherNow.wind_direction, ack: true });
+							await this.setStateChangedAsync('weather.sky', { val: Number(weatherNow.sky), ack: true });
+							await this.setStateChangedAsync('weather.datetime', { val: moment(weatherNow.datetime).valueOf(), ack: true });
+							await this.setStateChangedAsync('weather.temperature', { val: Number(weatherNow.temperature), ack: true });
+							await this.setStateChangedAsync('weather.condition', { val: weatherNow.condition, ack: true });
+							await this.setStateChangedAsync('weather.icon', { val: weatherNow.icon, ack: true });
+							await this.setStateChangedAsync('weather.wind_speed', { val: Number(weatherNow.wind_speed), ack: true });
+							await this.setStateChangedAsync('weather.wind_degrees', { val: Number(weatherNow.wind_degrees), ack: true });
+							await this.setStateChangedAsync('weather.wind_direction', { val: weatherNow.wind_direction, ack: true });
+						}
 					}
 				}
 
