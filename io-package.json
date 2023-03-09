@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.5.2",
+    "version": "2.6.0",
     "news": {
+      "2.6.0": {
+        "en": "chart summary for more strings\nFixed charting summary\nRounded values in JSON summary",
+        "de": "diagrammübersicht für mehr strings\nZusammenfassung der Diagramme\nGerundete Werte in JSON Zusammenfassung",
+        "ru": "резюме диаграммы для больше строк\nФиксированное резюме\nКруглые значения в JSON резюме",
+        "pt": "resumo gráfico para mais strings\nResumo de gráficos fixos\nValores arredondados no resumo JSON",
+        "nl": "vertaling:\nVertaling:\nRonde waarden in JSON sumary",
+        "fr": "résumé graphique pour plus de chaînes\nRésumé des graphiques fixes\nValeurs arrondies dans le résumé JSON",
+        "it": "sommario grafico per più stringhe\nRiepilogo grafico fisso\nValori arrotondati in sintesi JSON",
+        "es": "resumen gráfico para más cadenas\nResumen de la gráfica fija\nValores redondeados en el sumario de JSON",
+        "pl": "podsumowanie więcej strun\nFixed chart summary (ang.)\nOkrągłe wartości w podsumowaniu JSON",
+        "uk": "схема резюме для більш рядків\nФіксований розрахунок резюме\nЗакруглені значення в JSON резюме",
+        "zh-cn": "更细表\n固定图表\nB. 联合执行会摘要的附带价值"
+      },
       "2.5.2": {
         "en": "Fixed error when weather data could not be fetched",
         "de": "Fehler behoben, wenn Wetterdaten nicht abgeholt werden konnten",
@@ -80,19 +93,6 @@
         "pl": "Poprawa nachylenia – pozwala na odchylenie zera (0)",
         "uk": "Перевірка фіксованого нахилу - дозволити нульовий нахил (0)",
         "zh-cn": "固定的预制鉴定——允许零(0)"
-      },
-      "2.2.0": {
-        "en": "Added raw JSON data states for own graphs\nImproved debug log\nUpdated azimuth image for dark theme",
-        "de": "Rohe JSON-Datenzustände für eigene Graphen hinzugefügt\nVerbessertes Debug-Log\nAktualisiertes Azimut-Bild für dunkles Thema",
-        "ru": "Добавлены государства данных JSON для собственных графиков\nУлучшенный журнал debug\nОбновленное азимутное изображение для темной темы",
-        "pt": "Adicionado bruto JSON dados estados para próprios gráficos\nRegistro de depuração melhorado\nImagem azimute atualizada para o tema escuro",
-        "nl": "Vermeld Raw JSON data staat voor eigen grafieken\nVertaling:\nUpded azimuth imago voor donker thema",
-        "fr": "Ajout d'états bruts de données JSON pour ses propres graphiques\nBloc de débogage amélioré\nMise à jour de l'image de l'azimuth pour thème sombre",
-        "it": "Aggiunto grezzo JSON dati stati per propri grafici\nTronco di debug migliorato\nImmagine azimut aggiornata per tema scuro",
-        "es": "Se agregaron estados de datos JSON crudos para gráficos propios\nLog mejorado de depuración\nImagen azimut actualizada para tema oscuro",
-        "pl": "Dostarczane dane JSON dla własnych grafów\nImprovement debug log (ang.)\nUpdatek azimuth image",
-        "uk": "Додано необроблені стани даних JSON для власних графіків\nПокращено журнал налагодження\nОновлене азимутальне зображення для темної теми",
-        "zh-cn": "增加自评数据表\n改进纤维\n二. 对黑暗专题的图像的更新"
       }
     },
     "titleLang": {

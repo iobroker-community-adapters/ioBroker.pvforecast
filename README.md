@@ -29,8 +29,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 2.6.0 (2023-03-09)
 
 * (arteck) chart summary for more strings
 * (klein0r) Fixed charting summary
@@ -51,11 +50,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 
 ### 2.4.0 (2022-12-09)
 * (stromdao) Added SolarPredictionAPI
-
-### 2.3.0 (2022-06-26)
-* (klein0r) Add summary values to InfluxDB
-* (klein0r) Use cron to ensure update on day change
-* (klein0r) Removed visibility from weather data (doesn't exist in response)
 
 ## License
 
