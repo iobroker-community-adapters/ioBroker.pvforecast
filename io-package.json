@@ -236,6 +236,7 @@
     "watt_kw": false,
     "influxinstace": "",
     "chartingEnabled": false,
+    "chartingSummary": false,
     "chartingJustToday": true,
     "chartingLabelFormat": "DD.MM. HH:mm",
     "chartingLabelSize": 12,
