@@ -173,6 +173,14 @@
                     "lg": 4,
                     "label": "Charting enabled"
                 },
+                "chartSummary": {
+                    "newLine": false,
+                    "type": "checkbox",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Chart summary"
+                },
                 "chartingJustToday": {
                     "newLine": true,
                     "hidden": "!data.chartingEnabled",

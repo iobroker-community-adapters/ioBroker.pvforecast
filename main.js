@@ -288,7 +288,8 @@ class Pvforecast extends utils.Adapter {
 
 		const jsonDataSummary = [];
 		const jsonTableSummary = [];
-		const jsonGraphSummary = [];
+		let jsonGraphSummary = [];
+		const jsonForcastSummary = [];
 		const jsonGraphLabelSummary = [];
 
 		this.globalEveryHour = {};
@@ -441,7 +442,11 @@ class Pvforecast extends utils.Adapter {
 								}
 
 								jsonGraphLabels.push(timeInCustomFormat);
-								jsonGraphData.push(data.watts[time] / globalunit);
+								if (this.config.chartSummary) {
+									jsonGraphData.push(data.watts[time]);
+								} else {
+									jsonGraphData.push(data.watts[time] / globalunit);
+								}
 							}
 						}
 
@@ -471,8 +476,57 @@ class Pvforecast extends utils.Adapter {
 							yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
 							yAxis_step: this.config.chartingAxisStepY,
 						};
+						jsonForcastSummary.push(jsonGraphData); // zum zusammenrechnen
 
 						jsonGraphSummary.push(jsonGraph);
+
+
+						if (this.config.chartSummary) {
+							const arrAnzahl = jsonGraphSummary.length;					
+							if (arrAnzahl > 1) {
+								let arrGesamt = [];
+								const anzahlMessung = jsonForcastSummary[0].length;
+
+								for (let g = 0; g < anzahlMessung; g++) {
+									let zahl = 0;
+									for (let i = 0; i < jsonForcastSummary.length; i++) {
+										const pv = jsonForcastSummary[i][g];
+										zahl = zahl + pv;
+									}
+
+									arrGesamt.push(zahl / globalunit);
+								}
+
+								jsonGraphSummary = [];
+								const jsonGraph = {
+									// graph
+									data: arrGesamt,
+									type: 'bar',
+									legendText: 'Gesamt',
+									displayOrder: 1,
+									color: plantArray[0].graphcolor,
+									tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
+									//datalabel_append: this.config.watt_kw ? 'W' : 'kW',
+									datalabel_show: true,
+									datalabel_rotation: this.config.chartingRoation,
+									datalabel_color: plantArray[0].labelcolor,
+									datalabel_fontSize: this.config.chartingLabelSize,
+
+									// graph bar chart spfeicifc
+									barIsStacked: true,
+									barStackId: 1,
+
+									// graph y-Axis
+									yAxis_id: 0,
+									yAxis_position: 'left',
+									yAxis_show: true,
+									yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
+									yAxis_step: this.config.chartingAxisStepY,
+								};
+								jsonGraphSummary.push(jsonGraph);
+							}
+						}
+
 
 						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }), ack: true });
