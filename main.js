@@ -391,7 +391,7 @@ class Pvforecast extends utils.Adapter {
 							jsonDataSummary[timestamp] = 0;
 						}
 
-						jsonDataSummary[timestamp] += power;
+						jsonDataSummary[timestamp] = Math.round((jsonDataSummary[timestamp] + power) * 1000) / 1000; // Limit result to 3 digits
 					}
 
 					this.log.debug(`generated JSON data of "${plant.name}": ${JSON.stringify(jsonData)}`);

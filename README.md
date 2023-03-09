@@ -31,7 +31,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 
  ### **WORK IN PROGRESS**
+
 * (arteck) chart summary for more strings
+* (klein0r) Fixed charting summary
+* (klein0r) Rounded values in JSON summary
 
 ### 2.5.2 (2023-03-08)
 
