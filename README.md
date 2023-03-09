@@ -30,7 +30,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 
- ### **WORK IN PROGRESS**
+### **WORK IN PROGRESS**
 
 * (arteck) chart summary for more strings
 * (klein0r) Fixed charting summary
