@@ -36,6 +36,7 @@ class Pvforecast extends utils.Adapter {
 		this.reqInterval = 60;
 		this.hasApiKey = false;
 
+		this.timeZone = 'Europe/Berlin';
 		this.longitude = undefined;
 		this.latitude = undefined;
 
@@ -172,11 +173,10 @@ class Pvforecast extends utils.Adapter {
 		await this.updateServiceDataInterval();
 		await this.updateActualDataInterval();
 
-		let timeZone = 'Europe/Berlin';
 
 		try {
-			timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-			this.log.info(`Starting internal update cron (every 15 Minutes) for timezone: ${timeZone}`);
+			this.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+			this.log.info(`Starting internal update cron (every 15 Minutes) for timezone: ${this.timeZone}`);
 		} catch (err) {
 			this.log.warn(`Unable to get system timezone - fallback to Europe/Berlin`);
 		}
@@ -186,7 +186,7 @@ class Pvforecast extends utils.Adapter {
 			() => this.updateActualDataInterval(),
 			() => this.log.debug('stopped updateActualDataInterval'),
 			true,
-			timeZone
+			this.timeZone
 		);
 		this.log.debug(`[updateActualDataCron] next execution: ${this.updateActualDataCron.nextDates()}`);
 	}
@@ -273,7 +273,7 @@ class Pvforecast extends utils.Adapter {
 					resultObj[date] += value;
 					return resultObj;
 				} else {
-					return {...resultObj, [date]: value};
+					return { ...resultObj, [date]: value };
 				}
 			}, {});
 	}
@@ -501,11 +501,11 @@ class Pvforecast extends utils.Adapter {
 			this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
 		}
 
-		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
-		await this.setStateChangedAsync('summary.power.installed', { val: totalPowerInstalled, ack: true });
 		await this.setStateChangedAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
+		await this.setStateChangedAsync('summary.power.installed', { val: totalPowerInstalled, ack: true });
 
 		// add summary to InfluxDB
 		await asyncForEach(Object.keys(jsonDataSummary), async (time) => {
@@ -650,10 +650,10 @@ class Pvforecast extends utils.Adapter {
 			if (this.config.service === 'forecastsolar') {
 				if (this.hasApiKey) {
 					// https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
+					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
 				} else {
 					// https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `https://api.forecast.solar/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}`;
+					url = `https://api.forecast.solar/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
 				}
 			} else if (this.config.service === 'solcast') {
 				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
@@ -1731,7 +1731,8 @@ class Pvforecast extends utils.Adapter {
 
 				await this.extendObjectAsync(`${prefix}.${hourKey}`, {
 					common: {
-						unit: this.config.watt_kw ? 'W' : 'kW'
+						unit: this.config.watt_kw ? 'W' : 'kW',
+						desc: this.timeZone
 					},
 					native: {
 						hourKey: hourKey
@@ -1766,7 +1767,8 @@ class Pvforecast extends utils.Adapter {
 
 				await this.extendObjectAsync(`${prefix}.${hourKey}`, {
 					common: {
-						unit: this.config.watt_kw ? 'Wh' : 'kWh'
+						unit: this.config.watt_kw ? 'Wh' : 'kWh',
+						desc: this.timeZone
 					},
 					native: {
 						hourKey: hourKey

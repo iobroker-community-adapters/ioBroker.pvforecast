@@ -29,6 +29,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+* (klein0r) Request forecast data in correct timezone
+
 ### 2.6.0 (2023-03-09)
 
 * (arteck) chart summary for more strings
