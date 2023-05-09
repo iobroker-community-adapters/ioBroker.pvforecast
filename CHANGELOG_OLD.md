@@ -1,4 +1,7 @@
 # Older changes
+## 2.4.0 (2022-12-09)
+* (stromdao) Added SolarPredictionAPI
+
 ## 2.3.0 (2022-06-26)
 * (klein0r) Add summary values to InfluxDB
 * (klein0r) Use cron to ensure update on day change

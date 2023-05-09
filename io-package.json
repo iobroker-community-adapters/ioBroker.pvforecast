@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.6.0",
+    "version": "2.7.0",
     "news": {
+      "2.7.0": {
+        "en": "Request forecast data in correct timezone\nType of the `summary` object was changed to `device`",
+        "de": "Fordern Sie Prognosedaten in korrekter Zeitzone an\nArt des Zusammenfassungsobjekts wurde in das Gerät geändert",
+        "ru": "Запросить данные прогноза в правильном часовом поясе\nТип резюме объекта изменен на устройство",
+        "pt": "Solicitar dados de previsão no fuso horário correto\nO tipo do objeto sumário foi alterado para dispositivo",
+        "nl": "Verzoek om gegevens in correcte tijdzone\nType van het sumary object is veranderd om te apparaat",
+        "fr": "Demande de données prévisionnelles dans le fuseau horaire correct\nType de l'objet sommaire a été changé en périphérique",
+        "it": "Richiedi i dati previsionali nel fuso orario corretto\nTipo dell'oggetto sommario è stato cambiato in dispositivo",
+        "es": "Solicitar datos pronósticos en la zona horaria correcta\nTipo del objeto sumario se cambió al dispositivo",
+        "pl": "Dane dotyczące prognozy czasowej\nTyp obiektu podsumowalnego został zmieniony na urządzenie",
+        "uk": "Запит даних про прогнози в правильному часовому поясі\nТип об'єкту змінено на пристрій",
+        "zh-cn": "请求预测正确时间区的数据\n目 录"
+      },
       "2.6.0": {
         "en": "chart summary for more strings\nFixed charting summary\nRounded values in JSON summary",
         "de": "diagrammübersicht für mehr strings\nZusammenfassung der Diagramme\nGerundete Werte in JSON Zusammenfassung",
@@ -80,19 +93,6 @@
         "pl": "Dokładne wartości do InfluxDB\nZastosowanie crona w celu zapewnienia aktualizacji zmian w dzień\nPrzewiduje widoczność danych pogodowych (nie istnieje w odpowiedzi)",
         "uk": "Додайте підсумкові значення до InfluxDB\nВикористовуйте cron, щоб забезпечити оновлення при зміні дня\nВилучено видимість із даних про погоду (відповідь не існує)",
         "zh-cn": "增加流感\n为确保更新日内的变化而使用心\n消除天气数据(反应中存在)的可见度"
-      },
-      "2.2.1": {
-        "en": "Fixed tilt validation - allow zero tilt (0)",
-        "de": "Behobene Kippvalidierung - Nullneigung (0)",
-        "ru": "Фиксированная проверка наклона - позвольте нулевому наклону (0)",
-        "pt": "Validação de inclinação fixa - permitir zero tilt (0)",
-        "nl": "Gereserveerde tijltbetaling",
-        "fr": "Validation de l'inclinaison fixe - permettre l'inclinaison zéro (0)",
-        "it": "Validazione dell'inclinazione fissa - consentire l'inclinazione zero (0)",
-        "es": "Validación de inclinación fija - permitir cero inclinación (0)",
-        "pl": "Poprawa nachylenia – pozwala na odchylenie zera (0)",
-        "uk": "Перевірка фіксованого нахилу - дозволити нульовий нахил (0)",
-        "zh-cn": "固定的预制鉴定——允许零(0)"
       }
     },
     "titleLang": {
