@@ -126,7 +126,7 @@ class Pvforecast extends utils.Adapter {
 				this.log.debug(`Existing plant devices: ${JSON.stringify(plantDevices)} - configured: ${JSON.stringify(plantsKeep)}`);
 
 				await asyncForEach(plantDevices, async (deviceObj) => {
-					if (plantsKeep.indexOf(deviceObj._id) === -1) {
+					if (!plantsKeep.includes(deviceObj._id)) {
 						await this.delObjectAsync(deviceObj._id, { recursive: true });
 						this.log.info(`Deleted plant with id: "${deviceObj._id}" - (not found in configuration)`);
 					}
@@ -754,9 +754,9 @@ class Pvforecast extends utils.Adapter {
 	async saveEveryHourEmptyStates(type, cleanPlantId, prefix, dayOfMonth) {
 		const validHourKeys = this.getValidHourKeys();
 		const filledHourKeys = this.globalEveryHour[cleanPlantId]
-			.filter(e => e.dayOfMonth == dayOfMonth && e.type == type)
+			.filter(e => e.dayOfMonth == dayOfMonth && e.type === type)
 			.map(e => e.time);
-		const unfilledHourKeys = validHourKeys.filter(hourKey => filledHourKeys.indexOf(hourKey) < 0);
+		const unfilledHourKeys = validHourKeys.filter(hourKey => !filledHourKeys.includes(hourKey));
 
 		this.log.debug(`[saveEveryHourEmptyStates] ${unfilledHourKeys.length} items missing - please check if your license allows to request all values`);
 
@@ -817,6 +817,17 @@ class Pvforecast extends utils.Adapter {
 
 	async createAndDeleteStates() {
 		try {
+			// fix type of "summary"
+			try {
+				const oSummary = await this.getObjectAsync('summary');
+				if (oSummary && oSummary.type !== 'device') {
+					oSummary.type = 'device';
+					await this.setObjectAsync('summary', oSummary);
+				}
+			} catch (err) {
+				this.log.error(`[createAndDeleteStates] cannot update summary object error: ${err}`);
+			}
+
 			if (this.hasApiKey && this.config.weatherEnabled) {
 				this.log.debug('creating states for weather');
 
@@ -1784,7 +1795,7 @@ class Pvforecast extends utils.Adapter {
 		});
 
 		await asyncForEach(allHourStates.rows, async (obj) => {
-			if (validHourKeys.indexOf(obj.value.native.hourKey) === -1) {
+			if (!validHourKeys.includes(obj.value.native.hourKey)) {
 				await this.delForeignObjectAsync(obj.id);
 			}
 		});

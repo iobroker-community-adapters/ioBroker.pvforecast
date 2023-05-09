@@ -268,7 +268,7 @@
     },
     {
       "_id": "summary",
-      "type": "channel",
+      "type": "device",
       "common": {
         "name": {
           "en": "Summary",

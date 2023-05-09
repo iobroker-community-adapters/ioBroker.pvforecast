@@ -1,5 +1,4 @@
 ![Logo](admin/pvforecast.png)
-
 # ioBroker.pvforecast
 
 ![Number of Installations](http://iobroker.live/badges/pvforecast-installed.svg)
@@ -15,13 +14,11 @@
 Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](https://solcast.com/) or [SolarPredictionAPI](https://rapidapi.com/stromdao-stromdao-default/api/solarenergyprediction/)
 
 ## Documentation
-
 [🇺🇸 Documentation](./docs/en/README.md)
 
 [🇩🇪 Dokumentation](./docs/de/README.md)
 
 ## Credits
-
 - Logo (Sun): https://pixabay.com/de/vectors/sonne-wetter-wettervorhersage-157126/
 
 ## Changelog
@@ -30,17 +27,15 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-
 * (klein0r) Request forecast data in correct timezone
+* (bluefox) Type of the `summary` object was changed to `device`
 
 ### 2.6.0 (2023-03-09)
-
 * (arteck) chart summary for more strings
 * (klein0r) Fixed charting summary
 * (klein0r) Rounded values in JSON summary
 
 ### 2.5.2 (2023-03-08)
-
 * (klein0r) Fixed error when weather data could not be fetched
 
 ### 2.5.1 (2023-01-13)
@@ -56,7 +51,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 * (stromdao) Added SolarPredictionAPI
 
 ## License
-
 MIT License
 
 Copyright (c) 2021-2023 Patrick-Walther
