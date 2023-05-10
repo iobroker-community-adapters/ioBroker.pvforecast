@@ -1,4 +1,10 @@
 # Older changes
+## 2.5.0 (2023-01-11)
+* (klein0r) Added hourly values for energy
+* (Apollon77) Added Sentry for crash reporting
+* (klein0r) Dropped Admin 5 support
+* (klein0r) Added Ukrainian language
+
 ## 2.4.0 (2022-12-09)
 * (stromdao) Added SolarPredictionAPI
 

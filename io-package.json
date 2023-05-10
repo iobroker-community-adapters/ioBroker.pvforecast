@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.7.0",
+    "version": "2.7.1",
     "news": {
+      "2.7.1": {
+        "en": "Summary channel should not be deleted",
+        "de": "Zusammenfassung Kanal sollte nicht gelöscht werden",
+        "ru": "Аннотация канала не должна быть удалена",
+        "pt": "O canal sumário não deve ser excluído",
+        "nl": "Sumary kanaal mag niet worden verwijderd",
+        "fr": "Le canal sommaire ne doit pas être supprimé",
+        "it": "Canale di sintesi non deve essere cancellato",
+        "es": "No se debe eliminar el canal sumario",
+        "pl": "Kanał nie powinien być usuwany",
+        "uk": "Резюме каналу не потрібно видаляти",
+        "zh-cn": "不应删除汇总表"
+      },
       "2.7.0": {
         "en": "Request forecast data in correct timezone\nType of the `summary` object was changed to `device`",
         "de": "Fordern Sie Prognosedaten in korrekter Zeitzone an\nArt des Zusammenfassungsobjekts wurde in das Gerät geändert",
@@ -80,19 +93,6 @@
         "pl": "Added SolarPrediction",
         "uk": "Додано SolarPredictionAPI",
         "zh-cn": "增加太阳能防疫协会"
-      },
-      "2.3.0": {
-        "en": "Add summary values to InfluxDB\nUse cron to ensure update on day change\nRemoved visibility from weather data (doesn't exist in response)",
-        "de": "Zusammenfassungswerte zu InfluxDB hinzufügen\nVerwenden Sie cron, um sicherzustellen, Update auf Tageswechsel\nEntfernung der Sichtbarkeit von Wetterdaten (nicht vorhanden in Antwort)",
-        "ru": "Добавьте сводные значения в InfluxDB\nИспользуйте cron для обеспечения изменения в день\nУдаленная видимость от погодных данных (не существует в ответ)",
-        "pt": "Adicionar valores de resumo ao InfluxDB\nUse o cron para garantir a atualização na mudança do dia\nVisibilidade removida dos dados meteorológicos (não existe em resposta)",
-        "nl": "Verzamel de waarde van InfluxDB\nGebruik gewassen om updates te maken over dagverandering\nVerwijderde zichtbaarheid van weergegevens die niet bestaan in reactie",
-        "fr": "Ajouter des valeurs sommaires à InfluxDB\nUtilisez cron pour assurer la mise à jour sur le changement de jour\nVisibilité supprimée des données météorologiques (ne pas exister en réponse)",
-        "it": "Aggiungi i valori di sintesi per InfluxDB\nUtilizzare cron per garantire l'aggiornamento sul cambiamento di giorno\nRimozione della visibilità dai dati meteo (non esiste in risposta)",
-        "es": "Añadir valores sumarios a InfluxDB\nUse cron para asegurar la actualización del cambio de día\nLa visibilidad eliminada de los datos meteorológicos (no existe en respuesta)",
-        "pl": "Dokładne wartości do InfluxDB\nZastosowanie crona w celu zapewnienia aktualizacji zmian w dzień\nPrzewiduje widoczność danych pogodowych (nie istnieje w odpowiedzi)",
-        "uk": "Додайте підсумкові значення до InfluxDB\nВикористовуйте cron, щоб забезпечити оновлення при зміні дня\nВилучено видимість із даних про погоду (відповідь не існує)",
-        "zh-cn": "增加流感\n为确保更新日内的变化而使用心\n消除天气数据(反应中存在)的可见度"
       }
     },
     "titleLang": {
