@@ -7,7 +7,6 @@
 node_modules
 nbproject
 iob_npm.done
-package-lock.json
 
 # npm package files
 iobroker.*.tgz

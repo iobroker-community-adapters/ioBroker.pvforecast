@@ -122,7 +122,9 @@ class Pvforecast extends utils.Adapter {
 				// Get list of valid plants by configuration
 				const plantsKeep = plantArray.map(d => `${this.namespace}.plants.${this.cleanNamespace(d.name)}`);
 
-				const plantDevices = await this.getDevicesAsync();
+				// Delete plants which are not configured (anymore)
+				const allDevices = await this.getDevicesAsync();
+				const plantDevices = allDevices.filter(p => p._id.startsWith(`${this.namespace}.plants.`));
 				this.log.debug(`Existing plant devices: ${JSON.stringify(plantDevices)} - configured: ${JSON.stringify(plantsKeep)}`);
 
 				await asyncForEach(plantDevices, async (deviceObj) => {

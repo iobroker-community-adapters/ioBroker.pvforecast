@@ -1,4 +1,5 @@
 ![Logo](admin/pvforecast.png)
+
 # ioBroker.pvforecast
 
 ![Number of Installations](http://iobroker.live/badges/pvforecast-installed.svg)
@@ -14,11 +15,13 @@
 Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](https://solcast.com/) or [SolarPredictionAPI](https://rapidapi.com/stromdao-stromdao-default/api/solarenergyprediction/)
 
 ## Documentation
+
 [🇺🇸 Documentation](./docs/en/README.md)
 
 [🇩🇪 Dokumentation](./docs/de/README.md)
 
 ## Credits
+
 - Logo (Sun): https://pixabay.com/de/vectors/sonne-wetter-wettervorhersage-157126/
 
 ## Changelog
@@ -26,6 +29,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Summary channel should not be deleted
+
 ### 2.7.0 (2023-05-09)
 * (klein0r) Request forecast data in correct timezone
 * (bluefox) Type of the `summary` object was changed to `device`
