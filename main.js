@@ -169,12 +169,15 @@ class Pvforecast extends utils.Adapter {
 			globalunit = 1;
 		}
 
+		if (this.hasApiKey && this.config.service === 'forecastsolar' && this.config.weatherEnabled) {
+			this.log.info('Weather data is enabled in configuration - a professional account is required to request weather information');
+		}
+
 		await this.subscribeStatesAsync('plants.*');
 
 		await this.createAndDeleteStates();
 		await this.updateServiceDataInterval();
 		await this.updateActualDataInterval();
-
 
 		try {
 			this.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
