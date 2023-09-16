@@ -359,13 +359,13 @@ class Pvforecast extends utils.Adapter {
 						.pop() || 0;
 
 					totalPowerNow += powerNow;
-					totalPowerInstalled += plant.peakpower;
+					totalPowerInstalled += this.config.watt_kw ? plant.peakpower * 1000 : plant.peakpower;
 					totalEnergyNow += energyNow;
 					totalEnergyToday += energyToday;
 					totalEnergyTomorrow += energyTomorrow;
 
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(powerNow / globalunit), ack: true });
-					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.installed`, { val: plant.peakpower, ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.installed`, { val: this.config.watt_kw ? plant.peakpower * 1000 : plant.peakpower, ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(energyNow / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
@@ -475,6 +475,7 @@ class Pvforecast extends utils.Adapter {
 							yAxis_show: true,
 							yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
 							yAxis_step: this.config.chartingAxisStepY,
+							yAxis_max: this.config.watt_kw ? plant.peakpower * 1000 : plant.peakpower,
 						};
 
 						jsonGraphSummary.push(jsonGraph);
@@ -560,6 +561,7 @@ class Pvforecast extends utils.Adapter {
 					yAxis_show: true,
 					yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
 					yAxis_step: this.config.chartingAxisStepY,
+					yAxis_max: totalPowerInstalled,
 				};
 
 				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': [jsonGraphSummaryTotal], 'axisLabels': jsonGraphLabelSummary }), ack: true });
@@ -1623,6 +1625,11 @@ class Pvforecast extends utils.Adapter {
 						unit: this.config.watt_kw ? 'Wh' : 'kWh'
 					}
 				});
+				await this.extendObjectAsync(`plants.${cleanPlantId}.power.installed`, {
+					common: {
+						unit: this.config.watt_kw ? 'Wp' : 'kWp'
+					}
+				});
 				await this.extendObjectAsync(`plants.${cleanPlantId}.energy.today`, {
 					common: {
 						unit: this.config.watt_kw ? 'Wh' : 'kWh'
@@ -1654,6 +1661,11 @@ class Pvforecast extends utils.Adapter {
 			await this.extendObjectAsync('summary.power.now', {
 				common: {
 					unit: this.config.watt_kw ? 'W' : 'kW'
+				}
+			});
+			await this.extendObjectAsync('summary.power.installed', {
+				common: {
+					unit: this.config.watt_kw ? 'Wp' : 'kWp'
 				}
 			});
 			await this.extendObjectAsync('summary.energy.now', {
