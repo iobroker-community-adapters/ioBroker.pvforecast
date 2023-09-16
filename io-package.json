@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.8.0",
+    "version": "2.8.1",
     "news": {
+      "2.8.1": {
+        "en": "Fixed graph limits in summary\nAdded options for summary graph and label color",
+        "de": "Feste Grafikgrenzen in Zusammenfassung\nZusätzliche Optionen für Zusammenfassung Diagramm und Etikettenfarbe",
+        "ru": "Фиксированные лимиты графика в резюме\nДобавлены опции для краткого графика и цвета этикетки",
+        "pt": "Limites de gráficos fixos em resumo\nOpções adicionadas para o gráfico de resumo e cor da etiqueta",
+        "nl": "Gerepareerde grafische limieten in samenvatting\nToegevoegd opties voor sumary graph en labelkleur",
+        "fr": "Limites du graphique fixe en résumé\nOptions supplémentaires pour le graphique sommaire et la couleur de l'étiquette",
+        "it": "Limiti di grafico fissi in sintesi\nOpzioni aggiuntive per il grafico sommario e il colore dell'etichetta",
+        "es": "Límites fijos del gráfico en resumen\nOpciones adicionales para el gráfico sumario y el color de la etiqueta",
+        "pl": "Limit grafowy\nZadaniowe opcje grafu i etykietowania koloru",
+        "uk": "Виправлені межі графіка в резюме\nДодано параметри для анотації графа та кольору етикеток",
+        "zh-cn": "总表限制\n增加摘要图表和标签的选择"
+      },
       "2.8.0": {
         "en": "Graphs are limited to maximum power (max)\nInstalled power is Wp or kWp (as configured)",
         "de": "Grafiken sind auf maximale Leistung (max) begrenzt\nInstallierte Leistung ist Wp oder kWp (wie konfiguriert)",
@@ -80,19 +93,6 @@
         "pl": "Tablice JSON przy użyciu solcastu",
         "uk": "Фіксований стіл JSON при використанні розчинника",
         "zh-cn": "Fixed JSON 表"
-      },
-      "2.5.0": {
-        "en": "Added hourly values for energy\nAdded Sentry for crash reporting\nDropped Admin 5 support\nAdded Ukrainian language",
-        "de": "Stundenwerte für Energie hinzugefügt\nSentry für Crash Reporting hinzugefügt\nDroped Admin 5 Unterstützung\nUkrainische Sprache",
-        "ru": "Добавлены почасовые значения для энергии\nДобавлена служение для сообщения о сбоях\nDropped Admin 5 поддержка\nДобавлен украинский язык",
-        "pt": "Valores horários adicionados para a energia\nEnviado para relatório de acidente\nSuporte de Admin 5 Dropped\nAdicionado idioma ucraniano",
-        "nl": "Vermeld uurlijkse waarden voor energie\nVertaling:\nVertaling:\nVoeg Oekraïense taal toe",
-        "fr": "Ajout de valeurs horaires pour l'énergie\nAjout de Sentry for crash reporting\nSoutien Admin 5 abandonné\nAjout de la langue ukrainienne",
-        "it": "Valori orali aggiunti per energia\nAggiunto Sentry per la segnalazione di crash\nSupporto per admin goccia 5\nAggiunto lingua ucraina",
-        "es": "Valores por hora adicionales para la energía\nSentry adicional para reportar accidentes\nSoporte de Admin 5\nIdioma ucraniano añadido",
-        "pl": "Dokładne wartości dla energii\nWted Sentry for crash reporting (ang.)\nDropped Admin 5 (ang.)\nJęzyk ukraiński",
-        "uk": "Додано часові значення для енергії\nДодано Стирання для звіту про аварійний випадок\nПідтримка Dropped Admin 5\nУкраїнська мова",
-        "zh-cn": "增加能源时间价值\n增加事故报告待命状态\nD. 减少5个支助\n增加乌克兰语"
       }
     },
     "titleLang": {

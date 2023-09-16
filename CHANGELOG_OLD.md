@@ -1,4 +1,7 @@
 # Older changes
+## 2.5.2 (2023-03-08)
+* (klein0r) Fixed error when weather data could not be fetched
+
 ## 2.5.1 (2023-01-13)
 * (klein0r) Fixed JSON table when using solcast
 
