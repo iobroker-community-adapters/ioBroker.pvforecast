@@ -24,5 +24,7 @@
     "Charting label size": "Taille de l'étiquette de graphique",
     "Azimuth": "Azimut",
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Valeurs de titre valides : 0° (horizontal) à 90° (vertical)",
-    "(Professional account only)": "(Compte professionnel uniquement)"
+    "(Professional account only)": "(Compte professionnel uniquement)",
+    "Graph color": "Couleur du graphique",
+    "Label color": "Couleur de l'étiquette"
 }

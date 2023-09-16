@@ -24,5 +24,7 @@
     "Charting label size": "图表标签尺寸",
     "Azimuth": "方位角",
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "有效的倾斜值：0°（水平）到 90°（垂直）",
-    "(Professional account only)": "（仅限专业账户）"
+    "(Professional account only)": "（仅限专业账户）",
+    "Graph color": "图表颜色",
+    "Label color": "标签颜色"
 }

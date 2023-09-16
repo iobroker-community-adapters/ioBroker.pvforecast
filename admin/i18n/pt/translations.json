@@ -24,5 +24,7 @@
     "Charting label size": "Tamanho do rótulo do gráfico",
     "Azimuth": "Azimute",
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Valores de inclinação válidos: 0° (horizontal) a 90° (vertical)",
-    "(Professional account only)": "(Somente conta profissional)"
+    "(Professional account only)": "(Somente conta profissional)",
+    "Graph color": "Cor do gráfico",
+    "Label color": "Cor da etiqueta"
 }

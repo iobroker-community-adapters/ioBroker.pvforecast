@@ -24,5 +24,7 @@
     "Charting label size": "Rozmiar etykiety wykresu",
     "Azimuth": "Azymut",
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Prawidłowe wartości titlt: 0° (w poziomie) do 90° (w pionie)",
-    "(Professional account only)": "(Tylko konto profesjonalne)"
+    "(Professional account only)": "(Tylko konto profesjonalne)",
+    "Graph color": "Kolor wykresu",
+    "Label color": "Kolor etykiety"
 }

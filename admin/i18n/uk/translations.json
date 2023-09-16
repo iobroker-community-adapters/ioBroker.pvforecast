@@ -24,5 +24,7 @@
     "Charting label size": "Розмір етикетки діаграми",
     "Azimuth": "Азимут",
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Дійсні значення заголовка: від 0° (по горизонталі) до 90° (по вертикалі)",
-    "(Professional account only)": "(Лише для професійного облікового запису)"
+    "(Professional account only)": "(Лише для професійного облікового запису)",
+    "Graph color": "Колір графіка",
+    "Label color": "Колір етикетки"
 }

@@ -24,5 +24,7 @@
     "Charting label size": "Diagrammetikettengröße",
     "Azimuth": "Azimut",
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Gültige Neigungswerte: 0° (horizontal) bis 90° (vertikal)",
-    "(Professional account only)": "(nur professionelles Konto)"
+    "(Professional account only)": "(nur professionelles Konto)",
+    "Graph color": "Diagrammfarbe",
+    "Label color": "Etikettenfarbe"
 }
