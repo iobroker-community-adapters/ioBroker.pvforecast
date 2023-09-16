@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.7.1",
+    "version": "2.8.0",
     "news": {
+      "2.8.0": {
+        "en": "Graphs are limited to maximum power (max)\nInstalled power is Wp or kWp (as configured)",
+        "de": "Grafiken sind auf maximale Leistung (max) begrenzt\nInstallierte Leistung ist Wp oder kWp (wie konfiguriert)",
+        "ru": "Графы ограничены максимальной мощностью (максимум)\nУстановленная мощность Wp или kWp (как сконфигурирована)",
+        "pt": "Os gráficos são limitados à potência máxima (max)\nA potência instalada é Wp ou kWp (conforme configurado)",
+        "nl": "Grafs zijn beperkt tot maximale kracht\nGeïnstaleerde macht is Wp of KWP (as in beslag genomen)",
+        "fr": "Les graphiques sont limités à la puissance maximale (max)\nLa puissance installée est Wp ou kWp (comme configuré)",
+        "it": "I grafici sono limitati alla massima potenza (max)\nPotenza installata è Wp o kWp (come configurato)",
+        "es": "Los Gráficos se limitan a la potencia máxima (max)\nLa potencia instalada es Wp o kWp (como configurado)",
+        "pl": "Graphy są ograniczone do maksymalnej mocy (maksymalnie)\nInstalowana moc to Wp lub kWp (jako konfigurowany)",
+        "uk": "Графіки обмежені максимальною потужністю (max)\nВстановлена потужність Wp або кВтp (налаштована)",
+        "zh-cn": "罚款限于最高权力(最高限额)\n总电是Wp或 kWp(编)"
+      },
       "2.7.1": {
         "en": "Summary channel should not be deleted",
         "de": "Zusammenfassung Kanal sollte nicht gelöscht werden",
@@ -80,19 +93,6 @@
         "pl": "Dokładne wartości dla energii\nWted Sentry for crash reporting (ang.)\nDropped Admin 5 (ang.)\nJęzyk ukraiński",
         "uk": "Додано часові значення для енергії\nДодано Стирання для звіту про аварійний випадок\nПідтримка Dropped Admin 5\nУкраїнська мова",
         "zh-cn": "增加能源时间价值\n增加事故报告待命状态\nD. 减少5个支助\n增加乌克兰语"
-      },
-      "2.4.0": {
-        "en": "Added SolarPredictionAPI",
-        "de": "SolarPredictionAPI hinzugefügt",
-        "ru": "Добавлено SolarPredictionAPI",
-        "pt": "Adicionado SolarPredictionAPI",
-        "nl": "API",
-        "fr": "Ajout de SolarPredictionAPI",
-        "it": "API di protezione solare",
-        "es": "Añadido Predicción SolarAPI",
-        "pl": "Added SolarPrediction",
-        "uk": "Додано SolarPredictionAPI",
-        "zh-cn": "增加太阳能防疫协会"
       }
     },
     "titleLang": {

@@ -41,7 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.8.0 (2023-09-16)
 * (klein0r) Graphs are limited to maximum power (max)
 * (klein0r) Installed power is Wp or kWp (as configured)
 
@@ -59,9 +59,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 
 ### 2.5.2 (2023-03-08)
 * (klein0r) Fixed error when weather data could not be fetched
-
-### 2.5.1 (2023-01-13)
-* (klein0r) Fixed JSON table when using solcast
 
 ## License
 MIT License
