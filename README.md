@@ -41,6 +41,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Fixed graph limits in summary
+
 ### 2.8.0 (2023-09-16)
 * (klein0r) Graphs are limited to maximum power (max)
 * (klein0r) Installed power is Wp or kWp (as configured)

@@ -299,7 +299,7 @@ class Pvforecast extends utils.Adapter {
 		this.globalEveryHour = {};
 
 		let totalPowerNow = 0;
-		let totalPowerInstalled = 0;
+		const totalPowerInstalled = plantArray.reduce((totalInstalled, plant) => totalInstalled + (plant.peakpower) * 1000, 0);
 
 		let totalEnergyNow = 0;
 		let totalEnergyToday = 0;
@@ -307,6 +307,7 @@ class Pvforecast extends utils.Adapter {
 
 		await asyncForEach(plantArray, async (plant, index) => {
 			const cleanPlantId = this.cleanNamespace(plant.name);
+			const plantPowerInstalled = plant.peakpower * 1000; // kWp => Wp
 
 			this.globalEveryHour[cleanPlantId] = [];
 
@@ -359,13 +360,12 @@ class Pvforecast extends utils.Adapter {
 						.pop() || 0;
 
 					totalPowerNow += powerNow;
-					totalPowerInstalled += this.config.watt_kw ? plant.peakpower * 1000 : plant.peakpower;
 					totalEnergyNow += energyNow;
 					totalEnergyToday += energyToday;
 					totalEnergyTomorrow += energyTomorrow;
 
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(powerNow / globalunit), ack: true });
-					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.installed`, { val: this.config.watt_kw ? plant.peakpower * 1000 : plant.peakpower, ack: true });
+					await this.setStateChangedAsync(`plants.${cleanPlantId}.power.installed`, { val: Number(plantPowerInstalled / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(energyNow / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
 					await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
@@ -475,10 +475,14 @@ class Pvforecast extends utils.Adapter {
 							yAxis_show: true,
 							yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
 							yAxis_step: this.config.chartingAxisStepY,
-							yAxis_max: this.config.watt_kw ? plant.peakpower * 1000 : plant.peakpower,
+							yAxis_max: plantPowerInstalled / globalunit,
+							yAxis_maximumDigits: this.config.watt_kw ? 0 : 3,
 						};
 
-						jsonGraphSummary.push(jsonGraph);
+						jsonGraphSummary.push({
+							...jsonGraph,
+							yAxis_max: totalPowerInstalled / globalunit
+						});
 
 						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }), ack: true });
@@ -511,7 +515,7 @@ class Pvforecast extends utils.Adapter {
 		await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
 		await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
-		await this.setStateChangedAsync('summary.power.installed', { val: totalPowerInstalled, ack: true });
+		await this.setStateChangedAsync('summary.power.installed', { val: Number(totalPowerInstalled / globalunit), ack: true });
 
 		// add summary to InfluxDB
 		await asyncForEach(Object.keys(jsonDataSummary), async (time) => {
@@ -561,7 +565,8 @@ class Pvforecast extends utils.Adapter {
 					yAxis_show: true,
 					yAxis_appendix: this.config.watt_kw ? 'W' : 'kW',
 					yAxis_step: this.config.chartingAxisStepY,
-					yAxis_max: totalPowerInstalled,
+					yAxis_max: totalPowerInstalled / globalunit,
+					yAxis_maximumDigits: this.config.watt_kw ? 0 : 3,
 				};
 
 				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': [jsonGraphSummaryTotal], 'axisLabels': jsonGraphLabelSummary }), ack: true });
