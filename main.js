@@ -551,12 +551,12 @@ class Pvforecast extends utils.Adapter {
 					type: 'bar',
 					legendText: 'Total', // TODO: Configurable ?
 					displayOrder: 1,
-					color: plantArray[0].graphcolor,   // use the first string
+					color: this.config.chartingSummaryGraphcolor,
 					tooltip_AppendText: this.config.watt_kw ? 'W' : 'kW',
 					//datalabel_append: this.config.watt_kw ? 'W' : 'kW',
 					datalabel_show: true,
 					datalabel_rotation: this.config.chartingRoation,
-					datalabel_color: plantArray[0].labelcolor,   // use the first string
+					datalabel_color: this.config.chartingSummaryLabelcolor,
 					datalabel_fontSize: this.config.chartingLabelSize,
 
 					// graph y-Axis

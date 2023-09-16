@@ -174,13 +174,31 @@
                     "label": "Charting enabled"
                 },
                 "chartingSummary": {
-                    "newLine": false,
+                    "newLine": true,
                     "hidden": "!data.chartingEnabled",
                     "type": "checkbox",
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
                     "label": "Chart summary"
+                },
+                "chartingSummaryGraphcolor": {
+                    "type": "color",
+                    "hidden": "!data.chartingEnabled || !data.chartingSummary",
+                    "label": "Graph color",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "default": "#000000"
+                },
+                "chartingSummaryLabelcolor": {
+                    "type": "color",
+                    "hidden": "!data.chartingEnabled || !data.chartingSummary",
+                    "label": "Label color",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "default": "#cccccc"
                 },
                 "chartingJustToday": {
                     "newLine": true,

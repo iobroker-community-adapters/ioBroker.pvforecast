@@ -43,6 +43,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 ### **WORK IN PROGRESS**
 * (klein0r) Fixed graph limits in summary
+* (klein0r) Added options for summary graph and label color
 
 ### 2.8.0 (2023-09-16)
 * (klein0r) Graphs are limited to maximum power (max)
