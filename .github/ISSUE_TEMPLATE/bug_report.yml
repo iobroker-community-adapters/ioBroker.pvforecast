@@ -93,7 +93,3 @@ body:
       options:
         - label: iobroker.current.log (Please share the logs in debug mode)
           required: true
-        - label: Contents of the JavaScript browser console (always include in cases of issues with the user interface)
-  - type: textarea
-    attributes:
-      label: Additional information & file uploads
