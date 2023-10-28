@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.8.2",
+    "version": "2.9.0",
     "news": {
+      "2.9.0": {
+        "en": "Updated conversion for Solcast\nStore JSON state values in prettified format",
+        "de": "Aktualisierte Konvertierung für Solcast\nSpeichern von JSON-Zustandswerten im vortifizierten Format",
+        "ru": "Обновленная конверсия для Solcast\nХранить государственные ценности JSON в предварительном формате",
+        "pt": "Conversão atualizada para Solcast\nArmazenar valores de estado JSON em formato pré-tificado",
+        "nl": "Verouderde conversatie voor Solcast\nVertaling:",
+        "fr": "Conversion mise à jour pour Solcast\nStocker les valeurs de l'état JSON en format prétisé",
+        "it": "Conversione aggiornata per Solcast\nConservare i valori di stato JSON in formato prettificato",
+        "es": "Conversión actualizada para Solcast\nValores del estado de Store JSON en formato pretificado",
+        "pl": "Przejście na Solcast\nStore JSON (ang.)",
+        "uk": "Оновлена конвертація для Solcast\nЗберігайте значення стану JSON у попередньо встановленому форматі",
+        "zh-cn": "A. 更新的换文\nB. 前导 言"
+      },
       "2.8.2": {
         "en": "Added icons in admin tabs",
         "de": "Icons in Admin-Tabs hinzugefügt",
@@ -80,19 +93,6 @@
         "pl": "podsumowanie więcej strun\nFixed chart summary (ang.)\nOkrągłe wartości w podsumowaniu JSON",
         "uk": "схема резюме для більш рядків\nФіксований розрахунок резюме\nЗакруглені значення в JSON резюме",
         "zh-cn": "更细表\n固定图表\nB. 联合执行会摘要的附带价值"
-      },
-      "2.5.2": {
-        "en": "Fixed error when weather data could not be fetched",
-        "de": "Fehler behoben, wenn Wetterdaten nicht abgeholt werden konnten",
-        "ru": "Исправлена ошибка, когда погодные данные не могут быть получены",
-        "pt": "Erro fixo quando os dados meteorológicos não poderiam ser obtidos",
-        "nl": "Vergissing wanneer weergegevens niet kunnen worden opgehaald",
-        "fr": "Erreur fixe lorsque les données météorologiques ne peuvent pas être récupérées",
-        "it": "Errore fisso quando i dati meteo non potrebbero essere recuperati",
-        "es": "Error fijo cuando los datos meteorológicos no se pueden buscar",
-        "pl": "Błękitne błędy, gdy dane pogodowe nie mogą być odczytane",
-        "uk": "Виправлено помилку, коли дані погоди не можуть бути",
-        "zh-cn": "当天气数据不能分期时,固定错误"
       }
     },
     "titleLang": {
