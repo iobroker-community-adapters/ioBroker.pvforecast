@@ -1,6 +1,6 @@
 ![Logo](../../admin/pvforecast.png)
 
-# ioBroker.pvforecast - Adapter zu vorhersage eurer PV Erträge
+# ioBroker.pvforecast
 
 Dieser Adapter ersetzt das JavaScript aus dem [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
 

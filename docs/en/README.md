@@ -1,6 +1,6 @@
 ![Logo](../../admin/pvforecast.png)
 
-# ioBroker.pvforecast - Adapter for the forecast of PV incomes
+# ioBroker.pvforecast
 
 This Adapter replaced the javascript from the [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
 
