@@ -42,6 +42,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+* (klein0r) Updated conversion for Solcast
 * (klein0r) Store JSON state values in prettified format
 
 ### 2.8.2 (2023-10-28)
