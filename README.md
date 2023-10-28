@@ -41,7 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 2.8.2 (2023-10-28)
 * (klein0r) Added icons in admin tabs
 
 ### 2.8.1 (2023-09-16)
@@ -58,11 +58,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 ### 2.7.0 (2023-05-09)
 * (klein0r) Request forecast data in correct timezone
 * (bluefox) Type of the `summary` object was changed to `device`
-
-### 2.6.0 (2023-03-09)
-* (arteck) chart summary for more strings
-* (klein0r) Fixed charting summary
-* (klein0r) Rounded values in JSON summary
 
 ## License
 MIT License

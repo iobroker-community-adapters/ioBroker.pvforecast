@@ -1,4 +1,9 @@
 # Older changes
+## 2.6.0 (2023-03-09)
+* (arteck) chart summary for more strings
+* (klein0r) Fixed charting summary
+* (klein0r) Rounded values in JSON summary
+
 ## 2.5.2 (2023-03-08)
 * (klein0r) Fixed error when weather data could not be fetched
 

@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.8.1",
+    "version": "2.8.2",
     "news": {
+      "2.8.2": {
+        "en": "Added icons in admin tabs",
+        "de": "Icons in Admin-Tabs hinzugefügt",
+        "ru": "Добавлены иконки в admin tabs",
+        "pt": "Ícones adicionados em guias admin",
+        "nl": "Icoon toegevoegd in administratie",
+        "fr": "Ajout d'icônes dans les onglets d'administration",
+        "it": "Aggiunte le icone nelle schede admin",
+        "es": "Iconos añadidos en pestañas de administración",
+        "pl": "Ikony w adminowej tabeli",
+        "uk": "Додано іконки в вкладках адміністратора",
+        "zh-cn": "括号内增列图"
+      },
       "2.8.1": {
         "en": "Fixed graph limits in summary\nAdded options for summary graph and label color",
         "de": "Feste Grafikgrenzen in Zusammenfassung\nZusätzliche Optionen für Zusammenfassung Diagramm und Etikettenfarbe",
@@ -80,19 +93,6 @@
         "pl": "Błękitne błędy, gdy dane pogodowe nie mogą być odczytane",
         "uk": "Виправлено помилку, коли дані погоди не можуть бути",
         "zh-cn": "当天气数据不能分期时,固定错误"
-      },
-      "2.5.1": {
-        "en": "Fixed JSON table when using solcast",
-        "de": "Behobene JSON-Tabelle bei Verwendung von solcast",
-        "ru": "Исправлена таблица JSON при использовании solcast",
-        "pt": "Mesa JSON fixa ao usar solcast",
-        "nl": "_",
-        "fr": "Table fixe JSON lors de l'utilisation de solcast",
-        "it": "Tabella JSON fissa quando si utilizza solcast",
-        "es": "Mesa fija JSON cuando se utiliza el solcast",
-        "pl": "Tablice JSON przy użyciu solcastu",
-        "uk": "Фіксований стіл JSON при використанні розчинника",
-        "zh-cn": "Fixed JSON 表"
       }
     },
     "titleLang": {
