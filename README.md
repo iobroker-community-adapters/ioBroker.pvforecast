@@ -41,6 +41,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+* (klein0r) Added icons in admin tabs
+
 ### 2.8.1 (2023-09-16)
 * (klein0r) Fixed graph limits in summary
 * (klein0r) Added options for summary graph and label color
