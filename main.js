@@ -770,12 +770,14 @@ class Pvforecast extends utils.Adapter {
 			.map(e => e.time);
 		const unfilledHourKeys = validHourKeys.filter(hourKey => !filledHourKeys.includes(hourKey));
 
-		this.log.debug(`[saveEveryHourEmptyStates] ${unfilledHourKeys.length} items missing - please check if your license allows to request all values`);
+		if (unfilledHourKeys.length > 0) {
+			this.log.debug(`[saveEveryHourEmptyStates] ${unfilledHourKeys.length} items missing: "${unfilledHourKeys.join(', ')}"`);
 
-		// Fill all hours with 0 (which were not included in the service data)
-		await asyncForEach(unfilledHourKeys, async (hourKey) => {
-			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: 0, ack: true, q: 0x02 });
-		});
+			// Fill all hours with 0 (which were not included in the service data)
+			await asyncForEach(unfilledHourKeys, async (hourKey) => {
+				await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: 0, ack: true, q: 0x02 });
+			});
+		}
 	}
 
 	async saveEveryHourSummary(type, prefix, dayOfMonth) {
@@ -792,6 +794,8 @@ class Pvforecast extends utils.Adapter {
 					.filter(e => e.dayOfMonth == dayOfMonth && e.time === hourKey && e.type == type)
 					.reduce((pv, cv) => pv + cv.value, 0);
 			});
+
+			this.log.debug(`[saveEveryHourSummary] calculated total power for "${type}" time ${prefix}.${hourKey} (${dayOfMonth}) - value: ${totalPower}`);
 
 			await this.setStateChangedAsync(`${prefix}.${hourKey}`, { val: totalPower, ack: true });
 		});
