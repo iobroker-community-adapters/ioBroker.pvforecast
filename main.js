@@ -400,7 +400,7 @@ class Pvforecast extends utils.Adapter {
 					}
 
 					this.log.debug(`generated JSON data of "${plant.name}": ${JSON.stringify(jsonData)}`);
-					await this.setStateAsync(`plants.${cleanPlantId}.JSONData`, { val: JSON.stringify(jsonData), ack: true });
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONData`, { val: JSON.stringify(jsonData, null, 2), ack: true });
 
 					// JSON Table
 					const jsonTable = [];
@@ -427,7 +427,7 @@ class Pvforecast extends utils.Adapter {
 					}
 
 					this.log.debug(`generated JSON table of "${plant.name}": ${JSON.stringify(jsonTable)}`);
-					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(jsonTable), ack: true });
+					await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(jsonTable, null, 2), ack: true });
 
 					// JSON Graph
 					if (this.config.chartingEnabled) {
@@ -485,7 +485,7 @@ class Pvforecast extends utils.Adapter {
 						});
 
 						this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
-						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }), ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }, null, 2), ack: true });
 					} else {
 						await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
 					}
@@ -529,19 +529,19 @@ class Pvforecast extends utils.Adapter {
 				y: jsonDataSummary[time]
 			};
 		});
-		await this.setStateAsync('summary.JSONData', { val: JSON.stringify(jsonDataSummaryFormat), ack: true });
+		await this.setStateAsync('summary.JSONData', { val: JSON.stringify(jsonDataSummaryFormat, null, 2), ack: true });
 
 		// JSON Table
 		const jsonTableSummaryFormat = jsonTableSummary.map(row => {
 			row['Total'] = this.formatValue(row['Total'], this.config.watt_kw ? 0 : 3);
 			return row;
 		});
-		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat), ack: true });
+		await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat, null, 2), ack: true });
 
 		// JSON Graph
 		if (this.config.chartingEnabled) {
 			if (!this.config.chartingSummary) {
-				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }), ack: true });
+				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }, null, 2), ack: true });
 			} else {
 				const jsonGraphSummaryTotal = {
 					// graph
@@ -569,7 +569,7 @@ class Pvforecast extends utils.Adapter {
 					yAxis_maximumDigits: this.config.watt_kw ? 0 : 3,
 				};
 
-				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': [jsonGraphSummaryTotal], 'axisLabels': jsonGraphLabelSummary }), ack: true });
+				await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': [jsonGraphSummaryTotal], 'axisLabels': jsonGraphLabelSummary }, null, 2), ack: true });
 			}
 		} else {
 			await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
@@ -719,7 +719,7 @@ class Pvforecast extends utils.Adapter {
 						}
 
 						await this.setStateAsync(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
-						await this.setStateAsync(`plants.${cleanPlantId}.service.data`, { val: JSON.stringify(data), ack: true });
+						await this.setStateAsync(`plants.${cleanPlantId}.service.data`, { val: JSON.stringify(data, null, 2), ack: true });
 						await this.setStateAsync(`plants.${cleanPlantId}.service.lastUpdated`, { val: moment().valueOf(), ack: true });
 						await this.setStateAsync(`plants.${cleanPlantId}.service.message`, { val: message.type, ack: true });
 						await this.setStateAsync(`plants.${cleanPlantId}.place`, { val: message.info.place, ack: true });
