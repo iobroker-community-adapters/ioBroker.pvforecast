@@ -42,7 +42,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ## Changelog
-
+### **WORK IN PROGRESS**
 * (klein0r) Avoid logging of api key
 
 ### 2.9.0 (2023-10-28)
