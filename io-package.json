@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.9.0",
+    "version": "2.9.1",
     "news": {
+      "2.9.1": {
+        "en": "Avoid logging of api key",
+        "de": "Vermeiden Sie das Protokollieren des Api-Schlüssels",
+        "ru": "Избегайте входа в api key",
+        "pt": "Evite o registro da chave de api",
+        "nl": "Vermijden met het lokken van api sleutel",
+        "fr": "Éviter la connexion de la clé api",
+        "it": "Evitare la registrazione di chiave api",
+        "es": "Evite el registro de la tecla api",
+        "pl": "Uchwalanie klucza api",
+        "uk": "Уникайте залогів клавіші Api",
+        "zh-cn": "A. 撤销关键皮书"
+      },
       "2.9.0": {
         "en": "Updated conversion for Solcast\nStore JSON state values in prettified format",
         "de": "Aktualisierte Konvertierung für Solcast\nSpeichern von JSON-Zustandswerten im vortifizierten Format",
@@ -80,19 +93,6 @@
         "pl": "Dane dotyczące prognozy czasowej\nTyp obiektu podsumowalnego został zmieniony na urządzenie",
         "uk": "Запит даних про прогнози в правильному часовому поясі\nТип об'єкту змінено на пристрій",
         "zh-cn": "请求预测正确时间区的数据\n目 录"
-      },
-      "2.6.0": {
-        "en": "chart summary for more strings\nFixed charting summary\nRounded values in JSON summary",
-        "de": "diagrammübersicht für mehr strings\nZusammenfassung der Diagramme\nGerundete Werte in JSON Zusammenfassung",
-        "ru": "резюме диаграммы для больше строк\nФиксированное резюме\nКруглые значения в JSON резюме",
-        "pt": "resumo gráfico para mais strings\nResumo de gráficos fixos\nValores arredondados no resumo JSON",
-        "nl": "vertaling:\nVertaling:\nRonde waarden in JSON sumary",
-        "fr": "résumé graphique pour plus de chaînes\nRésumé des graphiques fixes\nValeurs arrondies dans le résumé JSON",
-        "it": "sommario grafico per più stringhe\nRiepilogo grafico fisso\nValori arrotondati in sintesi JSON",
-        "es": "resumen gráfico para más cadenas\nResumen de la gráfica fija\nValores redondeados en el sumario de JSON",
-        "pl": "podsumowanie więcej strun\nFixed chart summary (ang.)\nOkrągłe wartości w podsumowaniu JSON",
-        "uk": "схема резюме для більш рядків\nФіксований розрахунок резюме\nЗакруглені значення в JSON резюме",
-        "zh-cn": "更细表\n固定图表\nB. 联合执行会摘要的附带价值"
       }
     },
     "titleLang": {

@@ -42,7 +42,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ## Changelog
-### **WORK IN PROGRESS**
+### 2.9.1 (2023-12-18)
 * (klein0r) Avoid logging of api key
 
 ### 2.9.0 (2023-10-28)
@@ -59,9 +59,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 ### 2.8.0 (2023-09-16)
 * (klein0r) Graphs are limited to maximum power (max)
 * (klein0r) Installed power is Wp or kWp (as configured)
-
-### 2.7.1 (2023-05-10)
-* (klein0r) Summary channel should not be deleted
 
 ## License
 MIT License

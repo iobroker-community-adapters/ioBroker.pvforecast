@@ -1,4 +1,7 @@
 # Older changes
+## 2.7.1 (2023-05-10)
+* (klein0r) Summary channel should not be deleted
+
 ## 2.7.0 (2023-05-09)
 * (klein0r) Request forecast data in correct timezone
 * (bluefox) Type of the `summary` object was changed to `device`
