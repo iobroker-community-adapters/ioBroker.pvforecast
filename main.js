@@ -49,7 +49,7 @@ class Pvforecast extends utils.Adapter {
 	}
 
 	async onReady() {
-		this.log.debug(`instance config: ${JSON.stringify(this.config)}`);
+		this.logSensitive(`instance config: ${JSON.stringify(this.config)}`);
 
 		this.longitude = this.config.longitude;
 		this.latitude = this.config.latitude;
@@ -151,6 +151,8 @@ class Pvforecast extends utils.Adapter {
 		// Check if API key is configured
 		if (typeof this.config.apiKey !== 'undefined' && this.config.apiKey !== '') {
 			this.hasApiKey = true;
+		} else {
+			this.config.apiKey = '';
 		}
 
 		if (this.config.service === 'solcast' && !this.hasApiKey) {
@@ -620,7 +622,7 @@ class Pvforecast extends utils.Adapter {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
 					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.latitude}/${this.longitude}`;
-					this.log.debug(`[updateServiceWeatherData] url (professional account only): ${url}`);
+					this.logSensitive(`[updateServiceWeatherData] url (professional account only): ${url}`);
 
 					try {
 						const serviceResponse = await axios.get(url);
@@ -689,7 +691,7 @@ class Pvforecast extends utils.Adapter {
 				const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
 				const lastUpdate = (serviceDataLastUpdatedState && serviceDataLastUpdatedState.val) ? Number(serviceDataLastUpdatedState.val) : 0;
 
-				this.log.debug(`plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
+				this.logSensitive(`plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
 
 				if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
 					try {
@@ -1855,6 +1857,11 @@ class Pvforecast extends utils.Adapter {
 		}
 
 		return hourList;
+	}
+
+	logSensitive(msg) {
+		const newMsg = (typeof msg === 'string' && this.config.apiKey) ? msg.replace(this.config.apiKey, '**********') : msg;
+		this.log.debug(newMsg);
 	}
 
 	cleanNamespace(id) {
