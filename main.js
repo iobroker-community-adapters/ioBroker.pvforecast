@@ -6,8 +6,6 @@ const axios = require('axios').default;
 const solcast = require(__dirname + '/lib/solcast');
 const CronJob = require('cron').CronJob;
 
-const ioPackageJson = require('./io-package.json');
-
 let globalunit = 1000;
 
 const TYPE_ENERGY = 'energy';
@@ -1858,7 +1856,7 @@ class Pvforecast extends utils.Adapter {
 
 	logSensitive(msg) {
 		let newMsg = msg;
-		for (const attr of ioPackageJson.protectedNative) {
+		for (const attr of this.ioPack.protectedNative) {
 			newMsg = (typeof msg === 'string' && this.config[attr]) ? msg.replace(this.config[attr], `**config.${attr}**`) : msg;
 		}
 		this.log.debug(newMsg);
