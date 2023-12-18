@@ -31,6 +31,7 @@ class Pvforecast extends utils.Adapter {
 		super({
 			...options,
 			name: 'pvforecast',
+			useFormatDate: true,
 		});
 
 		this.globalEveryHour = {};
@@ -39,8 +40,8 @@ class Pvforecast extends utils.Adapter {
 		this.hasApiKey = false;
 
 		this.timeZone = 'Europe/Berlin';
-		this.longitude = undefined;
-		this.latitude = undefined;
+		this.pvLongitude = undefined;
+		this.pvLatitude = undefined;
 
 		this.updateServiceDataTimeout = null;
 		this.updateActualDataCron = null;
@@ -53,33 +54,27 @@ class Pvforecast extends utils.Adapter {
 	async onReady() {
 		this.logSensitive(`instance config: ${JSON.stringify(this.config)}`);
 
-		this.longitude = this.config.longitude;
-		this.latitude = this.config.latitude;
+		this.pvLongitude = this.config.longitude;
+		this.pvLatitude = this.config.latitude;
 
 		if (
-			(!this.longitude && this.longitude !== 0) || isNaN(this.longitude) ||
-			(!this.latitude && this.latitude !== 0) || isNaN(this.latitude)
+			(!this.pvLongitude && this.pvLongitude !== 0) || isNaN(this.pvLongitude) ||
+			(!this.pvLatitude && this.pvLatitude !== 0) || isNaN(this.pvLatitude)
 		) {
 			this.log.debug('[onReady] longitude and/or latitude not set, loading system configuration');
 
-			try {
-				const systemConfigState = await this.getForeignObjectAsync('system.config');
-				if (systemConfigState) {
-					this.longitude = systemConfigState.common.longitude;
-					this.latitude = systemConfigState.common.latitude;
+			// Check system values
+			if (this.longitude && this.latitude) {
+				this.pvLongitude = this.longitude;
+				this.pvLatitude = this.latitude;
 
-					if (this.longitude && this.latitude) {
-						this.log.info(`using system latitude: ${this.latitude} longitude: ${this.longitude}`);
-					}
-				}
-			} catch (err) {
-				this.log.error(`Error white requesting system.config: ${err}`);
+				this.log.info(`using system latitude: ${this.pvLatitude} longitude: ${this.pvLongitude}`);
 			}
 		}
 
 		if (
-			this.longitude == '' || typeof this.longitude == 'undefined' || isNaN(this.longitude) ||
-			this.latitude == '' || typeof this.latitude == 'undefined' || isNaN(this.latitude)
+			this.pvLongitude == '' || typeof this.pvLongitude == 'undefined' || isNaN(this.pvLongitude) ||
+			this.pvLatitude == '' || typeof this.pvLatitude == 'undefined' || isNaN(this.pvLatitude)
 		) {
 			this.log.error('Please set the longitude and latitude in the adapter (or system) configuration!');
 			return;
@@ -623,7 +618,7 @@ class Pvforecast extends utils.Adapter {
 				if (this.config.service === 'forecastsolar') {
 
 					// https://api.forecast.solar/:key/weather/:lat/:lon (Professional account only)
-					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.latitude}/${this.longitude}`;
+					const url = `https://api.forecast.solar/${this.config.apiKey}/weather/${this.pvLatitude}/${this.pvLongitude}`;
 					this.logSensitive(`[updateServiceWeatherData] url (professional account only): ${url}`);
 
 					try {
@@ -666,15 +661,15 @@ class Pvforecast extends utils.Adapter {
 			if (this.config.service === 'forecastsolar') {
 				if (this.hasApiKey) {
 					// https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
+					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
 				} else {
 					// https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `https://api.forecast.solar/estimate/${this.latitude}/${this.longitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
+					url = `https://api.forecast.solar/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
 				}
 			} else if (this.config.service === 'solcast') {
-				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.latitude}&longitude=${this.longitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
+				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
 			} else if (this.config.service === 'spa') {
-				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.latitude}&lon=${this.longitude}&deg=${plant.tilt}&az=${plant.azimuth}&wp=${plant.peakpower * 1000}`;
+				url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.pvLatitude}&lon=${this.pvLongitude}&deg=${plant.tilt}&az=${plant.azimuth}&wp=${plant.peakpower * 1000}`;
 				if (this.hasApiKey) {
 					requestHeader = {
 						headers: {
