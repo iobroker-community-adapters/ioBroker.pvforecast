@@ -41,7 +41,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-## Changelog
 ### **WORK IN PROGRESS**
 * (klein0r) Load system configuration via parameter
 
