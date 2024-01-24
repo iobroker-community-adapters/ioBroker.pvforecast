@@ -1,8 +1,11 @@
+# v0.1
 name: Bug report
-title: "Bug report"
-description: "Create a report to help improve this ioBroker adapter"
-labels: bug
+title: "[Bug]: "
+description: "Create a bug report to help improve this ioBroker adapter"
+assignees:
+  - klein0r
 body:
+  # general information
   - type: markdown
     attributes:
       value: >
@@ -11,16 +14,13 @@ body:
         If this is the first time you are doing this, please take a few moments to read
         through the [README](https://github.com/iobroker-community-adapters/ioBroker.pvforecast/blob/main/README.md).
 
-        You are about to report a bug in **Pvforecast Adapter**. Do not proceed if your issues
-        occurs with ioBroker, any third party adapters, unofficial or outdated
-        adapter versions.
+        You are about to report a bug in **Pvforecast Adapter**. Do not proceed if your issue
+        occurs with ioBroker core, any other adapters, unofficial or outdated
+        adapter or NodeJS versions.
 
         Do also not seek support here ("I need help with ...", "I have a
         question ...", "Can someone walk me through ..."), that belongs into the
         [ioBroker forum at forum.iobroker.net](https://forum.iobroker.net/).
-
-        And finally, make sure any bug you want to report is still present with the **current**
-        adapter (beta) version.
 
         Thank you for your collaboration!
   - type: checkboxes
@@ -29,22 +29,18 @@ body:
       options:
         - label: This issue is still present in the **current beta version** of this adapter
           required: true
-        - label: There is no other (open) issue with the same topic (used the search)
+        - label: There is no other (open) issue with the same topic (use the search!)
           required: true
-        - label: This issue is not described in the adapter documentation / FAQ
+        - label: This issue is not described in the adapter documentation / FAQ (read the docs!)
           required: true
-  - type: dropdown
-    id: api
+  # adapter specific input fields
+  - type: input
     attributes:
-      label: API
-      description: Which API is used for pv forecast / solar prediction
-      options:
-        - forecast.solar
-        - Solcast
-        - SolarPredictionAPI
-      default: 0
+      label: Used integration
+      description: forecast solar, solcast, ...
     validations:
       required: true
+  # general questions
   - type: textarea
     attributes:
       label: The problem
@@ -61,10 +57,6 @@ body:
       label: iobroker.current.log (in debug mode!)
       description: >-
         Share the log file of this adapter in debug mode
-  - type: markdown
-    attributes:
-      value: |
-        ## Environment
   - type: input
     attributes:
       label: Version of nodejs
@@ -79,17 +71,7 @@ body:
       required: true
   - type: input
     attributes:
-      label: Version of Adapter
+      label: Version of adapter
       description: Can be found in the adapters tab of ioBroker admin
     validations:
       required: true
-  - type: markdown
-    attributes:
-      value: |
-        ## Logs and other files needed for analysis
-  - type: checkboxes
-    attributes:
-      label: Checklist of files to include below
-      options:
-        - label: iobroker.current.log (Please share the logs in debug mode)
-          required: true
