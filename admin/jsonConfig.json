@@ -57,6 +57,15 @@
                     "label": "Weather (only with API-Key)",
                     "help": "(Professional account only)"
                 },
+                "dampingfactor": {
+                    "hidden": "data.service !== 'forecastsolar'",
+                    "type": "text",
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "label": "Damping Factor",
+                    "help": "example 0,1 (use in the morning and in the evening a factor of 0-1)"
+                },
                 "latitude": {
                     "newLine": true,
                     "type": "text",
