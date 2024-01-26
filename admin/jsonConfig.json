@@ -307,7 +307,7 @@
                             "sort": false,
                             "default": 0
                         },
-                                {
+                        {
                             "type": "number",
                             "min": 0,
                             "max": 1,
@@ -330,7 +330,7 @@
                             "sort": false,
                             "default": 0
                         },
-                                        {
+                        {
                             "type": "number",
                             "min": 0,
                             "max": 1,
