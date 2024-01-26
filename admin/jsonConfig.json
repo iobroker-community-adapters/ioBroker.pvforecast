@@ -309,6 +309,7 @@
                         },
                                 {
                             "type": "number",
+                            "hidden": "data.service !== 'forecastsolar'",
                             "min": 0,
                             "max": 1,
                             "attr": "dampm",
@@ -332,6 +333,7 @@
                         },
                                         {
                             "type": "number",
+                            "hidden": "data.service !== 'forecastsolar'",
                             "min": 0,
                             "max": 1,
                             "attr": "dampe",
