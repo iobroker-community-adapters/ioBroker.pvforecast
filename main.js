@@ -659,10 +659,10 @@ class Pvforecast extends utils.Adapter {
 			if (this.config.service === 'forecastsolar') {
 				if (this.hasApiKey) {
 					// https://api.forecast.solar/:apikey/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
+					url = `https://api.forecast.solar/${this.config.apiKey}/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc&damping=${plant.dampm},${plant.dampe}`;
 				} else {
 					// https://api.forecast.solar/estimate/:lat/:lon/:dec/:az/:kwp
-					url = `https://api.forecast.solar/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc`;
+					url = `https://api.forecast.solar/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?time=utc&damping=${plant.dampm},${plant.dampe}`;
 				}
 			} else if (this.config.service === 'solcast') {
 				url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;

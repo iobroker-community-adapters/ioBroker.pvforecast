@@ -310,6 +310,52 @@
                         {
                             "type": "number",
                             "min": 0,
+                            "max": 1,
+                            "attr": "dampm",
+                            "width": "5%",
+                            "title": {
+                                "en": "damping morning",
+                                "de": "Dämpfung morgens",
+                                "ru": "увлажнение по утрам",
+                                "pt": "umedecimento pela manhã",
+                                "nl": "bevochtiging in de ochtend",
+                                "fr": "mouillage le matin",
+                                "it": "inumidimento al mattino",
+                                "es": "humedeciendo por la mañana",
+                                "pl": "nawilżanie rano",
+                                "uk": "зволоження вранці",
+                                "zh-cn": "早上受潮"
+                            },
+                            "filter": false,
+                            "sort": false,
+                            "default": 0
+                        },
+                        {
+                            "type": "number",
+                            "min": 0,
+                            "max": 1,
+                            "attr": "dampe",
+                            "width": "5%",
+                            "title": {
+                                "en": "damping evening",
+                                "de": "Dämpfung abends",
+                                "ru": "затухание вечером",
+                                "pt": "atenuação à noite",
+                                "nl": "verzwakking in de avond",
+                                "fr": "atténuation le soir",
+                                "it": "attenuazione in serata",
+                                "es": "atenuación por la noche",
+                                "pl": "osłabienie wieczorem",
+                                "uk": "ослаблення ввечері",
+                                "zh-cn": "晚上衰減"
+                            },
+                            "filter": false,
+                            "sort": false,
+                            "default": 0
+                        },
+                        {
+                            "type": "number",
+                            "min": 0,
                             "max": 90,
                             "attr": "tilt",
                             "width": "20%",
