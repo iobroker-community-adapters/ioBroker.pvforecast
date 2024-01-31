@@ -43,6 +43,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 ### **WORK IN PROGRESS**
 * (klein0r) Load system configuration via parameter
+* (coltc50) Added damping factor for forecast solar
 
 ### 2.9.1 (2023-12-18)
 * (klein0r) Avoid logging of api key

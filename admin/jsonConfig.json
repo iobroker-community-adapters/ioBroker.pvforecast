@@ -311,6 +311,7 @@
                             "type": "number",
                             "min": 0,
                             "max": 1,
+                            "step": 0.1,
                             "attr": "dampm",
                             "width": "5%",
                             "title": {
@@ -334,6 +335,7 @@
                             "type": "number",
                             "min": 0,
                             "max": 1,
+                            "step": 0.1,
                             "attr": "dampe",
                             "width": "5%",
                             "title": {
@@ -380,7 +382,7 @@
                             "type": "number",
                             "attr": "peakpower",
                             "width": "20%",
-                            "title":  {
+                            "title": {
                                 "en": "Peak power (kWp)",
                                 "de": "Spitzenleistung (kWp)",
                                 "ru": "Пик власть (kWp)",
