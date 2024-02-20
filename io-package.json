@@ -146,7 +146,12 @@
         "js-controller": ">=4.0.15"
       }
     ],
-    "license": "MIT",
+    "tier": 3,
+    "licenseInformation": {
+      "license": "MIT",
+      "type": "free"
+    },
+    "automaticUpgrade": "patch",
     "platform": "Javascript/Node.js",
     "icon": "pvforecast.png",
     "connectionType": "cloud",
