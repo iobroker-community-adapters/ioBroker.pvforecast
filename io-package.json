@@ -151,7 +151,6 @@
       "license": "MIT",
       "type": "free"
     },
-    "automaticUpgrade": "patch",
     "platform": "Javascript/Node.js",
     "icon": "pvforecast.png",
     "connectionType": "cloud",
