@@ -34,7 +34,7 @@
     "url": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=18"
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.0.6",

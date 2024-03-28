@@ -42,6 +42,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
+
+NodeJS >= 18.x and js-controller >= 5 is required
+
 * (klein0r) Load system configuration via parameter
 * (coltc50) Added damping factor for forecast solar
 
