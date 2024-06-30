@@ -41,7 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 3.0.0 (2024-06-30)
 
 NodeJS >= 18.x and js-controller >= 5 is required
 
@@ -61,10 +61,6 @@ NodeJS >= 18.x and js-controller >= 5 is required
 ### 2.8.1 (2023-09-16)
 * (klein0r) Fixed graph limits in summary
 * (klein0r) Added options for summary graph and label color
-
-### 2.8.0 (2023-09-16)
-* (klein0r) Graphs are limited to maximum power (max)
-* (klein0r) Installed power is Wp or kWp (as configured)
 
 ## License
 MIT License

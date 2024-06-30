@@ -1,4 +1,8 @@
 # Older changes
+## 2.8.0 (2023-09-16)
+* (klein0r) Graphs are limited to maximum power (max)
+* (klein0r) Installed power is Wp or kWp (as configured)
+
 ## 2.7.1 (2023-05-10)
 * (klein0r) Summary channel should not be deleted
 

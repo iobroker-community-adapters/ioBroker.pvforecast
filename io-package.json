@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "2.9.1",
+    "version": "3.0.0",
     "news": {
+      "3.0.0": {
+        "en": "NodeJS >= 18.x and js-controller >= 5 is required\n\n* Load system configuration via parameter\n* Added damping factor for forecast solar",
+        "de": "NodeJS >= 18.x und js-Controller >= 5 ist erforderlich\n\n* Systemkonfiguration über Parameter laden\n* Zusätzlicher Dämpfungsfaktor für prognostizierte Solar",
+        "ru": "NodeJS >= 18.x и js-контроллер >= 5 требуется\n\n* Настройка системы загрузки с помощью параметра\n* Добавленный коэффициент демпфирования для прогноза солнечной",
+        "pt": "NodeJS >= 18.x e js-controller >= 5 é necessário\n\n* Configuração do sistema de carga via parâmetro\n* Adicionado fator de amortecimento para previsão solar",
+        "nl": "Voor de toepassing van de onderverdelingen 870190 tot en met 870290 wordt onder post 8702 verstaan: 5 is vereist\n\n* Laden systeemconfiguratie via parameter\n* Toegevoegd dempingsfactor voor voorspelling zonne-energie",
+        "fr": "NodeJS >= 18.x et js-controller >= 5 est nécessaire\n\n* Configuration du système de chargement par paramètre\n* Ajout d'un facteur d'amortissement pour les prévisions solaires",
+        "it": "NodeJS >= 18.x e js-controller 5 è richiesto\n\n* Configurazione del sistema di carico tramite parametro\n* Aggiunto fattore di smorzamento per il solare di previsione",
+        "es": "NodeJS >= 18.x y js-controller Se requiere 5\n\n* Configuración del sistema de carga mediante parámetro\n* Factor de amortiguación añadido para el pronóstico solar",
+        "pl": "NodeJS > = 18.x i kontroler js- > = 5 jest wymagane\n\n* Konfiguracja systemu obciążenia przez parametr\n* Dodano współczynnik tłumienia prognozowanego słońca",
+        "uk": "NodeJS >= 18.x та js-controller >= 5 обов'язково\n\n* Налаштування системи навантаження через параметр\n* Додано демпферний фактор для прогнозування сонячної",
+        "zh-cn": "节点JS18x和js控制器QQ 需要5个\n\n* 通过参数装入系统配置\n* 预测太阳的加坝因子"
+      },
       "2.9.1": {
         "en": "Avoid logging of api key",
         "de": "Vermeiden Sie das Protokollieren des Api-Schlüssels",
@@ -80,19 +93,6 @@
         "pl": "Kanał nie powinien być usuwany",
         "uk": "Резюме каналу не потрібно видаляти",
         "zh-cn": "不应删除汇总表"
-      },
-      "2.7.0": {
-        "en": "Request forecast data in correct timezone\nType of the `summary` object was changed to `device`",
-        "de": "Fordern Sie Prognosedaten in korrekter Zeitzone an\nArt des Zusammenfassungsobjekts wurde in das Gerät geändert",
-        "ru": "Запросить данные прогноза в правильном часовом поясе\nТип резюме объекта изменен на устройство",
-        "pt": "Solicitar dados de previsão no fuso horário correto\nO tipo do objeto sumário foi alterado para dispositivo",
-        "nl": "Verzoek om gegevens in correcte tijdzone\nType van het sumary object is veranderd om te apparaat",
-        "fr": "Demande de données prévisionnelles dans le fuseau horaire correct\nType de l'objet sommaire a été changé en périphérique",
-        "it": "Richiedi i dati previsionali nel fuso orario corretto\nTipo dell'oggetto sommario è stato cambiato in dispositivo",
-        "es": "Solicitar datos pronósticos en la zona horaria correcta\nTipo del objeto sumario se cambió al dispositivo",
-        "pl": "Dane dotyczące prognozy czasowej\nTyp obiektu podsumowalnego został zmieniony na urządzenie",
-        "uk": "Запит даних про прогнози в правильному часовому поясі\nТип об'єкту змінено на пристрій",
-        "zh-cn": "请求预测正确时间区的数据\n目 录"
       }
     },
     "titleLang": {
