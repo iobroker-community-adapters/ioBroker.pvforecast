@@ -23,8 +23,8 @@ async function asyncForEach(array, callback) {
 
 class Pvforecast extends utils.Adapter {
     /**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
-	 */
+     * @param {Partial<utils.AdapterOptions>} [options={}]
+     */
     constructor(options) {
         super({
             ...options,
@@ -32,6 +32,7 @@ class Pvforecast extends utils.Adapter {
             useFormatDate: true,
         });
 
+        this.dataUpdateInProgess = false;
         this.globalEveryHour = {};
 
         this.reqInterval = 60;
@@ -57,7 +58,7 @@ class Pvforecast extends utils.Adapter {
 
         if (
             (!this.pvLongitude && this.pvLongitude !== 0) || isNaN(this.pvLongitude) ||
-			(!this.pvLatitude && this.pvLatitude !== 0) || isNaN(this.pvLatitude)
+            (!this.pvLatitude && this.pvLatitude !== 0) || isNaN(this.pvLatitude)
         ) {
             this.log.debug('[onReady] longitude and/or latitude not set, loading system configuration');
 
@@ -72,7 +73,7 @@ class Pvforecast extends utils.Adapter {
 
         if (
             this.pvLongitude == '' || typeof this.pvLongitude == 'undefined' || isNaN(this.pvLongitude) ||
-			this.pvLatitude == '' || typeof this.pvLatitude == 'undefined' || isNaN(this.pvLatitude)
+            this.pvLatitude == '' || typeof this.pvLatitude == 'undefined' || isNaN(this.pvLatitude)
         ) {
             this.log.error('Please set the longitude and latitude in the adapter (or system) configuration!');
             return;
@@ -194,10 +195,10 @@ class Pvforecast extends utils.Adapter {
     }
 
     /**
-	 * Is called if a subscribed state changes
-	 * @param {string} id
-	 * @param {ioBroker.State | null | undefined} state
-	 */
+     * Is called if a subscribed state changes
+     * @param {string} id
+     * @param {ioBroker.State | null | undefined} state
+     */
     onStateChange(id, state) {
         if (state && !state.ack) {
             this.log.debug(`state ${id} changed: ${state.val} (ack = ${state.ack})`);
@@ -787,9 +788,14 @@ class Pvforecast extends utils.Adapter {
 
             await asyncForEach(plantArray, async (plant) => {
                 const cleanPlantId = this.cleanNamespace(plant.name);
-                totalPower += this.globalEveryHour[cleanPlantId]
-                    .filter(e => e.dayOfMonth == dayOfMonth && e.time === hourKey && e.type == type)
-                    .reduce((pv, cv) => pv + cv.value, 0);
+
+                if (this.globalEveryHour[cleanPlantId]) {
+                    totalPower += this.globalEveryHour[cleanPlantId]
+                        .filter(e => e.dayOfMonth == dayOfMonth && e.time === hourKey && e.type == type)
+                        .reduce((pv, cv) => pv + cv.value, 0);
+                } else {
+                    this.log.warn(`[saveEveryHourSummary] plant "${plant.name}" (${cleanPlantId}) is missing in global hours`);
+                }
             });
 
             this.log.debug(`[saveEveryHourSummary] calculated total power for "${type}" time ${prefix}.${hourKey} (${dayOfMonth}) - value: ${totalPower}`);
@@ -1886,9 +1892,9 @@ class Pvforecast extends utils.Adapter {
     }
 
     /**
-	 * Is called when adapter shuts down - callback has to be called under any circumstances!
-	 * @param {() => void} callback
-	 */
+     * Is called when adapter shuts down - callback has to be called under any circumstances!
+     * @param {() => void} callback
+     */
     onUnload(callback) {
         try {
             if (this.updateServiceDataTimeout) {
@@ -1909,8 +1915,8 @@ class Pvforecast extends utils.Adapter {
 if (require.main !== module) {
     // Export the constructor in compact mode
     /**
-	 * @param {Partial<utils.AdapterOptions>} [options={}]
-	 */
+     * @param {Partial<utils.AdapterOptions>} [options={}]
+     */
     module.exports = (options) => new Pvforecast(options);
 } else {
     // otherwise start the instance directly
