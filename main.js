@@ -180,7 +180,7 @@ class Pvforecast extends utils.Adapter {
         try {
             this.timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
             this.log.info(`Starting internal update cron (every 15 Minutes) for timezone: ${this.timeZone}`);
-        } catch (err) {
+        } catch {
             this.log.warn(`Unable to get system timezone - fallback to Europe/Berlin`);
         }
 
@@ -1906,7 +1906,7 @@ class Pvforecast extends utils.Adapter {
             }
 
             callback();
-        } catch (e) {
+        } catch {
             callback();
         }
     }
