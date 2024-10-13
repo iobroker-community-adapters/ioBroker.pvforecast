@@ -666,7 +666,7 @@ class Pvforecast extends utils.Adapter {
                     url = `https://api.forecast.solar/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?damping_morning=${plant.dampm ?? '0'}&damping_evening=${plant.dampe ?? '0'}&time=utc`;
                 }
             } else if (this.config.service === 'solcast') {
-                url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
+                url = `https://api.solcast.com.au/rooftop_sites/{{my_resource_id}}/forecasts?format=json&api_key={{my_api_key}}`;
             } else if (this.config.service === 'spa') {
                 url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.pvLatitude}&lon=${this.pvLongitude}&deg=${plant.tilt}&az=${plant.azimuth}&wp=${plant.peakpower * 1000}`;
                 if (this.hasApiKey) {
