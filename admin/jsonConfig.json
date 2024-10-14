@@ -546,6 +546,17 @@
                             "default": "xxxx-xxxx-xxxx-xxxx"
                         }
                     ]
+                },
+                "_divider5": {
+                    "type": "divider"
+                },
+                "_azimuthHelp": {
+                    "newLine": true,
+                    "type": "staticImage",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "src": "img/solcast-toolkit.png"
                 }
             }
         }
