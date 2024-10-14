@@ -1,4 +1,8 @@
 # Older changes
+## 2.8.1 (2023-09-16)
+* (klein0r) Fixed graph limits in summary
+* (klein0r) Added options for summary graph and label color
+
 ## 2.8.0 (2023-09-16)
 * (klein0r) Graphs are limited to maximum power (max)
 * (klein0r) Installed power is Wp or kWp (as configured)

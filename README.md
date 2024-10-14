@@ -41,7 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 4.0.0 (2024-10-14)
 
 * (@klein0r) Use Solcast rooftop sites api
 
@@ -61,10 +61,6 @@ NodeJS >= 18.x and js-controller >= 5 is required
 
 ### 2.8.2 (2023-10-28)
 * (klein0r) Added icons in admin tabs
-
-### 2.8.1 (2023-09-16)
-* (klein0r) Fixed graph limits in summary
-* (klein0r) Added options for summary graph and label color
 
 ## License
 MIT License

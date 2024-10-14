@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "3.0.0",
+    "version": "4.0.0",
     "news": {
+      "4.0.0": {
+        "en": "Use Solcast rooftop sites api",
+        "de": "Verwenden Sie Solcast-Dachflächen api",
+        "ru": "Использовать сайты крыши Solcast api",
+        "pt": "Use sites de telhado Solcast api",
+        "nl": "Gebruik Solcast daksites api",
+        "fr": "Utiliser Solcast rooftop sites api",
+        "it": "Utilizzare Solcast tetto siti api",
+        "es": "Utilice los sitios de techo Solcast api",
+        "pl": "Użyj Solcast dachów strony api",
+        "uk": "Використовуйте Solcast дах сайти api",
+        "zh-cn": "使用 Solcast 屋顶站点 api"
+      },
       "3.0.0": {
         "en": "NodeJS >= 18.x and js-controller >= 5 is required\n\n* Load system configuration via parameter\n* Added damping factor for forecast solar",
         "de": "NodeJS >= 18.x und js-Controller >= 5 ist erforderlich\n\n* Systemkonfiguration über Parameter laden\n* Zusätzlicher Dämpfungsfaktor für prognostizierte Solar",
@@ -80,19 +93,6 @@
         "pl": "Graphy są ograniczone do maksymalnej mocy (maksymalnie)\nInstalowana moc to Wp lub kWp (jako konfigurowany)",
         "uk": "Графіки обмежені максимальною потужністю (max)\nВстановлена потужність Wp або кВтp (налаштована)",
         "zh-cn": "罚款限于最高权力(最高限额)\n总电是Wp或 kWp(编)"
-      },
-      "2.7.1": {
-        "en": "Summary channel should not be deleted",
-        "de": "Zusammenfassung Kanal sollte nicht gelöscht werden",
-        "ru": "Аннотация канала не должна быть удалена",
-        "pt": "O canal sumário não deve ser excluído",
-        "nl": "Sumary kanaal mag niet worden verwijderd",
-        "fr": "Le canal sommaire ne doit pas être supprimé",
-        "it": "Canale di sintesi non deve essere cancellato",
-        "es": "No se debe eliminar el canal sumario",
-        "pl": "Kanał nie powinien być usuwany",
-        "uk": "Резюме каналу не потрібно видаляти",
-        "zh-cn": "不应删除汇总表"
       }
     },
     "titleLang": {
