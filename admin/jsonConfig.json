@@ -252,6 +252,7 @@
             }
         },
         "_pvsystems": {
+            "hidden": "data.service === 'solcast'",
             "type": "panel",
             "label": "PV-Systems",
             "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuNC4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIzIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMTIyLjIgMEM5MS43IDAgNjUuNSAyMS41IDU5LjUgNTEuNEw4LjMgMzA3LjRDLjQgMzQ3IDMwLjYgMzg0IDcxIDM4NEgyODh2NjRIMjI0Yy0xNy43IDAtMzIgMTQuMy0zMiAzMnMxNC4zIDMyIDMyIDMySDQxNmMxNy43IDAgMzItMTQuMyAzMi0zMnMtMTQuMy0zMi0zMi0zMkgzNTJWMzg0SDU2OWM0MC40IDAgNzAuNy0zNi45IDYyLjgtNzYuNmwtNTEuMi0yNTZDNTc0LjUgMjEuNSA1NDguMyAwIDUxNy44IDBIMTIyLjJ6TTI2MC45IDY0SDM3OS4xbDEwLjQgMTA0aC0xMzlMMjYwLjkgNjR6TTIwMi4zIDE2OEgxMDEuNEwxMjIuMiA2NGg5MC40TDIwMi4zIDE2OHpNOTEuOCAyMTZIMTk3LjVMMTg3LjEgMzIwSDcxTDkxLjggMjE2em0xNTMuOSAwSDM5NC4zbDEwLjQgMTA0LTE2OS40IDAgMTAuNC0xMDR6bTE5Ni44IDBINTQ4LjJMNTY5IDMyMGgtMTE2TDQ0Mi41IDIxNnptOTYtNDhINDM3LjdMNDI3LjMgNjRoOTAuNGwzMS40LTYuM0w1MTcuOCA2NGwyMC44IDEwNHoiLz48L3N2Zz4=",
@@ -465,6 +466,86 @@
                     "md": 4,
                     "lg": 4,
                     "src": "img/Azimuth.png"
+                }
+            }
+        },
+        "_pvsystemsSolcast": {
+            "hidden": "data.service !== 'solcast'",
+            "type": "panel",
+            "label": "PV-Systems",
+            "icon": "data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NDAgNTEyIj48IS0tISBGb250IEF3ZXNvbWUgUHJvIDYuNC4yIGJ5IEBmb250YXdlc29tZSAtIGh0dHBzOi8vZm9udGF3ZXNvbWUuY29tIExpY2Vuc2UgLSBodHRwczovL2ZvbnRhd2Vzb21lLmNvbS9saWNlbnNlIChDb21tZXJjaWFsIExpY2Vuc2UpIENvcHlyaWdodCAyMDIzIEZvbnRpY29ucywgSW5jLiAtLT48cGF0aCBkPSJNMTIyLjIgMEM5MS43IDAgNjUuNSAyMS41IDU5LjUgNTEuNEw4LjMgMzA3LjRDLjQgMzQ3IDMwLjYgMzg0IDcxIDM4NEgyODh2NjRIMjI0Yy0xNy43IDAtMzIgMTQuMy0zMiAzMnMxNC4zIDMyIDMyIDMySDQxNmMxNy43IDAgMzItMTQuMyAzMi0zMnMtMTQuMy0zMi0zMi0zMkgzNTJWMzg0SDU2OWM0MC40IDAgNzAuNy0zNi45IDYyLjgtNzYuNmwtNTEuMi0yNTZDNTc0LjUgMjEuNSA1NDguMyAwIDUxNy44IDBIMTIyLjJ6TTI2MC45IDY0SDM3OS4xbDEwLjQgMTA0aC0xMzlMMjYwLjkgNjR6TTIwMi4zIDE2OEgxMDEuNEwxMjIuMiA2NGg5MC40TDIwMi4zIDE2OHpNOTEuOCAyMTZIMTk3LjVMMTg3LjEgMzIwSDcxTDkxLjggMjE2em0xNTMuOSAwSDM5NC4zbDEwLjQgMTA0LTE2OS40IDAgMTAuNC0xMDR6bTE5Ni44IDBINTQ4LjJMNTY5IDMyMGgtMTE2TDQ0Mi41IDIxNnptOTYtNDhINDM3LjdMNDI3LjMgNjRoOTAuNGwzMS40LTYuM0w1MTcuOCA2NGwyMC44IDEwNHoiLz48L3N2Zz4=",
+            "items": {
+                "devicesSolcast": {
+                    "type": "table",
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "label": "PV-Systems",
+                    "items": [
+                        {
+                            "type": "text",
+                            "attr": "name",
+                            "width": "20%",
+                            "title": {
+                                "en": "Name",
+                                "de": "Name",
+                                "ru": "Имя",
+                                "pt": "Nome",
+                                "nl": "Naam",
+                                "fr": "Nom",
+                                "it": "Nome",
+                                "es": "Nombre",
+                                "pl": "Nazwa",
+                                "uk": "Ім'я",
+                                "zh-cn": "姓名"
+                            },
+                            "filter": true,
+                            "sort": true,
+                            "default": "PV"
+                        },
+                        {
+                            "type": "number",
+                            "attr": "peakpower",
+                            "width": "20%",
+                            "title": {
+                                "en": "Peak power (kWp)",
+                                "de": "Spitzenleistung (kWp)",
+                                "ru": "Пик власть (kWp)",
+                                "pt": "Potência de pico (kWp)",
+                                "nl": "Peak (kWp)",
+                                "fr": "Puissance nominale (kWp)",
+                                "it": "Potenza massima (kWp)",
+                                "es": "Potencia de pico (kWp)",
+                                "pl": "Peak power (kWp)",
+                                "uk": "Потужність Піка (kWp)",
+                                "zh-cn": "佩克权力 (kWp)"
+                            },
+                            "filter": false,
+                            "sort": false,
+                            "default": 9.9
+                        },
+                        {
+                            "type": "text",
+                            "attr": "resourceId",
+                            "width": "60%",
+                            "title": {
+                                "en": "Resource Id",
+                                "de": "Resource Id",
+                                "ru": "Resource Id",
+                                "pt": "Resource Id",
+                                "nl": "Resource Id",
+                                "fr": "Resource Id",
+                                "it": "Resource Id",
+                                "es": "Resource Id",
+                                "pl": "Resource Id",
+                                "uk": "Resource Id",
+                                "zh-cn": "Resource Id"
+                            },
+                            "filter": true,
+                            "sort": true,
+                            "default": "xxxx-xxxx-xxxx-xxxx"
+                        }
+                    ]
                 }
             }
         }

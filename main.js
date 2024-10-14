@@ -79,12 +79,15 @@ class Pvforecast extends utils.Adapter {
             return;
         }
 
-        if (typeof this.config.devices == 'undefined' || !this.config.devices.length) {
+        if (this.config.service === 'solcast' && (typeof this.config.devicesSolcast === 'undefined' || !this.config.devicesSolcast.length)) {
+            this.log.error('Please set at least one solcast device in the adapter configuration!');
+            return;
+        } else if (this.config.service !== 'solcast' && (typeof this.config.devices === 'undefined' || !this.config.devices.length)) {
             this.log.error('Please set at least one device in the adapter configuration!');
             return;
         } else {
             try {
-                const plantArray = this.config.devices;
+                const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
 
                 // Validate plants
                 await asyncForEach(plantArray, async (plant) => {
@@ -92,16 +95,22 @@ class Pvforecast extends utils.Adapter {
                         throw new Error(`Invalid device configuration: Found plant without name`);
                     }
 
-                    if (isNaN(plant.azimuth)) {
-                        throw new Error(`Invalid device configuration: Found plant without azimuth`);
-                    }
+                    if (this.config.service === 'solcast') {
+                        if (!plant.resourceId || plant.resourceId === 'xxxx-xxxx-xxxx-xxxx') {
+                            throw new Error(`Invalid device configuration: Found plant without resource id`);
+                        }
+                    } else {
+                        if (isNaN(plant.azimuth)) {
+                            throw new Error(`Invalid device configuration: Found plant without azimuth`);
+                        }
 
-                    if (isNaN(plant.tilt)) {
-                        throw new Error(`Invalid device configuration: Found plant with incorrect tilt`);
-                    }
+                        if (isNaN(plant.tilt)) {
+                            throw new Error(`Invalid device configuration: Found plant with incorrect tilt`);
+                        }
 
-                    if (!plant.peakpower || isNaN(plant.peakpower) || plant.peakpower < 0) {
-                        throw new Error(`Invalid device configuration: Found plant without peak power`);
+                        if (!plant.peakpower || isNaN(plant.peakpower) || plant.peakpower < 0) {
+                            throw new Error(`Invalid device configuration: Found plant without peak power`);
+                        }
                     }
 
                     if (this.config.influxinstace) {
@@ -287,7 +296,7 @@ class Pvforecast extends utils.Adapter {
 
         this.log.debug(`[updateActualDataInterval] starting update (today: ${todaysDate}, tomorrow: ${tomorrowDate})`);
 
-        const plantArray = this.config.devices || [];
+        const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
 
         const jsonDataSummary = [];
         const jsonTableSummary = [];
@@ -649,7 +658,7 @@ class Pvforecast extends utils.Adapter {
     }
 
     async updateServiceData() {
-        const plantArray = this.config.devices || [];
+        const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
 
         await asyncForEach(plantArray, async (plant) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
@@ -666,7 +675,8 @@ class Pvforecast extends utils.Adapter {
                     url = `https://api.forecast.solar/estimate/${this.pvLatitude}/${this.pvLongitude}/${plant.tilt}/${plant.azimuth}/${plant.peakpower}?damping_morning=${plant.dampm ?? '0'}&damping_evening=${plant.dampe ?? '0'}&time=utc`;
                 }
             } else if (this.config.service === 'solcast') {
-                url = `https://api.solcast.com.au/world_pv_power/forecasts?format=json&hours=48&loss_factor=1&latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&api_key=${this.config.apiKey}`;
+                // url = `https://api.solcast.com.au/data/forecast/rooftop_pv_power?format=json&hours=48&loss_factor=1&latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&period=PT30M&output_parameters=pv_power_rooftop&api_key=${this.config.apiKey}`;
+                url = `https://api.solcast.com.au/rooftop_sites/${plant.resourceId}/forecasts?format=json&api_key=${this.config.apiKey}`;
             } else if (this.config.service === 'spa') {
                 url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.pvLatitude}&lon=${this.pvLongitude}&deg=${plant.tilt}&az=${plant.azimuth}&wp=${plant.peakpower * 1000}`;
                 if (this.hasApiKey) {
@@ -779,7 +789,7 @@ class Pvforecast extends utils.Adapter {
     }
 
     async saveEveryHourSummary(type, prefix, dayOfMonth) {
-        const plantArray = this.config.devices || [];
+        const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
 
         const validHourKeys = this.getValidHourKeys();
 
@@ -1145,7 +1155,7 @@ class Pvforecast extends utils.Adapter {
                 await this.delObjectAsync('weather', { recursive: true });
             }
 
-            const plantArray = this.config.devices;
+            const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
 
             await asyncForEach(plantArray, async (plant) => {
                 const cleanPlantId = this.cleanNamespace(plant.name);

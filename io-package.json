@@ -248,7 +248,8 @@
     "chartingLabelSize": 12,
     "chartingRoation": 270,
     "chartingAxisStepY": 1,
-    "devices": []
+    "devices": [],
+    "devicesSolcast": []
   },
   "objects": [],
   "instanceObjects": [
