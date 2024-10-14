@@ -87,7 +87,7 @@ class Pvforecast extends utils.Adapter {
             return;
         } else {
             try {
-                const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
+                const plantArray = this.getPlantConfigData();
 
                 // Validate plants
                 await asyncForEach(plantArray, async (plant) => {
@@ -290,13 +290,17 @@ class Pvforecast extends utils.Adapter {
             }, {});
     }
 
+    getPlantConfigData() {
+        return (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
+    }
+
     async updateActualDataInterval() {
         const todaysDate = moment().date();
         const tomorrowDate = moment().add(1, 'days').date();
 
         this.log.debug(`[updateActualDataInterval] starting update (today: ${todaysDate}, tomorrow: ${tomorrowDate})`);
 
-        const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
+        const plantArray = this.getPlantConfigData();
 
         const jsonDataSummary = [];
         const jsonTableSummary = [];
@@ -658,7 +662,7 @@ class Pvforecast extends utils.Adapter {
     }
 
     async updateServiceData() {
-        const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
+        const plantArray = this.getPlantConfigData();
 
         await asyncForEach(plantArray, async (plant) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
@@ -789,7 +793,7 @@ class Pvforecast extends utils.Adapter {
     }
 
     async saveEveryHourSummary(type, prefix, dayOfMonth) {
-        const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
+        const plantArray = this.getPlantConfigData();
 
         const validHourKeys = this.getValidHourKeys();
 
@@ -1155,7 +1159,7 @@ class Pvforecast extends utils.Adapter {
                 await this.delObjectAsync('weather', { recursive: true });
             }
 
-            const plantArray = (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
+            const plantArray = this.getPlantConfigData();
 
             await asyncForEach(plantArray, async (plant) => {
                 const cleanPlantId = this.cleanNamespace(plant.name);
