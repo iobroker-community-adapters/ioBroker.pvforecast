@@ -41,6 +41,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+* (@klein0r) Fixed: Missing color settings for new Solcast table
+
 ### 4.0.0 (2024-10-14)
 
 * (@klein0r) Use Solcast rooftop sites api

@@ -504,6 +504,27 @@
                             "default": "PV"
                         },
                         {
+                            "type": "text",
+                            "attr": "resourceId",
+                            "width": "40%",
+                            "title": {
+                                "en": "Resource Id",
+                                "de": "Resource Id",
+                                "ru": "Resource Id",
+                                "pt": "Resource Id",
+                                "nl": "Resource Id",
+                                "fr": "Resource Id",
+                                "it": "Resource Id",
+                                "es": "Resource Id",
+                                "pl": "Resource Id",
+                                "uk": "Resource Id",
+                                "zh-cn": "Resource Id"
+                            },
+                            "filter": true,
+                            "sort": true,
+                            "default": "xxxx-xxxx-xxxx-xxxx"
+                        },
+                        {
                             "type": "number",
                             "attr": "peakpower",
                             "width": "20%",
@@ -525,25 +546,46 @@
                             "default": 9.9
                         },
                         {
-                            "type": "text",
-                            "attr": "resourceId",
-                            "width": "60%",
+                            "type": "color",
+                            "attr": "graphcolor",
+                            "width": "10%",
                             "title": {
-                                "en": "Resource Id",
-                                "de": "Resource Id",
-                                "ru": "Resource Id",
-                                "pt": "Resource Id",
-                                "nl": "Resource Id",
-                                "fr": "Resource Id",
-                                "it": "Resource Id",
-                                "es": "Resource Id",
-                                "pl": "Resource Id",
-                                "uk": "Resource Id",
-                                "zh-cn": "Resource Id"
+                                "en": "Graph color",
+                                "de": "Diagrammfarbe",
+                                "ru": "Граф цвет",
+                                "pt": "Cor do gráfico",
+                                "nl": "Graf kleur",
+                                "fr": "Graph color",
+                                "it": "Colore del grafico",
+                                "es": "Color Gráfico",
+                                "pl": "Kolor",
+                                "uk": "Колір графа",
+                                "zh-cn": "黄色色色"
                             },
-                            "filter": true,
-                            "sort": true,
-                            "default": "xxxx-xxxx-xxxx-xxxx"
+                            "filter": false,
+                            "sort": false,
+                            "default": "#000000"
+                        },
+                        {
+                            "type": "color",
+                            "attr": "labelcolor",
+                            "width": "10%",
+                            "title": {
+                                "en": "Label color",
+                                "de": "Etikettenfarbe",
+                                "ru": "Цвет этикетки",
+                                "pt": "Cor da etiqueta",
+                                "nl": "Label kleur",
+                                "fr": "Couleur d ' étiquette",
+                                "it": "Colore dell'etichetta",
+                                "es": "Color de la etiqueta",
+                                "pl": "Label",
+                                "uk": "Колір етикетки",
+                                "zh-cn": "Labeloseph"
+                            },
+                            "filter": false,
+                            "sort": false,
+                            "default": "#000000"
                         }
                     ]
                 },
