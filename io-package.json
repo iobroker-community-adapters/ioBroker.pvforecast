@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "news": {
+      "4.0.1": {
+        "en": "Fixed: Missing color settings for new Solcast table",
+        "de": "Behoben: Fehlende Farbeinstellungen für neue Solcast-Tabelle",
+        "ru": "Исправлено: Пропущенные цветовые настройки для нового стола Solcast",
+        "pt": "Corrigido: Configurações de cor faltando para nova tabela Solcast",
+        "nl": "Vast: Ontbrekende kleurinstellingen voor nieuwe Solcast-tabel",
+        "fr": "Correction: Paramètres de couleur manquants pour la nouvelle table Solcast",
+        "it": "Fisso: Impostazioni colore mancante per il nuovo tavolo Solcast",
+        "es": "Fijo: Desapareciendo la configuración de color para la nueva mesa de Solcast",
+        "pl": "Naprawiono: brakujące ustawienia kolorów dla nowej tabeli Solcast",
+        "uk": "Виправлено: Налаштування кольорів для нового таблиці Solcast",
+        "zh-cn": "固定: 新 Solcast 表格缺少颜色设置"
+      },
       "4.0.0": {
         "en": "Use Solcast rooftop sites api",
         "de": "Verwenden Sie Solcast-Dachflächen api",
@@ -80,19 +93,6 @@
         "pl": "Limit grafowy\nZadaniowe opcje grafu i etykietowania koloru",
         "uk": "Виправлені межі графіка в резюме\nДодано параметри для анотації графа та кольору етикеток",
         "zh-cn": "总表限制\n增加摘要图表和标签的选择"
-      },
-      "2.8.0": {
-        "en": "Graphs are limited to maximum power (max)\nInstalled power is Wp or kWp (as configured)",
-        "de": "Grafiken sind auf maximale Leistung (max) begrenzt\nInstallierte Leistung ist Wp oder kWp (wie konfiguriert)",
-        "ru": "Графы ограничены максимальной мощностью (максимум)\nУстановленная мощность Wp или kWp (как сконфигурирована)",
-        "pt": "Os gráficos são limitados à potência máxima (max)\nA potência instalada é Wp ou kWp (conforme configurado)",
-        "nl": "Grafs zijn beperkt tot maximale kracht\nGeïnstaleerde macht is Wp of KWP (as in beslag genomen)",
-        "fr": "Les graphiques sont limités à la puissance maximale (max)\nLa puissance installée est Wp ou kWp (comme configuré)",
-        "it": "I grafici sono limitati alla massima potenza (max)\nPotenza installata è Wp o kWp (come configurato)",
-        "es": "Los Gráficos se limitan a la potencia máxima (max)\nLa potencia instalada es Wp o kWp (como configurado)",
-        "pl": "Graphy są ograniczone do maksymalnej mocy (maksymalnie)\nInstalowana moc to Wp lub kWp (jako konfigurowany)",
-        "uk": "Графіки обмежені максимальною потужністю (max)\nВстановлена потужність Wp або кВтp (налаштована)",
-        "zh-cn": "罚款限于最高权力(最高限额)\n总电是Wp或 kWp(编)"
       }
     },
     "titleLang": {

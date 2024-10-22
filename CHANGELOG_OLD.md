@@ -1,4 +1,7 @@
 # Older changes
+## 2.8.2 (2023-10-28)
+* (klein0r) Added icons in admin tabs
+
 ## 2.8.1 (2023-09-16)
 * (klein0r) Fixed graph limits in summary
 * (klein0r) Added options for summary graph and label color

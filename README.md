@@ -41,7 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 4.0.1 (2024-10-22)
 
 * (@klein0r) Fixed: Missing color settings for new Solcast table
 
@@ -62,9 +62,6 @@ NodeJS >= 18.x and js-controller >= 5 is required
 ### 2.9.0 (2023-10-28)
 * (klein0r) Updated conversion for Solcast
 * (klein0r) Store JSON state values in prettified format
-
-### 2.8.2 (2023-10-28)
-* (klein0r) Added icons in admin tabs
 
 ## License
 MIT License
