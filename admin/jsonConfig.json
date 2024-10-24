@@ -1,6 +1,9 @@
 {
     "i18n": true,
     "type": "tabs",
+    "tabsStyle": {
+        "width": "calc(100% - 100px)"
+    },
     "iconPosition": "top",
     "items": {
         "_options": {
@@ -10,9 +13,11 @@
             "items": {
                 "service": {
                     "type": "select",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "options": [
                         {
                             "label": "Forecast.solar",
@@ -34,43 +39,53 @@
                     "hidden": "data.service !== 'forecastsolar'",
                     "type": "number",
                     "min": 60,
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Poll interval",
                     "help": "in minutes"
                 },
                 "apiKey": {
                     "newLine": true,
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "API-Key"
                 },
                 "weatherEnabled": {
                     "hidden": "data.service !== 'forecastsolar'",
                     "type": "checkbox",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Weather (only with API-Key)",
                     "help": "(Professional account only)"
                 },
                 "latitude": {
                     "newLine": true,
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Latitude",
                     "help": "uses system config if empty"
                 },
                 "longitude": {
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Longitude",
                     "help": "uses system config if empty"
                 },
@@ -80,17 +95,21 @@
                 "everyhourEnabled": {
                     "newLine": true,
                     "type": "checkbox",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "States for every hour"
                 },
                 "everyhourStepsize": {
                     "hidden": "!data.everyhourEnabled",
                     "type": "select",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "options": [
                         {
                             "label": {
@@ -147,9 +166,11 @@
                 "watt_kw": {
                     "newLine": true,
                     "type": "checkbox",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Values in watt instead of kW"
                 },
                 "_divider2": {
@@ -159,9 +180,11 @@
                     "newLine": true,
                     "type": "instance",
                     "adapter": "influxdb",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "InfluxDB instance"
                 },
                 "_divider3": {
@@ -170,54 +193,66 @@
                 "chartingEnabled": {
                     "newLine": true,
                     "type": "checkbox",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Charting enabled"
                 },
                 "chartingSummary": {
                     "newLine": true,
                     "hidden": "!data.chartingEnabled",
                     "type": "checkbox",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Chart summary"
                 },
                 "chartingSummaryGraphcolor": {
                     "type": "color",
                     "hidden": "!data.chartingEnabled || !data.chartingSummary",
                     "label": "Graph color",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "default": "#000000"
                 },
                 "chartingSummaryLabelcolor": {
                     "type": "color",
                     "hidden": "!data.chartingEnabled || !data.chartingSummary",
                     "label": "Label color",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "default": "#cccccc"
                 },
                 "chartingJustToday": {
                     "newLine": true,
                     "hidden": "!data.chartingEnabled",
                     "type": "checkbox",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Just include current day"
                 },
                 "chartingLabelFormat": {
                     "newLine": true,
                     "hidden": "!data.chartingEnabled",
                     "type": "text",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Charting label format",
                     "help": "Define a custom format like DD.MM.YYYY HH:mm:ss",
                     "helpLink": "https://momentjs.com/docs/#/parsing/string-format/"
@@ -225,9 +260,11 @@
                 "chartingLabelSize": {
                     "hidden": "!data.chartingEnabled",
                     "type": "number",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Charting label size"
                 },
                 "chartingRoation": {
@@ -236,17 +273,21 @@
                     "type": "number",
                     "min": -360,
                     "max": 360,
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Charting label rotation"
                 },
                 "chartingAxisStepY": {
                     "hidden": "!data.chartingEnabled",
                     "type": "number",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "label": "Charting Y-Axis step"
                 }
             }
@@ -259,9 +300,11 @@
             "items": {
                 "devices": {
                     "type": "table",
+                    "xs": 12,
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
+                    "xl": 12,
                     "label": "PV-Systems",
                     "items": [
                         {
@@ -455,16 +498,20 @@
                     "type": "header",
                     "text": "Azimuth",
                     "size": 2,
+                    "xs": 12,
                     "sm": 12,
-                    "md": 4,
-                    "lg": 4
+                    "md": 12,
+                    "lg": 12,
+                    "xl": 12
                 },
                 "_azimuthHelp": {
                     "newLine": true,
                     "type": "staticImage",
+                    "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
+                    "xl": 4,
                     "src": "img/Azimuth.png"
                 }
             }
@@ -477,9 +524,11 @@
             "items": {
                 "devicesSolcast": {
                     "type": "table",
+                    "xs": 12,
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
+                    "xl": 12,
                     "label": "PV-Systems",
                     "items": [
                         {
@@ -595,9 +644,11 @@
                 "_azimuthHelp": {
                     "newLine": true,
                     "type": "staticImage",
+                    "xs": 12,
                     "sm": 12,
                     "md": 12,
                     "lg": 12,
+                    "xl": 12,
                     "src": "img/solcast-toolkit.png"
                 }
             }
