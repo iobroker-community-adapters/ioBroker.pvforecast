@@ -41,6 +41,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+- (simatec) Admin-UI has been adapted for small displays.
+
 ### 4.0.1 (2024-10-22)
 
 * (@klein0r) Fixed: Missing color settings for new Solcast table
