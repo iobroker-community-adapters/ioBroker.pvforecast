@@ -39,7 +39,7 @@
   "dependencies": {
     "@iobroker/adapter-core": "^3.2.2",
     "axios": "^1.7.7",
-    "cron": "^3.1.7",
+    "cron": "^3.1.8",
     "moment": "^2.30.1"
   },
   "devDependencies": {
