@@ -1,4 +1,8 @@
 # Older changes
+## 2.9.0 (2023-10-28)
+* (klein0r) Updated conversion for Solcast
+* (klein0r) Store JSON state values in prettified format
+
 ## 2.8.2 (2023-10-28)
 * (klein0r) Added icons in admin tabs
 

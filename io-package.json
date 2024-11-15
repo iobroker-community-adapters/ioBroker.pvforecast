@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "4.0.1",
+    "version": "4.1.0",
     "news": {
+      "4.1.0": {
+        "en": "Added estimated energy: now until end of day\nAdmin-UI has been adapted for small displays",
+        "de": "Geschätzte Energie hinzugefügt: jetzt bis Ende des Tages\nAdmin-UI wurde für kleine Displays angepasst",
+        "ru": "Добавлена предполагаемая энергия: сейчас до конца дня\nAdmin-UI был адаптирован для небольших дисплеев",
+        "pt": "Energia estimada adicionada: agora até final do dia\nAdmin-UI foi adaptado para pequenas telas",
+        "nl": "Toegevoegde energie: nu tot het einde van de dag\nBeheerder-UI is aangepast voor kleine displays",
+        "fr": "Énergie estimée ajoutée: jusqu'à la fin de la journée\nAdmin-UI a été adapté pour les petits affichages",
+        "it": "Aggiunto energia stimata: ora fino alla fine del giorno\nAdmin-UI è stato adattato per piccoli display",
+        "es": "Energía estimada agregada: ahora hasta el fin del día\nAdmin-UI ha sido adaptado para pequeñas pantallas",
+        "pl": "Dodano szacunkową energię: teraz do końca dnia\nAdmin- UI został dostosowany do małych wyświetlaczy",
+        "uk": "Додана оцінка енергії: тепер до кінця дня\nАдмін-УІ адаптований для малих дисплеїв",
+        "zh-cn": "增加的估计能量:现在到一天结束\n管理员- UI 已适应小显示"
+      },
       "4.0.1": {
         "en": "Fixed: Missing color settings for new Solcast table",
         "de": "Behoben: Fehlende Farbeinstellungen für neue Solcast-Tabelle",
@@ -80,19 +93,6 @@
         "pl": "Ikony w adminowej tabeli",
         "uk": "Додано іконки в вкладках адміністратора",
         "zh-cn": "括号内增列图"
-      },
-      "2.8.1": {
-        "en": "Fixed graph limits in summary\nAdded options for summary graph and label color",
-        "de": "Feste Grafikgrenzen in Zusammenfassung\nZusätzliche Optionen für Zusammenfassung Diagramm und Etikettenfarbe",
-        "ru": "Фиксированные лимиты графика в резюме\nДобавлены опции для краткого графика и цвета этикетки",
-        "pt": "Limites de gráficos fixos em resumo\nOpções adicionadas para o gráfico de resumo e cor da etiqueta",
-        "nl": "Gerepareerde grafische limieten in samenvatting\nToegevoegd opties voor sumary graph en labelkleur",
-        "fr": "Limites du graphique fixe en résumé\nOptions supplémentaires pour le graphique sommaire et la couleur de l'étiquette",
-        "it": "Limiti di grafico fissi in sintesi\nOpzioni aggiuntive per il grafico sommario e il colore dell'etichetta",
-        "es": "Límites fijos del gráfico en resumen\nOpciones adicionales para el gráfico sumario y el color de la etiqueta",
-        "pl": "Limit grafowy\nZadaniowe opcje grafu i etykietowania koloru",
-        "uk": "Виправлені межі графіка в резюме\nДодано параметри для анотації графа та кольору етикеток",
-        "zh-cn": "总表限制\n增加摘要图表和标签的选择"
       }
     },
     "titleLang": {
