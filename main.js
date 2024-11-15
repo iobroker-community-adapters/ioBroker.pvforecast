@@ -200,7 +200,7 @@ class Pvforecast extends utils.Adapter {
             true,
             this.timeZone
         );
-        this.log.debug(`[updateActualDataCron] next execution: ${this.updateActualDataCron.nextDates()}`);
+        this.log.debug(`[updateActualDataCron] next execution: ${this.updateActualDataCron.nextDate()}`);
     }
 
     /**
