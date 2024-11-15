@@ -217,7 +217,7 @@ class Pvforecast extends utils.Adapter {
                     .then(obj => {
                         if (obj?.native?.resetId) {
                             this.log.debug(`state "${id}" changed - resetting "${obj.native.resetId}" to 0`);
-                            return this.setStateAsync(obj.native.resetId, { val: 0, ack: true });
+                            return this.setState(obj.native.resetId, { val: 0, ack: true });
                         }
                     })
                     .then(() => {
@@ -420,7 +420,7 @@ class Pvforecast extends utils.Adapter {
                     }
 
                     this.log.debug(`generated JSON data of "${plant.name}": ${JSON.stringify(jsonData)}`);
-                    await this.setStateAsync(`plants.${cleanPlantId}.JSONData`, { val: JSON.stringify(jsonData, null, 2), ack: true });
+                    await this.setState(`plants.${cleanPlantId}.JSONData`, { val: JSON.stringify(jsonData, null, 2), ack: true });
 
                     // JSON Table
                     const jsonTable = [];
@@ -447,7 +447,7 @@ class Pvforecast extends utils.Adapter {
                     }
 
                     this.log.debug(`generated JSON table of "${plant.name}": ${JSON.stringify(jsonTable)}`);
-                    await this.setStateAsync(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(jsonTable, null, 2), ack: true });
+                    await this.setState(`plants.${cleanPlantId}.JSONTable`, { val: JSON.stringify(jsonTable, null, 2), ack: true });
 
                     // JSON Graph
                     if (this.config.chartingEnabled) {
@@ -505,12 +505,12 @@ class Pvforecast extends utils.Adapter {
                         });
 
                         this.log.debug(`generated JSON graph of "${plant.name}": ${JSON.stringify(jsonGraph)}`);
-                        await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }, null, 2), ack: true });
+                        await this.setState(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({ 'graphs': [jsonGraph], 'axisLabels': jsonGraphLabels }, null, 2), ack: true });
                     } else {
-                        await this.setStateAsync(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
+                        await this.setState(`plants.${cleanPlantId}.JSONGraph`, { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
                     }
 
-                    await this.setStateAsync(`plants.${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
+                    await this.setState(`plants.${cleanPlantId}.lastUpdated`, { val: moment().valueOf(), ack: true });
 
                     this.log.debug(`finished plant update: "${plant.name}"`);
                 } catch (err) {
@@ -550,19 +550,19 @@ class Pvforecast extends utils.Adapter {
                 y: jsonDataSummary[time]
             };
         });
-        await this.setStateAsync('summary.JSONData', { val: JSON.stringify(jsonDataSummaryFormat, null, 2), ack: true });
+        await this.setState('summary.JSONData', { val: JSON.stringify(jsonDataSummaryFormat, null, 2), ack: true });
 
         // JSON Table
         const jsonTableSummaryFormat = jsonTableSummary.map(row => {
             row['Total'] = this.formatValue(row['Total'], this.config.watt_kw ? 0 : 3);
             return row;
         });
-        await this.setStateAsync('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat, null, 2), ack: true });
+        await this.setState('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat, null, 2), ack: true });
 
         // JSON Graph
         if (this.config.chartingEnabled) {
             if (!this.config.chartingSummary) {
-                await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }, null, 2), ack: true });
+                await this.setState('summary.JSONGraph', { val: JSON.stringify({ 'graphs': jsonGraphSummary, 'axisLabels': jsonGraphLabelSummary }, null, 2), ack: true });
             } else {
                 const jsonGraphSummaryTotal = {
                     // graph
@@ -590,13 +590,13 @@ class Pvforecast extends utils.Adapter {
                     yAxis_maximumDigits: this.config.watt_kw ? 0 : 3,
                 };
 
-                await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({ 'graphs': [jsonGraphSummaryTotal], 'axisLabels': jsonGraphLabelSummary }, null, 2), ack: true });
+                await this.setState('summary.JSONGraph', { val: JSON.stringify({ 'graphs': [jsonGraphSummaryTotal], 'axisLabels': jsonGraphLabelSummary }, null, 2), ack: true });
             }
         } else {
-            await this.setStateAsync('summary.JSONGraph', { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
+            await this.setState('summary.JSONGraph', { val: JSON.stringify({}), ack: true, q: 0x02, c: 'Charting is disabled' });
         }
 
-        await this.setStateAsync('summary.lastUpdated', { val: moment().valueOf(), ack: true });
+        await this.setState('summary.lastUpdated', { val: moment().valueOf(), ack: true });
 
         await this.updateActualWeatherData();
     }
@@ -649,8 +649,8 @@ class Pvforecast extends utils.Adapter {
                         this.log.debug(`[updateServiceWeatherData] received data: ${JSON.stringify(serviceResponse.data)}`);
 
                         if (serviceResponse) {
-                            await this.setStateAsync('weather.service.data', { val: JSON.stringify(serviceResponse.data.result), ack: true });
-                            await this.setStateAsync(`weather.service.lastUpdated`, { val: moment().valueOf(), ack: true });
+                            await this.setState('weather.service.data', { val: JSON.stringify(serviceResponse.data.result), ack: true });
+                            await this.setState(`weather.service.lastUpdated`, { val: moment().valueOf(), ack: true });
                         }
 
                     } catch (error) {
@@ -740,11 +740,11 @@ class Pvforecast extends utils.Adapter {
                             message = serviceResponse.data.message;
                         }
 
-                        await this.setStateAsync(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
-                        await this.setStateAsync(`plants.${cleanPlantId}.service.data`, { val: JSON.stringify(data, null, 2), ack: true });
-                        await this.setStateAsync(`plants.${cleanPlantId}.service.lastUpdated`, { val: moment().valueOf(), ack: true });
-                        await this.setStateAsync(`plants.${cleanPlantId}.service.message`, { val: message.type, ack: true });
-                        await this.setStateAsync(`plants.${cleanPlantId}.place`, { val: message.info.place, ack: true });
+                        await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
+                        await this.setState(`plants.${cleanPlantId}.service.data`, { val: JSON.stringify(data, null, 2), ack: true });
+                        await this.setState(`plants.${cleanPlantId}.service.lastUpdated`, { val: moment().valueOf(), ack: true });
+                        await this.setState(`plants.${cleanPlantId}.service.message`, { val: message.type, ack: true });
+                        await this.setState(`plants.${cleanPlantId}.place`, { val: message.info.place, ack: true });
 
                     } catch (error) {
                         if (error === 'Error: Request failed with status code 429') {
