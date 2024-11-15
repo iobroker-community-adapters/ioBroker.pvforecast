@@ -42,7 +42,9 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (simatec) Admin-UI has been adapted for small displays.
+
+* (@klein0r) Added estimated energy: now until end of day
+* (@simatec) Admin-UI has been adapted for small displays
 
 ### 4.0.1 (2024-10-22)
 

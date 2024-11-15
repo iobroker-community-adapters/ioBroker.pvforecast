@@ -438,6 +438,32 @@
       "native": {}
     },
     {
+      "_id": "summary.energy.nowUntilEndOfDay",
+      "type": "state",
+      "common": {
+        "name": {
+          "en": "Estimated energy (until end of day)",
+          "de": "Geschätzte Energie (bis Ende des Tages)",
+          "ru": "Оценка энергии (до конца дня)",
+          "pt": "Energia estimada (até final do dia)",
+          "nl": "Geschatte energie (tot eind van de dag)",
+          "fr": "Estimation de l'énergie (jusqu'à fin de journée)",
+          "it": "Energia stimata (fino alla fine del giorno)",
+          "es": "Energía estimada (hasta el final del día)",
+          "pl": "Szacowana energia (do końca dnia)",
+          "uk": "Оцінена енергія (до кінця дня)",
+          "zh-cn": "估计能源(至日结束)"
+        },
+        "type": "number",
+        "role": "value",
+        "read": true,
+        "write": false,
+        "unit": "kWh",
+        "def": 0
+      },
+      "native": {}
+    },
+    {
       "_id": "summary.energy.tomorrow",
       "type": "state",
       "common": {

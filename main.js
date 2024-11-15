@@ -313,6 +313,7 @@ class Pvforecast extends utils.Adapter {
         const totalPowerInstalled = plantArray.reduce((totalInstalled, plant) => totalInstalled + (plant.peakpower) * 1000, 0);
 
         let totalEnergyNow = 0;
+        let totalEnergyNowUntilEndOfDay = 0;
         let totalEnergyToday = 0;
         let totalEnergyTomorrow = 0;
 
@@ -336,7 +337,7 @@ class Pvforecast extends utils.Adapter {
 
                     const mappedWattHoursPeriod = this.prepareData(data.watt_hours_period);
 
-                    this.log.debug(`[updateActualDataInterval] prepared data for plants.${cleanPlantId}.energy.*: ${JSON.stringify(mappedWattHoursPeriod)}`);
+                    this.log.debug(`[updateActualDataInterval] prepared energy data for plants.${cleanPlantId}.energy.*: ${JSON.stringify(mappedWattHoursPeriod)}`);
 
                     for (const time in mappedWattHoursPeriod) {
                         if (this.config.everyhourEnabled) {
@@ -369,15 +370,23 @@ class Pvforecast extends utils.Adapter {
                         .filter((timeStr) => moment(timeStr).valueOf() < moment().valueOf())
                         .map(key => data.watt_hours[key])
                         .pop() || 0;
+                    const energyNowUntilEndOfDay = Object.keys(mappedWattHoursPeriod)
+                        .filter((timeStr) => {
+                            const m = moment(timeStr);
+                            return m.valueOf() >= moment().valueOf() && todaysDate === m.date();
+                        })
+                        .reduce((total, timeStr) => total + mappedWattHoursPeriod[timeStr], 0);
 
                     totalPowerNow += powerNow;
                     totalEnergyNow += energyNow;
+                    totalEnergyNowUntilEndOfDay += energyNowUntilEndOfDay;
                     totalEnergyToday += energyToday;
                     totalEnergyTomorrow += energyTomorrow;
 
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.power.now`, { val: Number(powerNow / globalunit), ack: true });
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.power.installed`, { val: Number(plantPowerInstalled / globalunit), ack: true });
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.now`, { val: Number(energyNow / globalunit), ack: true });
+                    await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.nowUntilEndOfDay`, { val: Number(energyNowUntilEndOfDay / globalunit), ack: true });
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.today`, { val: Number(energyToday / globalunit), ack: true });
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.tomorrow`, { val: Number(energyTomorrow / globalunit), ack: true });
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
@@ -523,6 +532,7 @@ class Pvforecast extends utils.Adapter {
         }
 
         await this.setStateChangedAsync('summary.energy.now', { val: Number(totalEnergyNow / globalunit), ack: true });
+        await this.setStateChangedAsync('summary.energy.nowUntilEndOfDay', { val: Number(totalEnergyNowUntilEndOfDay / globalunit), ack: true });
         await this.setStateChangedAsync('summary.energy.today', { val: Number(totalEnergyToday / globalunit), ack: true });
         await this.setStateChangedAsync('summary.energy.tomorrow', { val: Number(totalEnergyTomorrow / globalunit), ack: true });
         await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
@@ -1292,6 +1302,32 @@ class Pvforecast extends utils.Adapter {
                     native: {}
                 });
 
+                await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.energy.nowUntilEndOfDay`, {
+                    type: 'state',
+                    common: {
+                        name: {
+                            en: 'Estimated energy (until end of day)',
+                            de: 'Geschätzte Energie (bis Ende des Tages)',
+                            ru: 'Оценка энергии (до конца дня)',
+                            pt: 'Energia estimada (até final do dia)',
+                            nl: 'Geschatte energie (tot eind van de dag)',
+                            fr: 'Estimation de l\'énergie (jusqu\'à fin de journée)',
+                            it: 'Energia stimata (fino alla fine del giorno)',
+                            es: 'Energía estimada (hasta el final del día)',
+                            pl: 'Szacowana energia (do końca dnia)',
+                            uk: 'Оцінена енергія (до кінця дня)',
+                            'zh-cn': '估计能源(至日结束)',
+                        },
+                        type: 'number',
+                        role: 'value',
+                        unit: 'kWh',
+                        read: true,
+                        write: false,
+                        def: 0
+                    },
+                    native: {}
+                });
+
                 await this.setObjectNotExistsAsync(`plants.${cleanPlantId}.energy.today`, {
                     type: 'state',
                     common: {
@@ -1651,6 +1687,11 @@ class Pvforecast extends utils.Adapter {
                         unit: this.config.watt_kw ? 'Wh' : 'kWh'
                     }
                 });
+                await this.extendObjectAsync(`plants.${cleanPlantId}.energy.nowUntilEndOfDay`, {
+                    common: {
+                        unit: this.config.watt_kw ? 'Wh' : 'kWh'
+                    }
+                });
                 await this.extendObjectAsync(`plants.${cleanPlantId}.power.installed`, {
                     common: {
                         unit: this.config.watt_kw ? 'Wp' : 'kWp'
@@ -1684,27 +1725,32 @@ class Pvforecast extends utils.Adapter {
             });
 
             // update unit by config
-            await this.extendObjectAsync('summary.power.now', {
+            await this.extendObject('summary.power.now', {
                 common: {
                     unit: this.config.watt_kw ? 'W' : 'kW'
                 }
             });
-            await this.extendObjectAsync('summary.power.installed', {
+            await this.extendObject('summary.power.installed', {
                 common: {
                     unit: this.config.watt_kw ? 'Wp' : 'kWp'
                 }
             });
-            await this.extendObjectAsync('summary.energy.now', {
+            await this.extendObject('summary.energy.now', {
                 common: {
                     unit: this.config.watt_kw ? 'Wh' : 'kWh'
                 }
             });
-            await this.extendObjectAsync('summary.energy.today', {
+            await this.extendObject('summary.energy.today', {
                 common: {
                     unit: this.config.watt_kw ? 'Wh' : 'kWh'
                 }
             });
-            await this.extendObjectAsync('summary.energy.tomorrow', {
+            await this.extendObject('summary.energy.nowUntilEndOfDay', {
+                common: {
+                    unit: this.config.watt_kw ? 'Wh' : 'kWh'
+                }
+            });
+            await this.extendObject('summary.energy.tomorrow', {
                 common: {
                     unit: this.config.watt_kw ? 'Wh' : 'kWh'
                 }
