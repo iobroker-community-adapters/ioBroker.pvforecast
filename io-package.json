@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "4.1.0",
+    "version": "5.0.0",
     "news": {
+      "5.0.0": {
+        "en": "NodeJS >= 20.x and js-controller >= 6 is required\n\n* Minimum peak power is 0.1 kWp",
+        "de": "NodeJS >= 20.x und js-Controller >= 6 ist erforderlich\n\n* Minimale Spitzenleistung 0,1 kWp",
+        "ru": "NodeJS >= 20.x и js-контроллер >= 6 Требуется\n\n* Минимальная пиковая мощность 0,1 кВт",
+        "pt": "NodeJS >= 20.x e js-controller >= 6 é necessário\n\n* Potência máxima mínima é de 0,1 kWp",
+        "nl": "Van niet-gelegeerd staal 6 is vereist\n\n* Minimum piekvermogen is 0,1 kWp",
+        "fr": "NodeJS >= 20.x et js-controller >= 6 est nécessaire\n\n* La puissance maximale minimale est de 0,1 kWp",
+        "it": "NodeJS >= 20.x e js-controller >= 6 è richiesto\n\n* Potenza minima di picco è 0.1 kWp",
+        "es": "NodeJS ю= 20.x y js-controller Se requiere 6\n\n* Potencia máxima mínima es 0.1 kWp",
+        "pl": "NodeJS > = 20 x i kontroler js- > = 6 jest wymagane\n\n* Minimalna moc szczytowa wynosi 0,1 kWp",
+        "uk": "NodeJS >= 20.x та js-controller >= 6 обов'язковий\n\n* Мінімальна пікова потужність 0,1 кВт",
+        "zh-cn": "节点JS20x和js控制器QQ 需要6个\n\n* 最低峰值功率为0.1千瓦普"
+      },
       "4.1.0": {
         "en": "Added estimated energy: now until end of day\nAdmin-UI has been adapted for small displays",
         "de": "Geschätzte Energie hinzugefügt: jetzt bis Ende des Tages\nAdmin-UI wurde für kleine Displays angepasst",
@@ -80,19 +93,6 @@
         "pl": "Przejście na Solcast\nStore JSON (ang.)",
         "uk": "Оновлена конвертація для Solcast\nЗберігайте значення стану JSON у попередньо встановленому форматі",
         "zh-cn": "A. 更新的换文\nB. 前导 言"
-      },
-      "2.8.2": {
-        "en": "Added icons in admin tabs",
-        "de": "Icons in Admin-Tabs hinzugefügt",
-        "ru": "Добавлены иконки в admin tabs",
-        "pt": "Ícones adicionados em guias admin",
-        "nl": "Icoon toegevoegd in administratie",
-        "fr": "Ajout d'icônes dans les onglets d'administration",
-        "it": "Aggiunte le icone nelle schede admin",
-        "es": "Iconos añadidos en pestañas de administración",
-        "pl": "Ikony w adminowej tabeli",
-        "uk": "Додано іконки в вкладках адміністратора",
-        "zh-cn": "括号内增列图"
       }
     },
     "titleLang": {
