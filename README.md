@@ -41,6 +41,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+### **WORK IN PROGRESS**
+
+NodeJS >= 20.x and js-controller >= 6 is required
+
 ### 4.1.0 (2024-11-15)
 
 * (@klein0r) Added estimated energy: now until end of day
@@ -62,6 +66,7 @@ NodeJS >= 18.x and js-controller >= 5 is required
 * (coltc50) Added damping factor for forecast solar
 
 ### 2.9.1 (2023-12-18)
+
 * (klein0r) Avoid logging of api key
 
 ## License
