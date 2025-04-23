@@ -492,9 +492,6 @@
                     "type": "staticText",
                     "text": "Valid titlt values: 0° (horizontal) to 90° (vertical)"
                 },
-                "_divider4": {
-                    "type": "divider"
-                },
                 "_azimuthHelpTitle": {
                     "type": "header",
                     "text": "Azimuth",

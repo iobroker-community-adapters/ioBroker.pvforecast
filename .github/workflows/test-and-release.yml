@@ -30,7 +30,6 @@ jobs:
         with:
           node-version: '20.x'
           lint: true
-          lint-command: 'npm run lint .'
 
   # Runs adapter tests on all supported node versions and OSes
   adapter-tests:
