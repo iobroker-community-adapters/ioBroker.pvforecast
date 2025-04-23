@@ -441,7 +441,8 @@
                             },
                             "filter": false,
                             "sort": false,
-                            "default": 9.9
+                            "default": 9.9,
+                            "min": 0.1
                         },
                         {
                             "type": "color",
@@ -592,7 +593,8 @@
                             },
                             "filter": false,
                             "sort": false,
-                            "default": 9.9
+                            "default": 9.9,
+                            "min": 0.1
                         },
                         {
                             "type": "color",
