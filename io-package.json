@@ -157,7 +157,6 @@
     "dataSource": "poll",
     "mode": "daemon",
     "compact": true,
-    "allowInit": true,
     "enabled": false,
     "adminUI": {
       "config": "json"
