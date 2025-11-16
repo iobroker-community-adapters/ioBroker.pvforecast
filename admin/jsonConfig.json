@@ -490,7 +490,12 @@
                 },
                 "_tiltHelp": {
                     "type": "staticText",
-                    "text": "Valid titlt values: 0° (horizontal) to 90° (vertical)"
+                    "text": "Valid titlt values: 0° (horizontal) to 90° (vertical)",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 12,
+                    "lg": 12,
+                    "xl": 12
                 },
                 "_azimuthHelpTitle": {
                     "type": "header",
