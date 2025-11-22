@@ -44,6 +44,8 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 ### **WORK IN PROGRESS**
 
 * (@klein0r) admin 7.6.17 and js-controller 6.0.11 (or later) are required
+* (@Scrounger) solcast user agent bug fix
+* (@klein0r) Updated dependencies
 
 ### 5.0.0 (2025-04-23)
 

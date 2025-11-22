@@ -852,6 +852,13 @@ class Pvforecast extends utils.Adapter {
             } else if (this.config.service === 'solcast') {
                 // url = `https://api.solcast.com.au/data/forecast/rooftop_pv_power?format=json&hours=48&loss_factor=1&latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&tilt=${plant.tilt}&azimuth=${this.convertAzimuth(plant.azimuth)}&capacity=${plant.peakpower}&period=PT30M&output_parameters=pv_power_rooftop&api_key=${this.config.apiKey}`;
                 url = `https://api.solcast.com.au/rooftop_sites/${plant.resourceId}/forecasts?format=json&api_key=${this.config.apiKey}`;
+
+                requestHeader = {
+                    headers: {
+                        'User-Agent':
+                            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/142.0.0.0 Safari/537.36',
+                    },
+                };
             } else if (this.config.service === 'spa') {
                 url = `https://solarenergyprediction.p.rapidapi.com/v2.0/solar/prediction?decoration=forecast.solar&lat=${this.pvLatitude}&lon=${this.pvLongitude}&deg=${plant.tilt}&az=${plant.azimuth}&wp=${plant.peakpower * 1000}`;
                 if (this.hasApiKey) {
