@@ -2,19 +2,11 @@
   "name": "iobroker.pvforecast",
   "version": "5.0.0",
   "description": "pvforecast",
-  "author": {
-    "name": "Patrick Walther",
-    "email": "walther-patrick@gmx.net"
-  },
+  "author": "Patrick Walther <walther-patrick@gmx.net>",
   "contributors": [
-    {
-      "name": "Matthias Kleine",
-      "email": "info@haus-automatisierung.com"
-    },
-    {
-      "name": "STROMDAO GmbH",
-      "email": "dev@stromdao.com"
-    }
+    "Matthias Kleine <info@haus-automatisierung.com>",
+    "STROMDAO GmbH <dev@stromdao.com>",
+    "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
   ],
   "homepage": "https://github.com/iobroker-community-adapters/ioBroker.pvforecast",
   "license": "MIT",
