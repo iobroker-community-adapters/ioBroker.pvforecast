@@ -124,7 +124,8 @@
     "authors": [
       "Patrick Walther <walther-patrick@gmx.net>",
       "Matthias Kleine <info@haus-automatisierung.com>",
-      "STROMDAO GmbH <dev@stromdao.com>"
+      "STROMDAO GmbH <dev@stromdao.com>",
+      "iobroker-community-adapters <iobroker-community-adapters@gmx.de>"
     ],
     "docs": {
       "en": [
