@@ -1,4 +1,11 @@
 # Older changes
+## 3.0.0 (2024-06-30)
+
+NodeJS >= 18.x and js-controller >= 5 is required
+
+* (klein0r) Load system configuration via parameter
+* (coltc50) Added damping factor for forecast solar
+
 ## 2.9.1 (2023-12-18)
 
 * (klein0r) Avoid logging of api key

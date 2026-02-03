@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "5.0.0",
+    "version": "5.1.0",
     "news": {
+      "5.1.0": {
+        "en": "admin 7.6.17 and js-controller 6.0.11 (or later) are required\nsolcast user agent bug fix\nUpdated dependencies",
+        "de": "admin 7.6.17 und js-controller 6.0.11 (oder später) sind erforderlich\nsolcast benutzer agent fehler beheben\nAktualisierte Abhängigkeiten",
+        "ru": "admin 7.6.17 и js-контроллер 6.0.11 (или более поздние)\nsolcast user agent bug fix\nОбновленные зависимости",
+        "pt": "admin 7.6.17 e js-controller 6.0.11 (ou posterior) são necessários\ncorreção de erro do agente de usuário solcast\nDependências atualizadas",
+        "nl": "admin 7.6.17 en js-controller 6.0.11 (of later) zijn vereist\nsolcast gebruiker agent bug fix\nBijgewerkte afhankelijkheden",
+        "fr": "admin 7.6.17 et js-contrôleur 6.0.11 (ou plus tard) sont requis\ncorrection du bug de l'agent utilisateur solcast\nDépendances actualisées",
+        "it": "admin 7.6.17 e js-controller 6.0.11 (o successivo) sono richiesti\nerrore dell'agente utente solcast\nDipendenze aggiornate",
+        "es": "admin 7.6.17 y js-controller 6.0.11 (o posterior) son necesarios\nsolcast agente de usuario bug\nDependencias actualizadas",
+        "pl": "wymagany jest admin 7.6.17 i kontroler js- 6.0.11 (lub późniejszy)\nbłąd agenta użytkownika solcast\nAktualizacja zależności",
+        "uk": "admin 7.6.17 та js-controller 6.0.11 (або пізніше) обов’язкові\nsolcast користувача агент виправлення помилок\nОновлені залежності",
+        "zh-cn": "需要admin 7.6.17和js控制器 6.0.11(或以后)\nsolcast 用户代理错误修复\n更新的依赖关系"
+      },
       "5.0.0": {
         "en": "NodeJS >= 20.x and js-controller >= 6 is required\n\n* Minimum peak power is 0.1 kWp",
         "de": "NodeJS >= 20.x und js-Controller >= 6 ist erforderlich\n\n* Minimale Spitzenleistung 0,1 kWp",
@@ -80,19 +93,6 @@
         "pl": "Uchwalanie klucza api",
         "uk": "Уникайте залогів клавіші Api",
         "zh-cn": "A. 撤销关键皮书"
-      },
-      "2.9.0": {
-        "en": "Updated conversion for Solcast\nStore JSON state values in prettified format",
-        "de": "Aktualisierte Konvertierung für Solcast\nSpeichern von JSON-Zustandswerten im vortifizierten Format",
-        "ru": "Обновленная конверсия для Solcast\nХранить государственные ценности JSON в предварительном формате",
-        "pt": "Conversão atualizada para Solcast\nArmazenar valores de estado JSON em formato pré-tificado",
-        "nl": "Verouderde conversatie voor Solcast\nVertaling:",
-        "fr": "Conversion mise à jour pour Solcast\nStocker les valeurs de l'état JSON en format prétisé",
-        "it": "Conversione aggiornata per Solcast\nConservare i valori di stato JSON in formato prettificato",
-        "es": "Conversión actualizada para Solcast\nValores del estado de Store JSON en formato pretificado",
-        "pl": "Przejście na Solcast\nStore JSON (ang.)",
-        "uk": "Оновлена конвертація для Solcast\nЗберігайте значення стану JSON у попередньо встановленому форматі",
-        "zh-cn": "A. 更新的换文\nB. 前导 言"
       }
     },
     "titleLang": {
