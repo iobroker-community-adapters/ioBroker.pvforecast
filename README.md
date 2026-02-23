@@ -41,6 +41,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires admin >= 7.7.22 now
+
 ### 5.1.0 (2026-02-03)
 
 * (@klein0r) admin 7.6.17 and js-controller 6.0.11 (or later) are required
