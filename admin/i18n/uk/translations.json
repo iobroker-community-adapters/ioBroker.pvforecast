@@ -26,5 +26,7 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Дійсні значення заголовка: від 0° (по горизонталі) до 90° (по вертикалі)",
     "(Professional account only)": "(Лише для професійного облікового запису)",
     "Graph color": "Колір графіка",
-    "Label color": "Колір етикетки"
+    "Label color": "Колір етикетки",
+    "Forecast days (pvnode)": "Дні прогнозу (pvnode)",
+    "pvnode forecast days help": "Безкоштовно: макс. 1, Платно: макс. 7"
 }

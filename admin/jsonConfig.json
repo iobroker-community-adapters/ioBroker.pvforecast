@@ -30,13 +30,17 @@
                         {
                             "label": "SolarPredictionAPI",
                             "value": "spa"
+                        },
+                        {
+                            "label": "pvnode",
+                            "value": "pvnode"
                         }
                     ],
                     "default": "forecastsolar",
                     "label": "Forecast service"
                 },
                 "interval": {
-                    "hidden": "data.service !== 'forecastsolar'",
+                    "hidden": "data.service === 'solcast'",
                     "type": "number",
                     "min": 60,
                     "xs": 12,
@@ -56,6 +60,19 @@
                     "lg": 4,
                     "xl": 4,
                     "label": "API-Key"
+                },
+                "pvnodeForecastDays": {
+                    "hidden": "data.service !== 'pvnode'",
+                    "type": "number",
+                    "min": 1,
+                    "max": 7,
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "xl": 4,
+                    "label": "Forecast days (pvnode)",
+                    "help": "pvnode forecast days help"
                 },
                 "weatherEnabled": {
                     "hidden": "data.service !== 'forecastsolar'",

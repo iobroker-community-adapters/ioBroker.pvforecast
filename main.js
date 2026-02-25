@@ -4,6 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const moment = require('moment');
 const axios = require('axios').default;
 const solcast = require(`${__dirname}/lib/solcast`);
+const pvnode = require(`${__dirname}/lib/pvnode`);
 const CronJob = require('cron').CronJob;
 
 let globalunit = 1000;
@@ -98,6 +99,7 @@ class Pvforecast extends utils.Adapter {
             this.log.error('Please set at least one device in the adapter configuration!');
             return;
         }
+
         try {
             const plantArray = this.getPlantConfigData();
 
@@ -188,6 +190,11 @@ class Pvforecast extends utils.Adapter {
             return;
         }
 
+        if (this.config.service === 'pvnode' && !this.hasApiKey) {
+            this.log.error('Please set the API key for pvnode in the adapter configuration!');
+            return;
+        }
+
         if (this.config.watt_kw) {
             globalunit = 1;
         }
@@ -260,6 +267,8 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'solcast') {
             this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
             this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}ms`);
+        } else if (this.config.service === 'pvnode') {
+            this.log.debug(`updateServiceDataInterval (pvnode) - next service refresh in ${this.reqInterval}ms`);
         }
 
         this.updateServiceDataTimeout = this.setTimeout(async () => {
@@ -869,6 +878,17 @@ class Pvforecast extends utils.Adapter {
                         },
                     };
                 }
+            } else if (this.config.service === 'pvnode') {
+                const orientation = pvnode.convertAzimuthToOrientation(plant.azimuth);
+                const forecastDays = this.config.pvnodeForecastDays || 1;
+
+                url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${plant.tilt}&orientation=${orientation}&pv_power_kw=${plant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
+
+                requestHeader = {
+                    headers: {
+                        Authorization: `Bearer ${this.config.apiKey}`,
+                    },
+                };
             }
 
             if (url) {
@@ -914,6 +934,11 @@ class Pvforecast extends utils.Adapter {
                         } else if (this.config.service === 'spa') {
                             data = serviceResponse.data.result;
                             message = serviceResponse.data.message;
+                        } else if (this.config.service === 'pvnode') {
+                            data = pvnode.convertToForecast(serviceResponse.data);
+                            this.log.debug(`[parsePvnodeToForecast] converted JSON: ${JSON.stringify(data)}`);
+
+                            message = { info: { place: '-' }, type: 'pvnode' };
                         }
 
                         await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
@@ -934,6 +959,10 @@ class Pvforecast extends utils.Adapter {
                             this.log.error(
                                 'entry out of range (check the notes in settings) => check azimuth, tilt, longitude, latitude',
                             );
+                        } else if (error === 'Error: Request failed with status code 401') {
+                            this.log.error('Unauthorized: Please check your API key');
+                        } else if (error === 'Error: Request failed with status code 403') {
+                            this.log.error('Forbidden: Access denied - check your API key and account permissions');
                         } else if (error === 'Error: Request failed with status code 404') {
                             this.log.error('Error: Not Found');
                         } else if (error === 'Error: Request failed with status code 502') {

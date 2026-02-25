@@ -4,7 +4,14 @@
 
 Dieser Adapter ersetzt das JavaScript aus dem [ioBroker forum](https://forum.iobroker.net/topic/26068/forecast-solar-mit-dem-systeminfo-adapter)
 
-Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Daten:
+Der Adapter holt die Grunddaten von verschiedenen Prognosediensten und stellt sie als ioBroker-States bereit.
+
+## Unterstützte Prognosedienste
+
+- **Forecast.solar** - https://forecast.solar
+- **Solcast** - https://solcast.com
+- **SolarPredictionAPI** - via RapidAPI
+- **pvnode** - https://pvnode.com
 
 ## Einstellungen
 
@@ -17,33 +24,58 @@ Der Adapter holt die Grunddaten von https://api.forecast.solar mit folgenden Dat
 
 ![pvforecast options](https://user-images.githubusercontent.com/76852173/155196476-8c8210d9-bdb2-456b-a0aa-1dd411efea5e.JPG)
 
-Mit einem Api-Schlüssel kann zusätzlich das Wetter bezogen werden.
+Mit einem Api-Schlüssel kann zusätzlich das Wetter bezogen werden (nur Forecast.solar).
 
 1. datetime - Datum und Uhrzeit
 2. sky - Wert zwischen 0 und 1 prozentual für klaren Himmel [1 =  klarer Himmel].
 3. Temperatur [°C]
-4. Zustand - text 
+4. Zustand - text
 5. icon - text + nummer
 6. Wind Geschwindigkeit -  [km/h]
 7. Wind winkel - Norden 0°[Uhrzeigersinn]. (Wenn die Windgeschwindigkeit ist Null, wird der Wert nicht definiert)
-8. Wind richtung - Short name 
+8. Wind richtung - Short name
 9. Höhere Zeitauflösung
 
 ## Für die Anlage stehen folgende Einstellungen zu Verfügung
 
 1. Neigung (0°-90°)
 2. Azimuth (-180 = north, -90 = east, 0 = south, 90 = west, 180 = north)
-3. Anlagenleistung (kWh)
+3. Anlagenleistung (kWp)
 4. Anlagenname
 5. Diagramm Legenden Name
 9. Diagramm Farbe
-10. Diagramm Label Farbe 
+10. Diagramm Label Farbe
 
 ![pvforecast pvsystem](https://user-images.githubusercontent.com/76852173/155196535-6828775a-8234-4a6a-b2a3-03d7fd88c80d.JPG)
 
 All diese Information werden benötigt um eine saubere Funktion des Adapters gewährleisten zu können.
 
 Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das System die Daten automatisch in die Felder ein.
+
+## pvnode
+
+[pvnode](https://pvnode.com) ist ein deutscher Dienst, der hochauflösende PV-Prognosen mit 15-Minuten-Intervallen liefert.
+
+### pvnode Konfiguration
+
+1. **API-Key**: Erstellen Sie einen API-Schlüssel unter https://pvnode.com/api-keys
+2. **Prognosetage**: Anzahl der Prognosetage (Kostenlos: max. 1, Bezahlt: max. 7)
+3. **Abfrageintervall**: Empfohlen: 90 Minuten (pvnode aktualisiert 16x pro Tag)
+
+### pvnode Kontotypen
+
+| Funktion | Kostenlos | Bezahlt |
+|----------|-----------|---------|
+| API-Anfragen/Monat | 40 | 1.000 |
+| Prognosetage | 1 (heute + morgen) | bis zu 7 |
+| Historische Daten | nein | ja (-30 Tage) |
+| Standorte | 1 | mehrere |
+
+### pvnode Besonderheiten
+
+- **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen
+- **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
+- Die Felder "Dämpfung morgens" und "Dämpfung abends" werden für pvnode nicht verwendet
 
 ## VIS Beispiel
 

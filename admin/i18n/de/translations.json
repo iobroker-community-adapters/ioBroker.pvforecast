@@ -26,5 +26,7 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Gültige Neigungswerte: 0° (horizontal) bis 90° (vertikal)",
     "(Professional account only)": "(nur professionelles Konto)",
     "Graph color": "Diagrammfarbe",
-    "Label color": "Etikettenfarbe"
+    "Label color": "Etikettenfarbe",
+    "Forecast days (pvnode)": "Prognosetage (pvnode)",
+    "pvnode forecast days help": "Kostenlos: max. 1, Bezahlt: max. 7"
 }

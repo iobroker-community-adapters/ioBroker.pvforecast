@@ -248,6 +248,7 @@
     "chartingLabelSize": 12,
     "chartingRoation": 270,
     "chartingAxisStepY": 1,
+    "pvnodeForecastDays": 1,
     "devices": [],
     "devicesSolcast": []
   },

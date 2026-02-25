@@ -26,5 +26,7 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Valores de inclinação válidos: 0° (horizontal) a 90° (vertical)",
     "(Professional account only)": "(Somente conta profissional)",
     "Graph color": "Cor do gráfico",
-    "Label color": "Cor da etiqueta"
+    "Label color": "Cor da etiqueta",
+    "Forecast days (pvnode)": "Dias de previsão (pvnode)",
+    "pvnode forecast days help": "Grátis: máx. 1, Pago: máx. 7"
 }

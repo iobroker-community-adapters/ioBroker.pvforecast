@@ -26,5 +26,7 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Valid titlt values: 0° (horizontal) to 90° (vertical)",
     "(Professional account only)": "(Professional account only)",
     "Graph color": "Graph color",
-    "Label color": "Label color"
+    "Label color": "Label color",
+    "Forecast days (pvnode)": "Forecast days (pvnode)",
+    "pvnode forecast days help": "Free: max 1, Paid: max 7"
 }

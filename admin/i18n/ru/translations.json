@@ -26,5 +26,7 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Допустимые значения titlt: от 0° (по горизонтали) до 90° (по вертикали)",
     "(Professional account only)": "(Только профессиональный аккаунт)",
     "Graph color": "Цвет графика",
-    "Label color": "Цвет этикетки"
+    "Label color": "Цвет этикетки",
+    "Forecast days (pvnode)": "Дни прогноза (pvnode)",
+    "pvnode forecast days help": "Бесплатно: макс. 1, Платно: макс. 7"
 }
