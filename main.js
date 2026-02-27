@@ -510,14 +510,30 @@ class Pvforecast extends utils.Adapter {
 
                     // JSON Data
                     const jsonData = [];
+                    const hasPvnodeData = this.config.service === 'pvnode' && data.watts_clearsky;
                     for (const time in data.watts) {
                         const power = data.watts[time] / globalunit;
                         const timestamp = moment(time).valueOf();
 
-                        jsonData.push({
+                        const entry = {
                             t: timestamp,
                             y: power,
-                        });
+                        };
+
+                        // Include pvnode-specific fields if available
+                        if (hasPvnodeData) {
+                            if (data.watts_clearsky[time] != null) {
+                                entry.clearsky = data.watts_clearsky[time] / globalunit;
+                            }
+                            if (data.temperature?.[time] != null) {
+                                entry.temp = data.temperature[time];
+                            }
+                            if (data.weather_code?.[time] != null) {
+                                entry.weather_code = data.weather_code[time];
+                            }
+                        }
+
+                        jsonData.push(entry);
 
                         if (jsonDataSummary?.[timestamp] === undefined) {
                             jsonDataSummary[timestamp] = 0;
@@ -538,10 +554,28 @@ class Pvforecast extends utils.Adapter {
                     for (const time in data.watts) {
                         const power = data.watts[time] / globalunit;
 
-                        jsonTable.push({
+                        const tableRow = {
                             Time: time,
                             Power: this.formatValue(power, this.config.watt_kw ? 0 : 3),
-                        });
+                        };
+
+                        // Include pvnode-specific fields if available
+                        if (hasPvnodeData) {
+                            if (data.watts_clearsky[time] != null) {
+                                tableRow.Clearsky = this.formatValue(
+                                    data.watts_clearsky[time] / globalunit,
+                                    this.config.watt_kw ? 0 : 3,
+                                );
+                            }
+                            if (data.temperature?.[time] != null) {
+                                tableRow.Temperature = data.temperature[time];
+                            }
+                            if (data.weather_code?.[time] != null) {
+                                tableRow.WeatherCode = data.weather_code[time];
+                            }
+                        }
+
+                        jsonTable.push(tableRow);
 
                         if (index === 0) {
                             jsonTableSummary[wattindex] = { Time: time };
