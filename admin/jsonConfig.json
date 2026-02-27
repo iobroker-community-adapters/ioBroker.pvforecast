@@ -61,8 +61,19 @@
                     "xl": 4,
                     "label": "API-Key"
                 },
-                "pvnodeForecastDays": {
+                "pvnodePaid": {
                     "hidden": "data.service !== 'pvnode'",
+                    "type": "checkbox",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 4,
+                    "lg": 4,
+                    "xl": 4,
+                    "label": "pvnode paid account",
+                    "help": "pvnode paid account help"
+                },
+                "pvnodeForecastDays": {
+                    "hidden": "data.service !== 'pvnode' || !data.pvnodePaid",
                     "type": "number",
                     "min": 1,
                     "max": 7,
@@ -73,6 +84,18 @@
                     "xl": 4,
                     "label": "Forecast days (pvnode)",
                     "help": "pvnode forecast days help"
+                },
+                "pvnodeExtraParams": {
+                    "hidden": "data.service !== 'pvnode'",
+                    "newLine": true,
+                    "type": "text",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 8,
+                    "lg": 8,
+                    "xl": 8,
+                    "label": "pvnode extra parameters",
+                    "help": "pvnode extra parameters help"
                 },
                 "weatherEnabled": {
                     "hidden": "data.service !== 'forecastsolar'",

@@ -27,6 +27,10 @@
     "(Professional account only)": "(Лише для професійного облікового запису)",
     "Graph color": "Колір графіка",
     "Label color": "Колір етикетки",
+    "pvnode paid account": "Платний акаунт (pvnode)",
+    "pvnode paid account help": "Увімкнути для платних акаунтів pvnode (1 000 запитів/місяць, до 7 днів прогнозу)",
     "Forecast days (pvnode)": "Дні прогнозу (pvnode)",
-    "pvnode forecast days help": "Безкоштовно: макс. 1, Платно: макс. 7"
+    "pvnode forecast days help": "Кількість днів прогнозу (платно: макс. 7)",
+    "pvnode extra parameters": "Додаткові параметри (pvnode)",
+    "pvnode extra parameters help": "напр. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

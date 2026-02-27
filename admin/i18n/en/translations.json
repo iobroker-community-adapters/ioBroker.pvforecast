@@ -27,6 +27,10 @@
     "(Professional account only)": "(Professional account only)",
     "Graph color": "Graph color",
     "Label color": "Label color",
+    "pvnode paid account": "Paid account (pvnode)",
+    "pvnode paid account help": "Enable for paid pvnode accounts (1,000 requests/month, up to 7 forecast days)",
     "Forecast days (pvnode)": "Forecast days (pvnode)",
-    "pvnode forecast days help": "Free: max 1, Paid: max 7"
+    "pvnode forecast days help": "Number of forecast days (paid: max 7)",
+    "pvnode extra parameters": "Extra parameters (pvnode)",
+    "pvnode extra parameters help": "e.g. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

@@ -880,9 +880,13 @@ class Pvforecast extends utils.Adapter {
                 }
             } else if (this.config.service === 'pvnode') {
                 const orientation = pvnode.convertAzimuthToOrientation(plant.azimuth);
-                const forecastDays = this.config.pvnodeForecastDays || 1;
+                const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
 
                 url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${plant.tilt}&orientation=${orientation}&pv_power_kw=${plant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
+
+                if (this.config.pvnodeExtraParams) {
+                    url += `&${this.config.pvnodeExtraParams}`;
+                }
 
                 requestHeader = {
                     headers: {

@@ -59,8 +59,10 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 ### pvnode Konfiguration
 
 1. **API-Key**: Erstellen Sie einen API-Schlüssel unter https://pvnode.com/api-keys
-2. **Prognosetage**: Anzahl der Prognosetage (Kostenlos: max. 1, Bezahlt: max. 7)
-3. **Abfrageintervall**: Empfohlen: 90 Minuten (pvnode aktualisiert 16x pro Tag)
+2. **Bezahltes Konto**: Aktivieren Sie diese Option, wenn Sie ein bezahltes pvnode-Konto besitzen
+3. **Prognosetage**: Anzahl der Prognosetage (nur bei bezahltem Konto, max. 7). Kostenlose Konten erhalten automatisch 1 Tag.
+4. **Abfrageintervall**: Empfohlen: 90 Minuten (pvnode aktualisiert 16x pro Tag)
+5. **Zusätzliche Parameter**: Optionale API-Parameter wie z.B. `diffuse_radiation_model=perez&snow_slide_coefficient=0.5`
 
 ### pvnode Kontotypen
 
@@ -70,6 +72,20 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 | Prognosetage | 1 (heute + morgen) | bis zu 7 |
 | Historische Daten | nein | ja (-30 Tage) |
 | Standorte | 1 | mehrere |
+
+**Wichtig**: Aktivieren Sie die Option "Bezahltes Konto" nur, wenn Sie tatsächlich ein bezahltes pvnode-Konto haben. Andernfalls kann es zu API-Fehlern kommen, da der Adapter nicht automatisch erkennen kann, welchen Kontotyp Sie verwenden.
+
+### pvnode Zusätzliche Parameter
+
+Über das Feld "Zusätzliche Parameter" können folgende optionale API-Parameter übergeben werden:
+
+| Parameter | Beschreibung | Beispiel |
+|-----------|--------------|---------|
+| `diffuse_radiation_model` | Strahlungsmodell | `perez` |
+| `snow_slide_coefficient` | Schneerutsch-Koeffizient (0.0-0.8) | `0.5` |
+| `shading_config` | Verschattungskonfiguration | `7:2:3:1_1:1:0:0_0:0:0:0` |
+
+Format: `key1=value1&key2=value2`
 
 ### pvnode Besonderheiten
 

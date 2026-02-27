@@ -27,6 +27,10 @@
     "(Professional account only)": "(Tylko konto profesjonalne)",
     "Graph color": "Kolor wykresu",
     "Label color": "Kolor etykiety",
+    "pvnode paid account": "Konto płatne (pvnode)",
+    "pvnode paid account help": "Włącz dla płatnych kont pvnode (1000 żądań/miesiąc, do 7 dni prognozy)",
     "Forecast days (pvnode)": "Dni prognozy (pvnode)",
-    "pvnode forecast days help": "Bezpłatnie: maks. 1, Płatne: maks. 7"
+    "pvnode forecast days help": "Liczba dni prognozy (płatne: maks. 7)",
+    "pvnode extra parameters": "Dodatkowe parametry (pvnode)",
+    "pvnode extra parameters help": "np. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

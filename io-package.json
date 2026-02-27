@@ -248,7 +248,9 @@
     "chartingLabelSize": 12,
     "chartingRoation": 270,
     "chartingAxisStepY": 1,
+    "pvnodePaid": false,
     "pvnodeForecastDays": 1,
+    "pvnodeExtraParams": "",
     "devices": [],
     "devicesSolcast": []
   },

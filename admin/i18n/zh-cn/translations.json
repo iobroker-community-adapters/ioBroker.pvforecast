@@ -27,6 +27,10 @@
     "(Professional account only)": "（仅限专业账户）",
     "Graph color": "图表颜色",
     "Label color": "标签颜色",
+    "pvnode paid account": "付费账户 (pvnode)",
+    "pvnode paid account help": "为付费 pvnode 账户启用（每月 1,000 次请求，最多 7 天预测）",
     "Forecast days (pvnode)": "预测天数 (pvnode)",
-    "pvnode forecast days help": "免费：最多 1 天，付费：最多 7 天"
+    "pvnode forecast days help": "预测天数（付费：最多 7 天）",
+    "pvnode extra parameters": "额外参数 (pvnode)",
+    "pvnode extra parameters help": "例如 diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

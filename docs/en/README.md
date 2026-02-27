@@ -58,8 +58,10 @@ If longitude and latitude in the iobroker main settings, the adapter will fill o
 ### pvnode Configuration
 
 1. **API-Key**: Create an API key at https://pvnode.com/api-keys
-2. **Forecast days**: Number of forecast days (Free: max 1, Paid: max 7)
-3. **Poll interval**: Recommended: 90 minutes (pvnode updates 16 times per day)
+2. **Paid account**: Enable this option if you have a paid pvnode account
+3. **Forecast days**: Number of forecast days (paid accounts only, max 7). Free accounts automatically get 1 day.
+4. **Poll interval**: Recommended: 90 minutes (pvnode updates 16 times per day)
+5. **Extra parameters**: Optional API parameters like `diffuse_radiation_model=perez&snow_slide_coefficient=0.5`
 
 ### pvnode Account Types
 
@@ -69,6 +71,20 @@ If longitude and latitude in the iobroker main settings, the adapter will fill o
 | Forecast days | 1 (today + tomorrow) | up to 7 |
 | Historical data | no | yes (-30 days) |
 | Sites | 1 | multiple |
+
+**Important**: Only enable the "Paid account" option if you actually have a paid pvnode account. Otherwise, API errors may occur as the adapter cannot automatically detect your account type.
+
+### pvnode Extra Parameters
+
+The "Extra parameters" field allows passing optional API parameters:
+
+| Parameter | Description | Example |
+|-----------|-------------|---------|
+| `diffuse_radiation_model` | Radiation model | `perez` |
+| `snow_slide_coefficient` | Snow sliding speed factor (0.0-0.8) | `0.5` |
+| `shading_config` | Shading configuration | `7:2:3:1_1:1:0:0_0:0:0:0` |
+
+Format: `key1=value1&key2=value2`
 
 ### pvnode Notes
 
