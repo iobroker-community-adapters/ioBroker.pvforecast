@@ -91,6 +91,8 @@ Format: `key1=value1&key2=value2`
 
 - **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen
 - **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
+- **Anfragen-Bündelung**: Bei mehreren konfigurierten Anlagen werden automatisch bis zu 2 Anlagen pro API-Anfrage gebündelt (pvnode `second_array` Feature). Dies reduziert die Anzahl der API-Aufrufe (z.B. 2 Anlagen = 1 Anfrage statt 2). Die kombinierten Prognosedaten werden bei der ersten Anlage gespeichert; die zweite Anlage wird als gebündelt markiert.
+- **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte (summiert über alle Anlagen). Temperatur und Wettercode sind nur pro Anlage verfügbar, nicht im Summary.
 - Die Felder "Dämpfung morgens" und "Dämpfung abends" werden für pvnode nicht verwendet
 
 ## VIS Beispiel

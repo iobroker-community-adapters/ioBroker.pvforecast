@@ -90,6 +90,8 @@ Format: `key1=value1&key2=value2`
 
 - **15-minute resolution**: pvnode provides forecast data in 15-minute intervals
 - **Azimuth conversion**: The adapter automatically converts the azimuth value (adapter: 0=south) to the pvnode format (180=south)
+- **Request batching**: When multiple plants are configured, the adapter automatically batches up to 2 plants per API request using pvnode's `second_array` feature. This reduces the number of API calls (e.g., 2 plants = 1 request instead of 2). The combined forecast data is stored under the first plant; the second plant is marked as batched.
+- **Summary data**: The summary JSON includes clearsky values (summed across all plants). Temperature and weather code are only available per plant, not in the summary.
 - The "damping morning" and "damping evening" fields are not used for pvnode
 
 # VIS example
