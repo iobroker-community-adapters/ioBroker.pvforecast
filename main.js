@@ -334,6 +334,8 @@ class Pvforecast extends utils.Adapter {
 
         const jsonDataSummary = [];
         const jsonDataSummaryClearsky = [];
+        const jsonDataSummaryTemp = {};
+        const jsonDataSummaryWeatherCode = {};
         const jsonTableSummary = [];
         const jsonGraphSummary = [];
         const jsonGraphLabelSummary = [];
@@ -542,7 +544,7 @@ class Pvforecast extends utils.Adapter {
 
                         jsonDataSummary[timestamp] = Math.round((jsonDataSummary[timestamp] + power) * 1000) / 1000; // Limit result to 3 digits
 
-                        // Accumulate clearsky for summary (pvnode only, not temp/weather_code)
+                        // Accumulate clearsky for summary (pvnode only, summed across plants)
                         if (hasPvnodeData && data.watts_clearsky[time] != null) {
                             if (jsonDataSummaryClearsky[timestamp] === undefined) {
                                 jsonDataSummaryClearsky[timestamp] = 0;
@@ -552,6 +554,19 @@ class Pvforecast extends utils.Adapter {
                                     (jsonDataSummaryClearsky[timestamp] + data.watts_clearsky[time] / globalunit) *
                                         1000,
                                 ) / 1000;
+                        }
+
+                        // Temperature and weather_code for summary (first value wins, same for all plants)
+                        if (hasPvnodeData) {
+                            if (data.temperature?.[time] != null && jsonDataSummaryTemp[timestamp] === undefined) {
+                                jsonDataSummaryTemp[timestamp] = data.temperature[time];
+                            }
+                            if (
+                                data.weather_code?.[time] != null &&
+                                jsonDataSummaryWeatherCode[timestamp] === undefined
+                            ) {
+                                jsonDataSummaryWeatherCode[timestamp] = data.weather_code[time];
+                            }
                         }
                     }
 
@@ -605,6 +620,22 @@ class Pvforecast extends utils.Adapter {
                             jsonTableSummary[wattindex]['TotalClearsky'] =
                                 (jsonTableSummary[wattindex]['TotalClearsky'] || 0) +
                                 data.watts_clearsky[time] / globalunit;
+                        }
+
+                        // Temperature and weather_code for summary table (first value wins)
+                        if (hasPvnodeData) {
+                            if (
+                                data.temperature?.[time] != null &&
+                                jsonTableSummary[wattindex]['Temperature'] === undefined
+                            ) {
+                                jsonTableSummary[wattindex]['Temperature'] = data.temperature[time];
+                            }
+                            if (
+                                data.weather_code?.[time] != null &&
+                                jsonTableSummary[wattindex]['WeatherCode'] === undefined
+                            ) {
+                                jsonTableSummary[wattindex]['WeatherCode'] = data.weather_code[time];
+                            }
                         }
 
                         jsonTableSummary[wattindex][plant.name] = this.formatValue(power, this.config.watt_kw ? 0 : 3);
@@ -738,8 +769,16 @@ class Pvforecast extends utils.Adapter {
                 t: Number(time),
                 y: jsonDataSummary[time],
             };
-            if (hasPvnodeSummary && jsonDataSummaryClearsky[time] != null) {
-                entry.clearsky = jsonDataSummaryClearsky[time];
+            if (hasPvnodeSummary) {
+                if (jsonDataSummaryClearsky[time] != null) {
+                    entry.clearsky = jsonDataSummaryClearsky[time];
+                }
+                if (jsonDataSummaryTemp[time] != null) {
+                    entry.temp = jsonDataSummaryTemp[time];
+                }
+                if (jsonDataSummaryWeatherCode[time] != null) {
+                    entry.weather_code = jsonDataSummaryWeatherCode[time];
+                }
             }
             return entry;
         });
