@@ -55,6 +55,8 @@ If longitude and latitude in the iobroker main settings, the adapter will fill o
 
 [pvnode](https://pvnode.com) is a German service that provides high-resolution PV forecasts with 15-minute intervals.
 
+![pvforecast pvnode options](img/pvforecast-pvnode-options.png)
+
 ### pvnode Configuration
 
 1. **API-Key**: Create an API key at https://pvnode.com/api-keys

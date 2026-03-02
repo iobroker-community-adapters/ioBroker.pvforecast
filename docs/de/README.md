@@ -56,6 +56,8 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 [pvnode](https://pvnode.com) ist ein deutscher Dienst, der hochauflösende PV-Prognosen mit 15-Minuten-Intervallen liefert.
 
+![pvforecast pvnode options](img/pvforecast-pvnode-options.png)
+
 ### pvnode Konfiguration
 
 1. **API-Key**: Erstellen Sie einen API-Schlüssel unter https://pvnode.com/api-keys
