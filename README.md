@@ -20,7 +20,7 @@
 ![Stable](http://iobroker.live/badges/pvforecast-stable.svg)
 ![Installed](http://iobroker.live/badges/pvforecast-installed.svg)
 
-Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](https://solcast.com/) or [SolarPredictionAPI](https://rapidapi.com/stromdao-stromdao-default/api/solarenergyprediction/)
+Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](https://solcast.com/), [SolarPredictionAPI](https://rapidapi.com/stromdao-stromdao-default/api/solarenergyprediction/) or [pvnode](https://pvnode.com)
 
 ## Documentation
 
