@@ -26,5 +26,11 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Дійсні значення заголовка: від 0° (по горизонталі) до 90° (по вертикалі)",
     "(Professional account only)": "(Лише для професійного облікового запису)",
     "Graph color": "Колір графіка",
-    "Label color": "Колір етикетки"
+    "Label color": "Колір етикетки",
+    "pvnode paid account": "Платний акаунт (pvnode)",
+    "pvnode paid account help": "Увімкнути для платних акаунтів pvnode (1 000 запитів/місяць, до 7 днів прогнозу)",
+    "Forecast days (pvnode)": "Дні прогнозу (pvnode)",
+    "pvnode forecast days help": "Кількість днів прогнозу (платно: макс. 7)",
+    "pvnode extra parameters": "Додаткові параметри (pvnode)",
+    "pvnode extra parameters help": "напр. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

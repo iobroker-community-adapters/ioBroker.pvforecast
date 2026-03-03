@@ -4,6 +4,7 @@ const utils = require('@iobroker/adapter-core');
 const moment = require('moment');
 const axios = require('axios').default;
 const solcast = require(`${__dirname}/lib/solcast`);
+const pvnode = require(`${__dirname}/lib/pvnode`);
 const CronJob = require('cron').CronJob;
 
 let globalunit = 1000;
@@ -98,6 +99,7 @@ class Pvforecast extends utils.Adapter {
             this.log.error('Please set at least one device in the adapter configuration!');
             return;
         }
+
         try {
             const plantArray = this.getPlantConfigData();
 
@@ -188,6 +190,11 @@ class Pvforecast extends utils.Adapter {
             return;
         }
 
+        if (this.config.service === 'pvnode' && !this.hasApiKey) {
+            this.log.error('Please set the API key for pvnode in the adapter configuration!');
+            return;
+        }
+
         if (this.config.watt_kw) {
             globalunit = 1;
         }
@@ -260,6 +267,8 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'solcast') {
             this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
             this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}ms`);
+        } else if (this.config.service === 'pvnode') {
+            this.log.debug(`updateServiceDataInterval (pvnode) - next service refresh in ${this.reqInterval}ms`);
         }
 
         this.updateServiceDataTimeout = this.setTimeout(async () => {
@@ -324,6 +333,9 @@ class Pvforecast extends utils.Adapter {
         const plantArray = this.getPlantConfigData();
 
         const jsonDataSummary = [];
+        const jsonDataSummaryClearsky = [];
+        const jsonDataSummaryTemp = {};
+        const jsonDataSummaryWeatherCode = {};
         const jsonTableSummary = [];
         const jsonGraphSummary = [];
         const jsonGraphLabelSummary = [];
@@ -501,20 +513,61 @@ class Pvforecast extends utils.Adapter {
 
                     // JSON Data
                     const jsonData = [];
+                    const hasPvnodeData = this.config.service === 'pvnode' && data.watts_clearsky;
                     for (const time in data.watts) {
                         const power = data.watts[time] / globalunit;
                         const timestamp = moment(time).valueOf();
 
-                        jsonData.push({
+                        const entry = {
                             t: timestamp,
                             y: power,
-                        });
+                        };
+
+                        // Include pvnode-specific fields if available
+                        if (hasPvnodeData) {
+                            if (data.watts_clearsky[time] != null) {
+                                entry.clearsky = data.watts_clearsky[time] / globalunit;
+                            }
+                            if (data.temperature?.[time] != null) {
+                                entry.temp = data.temperature[time];
+                            }
+                            if (data.weather_code?.[time] != null) {
+                                entry.weather_code = data.weather_code[time];
+                            }
+                        }
+
+                        jsonData.push(entry);
 
                         if (jsonDataSummary?.[timestamp] === undefined) {
                             jsonDataSummary[timestamp] = 0;
                         }
 
                         jsonDataSummary[timestamp] = Math.round((jsonDataSummary[timestamp] + power) * 1000) / 1000; // Limit result to 3 digits
+
+                        // Accumulate clearsky for summary (pvnode only, summed across plants)
+                        if (hasPvnodeData && data.watts_clearsky[time] != null) {
+                            if (jsonDataSummaryClearsky[timestamp] === undefined) {
+                                jsonDataSummaryClearsky[timestamp] = 0;
+                            }
+                            jsonDataSummaryClearsky[timestamp] =
+                                Math.round(
+                                    (jsonDataSummaryClearsky[timestamp] + data.watts_clearsky[time] / globalunit) *
+                                        1000,
+                                ) / 1000;
+                        }
+
+                        // Temperature and weather_code for summary (first value wins, same for all plants)
+                        if (hasPvnodeData) {
+                            if (data.temperature?.[time] != null && jsonDataSummaryTemp[timestamp] === undefined) {
+                                jsonDataSummaryTemp[timestamp] = data.temperature[time];
+                            }
+                            if (
+                                data.weather_code?.[time] != null &&
+                                jsonDataSummaryWeatherCode[timestamp] === undefined
+                            ) {
+                                jsonDataSummaryWeatherCode[timestamp] = data.weather_code[time];
+                            }
+                        }
                     }
 
                     this.log.debug(`generated JSON data of "${plant.name}": ${JSON.stringify(jsonData)}`);
@@ -529,16 +582,60 @@ class Pvforecast extends utils.Adapter {
                     for (const time in data.watts) {
                         const power = data.watts[time] / globalunit;
 
-                        jsonTable.push({
+                        const tableRow = {
                             Time: time,
                             Power: this.formatValue(power, this.config.watt_kw ? 0 : 3),
-                        });
+                        };
+
+                        // Include pvnode-specific fields if available
+                        if (hasPvnodeData) {
+                            if (data.watts_clearsky[time] != null) {
+                                tableRow.Clearsky = this.formatValue(
+                                    data.watts_clearsky[time] / globalunit,
+                                    this.config.watt_kw ? 0 : 3,
+                                );
+                            }
+                            if (data.temperature?.[time] != null) {
+                                tableRow.Temperature = data.temperature[time];
+                            }
+                            if (data.weather_code?.[time] != null) {
+                                tableRow.WeatherCode = data.weather_code[time];
+                            }
+                        }
+
+                        jsonTable.push(tableRow);
 
                         if (index === 0) {
                             jsonTableSummary[wattindex] = { Time: time };
                             jsonTableSummary[wattindex]['Total'] = power;
+                            if (hasPvnodeData) {
+                                jsonTableSummary[wattindex]['TotalClearsky'] = 0;
+                            }
                         } else {
                             jsonTableSummary[wattindex]['Total'] = jsonTableSummary[wattindex]['Total'] + power;
+                        }
+
+                        // Accumulate clearsky for summary table (pvnode only)
+                        if (hasPvnodeData && data.watts_clearsky[time] != null) {
+                            jsonTableSummary[wattindex]['TotalClearsky'] =
+                                (jsonTableSummary[wattindex]['TotalClearsky'] || 0) +
+                                data.watts_clearsky[time] / globalunit;
+                        }
+
+                        // Temperature and weather_code for summary table (first value wins)
+                        if (hasPvnodeData) {
+                            if (
+                                data.temperature?.[time] != null &&
+                                jsonTableSummary[wattindex]['Temperature'] === undefined
+                            ) {
+                                jsonTableSummary[wattindex]['Temperature'] = data.temperature[time];
+                            }
+                            if (
+                                data.weather_code?.[time] != null &&
+                                jsonTableSummary[wattindex]['WeatherCode'] === undefined
+                            ) {
+                                jsonTableSummary[wattindex]['WeatherCode'] = data.weather_code[time];
+                            }
                         }
 
                         jsonTableSummary[wattindex][plant.name] = this.formatValue(power, this.config.watt_kw ? 0 : 3);
@@ -666,17 +763,33 @@ class Pvforecast extends utils.Adapter {
         });
 
         // JSON Data
+        const hasPvnodeSummary = this.config.service === 'pvnode' && Object.keys(jsonDataSummaryClearsky).length > 0;
         const jsonDataSummaryFormat = Object.keys(jsonDataSummary).map(time => {
-            return {
+            const entry = {
                 t: Number(time),
                 y: jsonDataSummary[time],
             };
+            if (hasPvnodeSummary) {
+                if (jsonDataSummaryClearsky[time] != null) {
+                    entry.clearsky = jsonDataSummaryClearsky[time];
+                }
+                if (jsonDataSummaryTemp[time] != null) {
+                    entry.temp = jsonDataSummaryTemp[time];
+                }
+                if (jsonDataSummaryWeatherCode[time] != null) {
+                    entry.weather_code = jsonDataSummaryWeatherCode[time];
+                }
+            }
+            return entry;
         });
         await this.setState('summary.JSONData', { val: JSON.stringify(jsonDataSummaryFormat, null, 2), ack: true });
 
         // JSON Table
         const jsonTableSummaryFormat = jsonTableSummary.map(row => {
             row['Total'] = this.formatValue(row['Total'], this.config.watt_kw ? 0 : 3);
+            if (hasPvnodeSummary && row['TotalClearsky'] != null) {
+                row['TotalClearsky'] = this.formatValue(row['TotalClearsky'], this.config.watt_kw ? 0 : 3);
+            }
             return row;
         });
         await this.setState('summary.JSONTable', { val: JSON.stringify(jsonTableSummaryFormat, null, 2), ack: true });
@@ -833,6 +946,11 @@ class Pvforecast extends utils.Adapter {
     }
 
     async updateServiceData() {
+        if (this.config.service === 'pvnode') {
+            await this.updatePvnodeServiceData();
+            return;
+        }
+
         const plantArray = this.getPlantConfigData();
 
         await asyncForEach(plantArray, async plant => {
@@ -928,19 +1046,7 @@ class Pvforecast extends utils.Adapter {
                         await this.setState(`plants.${cleanPlantId}.service.message`, { val: message.type, ack: true });
                         await this.setState(`plants.${cleanPlantId}.place`, { val: message.info.place, ack: true });
                     } catch (error) {
-                        if (error === 'Error: Request failed with status code 429') {
-                            this.log.error('too many data requests');
-                        } else if (error === 'Error: Request failed with status code 400') {
-                            this.log.error(
-                                'entry out of range (check the notes in settings) => check azimuth, tilt, longitude, latitude',
-                            );
-                        } else if (error === 'Error: Request failed with status code 404') {
-                            this.log.error('Error: Not Found');
-                        } else if (error === 'Error: Request failed with status code 502') {
-                            this.log.error('Error: Bad Gateway');
-                        } else {
-                            this.log.error(`Axios Error ${error}`);
-                        }
+                        this.handleServiceError(error);
                     }
                 } else {
                     this.log.debug(`Last update of "${plant.name}" is within refresh interval - skipping`);
@@ -949,6 +1055,161 @@ class Pvforecast extends utils.Adapter {
                 this.log.debug('received all data');
             }
         });
+    }
+
+    /**
+     * Fetch pvnode service data with request batching.
+     *
+     * pvnode supports a second_array parameter to combine up to 2 plant arrays
+     * per API request, reducing the number of API calls (important for free accounts
+     * with only 40 requests/month). The combined response includes the total output
+     * of both arrays.
+     *
+     * For the first plant in each batch, the combined data is stored in service.data.
+     * The second plant (if present) is marked as batched and gets no separate data,
+     * to avoid double-counting in the summary.
+     */
+    async updatePvnodeServiceData() {
+        const plantArray = this.getPlantConfigData();
+        const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
+        const requestHeader = {
+            headers: {
+                Authorization: `Bearer ${this.config.apiKey}`,
+            },
+        };
+
+        // Batch plants in pairs using pvnode's second_array feature (like SOLECTRUS)
+        const batches = [];
+        for (let i = 0; i < plantArray.length; i += 2) {
+            const batch = [plantArray[i]];
+            if (i + 1 < plantArray.length) {
+                batch.push(plantArray[i + 1]);
+            }
+            batches.push(batch);
+        }
+
+        this.log.info(
+            `[pvnode] Batching ${plantArray.length} plant(s) into ${batches.length} API request(s) using second_array`,
+        );
+
+        for (const batch of batches) {
+            const firstPlant = batch[0];
+            const secondPlant = batch.length > 1 ? batch[1] : null;
+            const cleanPlantId = this.cleanNamespace(firstPlant.name);
+
+            // Build URL with first plant parameters
+            const orientation = pvnode.convertAzimuthToOrientation(firstPlant.azimuth);
+            let url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${firstPlant.tilt}&orientation=${orientation}&pv_power_kw=${firstPlant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
+
+            // Add second plant as second_array if batched
+            if (secondPlant) {
+                const orientation2 = pvnode.convertAzimuthToOrientation(secondPlant.azimuth);
+                url += `&second_array_slope=${secondPlant.tilt}&second_array_orientation=${orientation2}&second_array_power_kw=${secondPlant.peakpower}`;
+
+                this.log.debug(`[pvnode] Batched "${firstPlant.name}" + "${secondPlant.name}" into one request`);
+            }
+
+            if (this.config.pvnodeExtraParams) {
+                url += `&${this.config.pvnodeExtraParams}`;
+            }
+
+            // Check if update is needed (based on first plant of batch)
+            const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
+            const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
+
+            const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
+            const lastUpdate =
+                serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
+                    ? Number(serviceDataLastUpdatedState.val)
+                    : 0;
+
+            this.logSensitive(
+                `[pvnode] batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} - last update: ${lastUpdate}, service url: ${url}`,
+            );
+
+            if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
+                try {
+                    this.log.debug(
+                        `[pvnode] Starting update for batch: ${firstPlant.name}${secondPlant ? ` + ${secondPlant.name}` : ''}`,
+                    );
+
+                    const serviceResponse = await axios.get(url, requestHeader);
+
+                    this.log.debug(`[pvnode] received data for batch: ${JSON.stringify(serviceResponse.data)}`);
+
+                    const data = pvnode.convertToForecast(serviceResponse.data);
+                    this.log.debug(`[pvnode] converted JSON: ${JSON.stringify(data)}`);
+
+                    const message = { info: { place: '-' }, type: 'pvnode' };
+
+                    // Store combined data for the first plant in the batch
+                    await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
+                    await this.setState(`plants.${cleanPlantId}.service.data`, {
+                        val: JSON.stringify(data, null, 2),
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanPlantId}.service.lastUpdated`, {
+                        val: moment().valueOf(),
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanPlantId}.service.message`, {
+                        val: message.type,
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanPlantId}.place`, {
+                        val: message.info.place,
+                        ack: true,
+                    });
+
+                    // Mark second plant as batched (empty data to avoid double-counting)
+                    if (secondPlant) {
+                        const cleanPlantId2 = this.cleanNamespace(secondPlant.name);
+                        await this.setState(`plants.${cleanPlantId2}.service.url`, { val: url, ack: true });
+                        await this.setState(`plants.${cleanPlantId2}.service.data`, { val: '', ack: true });
+                        await this.setState(`plants.${cleanPlantId2}.service.lastUpdated`, {
+                            val: moment().valueOf(),
+                            ack: true,
+                        });
+                        await this.setState(`plants.${cleanPlantId2}.service.message`, {
+                            val: `pvnode (batched with ${firstPlant.name})`,
+                            ack: true,
+                        });
+                        await this.setState(`plants.${cleanPlantId2}.place`, {
+                            val: message.info.place,
+                            ack: true,
+                        });
+                    }
+                } catch (error) {
+                    this.handleServiceError(error);
+                }
+            } else {
+                this.log.debug(
+                    `[pvnode] Last update of batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} is within refresh interval - skipping`,
+                );
+            }
+
+            this.log.debug('[pvnode] received all data');
+        }
+    }
+
+    handleServiceError(error) {
+        if (error === 'Error: Request failed with status code 429') {
+            this.log.error('too many data requests');
+        } else if (error === 'Error: Request failed with status code 400') {
+            this.log.error(
+                'entry out of range (check the notes in settings) => check azimuth, tilt, longitude, latitude',
+            );
+        } else if (error === 'Error: Request failed with status code 401') {
+            this.log.error('Unauthorized: Please check your API key');
+        } else if (error === 'Error: Request failed with status code 403') {
+            this.log.error('Forbidden: Access denied - check your API key and account permissions');
+        } else if (error === 'Error: Request failed with status code 404') {
+            this.log.error('Error: Not Found');
+        } else if (error === 'Error: Request failed with status code 502') {
+            this.log.error('Error: Bad Gateway');
+        } else {
+            this.log.error(`Axios Error ${error}`);
+        }
     }
 
     async saveEveryHour(type, cleanPlantId, prefix, dayOfMonth, timeStr, value) {
