@@ -1193,22 +1193,35 @@ class Pvforecast extends utils.Adapter {
     }
 
     handleServiceError(error) {
-        if (error === 'Error: Request failed with status code 429') {
-            this.log.error('too many data requests');
-        } else if (error === 'Error: Request failed with status code 400') {
-            this.log.error(
-                'entry out of range (check the notes in settings) => check azimuth, tilt, longitude, latitude',
-            );
-        } else if (error === 'Error: Request failed with status code 401') {
-            this.log.error('Unauthorized: Please check your API key');
-        } else if (error === 'Error: Request failed with status code 403') {
-            this.log.error('Forbidden: Access denied - check your API key and account permissions');
-        } else if (error === 'Error: Request failed with status code 404') {
-            this.log.error('Error: Not Found');
-        } else if (error === 'Error: Request failed with status code 502') {
-            this.log.error('Error: Bad Gateway');
+        // Prefer Axios-specific handling if this is an Axios error
+        if (axios.isAxiosError(error)) {
+            const status = error.response && error.response.status;
+
+            if (status === 429) {
+                this.log.error('too many data requests');
+            } else if (status === 400) {
+                this.log.error(
+                    'entry out of range (check the notes in settings) => check azimuth, tilt, longitude, latitude',
+                );
+            } else if (status === 401) {
+                this.log.error('Unauthorized: Please check your API key');
+            } else if (status === 403) {
+                this.log.error('Forbidden: Access denied - check your API key and account permissions');
+            } else if (status === 404) {
+                this.log.error('Error: Not Found');
+            } else if (status === 502) {
+                this.log.error('Error: Bad Gateway');
+            } else {
+                const msg = error.message || String(error);
+                this.log.error(`Axios Error (${status || 'no status'}): ${msg}`);
+            }
         } else {
-            this.log.error(`Axios Error ${error}`);
+            // Fallback for non-Axios errors or unexpected error shapes
+            if (error instanceof Error) {
+                this.log.error(`Service Error: ${error.message}`);
+            } else {
+                this.log.error(`Service Error: ${String(error)}`);
+            }
         }
     }
 
