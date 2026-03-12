@@ -26,5 +26,11 @@
     "Valid titlt values: 0° (horizontal) to 90° (vertical)": "Valori di inclinazione validi: da 0° (orizzontale) a 90° (verticale)",
     "(Professional account only)": "(Solo account professionale)",
     "Graph color": "Colore del grafico",
-    "Label color": "Colore dell'etichetta"
+    "Label color": "Colore dell'etichetta",
+    "pvnode paid account": "Account a pagamento (pvnode)",
+    "pvnode paid account help": "Attivare per account pvnode a pagamento (1.000 richieste/mese, fino a 7 giorni di previsione)",
+    "Forecast days (pvnode)": "Giorni di previsione (pvnode)",
+    "pvnode forecast days help": "Numero di giorni di previsione (a pagamento: max 7)",
+    "pvnode extra parameters": "Parametri aggiuntivi (pvnode)",
+    "pvnode extra parameters help": "es. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }
