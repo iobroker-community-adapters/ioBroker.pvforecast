@@ -43,6 +43,8 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 
 ### **WORK IN PROGRESS**
+
+- (@patricknitsch) Added pvnode als alternative Provider
 - (copilot) Adapter requires admin >= 7.7.22 now
 
 ### 5.1.0 (2026-02-03)
