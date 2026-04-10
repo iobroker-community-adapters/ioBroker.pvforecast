@@ -41,8 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 6.0.0 (2026-04-10)
 
 - (@patricknitsch) Added pvnode als alternative Provider
 - (copilot) Adapter requires admin >= 7.7.22 now
@@ -67,10 +66,6 @@ NodeJS >= 20.x and js-controller >= 6 is required
 ### 4.0.1 (2024-10-22)
 
 * (@klein0r) Fixed: Missing color settings for new Solcast table
-
-### 4.0.0 (2024-10-14)
-
-* (@klein0r) Use Solcast rooftop sites api
 
 ## License
 

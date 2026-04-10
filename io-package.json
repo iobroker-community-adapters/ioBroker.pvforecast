@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "5.1.0",
+    "version": "6.0.0",
     "news": {
+      "6.0.0": {
+        "en": "Added pvnode als alternative Provider\nAdapter requires admin >= 7.7.22 now",
+        "de": "Hinzugefügt pvnode als alternativer Anbieter\nAdapter benötigt admin >= 7.7.22 jetzt",
+        "ru": "Добавлен pvnode als Альтернативный провайдер\nАдаптер требует администратора >= 7.7.22",
+        "pt": "Adicionado provedor alternativo pvnode als\nAdaptador requer admin >= 7.7.22 agora",
+        "nl": "Toegevoegd pvnode als alternatieve provider\nAdapter vereist admin < 7.7.22 nu",
+        "fr": "Ajouté pvnode als fournisseur alternatif\nAdaptateur nécessite admin >= 7.7.22 maintenant",
+        "it": "Aggiunto pvnode als alternativo Provider\nAdattatore richiede admin >= 7.7.22 ora",
+        "es": "Proveedor alternativo de pvnode als\nEl adaptador requiere administrador= 7.7.22 ahora",
+        "pl": "Dodano pvnode als alternatywny Dostawca\nAdapter wymaga admin > = 7.7.22",
+        "uk": "Додано pvnode als альтернативний постачальник\nАдаптер вимагає адмін >= 7.7.22 тепер",
+        "zh-cn": "添加了 pvnode als 选项提供者\n适任者需要管理员 \\ 7.7.22 现在"
+      },
       "5.1.0": {
         "en": "admin 7.6.17 and js-controller 6.0.11 (or later) are required\nsolcast user agent bug fix\nUpdated dependencies",
         "de": "admin 7.6.17 und js-controller 6.0.11 (oder später) sind erforderlich\nsolcast benutzer agent fehler beheben\nAktualisierte Abhängigkeiten",
@@ -80,19 +93,6 @@
         "pl": "NodeJS > = 18.x i kontroler js- > = 5 jest wymagane\n\n* Konfiguracja systemu obciążenia przez parametr\n* Dodano współczynnik tłumienia prognozowanego słońca",
         "uk": "NodeJS >= 18.x та js-controller >= 5 обов'язково\n\n* Налаштування системи навантаження через параметр\n* Додано демпферний фактор для прогнозування сонячної",
         "zh-cn": "节点JS18x和js控制器QQ 需要5个\n\n* 通过参数装入系统配置\n* 预测太阳的加坝因子"
-      },
-      "2.9.1": {
-        "en": "Avoid logging of api key",
-        "de": "Vermeiden Sie das Protokollieren des Api-Schlüssels",
-        "ru": "Избегайте входа в api key",
-        "pt": "Evite o registro da chave de api",
-        "nl": "Vermijden met het lokken van api sleutel",
-        "fr": "Éviter la connexion de la clé api",
-        "it": "Evitare la registrazione di chiave api",
-        "es": "Evite el registro de la tecla api",
-        "pl": "Uchwalanie klucza api",
-        "uk": "Уникайте залогів клавіші Api",
-        "zh-cn": "A. 撤销关键皮书"
       }
     },
     "titleLang": {

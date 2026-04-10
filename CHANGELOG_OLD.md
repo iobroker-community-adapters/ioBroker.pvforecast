@@ -1,4 +1,8 @@
 # Older changes
+## 4.0.0 (2024-10-14)
+
+* (@klein0r) Use Solcast rooftop sites api
+
 ## 3.0.0 (2024-06-30)
 
 NodeJS >= 18.x and js-controller >= 5 is required
