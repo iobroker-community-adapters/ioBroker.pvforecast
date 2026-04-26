@@ -1,4 +1,8 @@
 # Older changes
+## 4.0.1 (2024-10-22)
+
+* (@klein0r) Fixed: Missing color settings for new Solcast table
+
 ## 4.0.0 (2024-10-14)
 
 * (@klein0r) Use Solcast rooftop sites api

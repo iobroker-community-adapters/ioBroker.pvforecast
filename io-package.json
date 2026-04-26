@@ -1,8 +1,21 @@
 {
   "common": {
     "name": "pvforecast",
-    "version": "6.0.0",
+    "version": "6.1.0",
     "news": {
+      "6.1.0": {
+        "en": "Adapter requires node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 now\nDependencies have been updated",
+        "de": "Adapter benötigt node.js >= 22, js-controller >= 6.0.11 und admin >= 7.7.22 jetzt\nAbhängigkeiten wurden aktualisiert",
+        "ru": "Адаптер требует node.js >= 22, js-контроллер >= 6.0.11 и админ >= 7.7.22 сейчас\nЗависимости были обновлены",
+        "pt": "Adaptador necessita de nod.js >= 22, js-controlador >= 6,0.11 e administrador >= 7,7,22 agora\nAs dependências foram atualizadas",
+        "nl": "Voor de adaptor zijn node.js < 22, js-controller > 6,0.11 en admin > 7.7.22 nodig\nAfhankelijkheden zijn bijgewerkt",
+        "fr": "Adapter nécessite node.js >= 22, js-controller >= 6.0.11 et admin >= 7.7.22 maintenant\nLes dépendances ont été actualisées",
+        "it": "Adattatore richiede node.js >= 22, js-controller >= 6.0.11 e admin >= 7.7.22 ora\nLe dipendenze sono state aggiornate",
+        "es": "Adaptador requiere node.js >= 22, js-controller √= 6.0.11 y admin= 7.7.22 ahora\nSe han actualizado las dependencias",
+        "pl": "Adapter wymaga node.js > = 22, kontroler js- i admin > = 7.7.22\nZaktualizowano zależności",
+        "uk": "Адаптер вимагає node.js >= 22, js-controller >= 6.0.11 і admin >= 7.7.22 тепер\nЗалежність було оновлено",
+        "zh-cn": "适配器需要节点.js >= 22,js控制器 >= 6.0.11和管理员 >= 7.7.22 现在\n依赖关系已更新"
+      },
       "6.0.0": {
         "en": "Added pvnode als alternative Provider\nAdapter requires admin >= 7.7.22 now",
         "de": "Hinzugefügt pvnode als alternativer Anbieter\nAdapter benötigt admin >= 7.7.22 jetzt",
@@ -80,19 +93,6 @@
         "pl": "Użyj Solcast dachów strony api",
         "uk": "Використовуйте Solcast дах сайти api",
         "zh-cn": "使用 Solcast 屋顶站点 api"
-      },
-      "3.0.0": {
-        "en": "NodeJS >= 18.x and js-controller >= 5 is required\n\n* Load system configuration via parameter\n* Added damping factor for forecast solar",
-        "de": "NodeJS >= 18.x und js-Controller >= 5 ist erforderlich\n\n* Systemkonfiguration über Parameter laden\n* Zusätzlicher Dämpfungsfaktor für prognostizierte Solar",
-        "ru": "NodeJS >= 18.x и js-контроллер >= 5 требуется\n\n* Настройка системы загрузки с помощью параметра\n* Добавленный коэффициент демпфирования для прогноза солнечной",
-        "pt": "NodeJS >= 18.x e js-controller >= 5 é necessário\n\n* Configuração do sistema de carga via parâmetro\n* Adicionado fator de amortecimento para previsão solar",
-        "nl": "Voor de toepassing van de onderverdelingen 870190 tot en met 870290 wordt onder post 8702 verstaan: 5 is vereist\n\n* Laden systeemconfiguratie via parameter\n* Toegevoegd dempingsfactor voor voorspelling zonne-energie",
-        "fr": "NodeJS >= 18.x et js-controller >= 5 est nécessaire\n\n* Configuration du système de chargement par paramètre\n* Ajout d'un facteur d'amortissement pour les prévisions solaires",
-        "it": "NodeJS >= 18.x e js-controller 5 è richiesto\n\n* Configurazione del sistema di carico tramite parametro\n* Aggiunto fattore di smorzamento per il solare di previsione",
-        "es": "NodeJS >= 18.x y js-controller Se requiere 5\n\n* Configuración del sistema de carga mediante parámetro\n* Factor de amortiguación añadido para el pronóstico solar",
-        "pl": "NodeJS > = 18.x i kontroler js- > = 5 jest wymagane\n\n* Konfiguracja systemu obciążenia przez parametr\n* Dodano współczynnik tłumienia prognozowanego słońca",
-        "uk": "NodeJS >= 18.x та js-controller >= 5 обов'язково\n\n* Налаштування системи навантаження через параметр\n* Додано демпферний фактор для прогнозування сонячної",
-        "zh-cn": "节点JS18x和js控制器QQ 需要5个\n\n* 通过参数装入系统配置\n* 预测太阳的加坝因子"
       }
     },
     "titleLang": {
