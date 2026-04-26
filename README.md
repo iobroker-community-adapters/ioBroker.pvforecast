@@ -42,7 +42,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     ### **WORK IN PROGRESS**
 -->
 ### **WORK IN PROGRESS**
-- (@mcm1957) Adapeter requires node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 now
+- (@mcm1957) Adapter requires node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 now
 - (@mcm1957) Dependencies have been updated
 
 ### 6.0.0 (2026-04-10)
