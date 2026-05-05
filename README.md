@@ -67,6 +67,8 @@ NodeJS >= 20.x and js-controller >= 6 is required
 * (@klein0r) Added estimated energy: now until end of day
 * (@simatec) Admin-UI has been adapted for small displays
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## License
 
 MIT License
