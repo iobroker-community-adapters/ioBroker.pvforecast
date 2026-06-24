@@ -1091,16 +1091,7 @@ class Pvforecast extends utils.Adapter {
     }
 
     /**
-     * Fetch pvnode service data with request batching.
-     *
-     * pvnode supports a second_array parameter to combine up to 2 plant arrays
-     * per API request, reducing the number of API calls (important for free accounts
-     * with only 40 requests/month). The combined response includes the total output
-     * of both arrays.
-     *
-     * For the first plant in each batch, the combined data is stored in service.data.
-     * The second plant (if present) is marked as batched and gets no separate data,
-     * to avoid double-counting in the summary.
+     * Fetch pvnode service data (v1 or v2 depending on config).
      */
     async updatePvnodeServiceData() {
         if (this.config.pvnodeV2) {
@@ -1192,9 +1183,10 @@ class Pvforecast extends utils.Adapter {
     /**
      * Fetch pvnode service data using API v2 (site_id-based).
      *
-     * A single request to https://api.pvnode.com/v2/forecast/<site_id> covers the
-     * entire site. The result is stored under the first configured plant; all
-     * additional plants receive empty data to avoid double-counting in the summary.
+     * A single request fetches site-wide values and per-string data. When the
+     * response contains a `strings` array and multiple plants are configured,
+     * each plant receives its own string forecast matched by index. Otherwise
+     * the site total is stored in plant[0] and additional plants get empty data.
      */
     async updatePvnodeV2ServiceData() {
         const plantArray = this.getPlantConfigData();

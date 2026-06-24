@@ -87,7 +87,7 @@ In API v2, all plant configuration (orientation, tilt, power) is managed directl
 4. **Subscription tier**: Free / Light / Plus (determines poll interval automatically)
 5. **Forecast days**: Number of forecast days (Light/Plus: max 7)
 
-**Plant table (v2):** At least one entry is required. The name is used for display; the optional peak power is used for the "Installed power" state. All plant data comes from a single v2 API call (the Site ID covers all arrays).
+**Plant table (v2):** At least one entry is required. The name is used for display; the optional peak power is used for the "Installed power" state. The adapter requests per-string data from the v2 API and maps each string to the configured plant by position (plant 1 → string 0, plant 2 → string 1, etc.). This allows individual per-plant forecasts. If no string data is available, the site total is stored under the first plant.
 
 ### pvnode API v1
 
@@ -118,6 +118,7 @@ Format: `key1=value1&key2=value2`
 - **15-minute resolution**: pvnode delivers forecast data in 15-minute intervals (v1 and v2)
 - **Azimuth conversion**: The adapter automatically converts the azimuth (adapter: 0=south) to pvnode format (180=south)
 - **Poll interval**: Set automatically based on subscription tier — no manual configuration needed
+- **Per-plant forecasts (v2)**: When the pvnode account returns string data, each configured plant receives its own forecast. Clearsky values, temperature, and weather code come from the site-wide data.
 - **Summary data**: The summary JSON includes clearsky values as well as temperature and weather code
 - The "damping morning" and "damping evening" fields are not used for pvnode
 

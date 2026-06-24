@@ -88,7 +88,7 @@ In API v2 wird die gesamte Anlagenkonfiguration (Ausrichtung, Neigung, Leistung)
 4. **Abonnementstufe**: Free / Light / Plus (bestimmt das Abrufintervall automatisch)
 5. **Prognosetage**: Anzahl der Prognosetage (Light/Plus: max. 7)
 
-**Anlagentabelle (v2):** Es wird mindestens ein Eintrag benötigt. Der Name dient der Anzeige; die optionale Spitzenleistung wird für den State „Installierte Leistung" verwendet. Alle Anlagendaten stammen aus einem einzigen v2-API-Aufruf (die Site-ID deckt alle Flächen ab).
+**Anlagentabelle (v2):** Es wird mindestens ein Eintrag benötigt. Der Name dient der Anzeige; die optionale Spitzenleistung wird für den State „Installierte Leistung" verwendet. Der Adapter fragt String-Daten von der v2-API ab und ordnet jeden String der konfigurierten Anlage nach Position zu (Anlage 1 → String 0, Anlage 2 → String 1 usw.). Damit sind echte Pro-Flächen-Prognosen möglich. Falls keine String-Daten verfügbar sind, wird der Gesamtwert der Site unter der ersten Anlage gespeichert.
 
 ### pvnode API v1
 
@@ -119,6 +119,7 @@ Format: `key1=value1&key2=value2`
 - **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen (v1 und v2)
 - **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
 - **Abfrageintervall**: Wird automatisch anhand der Kontostufe gesetzt — keine manuelle Konfiguration notwendig
+- **Pro-Flächen-Prognosen (v2)**: Wenn der pvnode-Account String-Daten liefert, erhält jede konfigurierte Anlage ihre eigene Prognose. Clearsky-Werte, Temperatur und Wettercode stammen aus den Site-weiten Daten.
 - **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
 - Die Felder „Dämpfung morgens" und „Dämpfung abends" werden für pvnode nicht verwendet
 
