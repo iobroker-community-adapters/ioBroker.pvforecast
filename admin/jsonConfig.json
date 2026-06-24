@@ -40,7 +40,7 @@
                     "label": "Forecast service"
                 },
                 "interval": {
-                    "hidden": "data.service === 'solcast' || (data.service === 'pvnode' && data.pvnodeV2)",
+                    "hidden": "data.service === 'solcast' || data.service === 'pvnode'",
                     "type": "number",
                     "min": 60,
                     "xs": 12,
