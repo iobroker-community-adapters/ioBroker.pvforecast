@@ -84,19 +84,25 @@
                     "label": "pvnode Site-ID",
                     "help": "pvnode site id help"
                 },
-                "pvnodePaid": {
+                "pvnodeTier": {
                     "hidden": "data.service !== 'pvnode'",
-                    "type": "checkbox",
+                    "newLine": true,
+                    "type": "select",
                     "xs": 12,
                     "sm": 12,
                     "md": 4,
                     "lg": 4,
                     "xl": 4,
-                    "label": "pvnode paid account",
-                    "help": "pvnode paid account help"
+                    "label": "pvnode tier",
+                    "help": "pvnode tier help",
+                    "options": [
+                        { "value": "free",  "label": "pvnode tier free"  },
+                        { "value": "light", "label": "pvnode tier light" },
+                        { "value": "plus",  "label": "pvnode tier plus"  }
+                    ]
                 },
                 "pvnodeForecastDays": {
-                    "hidden": "data.service !== 'pvnode' || !data.pvnodePaid",
+                    "hidden": "data.service !== 'pvnode' || (data.pvnodeTier || 'free') === 'free'",
                     "type": "number",
                     "min": 1,
                     "max": 7,

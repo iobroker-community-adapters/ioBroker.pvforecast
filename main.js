@@ -209,9 +209,13 @@ class Pvforecast extends utils.Adapter {
                 this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
 
                 // Auto-set poll interval based on subscription tier (ignores configured interval)
-                if (this.config.pvnodePaid) {
+                const tier = this.config.pvnodeTier || 'free';
+                if (tier === 'plus') {
+                    this.reqInterval = 10 * 60 * 1000;
+                    this.log.info('[pvnode v2] Poll interval auto-set to 10 min (Plus tier — nowcasting)');
+                } else if (tier === 'light') {
                     this.reqInterval = 60 * 60 * 1000;
-                    this.log.info('[pvnode v2] Poll interval auto-set to 60 min (Light/paid tier)');
+                    this.log.info('[pvnode v2] Poll interval auto-set to 60 min (Light tier)');
                 } else {
                     this.reqInterval = 24 * 60 * 60 * 1000;
                     this.log.info('[pvnode v2] Poll interval auto-set to 24 h (Free tier)');
@@ -1112,7 +1116,7 @@ class Pvforecast extends utils.Adapter {
         }
 
         const plantArray = this.getPlantConfigData();
-        const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,
@@ -1203,7 +1207,7 @@ class Pvforecast extends utils.Adapter {
      */
     async updatePvnodeV2ServiceData() {
         const plantArray = this.getPlantConfigData();
-        const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,

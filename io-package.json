@@ -250,7 +250,7 @@
     "chartingAxisStepY": 1,
     "pvnodeSiteId": "",
     "pvnodeV2": false,
-    "pvnodePaid": false,
+    "pvnodeTier": "free",
     "pvnodeForecastDays": 1,
     "pvnodeExtraParams": "",
     "devices": [],
