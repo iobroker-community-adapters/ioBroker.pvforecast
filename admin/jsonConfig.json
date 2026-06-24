@@ -61,6 +61,18 @@
                     "xl": 4,
                     "label": "API-Key"
                 },
+                "pvnodeSiteId": {
+                    "hidden": "data.service !== 'pvnode'",
+                    "newLine": true,
+                    "type": "text",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 8,
+                    "lg": 8,
+                    "xl": 8,
+                    "label": "pvnode Site-ID (API v2)",
+                    "help": "pvnode site id help"
+                },
                 "pvnodePaid": {
                     "hidden": "data.service !== 'pvnode'",
                     "type": "checkbox",

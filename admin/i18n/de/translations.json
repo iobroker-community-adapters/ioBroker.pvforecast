@@ -32,5 +32,7 @@
     "Forecast days (pvnode)": "Prognosetage (pvnode)",
     "pvnode forecast days help": "Anzahl der Prognosetage (bezahlt: max. 7)",
     "pvnode extra parameters": "Zusätzliche Parameter (pvnode)",
-    "pvnode extra parameters help": "z.B. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
+    "pvnode extra parameters help": "z.B. diffuse_radiation_model=perez&snow_slide_coefficient=0.5",
+    "pvnode Site-ID (API v2)": "pvnode Site-ID (API v2)",
+    "pvnode site id help": "Site-ID aus dem pvnode-Portal (z.B. site_xxxx…). Wenn angegeben, wird API v2 verwendet (empfohlen). Leer lassen für API v1 – v1 wird am 31.12.2026 abgeschaltet."
 }

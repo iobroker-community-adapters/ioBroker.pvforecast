@@ -113,6 +113,8 @@ class Pvforecast extends utils.Adapter {
                     if (!plant.resourceId || plant.resourceId === 'xxxx-xxxx-xxxx-xxxx') {
                         throw new Error(`Invalid device configuration: Found plant without resource id`);
                     }
+                } else if (this.config.service === 'pvnode' && this.config.pvnodeSiteId) {
+                    // V2 mode: all PV config is encoded in the site_id on the pvnode portal
                 } else {
                     if (isNaN(plant.azimuth)) {
                         throw new Error(`Invalid device configuration: Found plant without azimuth`);
@@ -193,6 +195,16 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'pvnode' && !this.hasApiKey) {
             this.log.error('Please set the API key for pvnode in the adapter configuration!');
             return;
+        }
+
+        if (this.config.service === 'pvnode') {
+            if (this.config.pvnodeSiteId) {
+                this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
+            } else {
+                this.log.warn(
+                    '[pvnode] Using API v1 (deprecated). Set a pvnode Site-ID in the adapter configuration to switch to API v2. pvnode will shut down API v1 on 2026-12-31.',
+                );
+            }
         }
 
         if (this.config.watt_kw) {
@@ -1070,6 +1082,11 @@ class Pvforecast extends utils.Adapter {
      * to avoid double-counting in the summary.
      */
     async updatePvnodeServiceData() {
+        if (this.config.pvnodeSiteId) {
+            await this.updatePvnodeV2ServiceData();
+            return;
+        }
+
         const plantArray = this.getPlantConfigData();
         const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
         const requestHeader = {
@@ -1190,6 +1207,98 @@ class Pvforecast extends utils.Adapter {
 
             this.log.debug('[pvnode] received all data');
         }
+    }
+
+    /**
+     * Fetch pvnode service data using API v2 (site_id-based).
+     *
+     * A single request to https://api.pvnode.com/v2/forecast/<site_id> covers the
+     * entire site. The result is stored under the first configured plant; all
+     * additional plants receive empty data to avoid double-counting in the summary.
+     */
+    async updatePvnodeV2ServiceData() {
+        const plantArray = this.getPlantConfigData();
+        const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
+        const requestHeader = {
+            headers: {
+                Authorization: `Bearer ${this.config.apiKey}`,
+            },
+        };
+
+        let url = `https://api.pvnode.com/v2/forecast/${this.config.pvnodeSiteId}?forecast_days=${forecastDays}&include=clearsky&include=default&include=weather&past_days=0`;
+
+        if (this.config.pvnodeExtraParams) {
+            url += `&${this.config.pvnodeExtraParams}`;
+        }
+
+        const firstPlant = plantArray[0];
+        if (!firstPlant) {
+            this.log.error('[pvnode v2] No plant configured. Please add at least one plant entry with a name.');
+            return;
+        }
+
+        const cleanPlantId = this.cleanNamespace(firstPlant.name);
+
+        const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
+        const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
+
+        const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
+        const lastUpdate =
+            serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
+                ? Number(serviceDataLastUpdatedState.val)
+                : 0;
+
+        this.logSensitive(`[pvnode v2] site "${this.config.pvnodeSiteId}" - last update: ${lastUpdate}, url: ${url}`);
+
+        if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
+            try {
+                this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
+
+                const serviceResponse = await axios.get(url, requestHeader);
+
+                this.log.debug(`[pvnode v2] received data: ${JSON.stringify(serviceResponse.data)}`);
+
+                const data = pvnode.convertV2ToForecast(serviceResponse.data);
+                this.log.debug(`[pvnode v2] converted JSON: ${JSON.stringify(data)}`);
+
+                await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
+                await this.setState(`plants.${cleanPlantId}.service.data`, {
+                    val: JSON.stringify(data, null, 2),
+                    ack: true,
+                });
+                await this.setState(`plants.${cleanPlantId}.service.lastUpdated`, {
+                    val: moment().valueOf(),
+                    ack: true,
+                });
+                await this.setState(`plants.${cleanPlantId}.service.message`, {
+                    val: 'pvnode v2',
+                    ack: true,
+                });
+                await this.setState(`plants.${cleanPlantId}.place`, { val: '-', ack: true });
+
+                // All additional plants get empty data to avoid double-counting
+                for (let i = 1; i < plantArray.length; i++) {
+                    const cleanId = this.cleanNamespace(plantArray[i].name);
+                    await this.setState(`plants.${cleanId}.service.url`, { val: url, ack: true });
+                    await this.setState(`plants.${cleanId}.service.data`, { val: '', ack: true });
+                    await this.setState(`plants.${cleanId}.service.lastUpdated`, {
+                        val: moment().valueOf(),
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanId}.service.message`, {
+                        val: `pvnode v2 (part of site ${this.config.pvnodeSiteId})`,
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanId}.place`, { val: '-', ack: true });
+                }
+            } catch (error) {
+                this.handleServiceError(error);
+            }
+        } else {
+            this.log.debug(`[pvnode v2] Last update is within refresh interval - skipping`);
+        }
+
+        this.log.debug('[pvnode v2] received all data');
     }
 
     handleServiceError(error) {

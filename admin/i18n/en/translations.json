@@ -32,5 +32,7 @@
     "Forecast days (pvnode)": "Forecast days (pvnode)",
     "pvnode forecast days help": "Number of forecast days (paid: max 7)",
     "pvnode extra parameters": "Extra parameters (pvnode)",
-    "pvnode extra parameters help": "e.g. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
+    "pvnode extra parameters help": "e.g. diffuse_radiation_model=perez&snow_slide_coefficient=0.5",
+    "pvnode Site-ID (API v2)": "pvnode Site-ID (API v2)",
+    "pvnode site id help": "Site ID from the pvnode portal (e.g. site_xxxx…). When set, API v2 is used (recommended). Leave empty for API v1 – v1 will be shut down on 2026-12-31."
 }
