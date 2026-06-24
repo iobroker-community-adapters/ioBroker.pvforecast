@@ -40,7 +40,7 @@
                     "label": "Forecast service"
                 },
                 "interval": {
-                    "hidden": "data.service === 'solcast'",
+                    "hidden": "data.service === 'solcast' || (data.service === 'pvnode' && data.pvnodeV2)",
                     "type": "number",
                     "min": 60,
                     "xs": 12,
@@ -109,7 +109,7 @@
                     "help": "pvnode forecast days help"
                 },
                 "pvnodeExtraParams": {
-                    "hidden": "data.service !== 'pvnode'",
+                    "hidden": "data.service !== 'pvnode' || data.pvnodeV2",
                     "newLine": true,
                     "type": "text",
                     "xs": 12,
@@ -133,6 +133,7 @@
                 },
                 "latitude": {
                     "newLine": true,
+                    "hidden": "data.service === 'pvnode' && data.pvnodeV2",
                     "type": "text",
                     "xs": 12,
                     "sm": 12,
@@ -143,6 +144,7 @@
                     "help": "uses system config if empty"
                 },
                 "longitude": {
+                    "hidden": "data.service === 'pvnode' && data.pvnodeV2",
                     "type": "text",
                     "xs": 12,
                     "sm": 12,

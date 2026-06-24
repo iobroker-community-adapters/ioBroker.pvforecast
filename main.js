@@ -204,6 +204,23 @@ class Pvforecast extends utils.Adapter {
                     return;
                 }
                 this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
+
+                // Auto-set poll interval based on subscription tier (ignores configured interval)
+                if (this.config.pvnodePaid) {
+                    this.reqInterval = 60 * 60 * 1000;
+                    this.log.info('[pvnode v2] Poll interval auto-set to 60 min (Light tier — hourly data)');
+                } else {
+                    this.reqInterval = 24 * 60 * 60 * 1000;
+                    this.log.info('[pvnode v2] Poll interval auto-set to 24 h (Free tier — daily data)');
+                }
+
+                // v2 returns hourly slots → force full-hour step size for hourly states
+                if (this.config.everyhourEnabled && this.config.everyhourStepsize !== STEP_FULL) {
+                    this.log.info(
+                        `[pvnode v2] Hourly states step size overridden to full hours (:00) — v2 delivers hourly data (was: ${this.config.everyhourStepsize})`,
+                    );
+                    this.config.everyhourStepsize = STEP_FULL;
+                }
             } else {
                 this.log.warn(
                     '[pvnode] Using API v1 (deprecated). Enable "pvnode API v2" and enter your Site-ID to switch to v2. pvnode will shut down v1 on 2026-12-31.',
