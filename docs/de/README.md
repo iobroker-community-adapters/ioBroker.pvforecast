@@ -54,49 +54,73 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 ## pvnode
 
-[pvnode](https://pvnode.com) ist ein deutscher Dienst, der hochauflösende PV-Prognosen mit 15-Minuten-Intervallen liefert.
+[pvnode](https://pvnode.com) ist ein deutscher Dienst für hochauflösende PV-Prognosen mit 15-Minuten-Intervallen. Der Adapter unterstützt sowohl **API v1** (Anlagenkonfiguration im Adapter) als auch **API v2** (Anlagenkonfiguration im pvnode-Portal per Site-ID).
 
-![pvforecast pvnode options](img/pvforecast-pvnode-options.png)
+> **Hinweis**: pvnode v1 wird am 31.12.2026 abgeschaltet. Es wird empfohlen, auf API v2 zu migrieren.
 
-### pvnode Konfiguration
+### pvnode Kontostufen
 
-1. **API-Key**: Erstellen Sie einen API-Schlüssel unter https://pvnode.com/api-keys
-2. **Bezahltes Konto**: Aktivieren Sie diese Option, wenn Sie ein bezahltes pvnode-Konto besitzen
-3. **Prognosetage**: Anzahl der Prognosetage (nur bei bezahltem Konto, max. 7). Kostenlose Konten erhalten automatisch 1 Tag.
-4. **Abfrageintervall**: Empfohlen: 90 Minuten (pvnode aktualisiert 16x pro Tag)
-5. **Zusätzliche Parameter**: Optionale API-Parameter wie z.B. `diffuse_radiation_model=perez&snow_slide_coefficient=0.5`
+| Funktion | Free | Light | Plus |
+|----------|------|-------|------|
+| API-Anfragen/Monat | 250 | 3.000 | 3.000 |
+| Updates pro Tag | 1 | 24 (stündlich) | 144 (alle 10 min) |
+| Prognosetage | 1 | 7 | 7 |
+| Solarflächen | bis 4 | bis 4 | bis 8 |
+| Historische Daten | nein | nein | 30 Tage |
 
-### pvnode Kontotypen
+Das **Abfrageintervall** wird vom Adapter automatisch anhand der gewählten Kontostufe gesetzt und muss nicht manuell konfiguriert werden:
 
-| Funktion | Kostenlos | Bezahlt |
-|----------|-----------|---------|
-| API-Anfragen/Monat | 40 | 1.000 |
-| Prognosetage | 1 (heute + morgen) | bis zu 7 |
-| Historische Daten | nein | ja (-30 Tage) |
-| Standorte | 1 | mehrere |
+| Stufe | Automatisches Intervall |
+|-------|------------------------|
+| Free | 24 Stunden |
+| Light | 60 Minuten |
+| Plus | 10 Minuten (Nowcasting) |
 
-**Wichtig**: Aktivieren Sie die Option "Bezahltes Konto" nur, wenn Sie tatsächlich ein bezahltes pvnode-Konto haben. Andernfalls kann es zu API-Fehlern kommen, da der Adapter nicht automatisch erkennen kann, welchen Kontotyp Sie verwenden.
+### pvnode API v2 (empfohlen)
 
-### pvnode Zusätzliche Parameter
+In API v2 wird die gesamte Anlagenkonfiguration (Ausrichtung, Neigung, Leistung) direkt im pvnode-Portal über eine **Site-ID** verwaltet. Der Adapter benötigt nur die Site-ID — keine Azimuth-/Neigungs-/Leistungsangaben im Adapter.
 
-Über das Feld "Zusätzliche Parameter" können folgende optionale API-Parameter übergeben werden:
+**Konfiguration:**
+
+1. **API-Key**: Erstellen unter https://pvnode.com/api-keys
+2. **pvnode API v2 verwenden**: Checkbox aktivieren
+3. **pvnode Site-ID**: Site-ID aus dem pvnode-Portal (z.B. `site_xxxx…`)
+4. **Abonnementstufe**: Free / Light / Plus (bestimmt das Abrufintervall automatisch)
+5. **Prognosetage**: Anzahl der Prognosetage (Light/Plus: max. 7)
+
+**Anlagentabelle (v2):** Es wird mindestens ein Eintrag benötigt. Der Name dient der Anzeige; die optionale Spitzenleistung wird für den State „Installierte Leistung" verwendet. Alle Anlagendaten stammen aus einem einzigen v2-API-Aufruf (die Site-ID deckt alle Flächen ab).
+
+### pvnode API v1
+
+In API v1 werden Azimuth, Neigung und Leistung pro Anlage direkt im Adapter konfiguriert. Jede Anlage erhält einen eigenen API-Aufruf.
+
+**Konfiguration:**
+
+1. **API-Key**: Erstellen unter https://pvnode.com/api-keys
+2. **pvnode API v2 verwenden**: Checkbox deaktiviert lassen
+3. **Abonnementstufe**: Free / Light / Plus
+4. **Prognosetage**: Anzahl der Prognosetage (Light/Plus: max. 7)
+5. **Zusätzliche Parameter**: Optionale API-Parameter (nur v1), z.B. `diffuse_radiation_model=perez&snow_slide_coefficient=0.5`
+
+**Rotierendes Abrufverfahren (v1):** Bei mehreren Anlagen wird beim Start einmalig jede Anlage abgefragt. Danach wird pro Zyklus nur eine Anlage abgefragt (reihum). Mit N Anlagen und Intervall T wird jede Anlage alle N×T aktualisiert. Beispiel: 3 Anlagen, Light-Tier (60 min) → jede Anlage alle 3 Stunden, 1 API-Aufruf pro Stunde.
+
+### pvnode Zusätzliche Parameter (nur v1)
 
 | Parameter | Beschreibung | Beispiel |
 |-----------|--------------|---------|
 | `diffuse_radiation_model` | Strahlungsmodell | `perez` |
-| `snow_slide_coefficient` | Schneerutsch-Koeffizient (0.0-0.8) | `0.5` |
+| `snow_slide_coefficient` | Schneerutsch-Koeffizient (0.0–0.8) | `0.5` |
 | `shading_config` | Verschattungskonfiguration | `7:2:3:1_1:1:0:0_0:0:0:0` |
 
 Format: `key1=value1&key2=value2`
 
 ### pvnode Besonderheiten
 
-- **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen
+- **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen (v1 und v2)
 - **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
-- **Anfragen-Bündelung**: Bei mehreren konfigurierten Anlagen werden automatisch bis zu 2 Anlagen pro API-Anfrage gebündelt (pvnode `second_array` Feature). Dies reduziert die Anzahl der API-Aufrufe (z.B. 2 Anlagen = 1 Anfrage statt 2). Die kombinierten Prognosedaten werden bei der ersten Anlage gespeichert; die zweite Anlage wird als gebündelt markiert.
-- **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte (summiert über alle Anlagen) sowie Temperatur und Wettercode (jeweils der Wert der ersten Anlage).
-- **Zeitzonen**: Die pvnode API liefert Timestamps in UTC. Der Adapter konvertiert diese automatisch in die lokale Systemzeit.
-- Die Felder "Dämpfung morgens" und "Dämpfung abends" werden für pvnode nicht verwendet
+- **Abfrageintervall**: Wird automatisch anhand der Kontostufe gesetzt — keine manuelle Konfiguration notwendig
+- **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
+- Die Felder „Dämpfung morgens" und „Dämpfung abends" werden für pvnode nicht verwendet
 
 ## VIS Beispiel
 
