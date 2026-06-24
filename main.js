@@ -1161,6 +1161,8 @@ class Pvforecast extends utils.Adapter {
                     this.log.debug(`[pvnode v1] converted JSON: ${JSON.stringify(data)}`);
                     this.log.info(
                         `[pvnode v1] converted: ${Object.keys(data.watts).length} power slots, ` +
+                            `${Object.keys(data.watts_clearsky).length} clearsky slots, ` +
+                            `${Object.keys(data.temperature).length} temp slots, ` +
                             `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
                             `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
                     );
@@ -1273,6 +1275,8 @@ class Pvforecast extends utils.Adapter {
                 this.log.debug(`[pvnode v2] converted JSON: ${JSON.stringify(data)}`);
                 this.log.info(
                     `[pvnode v2] converted: ${Object.keys(data.watts).length} power slots, ` +
+                        `${Object.keys(data.watts_clearsky).length} clearsky slots, ` +
+                        `${Object.keys(data.temperature).length} temp slots, ` +
                         `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
                         `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
                 );
