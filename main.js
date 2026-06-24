@@ -1119,42 +1119,19 @@ class Pvforecast extends utils.Adapter {
             },
         };
 
-        // Batch plants in pairs using pvnode's second_array feature (like SOLECTRUS)
-        const batches = [];
-        for (let i = 0; i < plantArray.length; i += 2) {
-            const batch = [plantArray[i]];
-            if (i + 1 < plantArray.length) {
-                batch.push(plantArray[i + 1]);
-            }
-            batches.push(batch);
-        }
-
         this.log.info(
-            `[pvnode] Batching ${plantArray.length} plant(s) into ${batches.length} API request(s) using second_array`,
+            `[pvnode v1] Fetching ${plantArray.length} plant(s) individually (${plantArray.length} API call(s) per cycle)`,
         );
 
-        for (const batch of batches) {
-            const firstPlant = batch[0];
-            const secondPlant = batch.length > 1 ? batch[1] : null;
-            const cleanPlantId = this.cleanNamespace(firstPlant.name);
-
-            // Build URL with first plant parameters
-            const orientation = pvnode.convertAzimuthToOrientation(firstPlant.azimuth);
-            let url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${firstPlant.tilt}&orientation=${orientation}&pv_power_kw=${firstPlant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
-
-            // Add second plant as second_array if batched
-            if (secondPlant) {
-                const orientation2 = pvnode.convertAzimuthToOrientation(secondPlant.azimuth);
-                url += `&second_array_slope=${secondPlant.tilt}&second_array_orientation=${orientation2}&second_array_power_kw=${secondPlant.peakpower}`;
-
-                this.log.debug(`[pvnode] Batched "${firstPlant.name}" + "${secondPlant.name}" into one request`);
-            }
+        for (const plant of plantArray) {
+            const cleanPlantId = this.cleanNamespace(plant.name);
+            const orientation = pvnode.convertAzimuthToOrientation(plant.azimuth);
+            let url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${plant.tilt}&orientation=${orientation}&pv_power_kw=${plant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
 
             if (this.config.pvnodeExtraParams) {
                 url += `&${this.config.pvnodeExtraParams}`;
             }
 
-            // Check if update is needed (based on first plant of batch)
             const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
             const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
 
@@ -1164,9 +1141,7 @@ class Pvforecast extends utils.Adapter {
                     ? Number(serviceDataLastUpdatedState.val)
                     : 0;
 
-            this.logSensitive(
-                `[pvnode] batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} - last update: ${lastUpdate}, service url: ${url}`,
-            );
+            this.logSensitive(`[pvnode v1] plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
 
             if (
                 !this.pvnodeServiceDataFetched ||
@@ -1175,30 +1150,25 @@ class Pvforecast extends utils.Adapter {
                 moment().valueOf() - lastUpdate > 60 * 60 * 1000
             ) {
                 try {
-                    this.log.debug(
-                        `[pvnode] Starting update for batch: ${firstPlant.name}${secondPlant ? ` + ${secondPlant.name}` : ''}`,
-                    );
+                    this.log.debug(`[pvnode v1] Starting update for plant: ${plant.name}`);
 
                     const serviceResponse = await axios.get(url, requestHeader);
 
                     this.log.debug(`[pvnode v1] received raw data: ${JSON.stringify(serviceResponse.data)}`);
                     this.log.info(
-                        `[pvnode v1] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
+                        `[pvnode v1] response (${plant.name}): HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
                     );
 
                     const data = pvnode.convertToForecast(serviceResponse.data);
                     this.log.debug(`[pvnode v1] converted JSON: ${JSON.stringify(data)}`);
                     this.log.info(
-                        `[pvnode v1] converted: ${Object.keys(data.watts).length} power slots, ` +
+                        `[pvnode v1] converted (${plant.name}): ${Object.keys(data.watts).length} power slots, ` +
                             `${Object.keys(data.watts_clearsky).length} clearsky slots, ` +
                             `${Object.keys(data.temperature).length} temp slots, ` +
                             `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
                             `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
                     );
 
-                    const message = { info: { place: '-' }, type: 'pvnode' };
-
-                    // Store combined data for the first plant in the batch
                     await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
                     await this.setState(`plants.${cleanPlantId}.service.data`, {
                         val: JSON.stringify(data, null, 2),
@@ -1208,47 +1178,19 @@ class Pvforecast extends utils.Adapter {
                         val: moment().valueOf(),
                         ack: true,
                     });
-                    await this.setState(`plants.${cleanPlantId}.service.message`, {
-                        val: message.type,
-                        ack: true,
-                    });
-                    await this.setState(`plants.${cleanPlantId}.place`, {
-                        val: message.info.place,
-                        ack: true,
-                    });
-
-                    // Mark second plant as batched (empty data to avoid double-counting)
-                    if (secondPlant) {
-                        const cleanPlantId2 = this.cleanNamespace(secondPlant.name);
-                        await this.setState(`plants.${cleanPlantId2}.service.url`, { val: url, ack: true });
-                        await this.setState(`plants.${cleanPlantId2}.service.data`, { val: '', ack: true });
-                        await this.setState(`plants.${cleanPlantId2}.service.lastUpdated`, {
-                            val: moment().valueOf(),
-                            ack: true,
-                        });
-                        await this.setState(`plants.${cleanPlantId2}.service.message`, {
-                            val: `pvnode (batched with ${firstPlant.name})`,
-                            ack: true,
-                        });
-                        await this.setState(`plants.${cleanPlantId2}.place`, {
-                            val: message.info.place,
-                            ack: true,
-                        });
-                    }
+                    await this.setState(`plants.${cleanPlantId}.service.message`, { val: 'pvnode', ack: true });
+                    await this.setState(`plants.${cleanPlantId}.place`, { val: '-', ack: true });
                 } catch (error) {
                     this.handleServiceError(error);
                 }
             } else {
                 this.log.debug(
-                    `[pvnode] Last update of batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} is within refresh interval - skipping`,
+                    `[pvnode v1] Last update of plant "${plant.name}" is within refresh interval - skipping`,
                 );
             }
-
-            this.log.debug('[pvnode] received all data');
         }
 
-        // Mark as fetched after all batches are processed so each batch gets
-        // the startup-forced fetch, not just the first one.
+        // Set after all plants so each plant gets the startup-forced fetch.
         this.pvnodeServiceDataFetched = true;
     }
 
