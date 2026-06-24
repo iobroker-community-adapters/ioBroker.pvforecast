@@ -386,19 +386,11 @@ class Pvforecast extends utils.Adapter {
         let totalEnergyToday = 0;
         let totalEnergyTomorrow = 0;
 
-        const isPvnodeV2 = this.config.service === 'pvnode' && this.config.pvnodeV2;
-
-        await asyncForEach(plantArray, async (plant, index) => {
+        await asyncForEach(plantArray, async (plant) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
             const plantPowerInstalled = plant.peakpower * 1000; // kWp => Wp
 
             this.globalEveryHour[cleanPlantId] = [];
-
-            // In pvnode v2 mode the API returns a single site total stored in plant[0].
-            // Skip additional plants to avoid 0-value states and spurious table columns.
-            if (isPvnodeV2 && index > 0) {
-                return;
-            }
 
             const serviceDataState = await this.getStateAsync(`plants.${cleanPlantId}.service.data`);
             if (serviceDataState && serviceDataState.val) {
@@ -1213,7 +1205,7 @@ class Pvforecast extends utils.Adapter {
             },
         };
 
-        let url = `https://api.pvnode.com/v2/forecast/${this.config.pvnodeSiteId}?forecast_days=${forecastDays}&include=clearsky&include=default&include=weather&past_days=0`;
+        let url = `https://api.pvnode.com/v2/forecast/${this.config.pvnodeSiteId}?forecast_days=${forecastDays}&include=clearsky&include=default&include=weather&include=strings&past_days=0`;
 
         if (this.config.pvnodeExtraParams) {
             url += `&${this.config.pvnodeExtraParams}`;
@@ -1254,46 +1246,63 @@ class Pvforecast extends utils.Adapter {
                     `[pvnode v2] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
                 );
 
-                const data = pvnode.convertV2ToForecast(serviceResponse.data);
-                this.log.debug(`[pvnode v2] converted JSON: ${JSON.stringify(data)}`);
+                const responseData = serviceResponse.data;
+                const hasStrings =
+                    responseData.strings &&
+                    Array.isArray(responseData.strings) &&
+                    responseData.strings.length > 0 &&
+                    plantArray.length > 1;
+
+                if (hasStrings) {
+                    this.log.info(
+                        `[pvnode v2] strings data available — distributing ${responseData.strings.length} string entries across ${plantArray.length} plants`,
+                    );
+                }
+
+                // Site-wide values (weather, clearsky, totals)
+                const siteData = pvnode.convertV2ToForecast(responseData);
                 this.log.info(
-                    `[pvnode v2] converted: ${Object.keys(data.watts).length} power slots, ` +
-                        `${Object.keys(data.watts_clearsky).length} clearsky slots, ` +
-                        `${Object.keys(data.temperature).length} temp slots, ` +
-                        `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
-                        `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
+                    `[pvnode v2] site total: ${Object.keys(siteData.watts).length} power slots, ` +
+                        `today=${siteData.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh`,
                 );
 
-                await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
-                await this.setState(`plants.${cleanPlantId}.service.data`, {
-                    val: JSON.stringify(data, null, 2),
-                    ack: true,
-                });
-                await this.setState(`plants.${cleanPlantId}.service.lastUpdated`, {
-                    val: moment().valueOf(),
-                    ack: true,
-                });
-                await this.setState(`plants.${cleanPlantId}.service.message`, {
-                    val: 'pvnode v2',
-                    ack: true,
-                });
-                await this.setState(`plants.${cleanPlantId}.place`, { val: '-', ack: true });
-
-                // All additional plants get empty data to avoid double-counting
-                for (let i = 1; i < plantArray.length; i++) {
+                for (let i = 0; i < plantArray.length; i++) {
                     const cleanId = this.cleanNamespace(plantArray[i].name);
+                    let data;
+
+                    if (hasStrings) {
+                        // Per-string data matched by index; inherit weather/clearsky from site-wide values
+                        data = pvnode.convertV2StringToForecast(responseData, i);
+                        data.watts_clearsky = siteData.watts_clearsky;
+                        if (i === 0) {
+                            data.temperature = siteData.temperature;
+                            data.weather_code = siteData.weather_code;
+                        }
+                        this.log.info(
+                            `[pvnode v2] plant[${i}] "${plantArray[i].name}": ${Object.keys(data.watts).length} power slots, ` +
+                                `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh`,
+                        );
+                    } else {
+                        // No per-string data — only plant[0] gets site total, others empty
+                        data = i === 0 ? siteData : null;
+                    }
+
                     await this.setState(`plants.${cleanId}.service.url`, { val: url, ack: true });
-                    await this.setState(`plants.${cleanId}.service.data`, { val: '', ack: true });
+                    await this.setState(`plants.${cleanId}.service.data`, {
+                        val: data ? JSON.stringify(data, null, 2) : '',
+                        ack: true,
+                    });
                     await this.setState(`plants.${cleanId}.service.lastUpdated`, {
                         val: moment().valueOf(),
                         ack: true,
                     });
                     await this.setState(`plants.${cleanId}.service.message`, {
-                        val: `pvnode v2 (part of site ${this.config.pvnodeSiteId})`,
+                        val: i === 0 || hasStrings ? 'pvnode v2' : `pvnode v2 (part of site ${this.config.pvnodeSiteId})`,
                         ack: true,
                     });
                     await this.setState(`plants.${cleanId}.place`, { val: '-', ack: true });
                 }
+
                 this.pvnodeServiceDataFetched = true;
             } catch (error) {
                 this.handleServiceError(error);
@@ -1383,9 +1392,7 @@ class Pvforecast extends utils.Adapter {
     }
 
     async saveEveryHourSummary(type, prefix, dayOfMonth) {
-        const allPlants = this.getPlantConfigData();
-        // In pvnode v2 mode, site total is stored in plant[0] only
-        const plantArray = this.config.service === 'pvnode' && this.config.pvnodeV2 ? allPlants.slice(0, 1) : allPlants;
+        const plantArray = this.getPlantConfigData();
 
         const validHourKeys = this.getValidHourKeys();
 
