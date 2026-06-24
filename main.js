@@ -45,6 +45,7 @@ class Pvforecast extends utils.Adapter {
 
         this.updateServiceDataTimeout = null;
         this.updateActualDataCron = null;
+        this.pvnodeServiceDataFetched = false;
 
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
@@ -1167,7 +1168,12 @@ class Pvforecast extends utils.Adapter {
                 `[pvnode] batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} - last update: ${lastUpdate}, service url: ${url}`,
             );
 
-            if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
+            if (
+                !this.pvnodeServiceDataFetched ||
+                lastUrl !== url ||
+                !lastUpdate ||
+                moment().valueOf() - lastUpdate > 60 * 60 * 1000
+            ) {
                 try {
                     this.log.debug(
                         `[pvnode] Starting update for batch: ${firstPlant.name}${secondPlant ? ` + ${secondPlant.name}` : ''}`,
@@ -1229,6 +1235,7 @@ class Pvforecast extends utils.Adapter {
                             ack: true,
                         });
                     }
+                    this.pvnodeServiceDataFetched = true;
                 } catch (error) {
                     this.handleServiceError(error);
                 }
@@ -1283,7 +1290,12 @@ class Pvforecast extends utils.Adapter {
 
         this.logSensitive(`[pvnode v2] site "${this.config.pvnodeSiteId}" - last update: ${lastUpdate}, url: ${url}`);
 
-        if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
+        if (
+            !this.pvnodeServiceDataFetched ||
+            lastUrl !== url ||
+            !lastUpdate ||
+            moment().valueOf() - lastUpdate > 60 * 60 * 1000
+        ) {
             try {
                 this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
 
@@ -1334,6 +1346,7 @@ class Pvforecast extends utils.Adapter {
                     });
                     await this.setState(`plants.${cleanId}.place`, { val: '-', ack: true });
                 }
+                this.pvnodeServiceDataFetched = true;
             } catch (error) {
                 this.handleServiceError(error);
             }
