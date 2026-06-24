@@ -80,6 +80,8 @@ Das **Abfrageintervall** wird vom Adapter automatisch anhand der gewählten Kont
 
 In API v2 wird die gesamte Anlagenkonfiguration (Ausrichtung, Neigung, Leistung) direkt im pvnode-Portal über eine **Site-ID** verwaltet. Der Adapter benötigt nur die Site-ID — keine Azimuth-/Neigungs-/Leistungsangaben im Adapter.
 
+**Voraussetzung:** Vor der Adapterkonfiguration muss im pvnode-Portal eine Site erstellt werden: https://pvnode.com/sites/new. Dort werden alle Solarflächen (Strings) mit Ausrichtung, Neigung und Spitzenleistung hinterlegt. Nach dem Speichern stellt das Portal die Site-ID bereit.
+
 **Konfiguration:**
 
 1. **API-Key**: Erstellen unter https://pvnode.com/api-keys

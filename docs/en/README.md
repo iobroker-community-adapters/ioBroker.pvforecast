@@ -79,6 +79,8 @@ The **poll interval** is set automatically by the adapter based on the selected 
 
 In API v2, all plant configuration (orientation, tilt, power) is managed directly in the pvnode portal via a **Site ID**. The adapter only needs the Site ID — no azimuth/tilt/power values are required in the adapter.
 
+**Prerequisites:** Before configuring the adapter, create a site in the pvnode portal at https://pvnode.com/sites/new. Add all solar arrays (strings) there with their orientation, tilt, and peak power. The portal will provide the Site ID after saving.
+
 **Configuration:**
 
 1. **API Key**: Create at https://pvnode.com/api-keys
