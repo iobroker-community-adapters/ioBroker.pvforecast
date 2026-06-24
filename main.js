@@ -1152,10 +1152,18 @@ class Pvforecast extends utils.Adapter {
 
                     const serviceResponse = await axios.get(url, requestHeader);
 
-                    this.log.debug(`[pvnode] received data for batch: ${JSON.stringify(serviceResponse.data)}`);
+                    this.log.debug(`[pvnode v1] received raw data: ${JSON.stringify(serviceResponse.data)}`);
+                    this.log.info(
+                        `[pvnode v1] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
+                    );
 
                     const data = pvnode.convertToForecast(serviceResponse.data);
-                    this.log.debug(`[pvnode] converted JSON: ${JSON.stringify(data)}`);
+                    this.log.debug(`[pvnode v1] converted JSON: ${JSON.stringify(data)}`);
+                    this.log.info(
+                        `[pvnode v1] converted: ${Object.keys(data.watts).length} power slots, ` +
+                            `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
+                            `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
+                    );
 
                     const message = { info: { place: '-' }, type: 'pvnode' };
 
@@ -1256,10 +1264,18 @@ class Pvforecast extends utils.Adapter {
 
                 const serviceResponse = await axios.get(url, requestHeader);
 
-                this.log.debug(`[pvnode v2] received data: ${JSON.stringify(serviceResponse.data)}`);
+                this.log.debug(`[pvnode v2] received raw data: ${JSON.stringify(serviceResponse.data)}`);
+                this.log.info(
+                    `[pvnode v2] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
+                );
 
                 const data = pvnode.convertV2ToForecast(serviceResponse.data);
                 this.log.debug(`[pvnode v2] converted JSON: ${JSON.stringify(data)}`);
+                this.log.info(
+                    `[pvnode v2] converted: ${Object.keys(data.watts).length} power slots, ` +
+                        `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
+                        `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
+                );
 
                 await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
                 await this.setState(`plants.${cleanPlantId}.service.data`, {
