@@ -200,7 +200,9 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'pvnode') {
             if (this.config.pvnodeV2) {
                 if (!this.config.pvnodeSiteId) {
-                    this.log.error('[pvnode] API v2 is enabled but no Site-ID is configured. Please enter the pvnode Site-ID in the adapter configuration!');
+                    this.log.error(
+                        '[pvnode] API v2 is enabled but no Site-ID is configured. Please enter the pvnode Site-ID in the adapter configuration!',
+                    );
                     return;
                 }
                 this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
