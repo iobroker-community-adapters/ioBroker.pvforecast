@@ -34,8 +34,9 @@
     "pvnode extra parameters": "Zusätzliche Parameter (pvnode)",
     "pvnode extra parameters help": "z.B. diffuse_radiation_model=perez&snow_slide_coefficient=0.5",
     "pvnode API v2": "pvnode API v2 verwenden",
-    "pvnode api v2 help": "API v2 aktivieren (empfohlen). Die Anlагenkonfiguration erfolgt im pvnode-Portal über die Site-ID. pvnode v1 wird am 31.12.2026 abgeschaltet.",
+    "pvnode api v2 help": "API v2 aktivieren (empfohlen). Die Anlagenkonfiguration erfolgt im pvnode-Portal über die Site-ID. pvnode v1 wird am 31.12.2026 abgeschaltet.",
     "pvnode Site-ID": "pvnode Site-ID",
     "pvnode site id help": "Site-ID aus dem pvnode-Portal (z.B. site_xxxx…).",
+    "pvnode v2 stepsize info": "pvnode API v2 liefert stündliche Daten – Schrittweite wird automatisch auf volle Stunden (:00) gesetzt.",
     "pvnode v2 plant info": "Im API-v2-Modus wird die Anlagenkonfiguration (Ausrichtung, Neigung, Leistung) im pvnode-Portal über die Site-ID verwaltet. Hier wird nur der Name für die Anzeige und optional die Spitzenleistung für den Zustand 'Installierte Leistung' benötigt."
 }

@@ -167,8 +167,18 @@
                     "xl": 4,
                     "label": "States for every hour"
                 },
+                "_everyhourStepsizeV2Info": {
+                    "hidden": "!data.everyhourEnabled || data.service !== 'pvnode' || !data.pvnodeV2",
+                    "type": "staticText",
+                    "text": "pvnode v2 stepsize info",
+                    "xs": 12,
+                    "sm": 12,
+                    "md": 8,
+                    "lg": 8,
+                    "xl": 8
+                },
                 "everyhourStepsize": {
-                    "hidden": "!data.everyhourEnabled",
+                    "hidden": "!data.everyhourEnabled || (data.service === 'pvnode' && data.pvnodeV2)",
                     "type": "select",
                     "xs": 12,
                     "sm": 12,

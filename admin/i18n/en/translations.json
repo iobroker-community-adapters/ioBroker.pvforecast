@@ -37,5 +37,6 @@
     "pvnode api v2 help": "Enable API v2 (recommended). Plant configuration is managed on the pvnode portal via the Site ID. pvnode v1 will be shut down on 2026-12-31.",
     "pvnode Site-ID": "pvnode Site-ID",
     "pvnode site id help": "Site ID from the pvnode portal (e.g. site_xxxx…).",
+    "pvnode v2 stepsize info": "pvnode API v2 delivers hourly data — step size is automatically set to full hours (:00).",
     "pvnode v2 plant info": "In API v2 mode, plant configuration (orientation, tilt, power) is managed on the pvnode portal via the Site ID. Only the name for display and optionally the peak power for the 'Installed power' state are needed here."
 }
