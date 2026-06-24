@@ -207,23 +207,23 @@ class Pvforecast extends utils.Adapter {
                     return;
                 }
                 this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
-
-                // Auto-set poll interval based on subscription tier (ignores configured interval)
-                const tier = this.config.pvnodeTier || 'free';
-                if (tier === 'plus') {
-                    this.reqInterval = 10 * 60 * 1000;
-                    this.log.info('[pvnode v2] Poll interval auto-set to 10 min (Plus tier — nowcasting)');
-                } else if (tier === 'light') {
-                    this.reqInterval = 60 * 60 * 1000;
-                    this.log.info('[pvnode v2] Poll interval auto-set to 60 min (Light tier)');
-                } else {
-                    this.reqInterval = 24 * 60 * 60 * 1000;
-                    this.log.info('[pvnode v2] Poll interval auto-set to 24 h (Free tier)');
-                }
             } else {
                 this.log.warn(
                     '[pvnode] Using API v1 (deprecated). Enable "pvnode API v2" and enter your Site-ID to switch to v2. pvnode will shut down v1 on 2026-12-31.',
                 );
+            }
+
+            // Auto-set poll interval based on subscription tier (applies to v1 and v2)
+            const tier = this.config.pvnodeTier || 'free';
+            if (tier === 'plus') {
+                this.reqInterval = 10 * 60 * 1000;
+                this.log.info('[pvnode] Poll interval auto-set to 10 min (Plus tier — nowcasting)');
+            } else if (tier === 'light') {
+                this.reqInterval = 60 * 60 * 1000;
+                this.log.info('[pvnode] Poll interval auto-set to 60 min (Light tier)');
+            } else {
+                this.reqInterval = 24 * 60 * 60 * 1000;
+                this.log.info('[pvnode] Poll interval auto-set to 24 h (Free tier)');
             }
         }
 
