@@ -389,11 +389,19 @@ class Pvforecast extends utils.Adapter {
         let totalEnergyToday = 0;
         let totalEnergyTomorrow = 0;
 
+        const isPvnodeV2 = this.config.service === 'pvnode' && this.config.pvnodeV2;
+
         await asyncForEach(plantArray, async (plant, index) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
             const plantPowerInstalled = plant.peakpower * 1000; // kWp => Wp
 
             this.globalEveryHour[cleanPlantId] = [];
+
+            // In pvnode v2 mode the API returns a single site total stored in plant[0].
+            // Skip additional plants to avoid 0-value states and spurious table columns.
+            if (isPvnodeV2 && index > 0) {
+                return;
+            }
 
             const serviceDataState = await this.getStateAsync(`plants.${cleanPlantId}.service.data`);
             if (serviceDataState && serviceDataState.val) {
@@ -1435,7 +1443,9 @@ class Pvforecast extends utils.Adapter {
     }
 
     async saveEveryHourSummary(type, prefix, dayOfMonth) {
-        const plantArray = this.getPlantConfigData();
+        const allPlants = this.getPlantConfigData();
+        // In pvnode v2 mode, site total is stored in plant[0] only
+        const plantArray = this.config.service === 'pvnode' && this.config.pvnodeV2 ? allPlants.slice(0, 1) : allPlants;
 
         const validHourKeys = this.getValidHourKeys();
 
