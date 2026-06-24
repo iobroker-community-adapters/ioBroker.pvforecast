@@ -249,6 +249,7 @@
     "chartingRoation": 270,
     "chartingAxisStepY": 1,
     "pvnodeSiteId": "",
+    "pvnodeV2": false,
     "pvnodePaid": false,
     "pvnodeForecastDays": 1,
     "pvnodeExtraParams": "",

@@ -113,7 +113,7 @@ class Pvforecast extends utils.Adapter {
                     if (!plant.resourceId || plant.resourceId === 'xxxx-xxxx-xxxx-xxxx') {
                         throw new Error(`Invalid device configuration: Found plant without resource id`);
                     }
-                } else if (this.config.service === 'pvnode' && this.config.pvnodeSiteId) {
+                } else if (this.config.service === 'pvnode' && this.config.pvnodeV2) {
                     // V2 mode: all PV config is encoded in the site_id on the pvnode portal
                 } else {
                     if (isNaN(plant.azimuth)) {
@@ -198,11 +198,15 @@ class Pvforecast extends utils.Adapter {
         }
 
         if (this.config.service === 'pvnode') {
-            if (this.config.pvnodeSiteId) {
+            if (this.config.pvnodeV2) {
+                if (!this.config.pvnodeSiteId) {
+                    this.log.error('[pvnode] API v2 is enabled but no Site-ID is configured. Please enter the pvnode Site-ID in the adapter configuration!');
+                    return;
+                }
                 this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
             } else {
                 this.log.warn(
-                    '[pvnode] Using API v1 (deprecated). Set a pvnode Site-ID in the adapter configuration to switch to API v2. pvnode will shut down API v1 on 2026-12-31.',
+                    '[pvnode] Using API v1 (deprecated). Enable "pvnode API v2" and enter your Site-ID to switch to v2. pvnode will shut down v1 on 2026-12-31.',
                 );
             }
         }
@@ -1082,7 +1086,7 @@ class Pvforecast extends utils.Adapter {
      * to avoid double-counting in the summary.
      */
     async updatePvnodeServiceData() {
-        if (this.config.pvnodeSiteId) {
+        if (this.config.pvnodeV2) {
             await this.updatePvnodeV2ServiceData();
             return;
         }
