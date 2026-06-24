@@ -46,6 +46,7 @@ class Pvforecast extends utils.Adapter {
         this.updateServiceDataTimeout = null;
         this.updateActualDataCron = null;
         this.pvnodeServiceDataFetched = false;
+        this.pvnodePlantFetchIndex = 0;
 
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
@@ -1123,11 +1124,21 @@ class Pvforecast extends utils.Adapter {
             },
         };
 
-        this.log.info(
-            `[pvnode v1] Fetching ${plantArray.length} plant(s) individually (${plantArray.length} API call(s) per cycle)`,
-        );
+        // On first run after startup fetch all plants; afterwards rotate one per poll cycle.
+        const plantsToFetch = !this.pvnodeServiceDataFetched
+            ? plantArray
+            : [plantArray[this.pvnodePlantFetchIndex % plantArray.length]];
 
-        for (const plant of plantArray) {
+        if (!this.pvnodeServiceDataFetched) {
+            this.log.info(`[pvnode v1] Startup: fetching all ${plantArray.length} plant(s)`);
+        } else {
+            const idx = this.pvnodePlantFetchIndex % plantArray.length;
+            this.log.info(
+                `[pvnode v1] Rotating fetch ${idx + 1}/${plantArray.length}: plant "${plantsToFetch[0].name}"`,
+            );
+        }
+
+        for (const plant of plantsToFetch) {
             const cleanPlantId = this.cleanNamespace(plant.name);
             const orientation = pvnode.convertAzimuthToOrientation(plant.azimuth);
             let url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${plant.tilt}&orientation=${orientation}&pv_power_kw=${plant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
@@ -1136,26 +1147,14 @@ class Pvforecast extends utils.Adapter {
                 url += `&${this.config.pvnodeExtraParams}`;
             }
 
+            // Re-fetch if URL changed (config update); otherwise always fetch in rotation.
             const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
             const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
 
-            const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
-            const lastUpdate =
-                serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
-                    ? Number(serviceDataLastUpdatedState.val)
-                    : 0;
+            this.logSensitive(`[pvnode v1] plant "${plant.name}" - service url: ${url}`);
 
-            this.logSensitive(`[pvnode v1] plant "${plant.name}" - last update: ${lastUpdate}, service url: ${url}`);
-
-            if (
-                !this.pvnodeServiceDataFetched ||
-                lastUrl !== url ||
-                !lastUpdate ||
-                moment().valueOf() - lastUpdate > 60 * 60 * 1000
-            ) {
+            if (lastUrl !== url || this.pvnodeServiceDataFetched) {
                 try {
-                    this.log.debug(`[pvnode v1] Starting update for plant: ${plant.name}`);
-
                     const serviceResponse = await axios.get(url, requestHeader);
 
                     this.log.debug(`[pvnode v1] received raw data: ${JSON.stringify(serviceResponse.data)}`);
@@ -1187,15 +1186,15 @@ class Pvforecast extends utils.Adapter {
                 } catch (error) {
                     this.handleServiceError(error);
                 }
-            } else {
-                this.log.debug(
-                    `[pvnode v1] Last update of plant "${plant.name}" is within refresh interval - skipping`,
-                );
             }
         }
 
-        // Set after all plants so each plant gets the startup-forced fetch.
-        this.pvnodeServiceDataFetched = true;
+        if (!this.pvnodeServiceDataFetched) {
+            this.pvnodeServiceDataFetched = true;
+            this.pvnodePlantFetchIndex = 0;
+        } else {
+            this.pvnodePlantFetchIndex = (this.pvnodePlantFetchIndex + 1) % plantArray.length;
+        }
     }
 
     /**
