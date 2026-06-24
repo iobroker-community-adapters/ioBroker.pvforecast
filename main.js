@@ -211,18 +211,10 @@ class Pvforecast extends utils.Adapter {
                 // Auto-set poll interval based on subscription tier (ignores configured interval)
                 if (this.config.pvnodePaid) {
                     this.reqInterval = 60 * 60 * 1000;
-                    this.log.info('[pvnode v2] Poll interval auto-set to 60 min (Light tier — hourly data)');
+                    this.log.info('[pvnode v2] Poll interval auto-set to 60 min (Light/paid tier)');
                 } else {
                     this.reqInterval = 24 * 60 * 60 * 1000;
-                    this.log.info('[pvnode v2] Poll interval auto-set to 24 h (Free tier — daily data)');
-                }
-
-                // v2 returns hourly slots → force full-hour step size for hourly states
-                if (this.config.everyhourEnabled && this.config.everyhourStepsize !== STEP_FULL) {
-                    this.log.info(
-                        `[pvnode v2] Hourly states step size overridden to full hours (:00) — v2 delivers hourly data (was: ${this.config.everyhourStepsize})`,
-                    );
-                    this.config.everyhourStepsize = STEP_FULL;
+                    this.log.info('[pvnode v2] Poll interval auto-set to 24 h (Free tier)');
                 }
             } else {
                 this.log.warn(
@@ -1311,9 +1303,7 @@ class Pvforecast extends utils.Adapter {
 
                 this.log.debug(`[pvnode v2] received raw data: ${JSON.stringify(serviceResponse.data)}`);
                 if (serviceResponse.data?.values?.length > 0) {
-                    this.log.info(
-                        `[pvnode v2] first entry sample: ${JSON.stringify(serviceResponse.data.values[0])}`,
-                    );
+                    this.log.info(`[pvnode v2] first entry sample: ${JSON.stringify(serviceResponse.data.values[0])}`);
                 }
                 this.log.info(
                     `[pvnode v2] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
