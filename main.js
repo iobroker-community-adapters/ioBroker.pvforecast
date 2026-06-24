@@ -1302,9 +1302,6 @@ class Pvforecast extends utils.Adapter {
                 const serviceResponse = await axios.get(url, requestHeader);
 
                 this.log.debug(`[pvnode v2] received raw data: ${JSON.stringify(serviceResponse.data)}`);
-                if (serviceResponse.data?.values?.length > 0) {
-                    this.log.info(`[pvnode v2] first entry sample: ${JSON.stringify(serviceResponse.data.values[0])}`);
-                }
                 this.log.info(
                     `[pvnode v2] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
                 );
