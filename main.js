@@ -1235,7 +1235,6 @@ class Pvforecast extends utils.Adapter {
                             ack: true,
                         });
                     }
-                    this.pvnodeServiceDataFetched = true;
                 } catch (error) {
                     this.handleServiceError(error);
                 }
@@ -1247,6 +1246,10 @@ class Pvforecast extends utils.Adapter {
 
             this.log.debug('[pvnode] received all data');
         }
+
+        // Mark as fetched after all batches are processed so each batch gets
+        // the startup-forced fetch, not just the first one.
+        this.pvnodeServiceDataFetched = true;
     }
 
     /**
