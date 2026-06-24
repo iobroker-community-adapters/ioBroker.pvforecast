@@ -386,7 +386,7 @@ class Pvforecast extends utils.Adapter {
         let totalEnergyToday = 0;
         let totalEnergyTomorrow = 0;
 
-        await asyncForEach(plantArray, async (plant) => {
+        await asyncForEach(plantArray, async (plant, index) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
             const plantPowerInstalled = plant.peakpower * 1000; // kWp => Wp
 
@@ -1289,7 +1289,10 @@ class Pvforecast extends utils.Adapter {
                         ack: true,
                     });
                     await this.setState(`plants.${cleanId}.service.message`, {
-                        val: i === 0 || hasStrings ? 'pvnode v2' : `pvnode v2 (part of site ${this.config.pvnodeSiteId})`,
+                        val:
+                            i === 0 || hasStrings
+                                ? 'pvnode v2'
+                                : `pvnode v2 (part of site ${this.config.pvnodeSiteId})`,
                         ack: true,
                     });
                     await this.setState(`plants.${cleanId}.place`, { val: '-', ack: true });
