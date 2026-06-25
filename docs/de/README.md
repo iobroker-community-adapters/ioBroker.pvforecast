@@ -56,7 +56,7 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 [pvnode](https://pvnode.com) ist ein deutscher Dienst für hochauflösende PV-Prognosen mit 15-Minuten-Intervallen. Der Adapter unterstützt sowohl **API v1** (Anlagenkonfiguration im Adapter) als auch **API v2** (Anlagenkonfiguration im pvnode-Portal per Site-ID).
 
-> **Hinweis**: pvnode v1 wird am 31.12.2026 abgeschaltet. Es wird empfohlen, auf API v2 zu migrieren.
+> **Warnung**: pvnode API v1 wird am **31.12.2026** abgeschaltet. Ab dem **01.01.2027** gibt der Adapter einen Fehler aus und stoppt das Polling, wenn v1 konfiguriert ist. Eine Migration auf API v2 ist erforderlich — siehe [pvnode API v2](#pvnode-api-v2-empfohlen) unten.
 
 ### pvnode Kontostufen
 

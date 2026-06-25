@@ -55,7 +55,7 @@ If longitude and latitude in the iobroker main settings, the adapter will fill o
 
 [pvnode](https://pvnode.com) is a German service providing high-resolution PV forecasts in 15-minute intervals. The adapter supports both **API v1** (plant configuration in the adapter) and **API v2** (plant configuration in the pvnode portal via Site ID).
 
-> **Note**: pvnode v1 will be shut down on 2026-12-31. Migration to API v2 is recommended.
+> **Warning**: pvnode API v1 will be shut down on **2026-12-31**. From **2027-01-01** onwards the adapter will log an error and stop polling when v1 is configured. Migration to API v2 is required — see [pvnode API v2](#pvnode-api-v2-recommended) below.
 
 ### pvnode Subscription Tiers
 

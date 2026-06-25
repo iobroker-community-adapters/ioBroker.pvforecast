@@ -1099,6 +1099,14 @@ class Pvforecast extends utils.Adapter {
             return;
         }
 
+        // pvnode API v1 was shut down on 2027-01-01
+        if (moment().isSameOrAfter(moment('2027-01-01', 'YYYY-MM-DD'))) {
+            this.log.error(
+                '[pvnode v1] pvnode API v1 was shut down on 2027-01-01. Please migrate to API v2 in the adapter configuration.',
+            );
+            return;
+        }
+
         const plantArray = this.getPlantConfigData();
         const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
         const requestHeader = {
