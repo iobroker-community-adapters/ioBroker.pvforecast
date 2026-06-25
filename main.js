@@ -1263,10 +1263,12 @@ class Pvforecast extends utils.Adapter {
                     let data;
 
                     if (hasStrings) {
-                        // Per-string data matched by index; inherit weather/clearsky from site-wide values
+                        // Per-string data matched by index
+                        // Clearsky, temperature and weather_code are site-wide — assign to plant[0]
+                        // only to avoid multiplying the site total by the number of plants in the summary
                         data = pvnode.convertV2StringToForecast(responseData, i);
-                        data.watts_clearsky = siteData.watts_clearsky;
                         if (i === 0) {
+                            data.watts_clearsky = siteData.watts_clearsky;
                             data.temperature = siteData.temperature;
                             data.weather_code = siteData.weather_code;
                         }
