@@ -47,6 +47,8 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 - (@patricknitsch) pvnode subscription tiers (Free / Light / Plus) replace the old paid-account checkbox; poll interval is set automatically per tier
 - (@patricknitsch) pvnode v1: rotating round-robin fetch — one plant per poll cycle instead of one combined request; each plant receives an individual API call
 - (@patricknitsch) Poll interval field hidden for pvnode (auto-managed)
+- (@patricknitsch) Update Documentation of pvnode
+- (@patricknitsch) Include warning for v1 and error after 31.12.26. The adapter cannot use v1 after this date anymore
 
 ### 6.1.0 (2026-04-26)
 - (@mcm1957) Adapter requires node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 now
