@@ -27,10 +27,18 @@
     "(Professional account only)": "(nur professionelles Konto)",
     "Graph color": "Diagrammfarbe",
     "Label color": "Etikettenfarbe",
-    "pvnode paid account": "Bezahltes Konto (pvnode)",
-    "pvnode paid account help": "Aktivieren für bezahlte pvnode-Konten (1.000 Anfragen/Monat, bis zu 7 Prognosetage)",
+    "pvnode tier": "pvnode-Abonnementstufe",
+    "pvnode tier help": "Free: 1 Update/Tag (24-h-Intervall). Light: stündliche Updates (60-min-Intervall). Plus: Nowcasting alle 10 min.",
+    "pvnode tier free": "Free (1 Update/Tag)",
+    "pvnode tier light": "Light (stündliche Updates)",
+    "pvnode tier plus": "Plus (Nowcasting, alle 10 min)",
     "Forecast days (pvnode)": "Prognosetage (pvnode)",
-    "pvnode forecast days help": "Anzahl der Prognosetage (bezahlt: max. 7)",
+    "pvnode forecast days help": "Anzahl der Prognosetage (Light/Plus: max. 7)",
     "pvnode extra parameters": "Zusätzliche Parameter (pvnode)",
-    "pvnode extra parameters help": "z.B. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
+    "pvnode extra parameters help": "z.B. diffuse_radiation_model=perez&snow_slide_coefficient=0.5",
+    "pvnode API v2": "pvnode API v2 verwenden",
+    "pvnode api v2 help": "API v2 aktivieren (empfohlen). Die Anlagenkonfiguration erfolgt im pvnode-Portal über die Site-ID. pvnode v1 wird am 31.12.2026 abgeschaltet.",
+    "pvnode Site-ID": "pvnode Site-ID",
+    "pvnode site id help": "Site-ID aus dem pvnode-Portal (z.B. site_xxxx…).",
+    "pvnode v2 plant info": "Im API-v2-Modus wird die Anlagenkonfiguration (Ausrichtung, Neigung, Leistung) im pvnode-Portal über die Site-ID verwaltet. Hier wird nur der Name für die Anzeige und optional die Spitzenleistung für den Zustand 'Installierte Leistung' benötigt."
 }

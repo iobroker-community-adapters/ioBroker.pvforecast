@@ -45,6 +45,8 @@ class Pvforecast extends utils.Adapter {
 
         this.updateServiceDataTimeout = null;
         this.updateActualDataCron = null;
+        this.pvnodeServiceDataFetched = false;
+        this.pvnodePlantFetchIndex = 0;
 
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
@@ -113,6 +115,8 @@ class Pvforecast extends utils.Adapter {
                     if (!plant.resourceId || plant.resourceId === 'xxxx-xxxx-xxxx-xxxx') {
                         throw new Error(`Invalid device configuration: Found plant without resource id`);
                     }
+                } else if (this.config.service === 'pvnode' && this.config.pvnodeV2) {
+                    // V2 mode: all PV config is encoded in the site_id on the pvnode portal
                 } else {
                     if (isNaN(plant.azimuth)) {
                         throw new Error(`Invalid device configuration: Found plant without azimuth`);
@@ -193,6 +197,35 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'pvnode' && !this.hasApiKey) {
             this.log.error('Please set the API key for pvnode in the adapter configuration!');
             return;
+        }
+
+        if (this.config.service === 'pvnode') {
+            if (this.config.pvnodeV2) {
+                if (!this.config.pvnodeSiteId) {
+                    this.log.error(
+                        '[pvnode] API v2 is enabled but no Site-ID is configured. Please enter the pvnode Site-ID in the adapter configuration!',
+                    );
+                    return;
+                }
+                this.log.info(`[pvnode] Using API v2 with site ID: ${this.config.pvnodeSiteId}`);
+            } else {
+                this.log.warn(
+                    '[pvnode] Using API v1 (deprecated). Enable "pvnode API v2" and enter your Site-ID to switch to v2. pvnode will shut down v1 on 2026-12-31.',
+                );
+            }
+
+            // Auto-set poll interval based on subscription tier (applies to v1 and v2)
+            const tier = this.config.pvnodeTier || 'free';
+            if (tier === 'plus') {
+                this.reqInterval = 10 * 60 * 1000;
+                this.log.info('[pvnode] Poll interval auto-set to 10 min (Plus tier — nowcasting)');
+            } else if (tier === 'light') {
+                this.reqInterval = 60 * 60 * 1000;
+                this.log.info('[pvnode] Poll interval auto-set to 60 min (Light tier)');
+            } else {
+                this.reqInterval = 24 * 60 * 60 * 1000;
+                this.log.info('[pvnode] Poll interval auto-set to 24 h (Free tier)');
+            }
         }
 
         if (this.config.watt_kw) {
@@ -1058,91 +1091,78 @@ class Pvforecast extends utils.Adapter {
     }
 
     /**
-     * Fetch pvnode service data with request batching.
-     *
-     * pvnode supports a second_array parameter to combine up to 2 plant arrays
-     * per API request, reducing the number of API calls (important for free accounts
-     * with only 40 requests/month). The combined response includes the total output
-     * of both arrays.
-     *
-     * For the first plant in each batch, the combined data is stored in service.data.
-     * The second plant (if present) is marked as batched and gets no separate data,
-     * to avoid double-counting in the summary.
+     * Fetch pvnode service data (v1 or v2 depending on config).
      */
     async updatePvnodeServiceData() {
+        if (this.config.pvnodeV2) {
+            await this.updatePvnodeV2ServiceData();
+            return;
+        }
+
+        // pvnode API v1 was shut down on 2027-01-01
+        if (moment().isSameOrAfter(moment('2027-01-01', 'YYYY-MM-DD'))) {
+            this.log.error(
+                '[pvnode v1] pvnode API v1 was shut down on 2027-01-01. Please migrate to API v2 in the adapter configuration.',
+            );
+            return;
+        }
+
         const plantArray = this.getPlantConfigData();
-        const forecastDays = this.config.pvnodePaid ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,
             },
         };
 
-        // Batch plants in pairs using pvnode's second_array feature (like SOLECTRUS)
-        const batches = [];
-        for (let i = 0; i < plantArray.length; i += 2) {
-            const batch = [plantArray[i]];
-            if (i + 1 < plantArray.length) {
-                batch.push(plantArray[i + 1]);
-            }
-            batches.push(batch);
+        // On first run after startup fetch all plants; afterwards rotate one per poll cycle.
+        const plantsToFetch = !this.pvnodeServiceDataFetched
+            ? plantArray
+            : [plantArray[this.pvnodePlantFetchIndex % plantArray.length]];
+
+        if (!this.pvnodeServiceDataFetched) {
+            this.log.info(`[pvnode v1] Startup: fetching all ${plantArray.length} plant(s)`);
+        } else {
+            const idx = this.pvnodePlantFetchIndex % plantArray.length;
+            this.log.info(
+                `[pvnode v1] Rotating fetch ${idx + 1}/${plantArray.length}: plant "${plantsToFetch[0].name}"`,
+            );
         }
 
-        this.log.info(
-            `[pvnode] Batching ${plantArray.length} plant(s) into ${batches.length} API request(s) using second_array`,
-        );
-
-        for (const batch of batches) {
-            const firstPlant = batch[0];
-            const secondPlant = batch.length > 1 ? batch[1] : null;
-            const cleanPlantId = this.cleanNamespace(firstPlant.name);
-
-            // Build URL with first plant parameters
-            const orientation = pvnode.convertAzimuthToOrientation(firstPlant.azimuth);
-            let url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${firstPlant.tilt}&orientation=${orientation}&pv_power_kw=${firstPlant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
-
-            // Add second plant as second_array if batched
-            if (secondPlant) {
-                const orientation2 = pvnode.convertAzimuthToOrientation(secondPlant.azimuth);
-                url += `&second_array_slope=${secondPlant.tilt}&second_array_orientation=${orientation2}&second_array_power_kw=${secondPlant.peakpower}`;
-
-                this.log.debug(`[pvnode] Batched "${firstPlant.name}" + "${secondPlant.name}" into one request`);
-            }
+        for (const plant of plantsToFetch) {
+            const cleanPlantId = this.cleanNamespace(plant.name);
+            const orientation = pvnode.convertAzimuthToOrientation(plant.azimuth);
+            let url = `https://api.pvnode.com/v1/forecast/?latitude=${this.pvLatitude}&longitude=${this.pvLongitude}&slope=${plant.tilt}&orientation=${orientation}&pv_power_kw=${plant.peakpower}&required_data=pv_watts,temp,weather_code&clearsky_data=true&past_days=0&forecast_days=${forecastDays}`;
 
             if (this.config.pvnodeExtraParams) {
                 url += `&${this.config.pvnodeExtraParams}`;
             }
 
-            // Check if update is needed (based on first plant of batch)
+            // Re-fetch if URL changed (config update); otherwise always fetch in rotation.
             const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
             const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
 
-            const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
-            const lastUpdate =
-                serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
-                    ? Number(serviceDataLastUpdatedState.val)
-                    : 0;
+            this.logSensitive(`[pvnode v1] plant "${plant.name}" - service url: ${url}`);
 
-            this.logSensitive(
-                `[pvnode] batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} - last update: ${lastUpdate}, service url: ${url}`,
-            );
-
-            if (lastUrl !== url || !lastUpdate || moment().valueOf() - lastUpdate > 60 * 60 * 1000) {
+            if (lastUrl !== url || this.pvnodeServiceDataFetched) {
                 try {
-                    this.log.debug(
-                        `[pvnode] Starting update for batch: ${firstPlant.name}${secondPlant ? ` + ${secondPlant.name}` : ''}`,
-                    );
-
                     const serviceResponse = await axios.get(url, requestHeader);
 
-                    this.log.debug(`[pvnode] received data for batch: ${JSON.stringify(serviceResponse.data)}`);
+                    this.log.debug(`[pvnode v1] received raw data: ${JSON.stringify(serviceResponse.data)}`);
+                    this.log.info(
+                        `[pvnode v1] response (${plant.name}): HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
+                    );
 
                     const data = pvnode.convertToForecast(serviceResponse.data);
-                    this.log.debug(`[pvnode] converted JSON: ${JSON.stringify(data)}`);
+                    this.log.debug(`[pvnode v1] converted JSON: ${JSON.stringify(data)}`);
+                    this.log.info(
+                        `[pvnode v1] converted (${plant.name}): ${Object.keys(data.watts).length} power slots, ` +
+                            `${Object.keys(data.watts_clearsky).length} clearsky slots, ` +
+                            `${Object.keys(data.temperature).length} temp slots, ` +
+                            `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh, ` +
+                            `tomorrow=${data.watt_hours_day[moment().add(1, 'days').format('YYYY-MM-DD')] ?? 0} Wh`,
+                    );
 
-                    const message = { info: { place: '-' }, type: 'pvnode' };
-
-                    // Store combined data for the first plant in the batch
                     await this.setState(`plants.${cleanPlantId}.service.url`, { val: url, ack: true });
                     await this.setState(`plants.${cleanPlantId}.service.data`, {
                         val: JSON.stringify(data, null, 2),
@@ -1152,44 +1172,151 @@ class Pvforecast extends utils.Adapter {
                         val: moment().valueOf(),
                         ack: true,
                     });
-                    await this.setState(`plants.${cleanPlantId}.service.message`, {
-                        val: message.type,
-                        ack: true,
-                    });
-                    await this.setState(`plants.${cleanPlantId}.place`, {
-                        val: message.info.place,
-                        ack: true,
-                    });
-
-                    // Mark second plant as batched (empty data to avoid double-counting)
-                    if (secondPlant) {
-                        const cleanPlantId2 = this.cleanNamespace(secondPlant.name);
-                        await this.setState(`plants.${cleanPlantId2}.service.url`, { val: url, ack: true });
-                        await this.setState(`plants.${cleanPlantId2}.service.data`, { val: '', ack: true });
-                        await this.setState(`plants.${cleanPlantId2}.service.lastUpdated`, {
-                            val: moment().valueOf(),
-                            ack: true,
-                        });
-                        await this.setState(`plants.${cleanPlantId2}.service.message`, {
-                            val: `pvnode (batched with ${firstPlant.name})`,
-                            ack: true,
-                        });
-                        await this.setState(`plants.${cleanPlantId2}.place`, {
-                            val: message.info.place,
-                            ack: true,
-                        });
-                    }
+                    await this.setState(`plants.${cleanPlantId}.service.message`, { val: 'pvnode', ack: true });
+                    await this.setState(`plants.${cleanPlantId}.place`, { val: '-', ack: true });
                 } catch (error) {
                     this.handleServiceError(error);
                 }
-            } else {
-                this.log.debug(
-                    `[pvnode] Last update of batch "${firstPlant.name}"${secondPlant ? ` + "${secondPlant.name}"` : ''} is within refresh interval - skipping`,
-                );
             }
-
-            this.log.debug('[pvnode] received all data');
         }
+
+        if (!this.pvnodeServiceDataFetched) {
+            this.pvnodeServiceDataFetched = true;
+            this.pvnodePlantFetchIndex = 0;
+        } else {
+            this.pvnodePlantFetchIndex = (this.pvnodePlantFetchIndex + 1) % plantArray.length;
+        }
+    }
+
+    /**
+     * Fetch pvnode service data using API v2 (site_id-based).
+     *
+     * A single request fetches site-wide values and per-string data. When the
+     * response contains a `strings` array and multiple plants are configured,
+     * each plant receives its own string forecast matched by index. Otherwise
+     * the site total is stored in plant[0] and additional plants get empty data.
+     */
+    async updatePvnodeV2ServiceData() {
+        const plantArray = this.getPlantConfigData();
+        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
+        const requestHeader = {
+            headers: {
+                Authorization: `Bearer ${this.config.apiKey}`,
+            },
+        };
+
+        let url = `https://api.pvnode.com/v2/forecast/${this.config.pvnodeSiteId}?forecast_days=${forecastDays}&include=clearsky&include=default&include=weather&include=strings&past_days=0`;
+
+        if (this.config.pvnodeExtraParams) {
+            url += `&${this.config.pvnodeExtraParams}`;
+        }
+
+        const firstPlant = plantArray[0];
+        if (!firstPlant) {
+            this.log.error('[pvnode v2] No plant configured. Please add at least one plant entry with a name.');
+            return;
+        }
+
+        const cleanPlantId = this.cleanNamespace(firstPlant.name);
+
+        const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
+        const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
+
+        const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
+        const lastUpdate =
+            serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
+                ? Number(serviceDataLastUpdatedState.val)
+                : 0;
+
+        this.logSensitive(`[pvnode v2] site "${this.config.pvnodeSiteId}" - last update: ${lastUpdate}, url: ${url}`);
+
+        if (
+            !this.pvnodeServiceDataFetched ||
+            lastUrl !== url ||
+            !lastUpdate ||
+            moment().valueOf() - lastUpdate > 60 * 60 * 1000
+        ) {
+            try {
+                this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
+
+                const serviceResponse = await axios.get(url, requestHeader);
+
+                this.log.debug(`[pvnode v2] received raw data: ${JSON.stringify(serviceResponse.data)}`);
+                this.log.info(
+                    `[pvnode v2] response: HTTP ${serviceResponse.status}, ${serviceResponse.data?.values?.length ?? 0} value(s)`,
+                );
+
+                const responseData = serviceResponse.data;
+                const hasStrings =
+                    responseData.strings &&
+                    Array.isArray(responseData.strings) &&
+                    responseData.strings.length > 0 &&
+                    plantArray.length > 1;
+
+                if (hasStrings) {
+                    this.log.info(
+                        `[pvnode v2] strings data available — distributing ${responseData.strings.length} string entries across ${plantArray.length} plants`,
+                    );
+                }
+
+                // Site-wide values (weather, clearsky, totals)
+                const siteData = pvnode.convertV2ToForecast(responseData);
+                this.log.info(
+                    `[pvnode v2] site total: ${Object.keys(siteData.watts).length} power slots, ` +
+                        `today=${siteData.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh`,
+                );
+
+                for (let i = 0; i < plantArray.length; i++) {
+                    const cleanId = this.cleanNamespace(plantArray[i].name);
+                    let data;
+
+                    if (hasStrings) {
+                        // Per-string data matched by index
+                        // Clearsky, temperature and weather_code are site-wide — assign to plant[0]
+                        // only to avoid multiplying the site total by the number of plants in the summary
+                        data = pvnode.convertV2StringToForecast(responseData, i);
+                        if (i === 0) {
+                            data.watts_clearsky = siteData.watts_clearsky;
+                            data.temperature = siteData.temperature;
+                            data.weather_code = siteData.weather_code;
+                        }
+                        this.log.info(
+                            `[pvnode v2] plant[${i}] "${plantArray[i].name}": ${Object.keys(data.watts).length} power slots, ` +
+                                `today=${data.watt_hours_day[moment().format('YYYY-MM-DD')] ?? 0} Wh`,
+                        );
+                    } else {
+                        // No per-string data — only plant[0] gets site total, others empty
+                        data = i === 0 ? siteData : null;
+                    }
+
+                    await this.setState(`plants.${cleanId}.service.url`, { val: url, ack: true });
+                    await this.setState(`plants.${cleanId}.service.data`, {
+                        val: data ? JSON.stringify(data, null, 2) : '',
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanId}.service.lastUpdated`, {
+                        val: moment().valueOf(),
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanId}.service.message`, {
+                        val:
+                            i === 0 || hasStrings
+                                ? 'pvnode v2'
+                                : `pvnode v2 (part of site ${this.config.pvnodeSiteId})`,
+                        ack: true,
+                    });
+                    await this.setState(`plants.${cleanId}.place`, { val: '-', ack: true });
+                }
+
+                this.pvnodeServiceDataFetched = true;
+            } catch (error) {
+                this.handleServiceError(error);
+            }
+        } else {
+            this.log.debug(`[pvnode v2] Last update is within refresh interval - skipping`);
+        }
+
+        this.log.debug('[pvnode v2] received all data');
     }
 
     handleServiceError(error) {
