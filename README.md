@@ -41,6 +41,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+- (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
+
 ### 6.2.0 (2026-07-06)
 - (@patricknitsch) pvnode API v2 support: plant configuration via Site ID in the pvnode portal — create a site at https://pvnode.com/sites/new
 - (@patricknitsch) pvnode v2: per-string forecasts — each configured plant receives its own forecast matched by index (plant 1 → string 0, etc.)
@@ -49,6 +53,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 - (@patricknitsch) Poll interval field hidden for pvnode (auto-managed)
 - (@patricknitsch) Update Documentation of pvnode
 - (@patricknitsch) Include warning for v1 and error after 31.12.26. The adapter cannot use v1 after this date anymore
+- (@patricknitsch) pvnode Free tier forecast days is now configurable (1-2, today/today+tomorrow) instead of being hardcoded to 1, matching the actual pvnode Free tier scope
 
 ### 6.1.0 (2026-04-26)
 - (@mcm1957) Adapter requires node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 now

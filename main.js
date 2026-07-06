@@ -357,6 +357,17 @@ class Pvforecast extends utils.Adapter {
         return (this.config.service === 'solcast' ? this.config.devicesSolcast : this.config.devices) || [];
     }
 
+    /**
+     * Determine the pvnode forecast_days parameter, clamped to the selected tier's limit.
+     * Free tier is capped at 2 days (today + tomorrow); Light/Plus are capped at 7 days.
+     */
+    getPvnodeForecastDays() {
+        const isFree = (this.config.pvnodeTier || 'free') === 'free';
+        const maxDays = isFree ? 2 : 7;
+        const requested = this.config.pvnodeForecastDays || (isFree ? 2 : 7);
+        return Math.min(Math.max(requested, 1), maxDays);
+    }
+
     async updateActualDataInterval() {
         const todaysDate = moment().date();
         const tomorrowDate = moment().add(1, 'days').date();
@@ -1108,7 +1119,7 @@ class Pvforecast extends utils.Adapter {
         }
 
         const plantArray = this.getPlantConfigData();
-        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = this.getPvnodeForecastDays();
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,
@@ -1198,7 +1209,7 @@ class Pvforecast extends utils.Adapter {
      */
     async updatePvnodeV2ServiceData() {
         const plantArray = this.getPlantConfigData();
-        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = this.getPvnodeForecastDays();
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,
