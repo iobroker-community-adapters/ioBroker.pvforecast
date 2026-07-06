@@ -1,4 +1,9 @@
 # Older changes
+## 4.1.0 (2024-11-15)
+
+* (@klein0r) Added estimated energy: now until end of day
+* (@simatec) Admin-UI has been adapted for small displays
+
 ## 4.0.1 (2024-10-22)
 
 * (@klein0r) Fixed: Missing color settings for new Solcast table
