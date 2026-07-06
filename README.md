@@ -49,6 +49,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 - (@patricknitsch) Poll interval field hidden for pvnode (auto-managed)
 - (@patricknitsch) Update Documentation of pvnode
 - (@patricknitsch) Include warning for v1 and error after 31.12.26. The adapter cannot use v1 after this date anymore
+- (@patricknitsch) pvnode Free tier now fetches 2 forecast days (today + tomorrow) instead of 1, matching the actual pvnode Free tier scope
 
 ### 6.1.0 (2026-04-26)
 - (@mcm1957) Adapter requires node.js >= 22, js-controller >= 6.0.11 and admin >= 7.7.22 now

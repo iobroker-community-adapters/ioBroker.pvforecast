@@ -1108,7 +1108,7 @@ class Pvforecast extends utils.Adapter {
         }
 
         const plantArray = this.getPlantConfigData();
-        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 2;
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,
@@ -1198,7 +1198,7 @@ class Pvforecast extends utils.Adapter {
      */
     async updatePvnodeV2ServiceData() {
         const plantArray = this.getPlantConfigData();
-        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 1;
+        const forecastDays = (this.config.pvnodeTier || 'free') !== 'free' ? this.config.pvnodeForecastDays || 7 : 2;
         const requestHeader = {
             headers: {
                 Authorization: `Bearer ${this.config.apiKey}`,

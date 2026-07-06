@@ -63,7 +63,7 @@ If longitude and latitude in the iobroker main settings, the adapter will fill o
 |---------|------|-------|------|
 | API requests/month | 250 | 3,000 | 3,000 |
 | Updates per day | 1 | 24 (hourly) | 144 (every 10 min) |
-| Forecast days | 1 | 7 | 7 |
+| Forecast days | 2 (today + tomorrow) | 7 | 7 |
 | Solar arrays | up to 4 | up to 4 | up to 8 |
 | Historical data | no | no | 30 days |
 
@@ -87,7 +87,7 @@ In API v2, all plant configuration (orientation, tilt, power) is managed directl
 2. **Use pvnode API v2**: Enable checkbox
 3. **pvnode Site ID**: Site ID from the pvnode portal (e.g. `site_xxxx…`)
 4. **Subscription tier**: Free / Light / Plus (determines poll interval automatically)
-5. **Forecast days**: Number of forecast days (Light/Plus: max 7)
+5. **Forecast days**: Number of forecast days (Free: fixed at 2 days – today and tomorrow; Light/Plus: max 7)
 
 **Plant table (v2):** At least one entry is required. The name is used for display; the optional peak power is used for the "Installed power" state. The adapter requests per-string data from the v2 API and maps each string to the configured plant by position (plant 1 → string 0, plant 2 → string 1, etc.). This allows individual per-plant forecasts. If no string data is available, the site total is stored under the first plant.
 
@@ -100,7 +100,7 @@ In API v1, azimuth, tilt, and power are configured per plant directly in the ada
 1. **API Key**: Create at https://pvnode.com/api-keys
 2. **Use pvnode API v2**: Leave checkbox disabled
 3. **Subscription tier**: Free / Light / Plus
-4. **Forecast days**: Number of forecast days (Light/Plus: max 7)
+4. **Forecast days**: Number of forecast days (Free: fixed at 2 days – today and tomorrow; Light/Plus: max 7)
 5. **Extra parameters**: Optional API parameters (v1 only), e.g. `diffuse_radiation_model=perez&snow_slide_coefficient=0.5`
 
 **Rotating fetch (v1):** With multiple plants, all plants are fetched once on startup. Afterwards, only one plant is fetched per cycle (round-robin). With N plants and interval T, each plant is refreshed every N×T. Example: 3 plants, Light tier (60 min) → each plant every 3 hours, 1 API call per hour.
