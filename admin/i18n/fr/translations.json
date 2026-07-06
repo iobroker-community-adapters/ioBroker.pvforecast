@@ -30,7 +30,8 @@
     "pvnode paid account": "Compte payant (pvnode)",
     "pvnode paid account help": "Activer pour les comptes pvnode payants (1 000 requêtes/mois, jusqu'à 7 jours de prévision)",
     "Forecast days (pvnode)": "Jours de prévision (pvnode)",
-    "pvnode forecast days help": "Nombre de jours de prévision (payant : max 7)",
+    "pvnode forecast days help": "Nombre de jours de prévision (Free : max 2 – aujourd'hui et demain ; Light/Plus : max 7)",
+    "pvnode forecast days free validator error": "Le forfait Free ne prend en charge que 1 à 2 jours de prévision (aujourd'hui et demain).",
     "pvnode extra parameters": "Paramètres supplémentaires (pvnode)",
     "pvnode extra parameters help": "p.ex. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

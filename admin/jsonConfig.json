@@ -102,7 +102,7 @@
                     ]
                 },
                 "pvnodeForecastDays": {
-                    "hidden": "data.service !== 'pvnode' || (data.pvnodeTier || 'free') === 'free'",
+                    "hidden": "data.service !== 'pvnode'",
                     "type": "number",
                     "min": 1,
                     "max": 7,
@@ -112,7 +112,9 @@
                     "lg": 4,
                     "xl": 4,
                     "label": "Forecast days (pvnode)",
-                    "help": "pvnode forecast days help"
+                    "help": "pvnode forecast days help",
+                    "validator": "(data.pvnodeTier || 'free') !== 'free' || (data.pvnodeForecastDays >= 1 && data.pvnodeForecastDays <= 2)",
+                    "validatorErrorText": "pvnode forecast days free validator error"
                 },
                 "pvnodeExtraParams": {
                     "hidden": "data.service !== 'pvnode' || data.pvnodeV2",

@@ -30,7 +30,8 @@
     "pvnode paid account": "Платний акаунт (pvnode)",
     "pvnode paid account help": "Увімкнути для платних акаунтів pvnode (1 000 запитів/місяць, до 7 днів прогнозу)",
     "Forecast days (pvnode)": "Дні прогнозу (pvnode)",
-    "pvnode forecast days help": "Кількість днів прогнозу (платно: макс. 7)",
+    "pvnode forecast days help": "Кількість днів прогнозу (Free: макс. 2 – сьогодні і завтра; Light/Plus: макс. 7)",
+    "pvnode forecast days free validator error": "Тариф Free підтримує лише 1-2 дні прогнозу (сьогодні і завтра).",
     "pvnode extra parameters": "Додаткові параметри (pvnode)",
     "pvnode extra parameters help": "напр. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

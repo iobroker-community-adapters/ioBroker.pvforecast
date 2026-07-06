@@ -30,7 +30,8 @@
     "pvnode paid account": "Betaald account (pvnode)",
     "pvnode paid account help": "Inschakelen voor betaalde pvnode-accounts (1.000 verzoeken/maand, tot 7 prognosedagen)",
     "Forecast days (pvnode)": "Prognosedagen (pvnode)",
-    "pvnode forecast days help": "Aantal prognosedagen (betaald: max 7)",
+    "pvnode forecast days help": "Aantal prognosedagen (Free: max 2 – vandaag en morgen; Light/Plus: max 7)",
+    "pvnode forecast days free validator error": "Het Free-abonnement ondersteunt slechts 1-2 prognosedagen (vandaag en morgen).",
     "pvnode extra parameters": "Extra parameters (pvnode)",
     "pvnode extra parameters help": "bijv. diffuse_radiation_model=perez&snow_slide_coefficient=0.5"
 }

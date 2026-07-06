@@ -64,7 +64,7 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 |----------|------|-------|------|
 | API-Anfragen/Monat | 250 | 3.000 | 3.000 |
 | Updates pro Tag | 1 | 24 (stündlich) | 144 (alle 10 min) |
-| Prognosetage | 2 (heute + morgen) | 7 | 7 |
+| Prognosetage | 1-2 (heute + morgen) | 1-7 | 1-7 |
 | Solarflächen | bis 4 | bis 4 | bis 8 |
 | Historische Daten | nein | nein | 30 Tage |
 
@@ -88,7 +88,7 @@ In API v2 wird die gesamte Anlagenkonfiguration (Ausrichtung, Neigung, Leistung)
 2. **pvnode API v2 verwenden**: Checkbox aktivieren
 3. **pvnode Site-ID**: Site-ID aus dem pvnode-Portal (z.B. `site_xxxx…`)
 4. **Abonnementstufe**: Free / Light / Plus (bestimmt das Abrufintervall automatisch)
-5. **Prognosetage**: Anzahl der Prognosetage (Free: fest 2 Tage – heute und morgen; Light/Plus: max. 7)
+5. **Prognosetage**: Anzahl der Prognosetage (Free: max. 2 – heute und morgen; Light/Plus: max. 7)
 
 **Anlagentabelle (v2):** Es wird mindestens ein Eintrag benötigt. Der Name dient der Anzeige; die optionale Spitzenleistung wird für den State „Installierte Leistung" verwendet. Der Adapter fragt String-Daten von der v2-API ab und ordnet jeden String der konfigurierten Anlage nach Position zu (Anlage 1 → String 0, Anlage 2 → String 1 usw.). Damit sind echte Pro-Flächen-Prognosen möglich. Falls keine String-Daten verfügbar sind, wird der Gesamtwert der Site unter der ersten Anlage gespeichert.
 
@@ -101,7 +101,7 @@ In API v1 werden Azimuth, Neigung und Leistung pro Anlage direkt im Adapter konf
 1. **API-Key**: Erstellen unter https://pvnode.com/api-keys
 2. **pvnode API v2 verwenden**: Checkbox deaktiviert lassen
 3. **Abonnementstufe**: Free / Light / Plus
-4. **Prognosetage**: Anzahl der Prognosetage (Free: fest 2 Tage – heute und morgen; Light/Plus: max. 7)
+4. **Prognosetage**: Anzahl der Prognosetage (Free: max. 2 – heute und morgen; Light/Plus: max. 7)
 5. **Zusätzliche Parameter**: Optionale API-Parameter (nur v1), z.B. `diffuse_radiation_model=perez&snow_slide_coefficient=0.5`
 
 **Rotierendes Abrufverfahren (v1):** Bei mehreren Anlagen wird beim Start einmalig jede Anlage abgefragt. Danach wird pro Zyklus nur eine Anlage abgefragt (reihum). Mit N Anlagen und Intervall T wird jede Anlage alle N×T aktualisiert. Beispiel: 3 Anlagen, Light-Tier (60 min) → jede Anlage alle 3 Stunden, 1 API-Aufruf pro Stunde.
