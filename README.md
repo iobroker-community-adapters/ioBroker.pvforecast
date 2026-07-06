@@ -41,6 +41,10 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
+
+### **WORK IN PROGRESS**
+- (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
+
 ### 6.2.0 (2026-07-06)
 - (@patricknitsch) pvnode API v2 support: plant configuration via Site ID in the pvnode portal — create a site at https://pvnode.com/sites/new
 - (@patricknitsch) pvnode v2: per-string forecasts — each configured plant receives its own forecast matched by index (plant 1 → string 0, etc.)
