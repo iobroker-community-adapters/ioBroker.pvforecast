@@ -41,7 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-### **WORK IN PROGRESS**
+### 6.2.0 (2026-07-06)
 - (@patricknitsch) pvnode API v2 support: plant configuration via Site ID in the pvnode portal — create a site at https://pvnode.com/sites/new
 - (@patricknitsch) pvnode v2: per-string forecasts — each configured plant receives its own forecast matched by index (plant 1 → string 0, etc.)
 - (@patricknitsch) pvnode subscription tiers (Free / Light / Plus) replace the old paid-account checkbox; poll interval is set automatically per tier
@@ -71,11 +71,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 NodeJS >= 20.x and js-controller >= 6 is required
 
 * (@klein0r) Minimum peak power is 0.1 kWp
-
-### 4.1.0 (2024-11-15)
-
-* (@klein0r) Added estimated energy: now until end of day
-* (@simatec) Admin-UI has been adapted for small displays
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

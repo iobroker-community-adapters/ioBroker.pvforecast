@@ -1,6 +1,6 @@
 {
   "name": "iobroker.pvforecast",
-  "version": "6.1.0",
+  "version": "6.2.0",
   "description": "pvforecast",
   "author": "Patrick Walther <walther-patrick@gmx.net>",
   "contributors": [
@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.1",
-    "axios": "^1.18.0",
+    "axios": "^1.18.1",
     "cron": "^4.4.0",
     "moment": "^2.30.1"
   },
