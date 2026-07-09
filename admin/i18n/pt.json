@@ -29,7 +29,8 @@
     "in minutes": "em minutos",
     "pvnode extra parameters": "Parâmetros adicionais (pvnode)",
     "pvnode extra parameters help": "ex. diffuse_radiation_model=perez&snow_slide_coefficient=0.5",
-    "pvnode forecast days help": "Número de dias de previsão (pago: máx. 7)",
+    "pvnode forecast days free validator error": "O plano Free suporta apenas 1-2 dias de previsão (hoje e amanhã).",
+    "pvnode forecast days help": "Número de dias de previsão (Free: máx. 2 – hoje e amanhã; Light/Plus: máx. 7)",
     "pvnode paid account": "Conta paga (pvnode)",
     "pvnode paid account help": "Ativar para contas pvnode pagas (1.000 solicitações/mês, até 7 dias de previsão)",
     "uses system config if empty": "usa a configuração do sistema se estiver vazio"

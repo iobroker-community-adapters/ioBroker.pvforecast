@@ -29,7 +29,8 @@
     "in minutes": "在几分钟内",
     "pvnode extra parameters": "额外参数 (pvnode)",
     "pvnode extra parameters help": "例如 diffuse_radiation_model=perez&snow_slide_coefficient=0.5",
-    "pvnode forecast days help": "预测天数（付费：最多 7 天）",
+    "pvnode forecast days free validator error": "Free 套餐仅支持 1-2 天的预测（今天和明天）。",
+    "pvnode forecast days help": "预测天数（Free：最多 2 天 — 今天和明天；Light/Plus：最多 7 天）",
     "pvnode paid account": "付费账户 (pvnode)",
     "pvnode paid account help": "为付费 pvnode 账户启用（每月 1,000 次请求，最多 7 天预测）",
     "uses system config if empty": "如果为空，则使用系统配置"
