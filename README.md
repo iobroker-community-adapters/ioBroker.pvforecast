@@ -43,6 +43,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 
 ### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22.19.0 now
 - (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
 
 ### 6.2.0 (2026-07-06)
