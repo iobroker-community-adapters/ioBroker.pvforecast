@@ -1241,11 +1241,15 @@ class Pvforecast extends utils.Adapter {
 
         this.logSensitive(`[pvnode v2] site "${this.config.pvnodeSiteId}" - last update: ${lastUpdate}, url: ${url}`);
 
+        // Respect the tier-based poll interval (Free: 24 h, Light: 60 min, Plus: 10 min).
+        // A small tolerance prevents skipping a cycle when the timer fires slightly early.
+        const minRefreshInterval = Math.max(this.reqInterval - 60 * 1000, 0);
+
         if (
             !this.pvnodeServiceDataFetched ||
             lastUrl !== url ||
             !lastUpdate ||
-            moment().valueOf() - lastUpdate > 60 * 60 * 1000
+            moment().valueOf() - lastUpdate >= minRefreshInterval
         ) {
             try {
                 this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
