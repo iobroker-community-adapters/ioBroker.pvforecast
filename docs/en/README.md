@@ -118,6 +118,7 @@ Format: `key1=value1&key2=value2`
 ### pvnode Notes
 
 - **15-minute resolution**: pvnode delivers forecast data in 15-minute intervals (v1 and v2)
+- **Daily totals for additional days**: With more than 2 forecast days (Light/Plus), the states `energy.day2` … `energy.day6` (energy in 2 … 6 days) are created for each plant and under `summary.energy`. States for days outside the configured forecast days are removed automatically.
 - **Azimuth conversion**: The adapter automatically converts the azimuth (adapter: 0=south) to pvnode format (180=south)
 - **Poll interval**: Set automatically based on subscription tier — no manual configuration needed
 - **Per-plant forecasts (v2)**: When the pvnode account returns string data, each configured plant receives its own forecast. Clearsky values, temperature, and weather code come from the site-wide data.

@@ -119,6 +119,7 @@ Format: `key1=value1&key2=value2`
 ### pvnode Besonderheiten
 
 - **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen (v1 und v2)
+- **Tagessummen für weitere Tage**: Bei mehr als 2 Prognosetagen (Light/Plus) werden zusätzlich `energy.day2` … `energy.day6` (Energie in 2 … 6 Tagen) je Anlage und unter `summary.energy` angelegt. Datenpunkte für Tage außerhalb der eingestellten Prognosetage werden automatisch entfernt.
 - **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
 - **Abfrageintervall**: Wird automatisch anhand der Kontostufe gesetzt — keine manuelle Konfiguration notwendig
 - **Pro-Flächen-Prognosen (v2)**: Wenn der pvnode-Account String-Daten liefert, erhält jede konfigurierte Anlage ihre eigene Prognose. Clearsky-Werte, Temperatur und Wettercode stammen aus den Site-weiten Daten.

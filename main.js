@@ -15,6 +15,7 @@ const TYPE_POWER = 'power';
 const STEP_FULL = 'full';
 const STEP_HALF = 'half';
 const STEP_QUARTER = 'quarter';
+const MAX_FORECAST_DAY_OFFSET = 6; // today + 6 days = 7 forecast days
 
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
@@ -368,6 +369,76 @@ class Pvforecast extends utils.Adapter {
         return Math.min(Math.max(requested, 1), maxDays);
     }
 
+    /**
+     * Day offsets (relative to today) for which additional daily energy states are created.
+     * Today (0) and tomorrow (1) always exist - additional days are only available for pvnode
+     * when more than 2 forecast days are requested (Light/Plus tier).
+     *
+     * @returns {number[]} e.g. [2, 3, 4, 5, 6] for 7 forecast days
+     */
+    getAdditionalForecastDayOffsets() {
+        const forecastDays = this.config.service === 'pvnode' ? this.getPvnodeForecastDays() : 2;
+        const offsets = [];
+        for (let offset = 2; offset < forecastDays; offset++) {
+            offsets.push(offset);
+        }
+        return offsets;
+    }
+
+    /**
+     * Create the daily energy states (in X days) which are covered by the forecast
+     * and delete the ones which are no longer available.
+     *
+     * @param {string} prefix - e.g. "plants.xyz.energy" or "summary.energy"
+     */
+    async createAndDeleteForecastDayStates(prefix) {
+        const offsets = this.getAdditionalForecastDayOffsets();
+
+        for (let offset = 2; offset <= MAX_FORECAST_DAY_OFFSET; offset++) {
+            const id = `${prefix}.day${offset}`;
+
+            if (offsets.includes(offset)) {
+                await this.setObjectNotExistsAsync(id, {
+                    type: 'state',
+                    common: {
+                        name: {
+                            en: `Estimated energy (in ${offset} days)`,
+                            de: `Geschätzte Energie (in ${offset} Tagen)`,
+                            ru: `Расчетная энергия (через ${offset} дня)`,
+                            pt: `Energia estimada (em ${offset} dias)`,
+                            nl: `Geschatte energie (over ${offset} dagen)`,
+                            fr: `Énergie estimée (dans ${offset} jours)`,
+                            it: `Energia stimata (tra ${offset} giorni)`,
+                            es: `Energía estimada (en ${offset} días)`,
+                            pl: `Szacowana energia (za ${offset} dni)`,
+                            uk: `Орієнтовна енергія (через ${offset} дні)`,
+                            'zh-cn': `估计能量（${offset}天后）`,
+                        },
+                        type: 'number',
+                        role: 'value',
+                        unit: 'kWh',
+                        read: true,
+                        write: false,
+                        def: 0,
+                    },
+                    native: {},
+                });
+
+                await this.extendObjectAsync(id, {
+                    common: {
+                        unit: this.config.watt_kw ? 'Wh' : 'kWh',
+                    },
+                });
+            } else {
+                const obj = await this.getObjectAsync(id);
+                if (obj) {
+                    await this.delObjectAsync(id);
+                    this.log.debug(`[createAndDeleteForecastDayStates] deleted "${id}" (not covered by forecast)`);
+                }
+            }
+        }
+    }
+
     async updateActualDataInterval() {
         const todaysDate = moment().date();
         const tomorrowDate = moment().add(1, 'days').date();
@@ -396,6 +467,12 @@ class Pvforecast extends utils.Adapter {
         let totalEnergyNowUntilEndOfDay = 0;
         let totalEnergyToday = 0;
         let totalEnergyTomorrow = 0;
+
+        const additionalDayOffsets = this.getAdditionalForecastDayOffsets();
+        const totalEnergyDays = {};
+        for (const offset of additionalDayOffsets) {
+            totalEnergyDays[offset] = 0;
+        }
 
         await asyncForEach(plantArray, async (plant, index) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
@@ -525,6 +602,16 @@ class Pvforecast extends utils.Adapter {
                         val: Number(energyTomorrow / globalunit),
                         ack: true,
                     });
+                    for (const offset of additionalDayOffsets) {
+                        const energyDay = data.watt_hours_day[moment().add(offset, 'days').format('YYYY-MM-DD')] ?? 0;
+                        totalEnergyDays[offset] += energyDay;
+
+                        await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.day${offset}`, {
+                            val: Number(energyDay / globalunit),
+                            ack: true,
+                        });
+                    }
+
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
                     if (this.config.everyhourEnabled) {
@@ -795,6 +882,12 @@ class Pvforecast extends utils.Adapter {
             val: Number(totalEnergyTomorrow / globalunit),
             ack: true,
         });
+        for (const offset of additionalDayOffsets) {
+            await this.setStateChangedAsync(`summary.energy.day${offset}`, {
+                val: Number(totalEnergyDays[offset] / globalunit),
+                ack: true,
+            });
+        }
         await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
         await this.setStateChangedAsync('summary.power.installed', {
             val: Number(totalPowerInstalled / globalunit),
@@ -2325,6 +2418,8 @@ class Pvforecast extends utils.Adapter {
                     },
                 });
 
+                await this.createAndDeleteForecastDayStates(`plants.${cleanPlantId}.energy`);
+
                 if (this.config.everyhourEnabled) {
                     await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursToday`);
                     await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursTomorrow`);
@@ -2372,6 +2467,8 @@ class Pvforecast extends utils.Adapter {
                     unit: this.config.watt_kw ? 'Wh' : 'kWh',
                 },
             });
+
+            await this.createAndDeleteForecastDayStates('summary.energy');
 
             if (this.config.everyhourEnabled) {
                 await this.createHoursStates(TYPE_ENERGY, 'summary.energy.hoursToday');
