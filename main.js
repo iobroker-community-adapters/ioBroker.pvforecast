@@ -449,6 +449,34 @@ class Pvforecast extends utils.Adapter {
         }
     }
 
+    /**
+     * Create the hourly states (hoursDay2 ... hoursDay6) of the additional forecast days
+     * and delete the ones which are no longer available (or if hourly states are disabled).
+     *
+     * @param {string} prefix - e.g. "plants.xyz" or "summary"
+     */
+    async createAndDeleteForecastDayHoursStates(prefix) {
+        const offsets = this.config.everyhourEnabled ? this.getAdditionalForecastDayOffsets() : [];
+
+        for (let offset = 2; offset <= MAX_FORECAST_DAY_OFFSET; offset++) {
+            for (const type of [TYPE_ENERGY, TYPE_POWER]) {
+                const id = `${prefix}.${type}.hoursDay${offset}`;
+
+                if (offsets.includes(offset)) {
+                    await this.createHoursStates(type, id);
+                } else {
+                    const obj = await this.getObjectAsync(id);
+                    if (obj) {
+                        await this.delObjectAsync(id, { recursive: true });
+                        this.log.debug(
+                            `[createAndDeleteForecastDayHoursStates] deleted "${id}" (not covered by forecast)`,
+                        );
+                    }
+                }
+            }
+        }
+    }
+
     async updateActualDataInterval() {
         const todaysDate = moment().date();
         const tomorrowDate = moment().add(1, 'days').date();
@@ -479,6 +507,11 @@ class Pvforecast extends utils.Adapter {
         let totalEnergyTomorrow = 0;
 
         const additionalDayOffsets = this.getAdditionalForecastDayOffsets();
+        // Hourly states of additional forecast days (hoursDay2 ... hoursDay6)
+        const additionalHourDays = additionalDayOffsets.map(offset => ({
+            channel: `hoursDay${offset}`,
+            dayOfMonth: moment().add(offset, 'days').date(),
+        }));
         const totalEnergyDays = {};
         for (const offset of additionalDayOffsets) {
             totalEnergyDays[offset] = 0;
@@ -528,6 +561,16 @@ class Pvforecast extends utils.Adapter {
                                 time,
                                 mappedWattHoursPeriod[time] / globalunit,
                             );
+                            for (const { channel, dayOfMonth } of additionalHourDays) {
+                                await this.saveEveryHour(
+                                    TYPE_ENERGY,
+                                    cleanPlantId,
+                                    `plants.${cleanPlantId}.energy.${channel}`,
+                                    dayOfMonth,
+                                    time,
+                                    mappedWattHoursPeriod[time] / globalunit,
+                                );
+                            }
                         }
 
                         // add to InfluxDB
@@ -552,6 +595,16 @@ class Pvforecast extends utils.Adapter {
                                 time,
                                 data.watts[time] / globalunit,
                             );
+                            for (const { channel, dayOfMonth } of additionalHourDays) {
+                                await this.saveEveryHour(
+                                    TYPE_POWER,
+                                    cleanPlantId,
+                                    `plants.${cleanPlantId}.power.${channel}`,
+                                    dayOfMonth,
+                                    time,
+                                    data.watts[time] / globalunit,
+                                );
+                            }
                         }
 
                         // add to InfluxDB
@@ -650,6 +703,21 @@ class Pvforecast extends utils.Adapter {
                             `plants.${cleanPlantId}.power.hoursTomorrow`,
                             tomorrowDate,
                         );
+
+                        for (const { channel, dayOfMonth } of additionalHourDays) {
+                            await this.saveEveryHourEmptyStates(
+                                TYPE_ENERGY,
+                                cleanPlantId,
+                                `plants.${cleanPlantId}.energy.${channel}`,
+                                dayOfMonth,
+                            );
+                            await this.saveEveryHourEmptyStates(
+                                TYPE_POWER,
+                                cleanPlantId,
+                                `plants.${cleanPlantId}.power.${channel}`,
+                                dayOfMonth,
+                            );
+                        }
                     }
 
                     // JSON Data
@@ -875,6 +943,11 @@ class Pvforecast extends utils.Adapter {
 
             await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursToday', todaysDate);
             await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursTomorrow', tomorrowDate);
+
+            for (const { channel, dayOfMonth } of additionalHourDays) {
+                await this.saveEveryHourSummary(TYPE_ENERGY, `summary.energy.${channel}`, dayOfMonth);
+                await this.saveEveryHourSummary(TYPE_POWER, `summary.power.${channel}`, dayOfMonth);
+            }
 
             this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
         }
@@ -2465,6 +2538,7 @@ class Pvforecast extends utils.Adapter {
                 });
 
                 await this.createAndDeleteForecastDayStates(`plants.${cleanPlantId}.energy`);
+                await this.createAndDeleteForecastDayHoursStates(`plants.${cleanPlantId}`);
 
                 if (this.config.everyhourEnabled) {
                     await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursToday`);
@@ -2515,6 +2589,7 @@ class Pvforecast extends utils.Adapter {
             });
 
             await this.createAndDeleteForecastDayStates('summary.energy');
+            await this.createAndDeleteForecastDayHoursStates('summary');
 
             if (this.config.everyhourEnabled) {
                 await this.createHoursStates(TYPE_ENERGY, 'summary.energy.hoursToday');

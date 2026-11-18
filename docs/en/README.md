@@ -119,6 +119,7 @@ Format: `key1=value1&key2=value2`
 
 - **15-minute resolution**: pvnode delivers forecast data in 15-minute intervals (v1 and v2)
 - **Daily totals for additional days**: With more than 2 forecast days (Light/Plus), the states `energy.day2` … `energy.day6` (energy in 2 … 6 days) are created for each plant and under `summary.energy`. States for days outside the configured forecast days are removed automatically.
+- **Hourly values for additional days**: If hourly states are enabled, the channels `energy.hoursDay2` … `energy.hoursDay6` and `power.hoursDay2` … `power.hoursDay6` are created for the same days for each plant and under `summary` (analogous to `hoursToday`/`hoursTomorrow`).
 - **Azimuth conversion**: The adapter automatically converts the azimuth (adapter: 0=south) to pvnode format (180=south)
 - **Poll interval**: Set automatically based on subscription tier — no manual configuration needed
 - **Adapter restart**: If the stored forecast data is still current on startup (younger than the poll interval), no new request is made. The next request is scheduled as soon as the data becomes outdated. After a configuration change or a newly added plant, data is requested immediately.

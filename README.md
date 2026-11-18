@@ -47,6 +47,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 - (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
 - (@patricknitsch) Fix pvnode v2 Plus tier only fetching every 60 minutes instead of every 10 minutes
 - (@patricknitsch) pvnode: Add daily energy states for additional forecast days (`energy.day2` ... `energy.day6`) for Light/Plus tier
+- (@patricknitsch) pvnode: Add hourly states for additional forecast days (`energy.hoursDay2` ... `energy.hoursDay6`, `power.hoursDay2` ... `power.hoursDay6`) if hourly states are enabled
 - (@patricknitsch) pvnode: Skip the request on adapter start if the stored forecast is still current (saves requests of the monthly quota)
 
 ### 6.2.0 (2026-07-06)
