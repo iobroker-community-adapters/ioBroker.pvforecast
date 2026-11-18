@@ -62,11 +62,11 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 | Funktion | Free | Light | Plus |
 |----------|------|-------|------|
-| API-Anfragen/Monat | 250 | 3.000 | 3.000 |
+| API-Anfragen/Monat | 250 | 3.000 | 4.500 |
 | Updates pro Tag | 1 | 24 (stündlich) | 144 (alle 10 min) |
 | Prognosetage | 1-2 (heute + morgen) | 1-7 | 1-7 |
 | Solarflächen | bis 4 | bis 4 | bis 8 |
-| Historische Daten | nein | nein | 30 Tage |
+| Archivierte Prognose | nein | nein | 7 Tage |
 
 Das **Abfrageintervall** wird vom Adapter automatisch anhand der gewählten Kontostufe gesetzt und muss nicht manuell konfiguriert werden:
 

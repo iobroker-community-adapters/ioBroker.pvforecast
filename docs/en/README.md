@@ -61,11 +61,11 @@ If longitude and latitude in the iobroker main settings, the adapter will fill o
 
 | Feature | Free | Light | Plus |
 |---------|------|-------|------|
-| API requests/month | 250 | 3,000 | 3,000 |
+| API requests/month | 250 | 3,000 | 4,500 |
 | Updates per day | 1 | 24 (hourly) | 144 (every 10 min) |
 | Forecast days | 1-2 (today + tomorrow) | 1-7 | 1-7 |
 | Solar arrays | up to 4 | up to 4 | up to 8 |
-| Historical data | no | no | 30 days |
+| Archived forecast | no | no | 7 days |
 
 The **poll interval** is set automatically by the adapter based on the selected tier — no manual configuration required:
 
