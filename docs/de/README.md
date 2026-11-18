@@ -122,6 +122,7 @@ Format: `key1=value1&key2=value2`
 - **Tagessummen für weitere Tage**: Bei mehr als 2 Prognosetagen (Light/Plus) werden zusätzlich `energy.day2` … `energy.day6` (Energie in 2 … 6 Tagen) je Anlage und unter `summary.energy` angelegt. Datenpunkte für Tage außerhalb der eingestellten Prognosetage werden automatisch entfernt.
 - **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
 - **Abfrageintervall**: Wird automatisch anhand der Kontostufe gesetzt — keine manuelle Konfiguration notwendig
+- **Neustart des Adapters**: Sind die gespeicherten Prognosedaten beim Start noch aktuell (jünger als das Abfrageintervall), wird keine neue Anfrage gestellt. Die nächste Anfrage erfolgt, sobald die Daten veraltet sind. Bei geänderter Konfiguration oder neu hinzugefügter Anlage wird sofort abgefragt.
 - **Pro-Flächen-Prognosen (v2)**: Wenn der pvnode-Account String-Daten liefert, erhält jede konfigurierte Anlage ihre eigene Prognose. Clearsky-Werte, Temperatur und Wettercode stammen aus den Site-weiten Daten.
 - **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
 - Die Felder „Dämpfung morgens" und „Dämpfung abends" werden für pvnode nicht verwendet

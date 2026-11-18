@@ -48,6 +48,7 @@ class Pvforecast extends utils.Adapter {
         this.updateActualDataCron = null;
         this.pvnodeServiceDataFetched = false;
         this.pvnodePlantFetchIndex = 0;
+        this.pvnodeNextFetchDelay = null;
 
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
@@ -301,14 +302,23 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'solcast') {
             this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
             this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}ms`);
-        } else if (this.config.service === 'pvnode') {
-            this.log.debug(`updateServiceDataInterval (pvnode) - next service refresh in ${this.reqInterval}ms`);
+        }
+
+        let nextRefresh = this.reqInterval;
+        if (this.config.service === 'pvnode') {
+            // If a request was skipped because the stored data is still current,
+            // schedule the next request when the data becomes outdated
+            if (this.pvnodeNextFetchDelay !== null) {
+                nextRefresh = this.pvnodeNextFetchDelay;
+                this.pvnodeNextFetchDelay = null;
+            }
+            this.log.debug(`updateServiceDataInterval (pvnode) - next service refresh in ${nextRefresh}ms`);
         }
 
         this.updateServiceDataTimeout = this.setTimeout(async () => {
             this.updateServiceDataTimeout = null;
             await this.updateServiceDataInterval();
-        }, this.reqInterval);
+        }, nextRefresh);
     }
 
     prepareData(data) {
@@ -1195,6 +1205,22 @@ class Pvforecast extends utils.Adapter {
     }
 
     /**
+     * Read the stored service url and the timestamp of the last successful request of a plant.
+     *
+     * @param {string} cleanPlantId - Cleaned plant id
+     * @returns {Promise<{lastUrl: string, lastUpdate: number}>} Stored url and last update (0 if unknown)
+     */
+    async getPvnodeServiceState(cleanPlantId) {
+        const urlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
+        const lastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
+
+        return {
+            lastUrl: urlState && urlState.val ? String(urlState.val) : '',
+            lastUpdate: lastUpdatedState && lastUpdatedState.val ? Number(lastUpdatedState.val) : 0,
+        };
+    }
+
+    /**
      * Fetch pvnode service data (v1 or v2 depending on config).
      */
     async updatePvnodeServiceData() {
@@ -1242,13 +1268,25 @@ class Pvforecast extends utils.Adapter {
                 url += `&${this.config.pvnodeExtraParams}`;
             }
 
-            // Re-fetch if URL changed (config update); otherwise always fetch in rotation.
-            const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
-            const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
-
             this.logSensitive(`[pvnode v1] plant "${plant.name}" - service url: ${url}`);
 
-            if (lastUrl !== url || this.pvnodeServiceDataFetched) {
+            // In rotation: always fetch. On startup: only fetch if the URL changed (config update)
+            // or the stored data is older than one full rotation (poll interval * number of plants).
+            let fetchPlant = this.pvnodeServiceDataFetched;
+            if (!fetchPlant) {
+                const { lastUrl, lastUpdate } = await this.getPvnodeServiceState(cleanPlantId);
+                const maxAge = Math.max(this.reqInterval * plantArray.length - 60 * 1000, 0);
+                const age = moment().valueOf() - lastUpdate;
+
+                fetchPlant = lastUrl !== url || !lastUpdate || age >= maxAge;
+                if (!fetchPlant) {
+                    this.log.info(
+                        `[pvnode v1] Startup: data of plant "${plant.name}" is still current (${Math.round(age / 60000)} min old) - skipping request`,
+                    );
+                }
+            }
+
+            if (fetchPlant) {
                 try {
                     const serviceResponse = await axios.get(url, requestHeader);
 
@@ -1321,29 +1359,27 @@ class Pvforecast extends utils.Adapter {
             return;
         }
 
-        const cleanPlantId = this.cleanNamespace(firstPlant.name);
-
-        const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
-        const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
-
-        const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
-        const lastUpdate =
-            serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
-                ? Number(serviceDataLastUpdatedState.val)
-                : 0;
+        // All plants are filled by the same request - a request is required if any plant
+        // has a different URL (config update) or no data yet (e.g. newly added plant)
+        let urlChanged = false;
+        let lastUpdate = Infinity;
+        for (const plant of plantArray) {
+            const serviceState = await this.getPvnodeServiceState(this.cleanNamespace(plant.name));
+            if (serviceState.lastUrl !== url) {
+                urlChanged = true;
+            }
+            lastUpdate = Math.min(lastUpdate, serviceState.lastUpdate);
+        }
+        const age = moment().valueOf() - lastUpdate;
 
         this.logSensitive(`[pvnode v2] site "${this.config.pvnodeSiteId}" - last update: ${lastUpdate}, url: ${url}`);
 
-        // Respect the tier-based poll interval (Free: 24 h, Light: 60 min, Plus: 10 min).
+        // Respect the tier-based poll interval (Free: 24 h, Light: 60 min, Plus: 10 min) - also on startup,
+        // to avoid wasting requests of the monthly quota on adapter restarts.
         // A small tolerance prevents skipping a cycle when the timer fires slightly early.
         const minRefreshInterval = Math.max(this.reqInterval - 60 * 1000, 0);
 
-        if (
-            !this.pvnodeServiceDataFetched ||
-            lastUrl !== url ||
-            !lastUpdate ||
-            moment().valueOf() - lastUpdate >= minRefreshInterval
-        ) {
+        if (urlChanged || !lastUpdate || age < 0 || age >= minRefreshInterval) {
             try {
                 this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
 
@@ -1421,7 +1457,17 @@ class Pvforecast extends utils.Adapter {
                 this.handleServiceError(error);
             }
         } else {
-            this.log.debug(`[pvnode v2] Last update is within refresh interval - skipping`);
+            if (!this.pvnodeServiceDataFetched) {
+                this.log.info(
+                    `[pvnode v2] Startup: stored data is still current (${Math.round(age / 60000)} min old) - skipping request`,
+                );
+                this.pvnodeServiceDataFetched = true;
+            } else {
+                this.log.debug(`[pvnode v2] Last update is within refresh interval - skipping`);
+            }
+
+            // Next request as soon as the stored data becomes outdated
+            this.pvnodeNextFetchDelay = Math.max(this.reqInterval - age, 60 * 1000);
         }
 
         this.log.debug('[pvnode v2] received all data');
