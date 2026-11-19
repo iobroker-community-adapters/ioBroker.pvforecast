@@ -15,6 +15,7 @@ const TYPE_POWER = 'power';
 const STEP_FULL = 'full';
 const STEP_HALF = 'half';
 const STEP_QUARTER = 'quarter';
+const MAX_FORECAST_DAY_OFFSET = 6; // today + 6 days = 7 forecast days
 
 async function asyncForEach(array, callback) {
     for (let index = 0; index < array.length; index++) {
@@ -47,6 +48,7 @@ class Pvforecast extends utils.Adapter {
         this.updateActualDataCron = null;
         this.pvnodeServiceDataFetched = false;
         this.pvnodePlantFetchIndex = 0;
+        this.pvnodeNextFetchDelay = null;
 
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
@@ -300,14 +302,23 @@ class Pvforecast extends utils.Adapter {
         if (this.config.service === 'solcast') {
             this.reqInterval = moment().startOf('day').add(1, 'days').add(1, 'hours').valueOf() - moment().valueOf();
             this.log.debug(`updateServiceDataInterval (solcast) - next service refresh in ${this.reqInterval}ms`);
-        } else if (this.config.service === 'pvnode') {
-            this.log.debug(`updateServiceDataInterval (pvnode) - next service refresh in ${this.reqInterval}ms`);
+        }
+
+        let nextRefresh = this.reqInterval;
+        if (this.config.service === 'pvnode') {
+            // If a request was skipped because the stored data is still current,
+            // schedule the next request when the data becomes outdated
+            if (this.pvnodeNextFetchDelay !== null) {
+                nextRefresh = this.pvnodeNextFetchDelay;
+                this.pvnodeNextFetchDelay = null;
+            }
+            this.log.debug(`updateServiceDataInterval (pvnode) - next service refresh in ${nextRefresh}ms`);
         }
 
         this.updateServiceDataTimeout = this.setTimeout(async () => {
             this.updateServiceDataTimeout = null;
             await this.updateServiceDataInterval();
-        }, this.reqInterval);
+        }, nextRefresh);
     }
 
     prepareData(data) {
@@ -368,6 +379,104 @@ class Pvforecast extends utils.Adapter {
         return Math.min(Math.max(requested, 1), maxDays);
     }
 
+    /**
+     * Day offsets (relative to today) for which additional daily energy states are created.
+     * Today (0) and tomorrow (1) always exist - additional days are only available for pvnode
+     * when more than 2 forecast days are requested (Light/Plus tier).
+     *
+     * @returns {number[]} e.g. [2, 3, 4, 5, 6] for 7 forecast days
+     */
+    getAdditionalForecastDayOffsets() {
+        const forecastDays = this.config.service === 'pvnode' ? this.getPvnodeForecastDays() : 2;
+        const offsets = [];
+        for (let offset = 2; offset < forecastDays; offset++) {
+            offsets.push(offset);
+        }
+        return offsets;
+    }
+
+    /**
+     * Create the daily energy states (in X days) which are covered by the forecast
+     * and delete the ones which are no longer available.
+     *
+     * @param {string} prefix - e.g. "plants.xyz.energy" or "summary.energy"
+     */
+    async createAndDeleteForecastDayStates(prefix) {
+        const offsets = this.getAdditionalForecastDayOffsets();
+
+        for (let offset = 2; offset <= MAX_FORECAST_DAY_OFFSET; offset++) {
+            const id = `${prefix}.day${offset}`;
+
+            if (offsets.includes(offset)) {
+                await this.setObjectNotExistsAsync(id, {
+                    type: 'state',
+                    common: {
+                        name: {
+                            en: `Estimated energy (in ${offset} days)`,
+                            de: `Geschätzte Energie (in ${offset} Tagen)`,
+                            ru: `Расчетная энергия (через ${offset} дня)`,
+                            pt: `Energia estimada (em ${offset} dias)`,
+                            nl: `Geschatte energie (over ${offset} dagen)`,
+                            fr: `Énergie estimée (dans ${offset} jours)`,
+                            it: `Energia stimata (tra ${offset} giorni)`,
+                            es: `Energía estimada (en ${offset} días)`,
+                            pl: `Szacowana energia (za ${offset} dni)`,
+                            uk: `Орієнтовна енергія (через ${offset} дні)`,
+                            'zh-cn': `估计能量（${offset}天后）`,
+                        },
+                        type: 'number',
+                        role: 'value',
+                        unit: 'kWh',
+                        read: true,
+                        write: false,
+                        def: 0,
+                    },
+                    native: {},
+                });
+
+                await this.extendObjectAsync(id, {
+                    common: {
+                        unit: this.config.watt_kw ? 'Wh' : 'kWh',
+                    },
+                });
+            } else {
+                const obj = await this.getObjectAsync(id);
+                if (obj) {
+                    await this.delObjectAsync(id);
+                    this.log.debug(`[createAndDeleteForecastDayStates] deleted "${id}" (not covered by forecast)`);
+                }
+            }
+        }
+    }
+
+    /**
+     * Create the hourly states (hoursDay2 ... hoursDay6) of the additional forecast days
+     * and delete the ones which are no longer available (or if hourly states are disabled).
+     *
+     * @param {string} prefix - e.g. "plants.xyz" or "summary"
+     */
+    async createAndDeleteForecastDayHoursStates(prefix) {
+        const offsets = this.config.everyhourEnabled ? this.getAdditionalForecastDayOffsets() : [];
+
+        for (let offset = 2; offset <= MAX_FORECAST_DAY_OFFSET; offset++) {
+            for (const type of [TYPE_ENERGY, TYPE_POWER]) {
+                const id = `${prefix}.${type}.hoursDay${offset}`;
+
+                if (offsets.includes(offset)) {
+                    await this.createHoursStates(type, id);
+                } else {
+                    const obj = await this.getObjectAsync(id);
+                    if (obj) {
+                        await this.delObjectAsync(id, { recursive: true });
+                        this.log.debug(
+                            `[createAndDeleteForecastDayHoursStates] deleted "${id}" (not covered by forecast)`,
+                        );
+                    }
+                }
+            }
+        }
+    }
+
     async updateActualDataInterval() {
         const todaysDate = moment().date();
         const tomorrowDate = moment().add(1, 'days').date();
@@ -396,6 +505,17 @@ class Pvforecast extends utils.Adapter {
         let totalEnergyNowUntilEndOfDay = 0;
         let totalEnergyToday = 0;
         let totalEnergyTomorrow = 0;
+
+        const additionalDayOffsets = this.getAdditionalForecastDayOffsets();
+        // Hourly states of additional forecast days (hoursDay2 ... hoursDay6)
+        const additionalHourDays = additionalDayOffsets.map(offset => ({
+            channel: `hoursDay${offset}`,
+            dayOfMonth: moment().add(offset, 'days').date(),
+        }));
+        const totalEnergyDays = {};
+        for (const offset of additionalDayOffsets) {
+            totalEnergyDays[offset] = 0;
+        }
 
         await asyncForEach(plantArray, async (plant, index) => {
             const cleanPlantId = this.cleanNamespace(plant.name);
@@ -441,6 +561,16 @@ class Pvforecast extends utils.Adapter {
                                 time,
                                 mappedWattHoursPeriod[time] / globalunit,
                             );
+                            for (const { channel, dayOfMonth } of additionalHourDays) {
+                                await this.saveEveryHour(
+                                    TYPE_ENERGY,
+                                    cleanPlantId,
+                                    `plants.${cleanPlantId}.energy.${channel}`,
+                                    dayOfMonth,
+                                    time,
+                                    mappedWattHoursPeriod[time] / globalunit,
+                                );
+                            }
                         }
 
                         // add to InfluxDB
@@ -465,6 +595,16 @@ class Pvforecast extends utils.Adapter {
                                 time,
                                 data.watts[time] / globalunit,
                             );
+                            for (const { channel, dayOfMonth } of additionalHourDays) {
+                                await this.saveEveryHour(
+                                    TYPE_POWER,
+                                    cleanPlantId,
+                                    `plants.${cleanPlantId}.power.${channel}`,
+                                    dayOfMonth,
+                                    time,
+                                    data.watts[time] / globalunit,
+                                );
+                            }
                         }
 
                         // add to InfluxDB
@@ -525,6 +665,16 @@ class Pvforecast extends utils.Adapter {
                         val: Number(energyTomorrow / globalunit),
                         ack: true,
                     });
+                    for (const offset of additionalDayOffsets) {
+                        const energyDay = data.watt_hours_day[moment().add(offset, 'days').format('YYYY-MM-DD')] ?? 0;
+                        totalEnergyDays[offset] += energyDay;
+
+                        await this.setStateChangedAsync(`plants.${cleanPlantId}.energy.day${offset}`, {
+                            val: Number(energyDay / globalunit),
+                            ack: true,
+                        });
+                    }
+
                     await this.setStateChangedAsync(`plants.${cleanPlantId}.name`, { val: plant.name, ack: true });
 
                     if (this.config.everyhourEnabled) {
@@ -553,6 +703,21 @@ class Pvforecast extends utils.Adapter {
                             `plants.${cleanPlantId}.power.hoursTomorrow`,
                             tomorrowDate,
                         );
+
+                        for (const { channel, dayOfMonth } of additionalHourDays) {
+                            await this.saveEveryHourEmptyStates(
+                                TYPE_ENERGY,
+                                cleanPlantId,
+                                `plants.${cleanPlantId}.energy.${channel}`,
+                                dayOfMonth,
+                            );
+                            await this.saveEveryHourEmptyStates(
+                                TYPE_POWER,
+                                cleanPlantId,
+                                `plants.${cleanPlantId}.power.${channel}`,
+                                dayOfMonth,
+                            );
+                        }
                     }
 
                     // JSON Data
@@ -779,6 +944,11 @@ class Pvforecast extends utils.Adapter {
             await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursToday', todaysDate);
             await this.saveEveryHourSummary(TYPE_POWER, 'summary.power.hoursTomorrow', tomorrowDate);
 
+            for (const { channel, dayOfMonth } of additionalHourDays) {
+                await this.saveEveryHourSummary(TYPE_ENERGY, `summary.energy.${channel}`, dayOfMonth);
+                await this.saveEveryHourSummary(TYPE_POWER, `summary.power.${channel}`, dayOfMonth);
+            }
+
             this.log.debug(`global time: ${JSON.stringify(this.globalEveryHour)}`);
         }
 
@@ -795,6 +965,12 @@ class Pvforecast extends utils.Adapter {
             val: Number(totalEnergyTomorrow / globalunit),
             ack: true,
         });
+        for (const offset of additionalDayOffsets) {
+            await this.setStateChangedAsync(`summary.energy.day${offset}`, {
+                val: Number(totalEnergyDays[offset] / globalunit),
+                ack: true,
+            });
+        }
         await this.setStateChangedAsync('summary.power.now', { val: Number(totalPowerNow / globalunit), ack: true });
         await this.setStateChangedAsync('summary.power.installed', {
             val: Number(totalPowerInstalled / globalunit),
@@ -1102,6 +1278,22 @@ class Pvforecast extends utils.Adapter {
     }
 
     /**
+     * Read the stored service url and the timestamp of the last successful request of a plant.
+     *
+     * @param {string} cleanPlantId - Cleaned plant id
+     * @returns {Promise<{lastUrl: string, lastUpdate: number}>} Stored url and last update (0 if unknown)
+     */
+    async getPvnodeServiceState(cleanPlantId) {
+        const urlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
+        const lastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
+
+        return {
+            lastUrl: urlState && urlState.val ? String(urlState.val) : '',
+            lastUpdate: lastUpdatedState && lastUpdatedState.val ? Number(lastUpdatedState.val) : 0,
+        };
+    }
+
+    /**
      * Fetch pvnode service data (v1 or v2 depending on config).
      */
     async updatePvnodeServiceData() {
@@ -1149,13 +1341,25 @@ class Pvforecast extends utils.Adapter {
                 url += `&${this.config.pvnodeExtraParams}`;
             }
 
-            // Re-fetch if URL changed (config update); otherwise always fetch in rotation.
-            const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
-            const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
-
             this.logSensitive(`[pvnode v1] plant "${plant.name}" - service url: ${url}`);
 
-            if (lastUrl !== url || this.pvnodeServiceDataFetched) {
+            // In rotation: always fetch. On startup: only fetch if the URL changed (config update)
+            // or the stored data is older than one full rotation (poll interval * number of plants).
+            let fetchPlant = this.pvnodeServiceDataFetched;
+            if (!fetchPlant) {
+                const { lastUrl, lastUpdate } = await this.getPvnodeServiceState(cleanPlantId);
+                const maxAge = Math.max(this.reqInterval * plantArray.length - 60 * 1000, 0);
+                const age = moment().valueOf() - lastUpdate;
+
+                fetchPlant = lastUrl !== url || !lastUpdate || age >= maxAge;
+                if (!fetchPlant) {
+                    this.log.info(
+                        `[pvnode v1] Startup: data of plant "${plant.name}" is still current (${Math.round(age / 60000)} min old) - skipping request`,
+                    );
+                }
+            }
+
+            if (fetchPlant) {
                 try {
                     const serviceResponse = await axios.get(url, requestHeader);
 
@@ -1228,25 +1432,27 @@ class Pvforecast extends utils.Adapter {
             return;
         }
 
-        const cleanPlantId = this.cleanNamespace(firstPlant.name);
-
-        const serviceDataUrlState = await this.getStateAsync(`plants.${cleanPlantId}.service.url`);
-        const lastUrl = serviceDataUrlState && serviceDataUrlState.val ? serviceDataUrlState.val : '';
-
-        const serviceDataLastUpdatedState = await this.getStateAsync(`plants.${cleanPlantId}.service.lastUpdated`);
-        const lastUpdate =
-            serviceDataLastUpdatedState && serviceDataLastUpdatedState.val
-                ? Number(serviceDataLastUpdatedState.val)
-                : 0;
+        // All plants are filled by the same request - a request is required if any plant
+        // has a different URL (config update) or no data yet (e.g. newly added plant)
+        let urlChanged = false;
+        let lastUpdate = Infinity;
+        for (const plant of plantArray) {
+            const serviceState = await this.getPvnodeServiceState(this.cleanNamespace(plant.name));
+            if (serviceState.lastUrl !== url) {
+                urlChanged = true;
+            }
+            lastUpdate = Math.min(lastUpdate, serviceState.lastUpdate);
+        }
+        const age = moment().valueOf() - lastUpdate;
 
         this.logSensitive(`[pvnode v2] site "${this.config.pvnodeSiteId}" - last update: ${lastUpdate}, url: ${url}`);
 
-        if (
-            !this.pvnodeServiceDataFetched ||
-            lastUrl !== url ||
-            !lastUpdate ||
-            moment().valueOf() - lastUpdate > 60 * 60 * 1000
-        ) {
+        // Respect the tier-based poll interval (Free: 24 h, Light: 60 min, Plus: 10 min) - also on startup,
+        // to avoid wasting requests of the monthly quota on adapter restarts.
+        // A small tolerance prevents skipping a cycle when the timer fires slightly early.
+        const minRefreshInterval = Math.max(this.reqInterval - 60 * 1000, 0);
+
+        if (urlChanged || !lastUpdate || age < 0 || age >= minRefreshInterval) {
             try {
                 this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
 
@@ -1324,7 +1530,17 @@ class Pvforecast extends utils.Adapter {
                 this.handleServiceError(error);
             }
         } else {
-            this.log.debug(`[pvnode v2] Last update is within refresh interval - skipping`);
+            if (!this.pvnodeServiceDataFetched) {
+                this.log.info(
+                    `[pvnode v2] Startup: stored data is still current (${Math.round(age / 60000)} min old) - skipping request`,
+                );
+                this.pvnodeServiceDataFetched = true;
+            } else {
+                this.log.debug(`[pvnode v2] Last update is within refresh interval - skipping`);
+            }
+
+            // Next request as soon as the stored data becomes outdated
+            this.pvnodeNextFetchDelay = Math.max(this.reqInterval - age, 60 * 1000);
         }
 
         this.log.debug('[pvnode v2] received all data');
@@ -2321,6 +2537,9 @@ class Pvforecast extends utils.Adapter {
                     },
                 });
 
+                await this.createAndDeleteForecastDayStates(`plants.${cleanPlantId}.energy`);
+                await this.createAndDeleteForecastDayHoursStates(`plants.${cleanPlantId}`);
+
                 if (this.config.everyhourEnabled) {
                     await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursToday`);
                     await this.createHoursStates(TYPE_ENERGY, `plants.${cleanPlantId}.energy.hoursTomorrow`);
@@ -2368,6 +2587,9 @@ class Pvforecast extends utils.Adapter {
                     unit: this.config.watt_kw ? 'Wh' : 'kWh',
                 },
             });
+
+            await this.createAndDeleteForecastDayStates('summary.energy');
+            await this.createAndDeleteForecastDayHoursStates('summary');
 
             if (this.config.everyhourEnabled) {
                 await this.createHoursStates(TYPE_ENERGY, 'summary.energy.hoursToday');
