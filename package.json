@@ -30,7 +30,7 @@
   },
   "dependencies": {
     "@iobroker/adapter-core": "^3.4.3",
-    "axios": "^1.20.0",
+    "axios": "^1.21.1",
     "cron": "^4.4.0",
     "moment": "^2.31.0"
   },
@@ -41,8 +41,8 @@
     "@alcalzone/release-script-plugin-manual-review": "^5.2.0",
     "@iobroker/adapter-dev": "^1.5.0",
     "@iobroker/eslint-config": "^2.3.4",
-    "@iobroker/testing": "^6.3.1",
-    "@tsconfig/node22": "^22.0.6",
+    "@iobroker/testing": "^6.3.2",
+    "@tsconfig/node22": "^22.0.7",
     "@types/node": "^22.20.5",
     "@types/proxyquire": "^1.3.31",
     "proxyquire": "^2.1.3",
