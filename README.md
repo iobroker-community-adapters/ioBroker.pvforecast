@@ -41,8 +41,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
     Placeholder for the next version (at the beginning of the line):
     ### **WORK IN PROGRESS**
 -->
-
-### **WORK IN PROGRESS**
+### 7.0.0 (2026-11-19)
 - (copilot) Adapter requires node.js >= 22.19.0 now
 - (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
 - (@patricknitsch) Fix pvnode v2 Plus tier only fetching every 60 minutes instead of every 10 minutes
@@ -73,12 +72,6 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 * (@klein0r) admin 7.6.17 and js-controller 6.0.11 (or later) are required
 * (@Scrounger) solcast user agent bug fix
 * (@klein0r) Updated dependencies
-
-### 5.0.0 (2025-04-23)
-
-NodeJS >= 20.x and js-controller >= 6 is required
-
-* (@klein0r) Minimum peak power is 0.1 kWp
 
 [Older changelogs can be found there](CHANGELOG_OLD.md)
 

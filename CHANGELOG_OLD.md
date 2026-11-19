@@ -1,4 +1,10 @@
 # Older changes
+## 5.0.0 (2025-04-23)
+
+NodeJS >= 20.x and js-controller >= 6 is required
+
+* (@klein0r) Minimum peak power is 0.1 kWp
+
 ## 4.1.0 (2024-11-15)
 
 * (@klein0r) Added estimated energy: now until end of day
