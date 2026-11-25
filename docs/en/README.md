@@ -122,6 +122,7 @@ Format: `key1=value1&key2=value2`
 - **Poll interval**: Set automatically based on subscription tier — no manual configuration needed
 - **Per-plant forecasts (v2)**: When the pvnode account returns string data, each configured plant receives its own forecast. Clearsky values, temperature, and weather code come from the site-wide data.
 - **Summary data**: The summary JSON includes clearsky values as well as temperature and weather code
+- **Variability band (v2, Plus)**: With the Plus tier the adapter also requests the lower and upper yield bound (about the next 40 hours). They are stored in the JSONData states as fields `y_min` and `y_max`. If the pvnode plan does not provide the band, the forecast is requested without it
 - The "damping morning" and "damping evening" fields are not used for pvnode
 
 ## Web component "PV forecast"
