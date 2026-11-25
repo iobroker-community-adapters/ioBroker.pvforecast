@@ -125,6 +125,33 @@ Format: `key1=value1&key2=value2`
 - **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
 - Die Felder „Dämpfung morgens" und „Dämpfung abends" werden für pvnode nicht verwendet
 
+## Web-Komponente „PV-Prognose“
+
+Der Adapter bringt eine Web-Komponente nach [`@iobroker/web-components`](https://github.com/ioBroker/web-components) mit (`pvforecast-forecast`). Sie kann überall eingefügt werden, wo ioBroker Web-Komponenten anzeigt (z. B. Aura, vis-2, Devices, Admin).
+
+Die Komponente zeigt automatisch die Prognose der gewählten Instanz:
+
+- **Tageskacheln** für bis zu 7 Tage: Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Für heute und morgen kommt die Energie aus den States `energy.today` / `energy.tomorrow`, für die weiteren Tage wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
+- **Diagramm** der Leistungskurve mit Clearsky-Linie, Variabilitätsband (pvnode Plus) und Markierung für „jetzt“; ein Klick auf eine Tageskachel zeigt nur diesen Tag
+- **Tooltip** mit allen Werten beim Überfahren des Diagramms
+
+Einstellungen der Komponente:
+
+| Einstellung | Beschreibung |
+|-------------|--------------|
+| Instanz | pvforecast-Instanz, z. B. `pvforecast.0` |
+| Anlage | `Summe aller Anlagen` oder eine einzelne Anlage (die Liste kommt vom Adapter) |
+| Tage | Anzahl der angezeigten Tage (1–7) |
+| Titel | Eigener Titel, leer = Name der Anlage |
+| Clearsky / Variabilitätsband | Linien ein- oder ausblenden |
+| Farbe | Farbe der Prognosekurve |
+
+## Device Manager
+
+Im Tab **Geräte** (Device Manager) erscheint jede Anlage und die Summe aller Anlagen als eigenes Gerät. Die Karte zeigt live die aktuelle Leistung sowie die Energie für heute und morgen. In den Details stehen installierte Leistung, Energie heute/morgen, die letzte Aktualisierung und die Web-Komponente mit der Prognose für 7 Tage.
+
+Für die Web-Komponente in den Details wird ein Admin mit JSON-Config ab 10.1.14 benötigt.
+
 ## VIS Beispiel
 
 Bevor das Beispiel geladen werden kann, bitte installiert: [Material Design](https://github.com/Scrounger/ioBroker.vis-materialdesign).

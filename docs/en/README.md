@@ -124,6 +124,33 @@ Format: `key1=value1&key2=value2`
 - **Summary data**: The summary JSON includes clearsky values as well as temperature and weather code
 - The "damping morning" and "damping evening" fields are not used for pvnode
 
+## Web component "PV forecast"
+
+The adapter brings a web component of [`@iobroker/web-components`](https://github.com/ioBroker/web-components) (`pvforecast-forecast`). It can be placed wherever ioBroker shows web components (e.g. Aura, vis-2, Devices, Admin).
+
+The component shows the forecast of the selected instance automatically:
+
+- **Day tiles** for up to 7 days: energy, peak power with time and maximum temperature (pvnode). For today and tomorrow the energy comes from the states `energy.today` / `energy.tomorrow`, for the following days it is calculated from the forecast curve (marked with "≈")
+- **Chart** of the power curve with clear sky line, variability band (pvnode Plus) and a marker for "now"; a click on a day tile shows only that day
+- **Tooltip** with all values when moving over the chart
+
+Settings of the component:
+
+| Setting | Description |
+|---------|-------------|
+| Instance | pvforecast instance, e.g. `pvforecast.0` |
+| Plant | `Total of all plants` or a single plant (the list comes from the adapter) |
+| Days | number of days shown (1–7) |
+| Title | own title, empty = name of the plant |
+| Clear sky / variability band | show or hide the lines |
+| Color | color of the forecast curve |
+
+## Device Manager
+
+In the tab **Devices** (device manager) every plant and the total of all plants is shown as a device. The card shows the current power and the energy for today and tomorrow live. The details show the installed power, energy today/tomorrow, the last update and the web component with the forecast for 7 days.
+
+The web component in the details needs an admin with JSON-Config 10.1.14 or newer.
+
 # VIS example
 
 Please install: [Material Design](https://github.com/Scrounger/ioBroker.vis-materialdesign) before you use the example.

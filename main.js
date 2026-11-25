@@ -5,6 +5,7 @@ const moment = require('moment');
 const axios = require('axios').default;
 const solcast = require(`${__dirname}/lib/solcast`);
 const pvnode = require(`${__dirname}/lib/pvnode`);
+const { PvforecastDeviceManagement, getPlantOptions } = require(`${__dirname}/lib/deviceManagement`);
 const CronJob = require('cron').CronJob;
 
 let globalunit = 1000;
@@ -51,6 +52,9 @@ class Pvforecast extends utils.Adapter {
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
         this.on('unload', this.onUnload.bind(this));
+        this.on('message', this.onMessage.bind(this));
+
+        this.deviceManagement = new PvforecastDeviceManagement(this);
     }
 
     async onReady() {
@@ -2564,6 +2568,22 @@ class Pvforecast extends utils.Adapter {
             newAngle = 180 + 180 + newAngle;
         }
         return newAngle;
+    }
+
+    /**
+     * Messages of the web component (the plants for its settings). Messages of the device manager
+     * (`dm:...`) are answered by PvforecastDeviceManagement.
+     *
+     * @param {ioBroker.Message} obj
+     */
+    onMessage(obj) {
+        if (!obj || typeof obj !== 'object' || !obj.command || obj.command.startsWith('dm:')) {
+            return;
+        }
+        if (obj.command === 'getPlants' && obj.callback) {
+            const options = getPlantOptions(this.getPlantConfigData(), name => this.cleanNamespace(name));
+            this.sendTo(obj.from, obj.command, options, obj.callback);
+        }
     }
 
     /**

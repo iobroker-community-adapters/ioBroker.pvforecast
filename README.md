@@ -43,6 +43,8 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 
 ### **WORK IN PROGRESS**
+- (@patricknitsch) New web component "PV forecast" (Aura, vis-2, Devices, Admin): forecast for up to 7 days with energy per day, power curve, clear sky and variability band
+- (@patricknitsch) Device manager: every plant and the total are shown as devices with live values and the forecast as details
 - (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
 
 ### 6.2.0 (2026-07-06)

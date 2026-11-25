@@ -1,0 +1,70 @@
+{
+    "$schema": "https://raw.githubusercontent.com/ioBroker/web-components/main/schemas/manifest.json",
+    "manifestVersion": 1,
+    "tag": "pvforecast-forecast",
+    "name": {
+        "en": "PV forecast",
+        "de": "PV-Prognose",
+        "ru": "Прогноз PV",
+        "pt": "Previsão FV",
+        "nl": "PV-prognose",
+        "fr": "Prévision PV",
+        "it": "Previsione FV",
+        "es": "Pronóstico FV",
+        "pl": "Prognoza PV",
+        "uk": "Прогноз PV",
+        "zh-cn": "光伏预报"
+    },
+    "description": {
+        "en": "Forecast of pvforecast for several days: power curve, energy per day, clear sky and variability band",
+        "de": "Prognose von pvforecast für mehrere Tage: Leistungskurve, Energie pro Tag, Clearsky und Variabilitätsband"
+    },
+    "icon": "pvforecast-forecast.svg",
+    "module": "pvforecast-forecast.js",
+    "size": { "width": 520, "height": 340 },
+    "settings": {
+        "type": "panel",
+        "items": {
+            "instance": {
+                "type": "instance",
+                "adapter": "pvforecast",
+                "label": { "en": "Instance", "de": "Instanz" },
+                "default": "pvforecast.0"
+            },
+            "plant": {
+                "type": "selectSendTo",
+                "command": "getPlants",
+                "instance": "${data.instance}",
+                "alsoDependsOn": ["instance"],
+                "label": { "en": "Plant", "de": "Anlage" },
+                "default": "summary"
+            },
+            "days": {
+                "type": "number",
+                "label": { "en": "Days", "de": "Tage" },
+                "min": 1,
+                "max": 7,
+                "default": 3
+            },
+            "title": {
+                "type": "text",
+                "label": { "en": "Title (empty: name of the plant)", "de": "Titel (leer: Name der Anlage)" }
+            },
+            "showClearsky": {
+                "type": "checkbox",
+                "label": { "en": "Show clear sky", "de": "Clearsky anzeigen" },
+                "default": true
+            },
+            "showVariability": {
+                "type": "checkbox",
+                "label": { "en": "Show variability band (pvnode Plus)", "de": "Variabilitätsband anzeigen (pvnode Plus)" },
+                "default": true
+            },
+            "color": {
+                "type": "color",
+                "label": { "en": "Color", "de": "Farbe" },
+                "default": "#f5a623"
+            }
+        }
+    }
+}

@@ -162,6 +162,34 @@
     "adminUI": {
       "config": "json"
     },
+    "supportedMessages": {
+      "deviceManager": true,
+      "custom": true
+    },
+    "webComponents": [
+      {
+        "manifest": "webcomponents/pvforecast-forecast.json",
+        "tag": "pvforecast-forecast",
+        "name": {
+          "en": "PV forecast",
+          "de": "PV-Prognose",
+          "ru": "Прогноз PV",
+          "pt": "Previsão FV",
+          "nl": "PV-prognose",
+          "fr": "Prévision PV",
+          "it": "Previsione FV",
+          "es": "Pronóstico FV",
+          "pl": "Prognoza PV",
+          "uk": "Прогноз PV",
+          "zh-cn": "光伏预报"
+        },
+        "icon": "pvforecast-forecast.svg",
+        "size": {
+          "width": 520,
+          "height": 340
+        }
+      }
+    ],
     "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
     "keywords": [
       "Solar",
