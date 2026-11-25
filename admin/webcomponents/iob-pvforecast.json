@@ -1,7 +1,7 @@
 {
     "$schema": "https://raw.githubusercontent.com/ioBroker/web-components/main/schemas/manifest.json",
     "manifestVersion": 1,
-    "tag": "pvforecast-forecast",
+    "tag": "iob-pvforecast",
     "name": {
         "en": "PV forecast",
         "de": "PV-Prognose",
@@ -19,8 +19,8 @@
         "en": "Forecast of pvforecast for several days: power curve, energy per day, clear sky and variability band",
         "de": "Prognose von pvforecast für mehrere Tage: Leistungskurve, Energie pro Tag, Clearsky und Variabilitätsband"
     },
-    "icon": "pvforecast-forecast.svg",
-    "module": "pvforecast-forecast.js",
+    "icon": "iob-pvforecast.svg",
+    "module": "iob-pvforecast.js",
     "size": { "width": 520, "height": 340 },
     "settings": {
         "type": "panel",

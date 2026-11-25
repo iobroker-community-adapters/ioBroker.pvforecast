@@ -128,13 +128,24 @@ Format: `key1=value1&key2=value2`
 
 ## Web-Komponente „PV-Prognose“
 
-Der Adapter bringt eine Web-Komponente nach [`@iobroker/web-components`](https://github.com/ioBroker/web-components) mit (`pvforecast-forecast`). Sie kann überall eingefügt werden, wo ioBroker Web-Komponenten anzeigt (z. B. Aura, vis-2, Devices, Admin).
+Der Adapter bringt eine Web-Komponente nach [`@iobroker/web-components`](https://github.com/ioBroker/web-components) mit (`iob-pvforecast`). Sie kann überall eingefügt werden, wo ioBroker Web-Komponenten anzeigt (z. B. Aura, vis-2, Devices, Admin).
 
 Die Komponente zeigt automatisch die Prognose der gewählten Instanz:
 
 - **Tageskacheln** für bis zu 7 Tage: Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Für heute und morgen kommt die Energie aus den States `energy.today` / `energy.tomorrow`, für die weiteren Tage wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
 - **Diagramm** der Leistungskurve mit Clearsky-Linie, Variabilitätsband (pvnode Plus) und Markierung für „jetzt“; ein Klick auf eine Tageskachel zeigt nur diesen Tag
 - **Tooltip** mit allen Werten beim Überfahren des Diagramms
+- **Variabilitätsband (pvnode Plus, API v2)**: Die Kacheln zeigen zusätzlich die Spanne der Energie (↕ Min – Max), das Diagramm das Band um die Prognosekurve. Außerhalb des Bandes (vor dem Abruf, nach ca. 40 Stunden) zählt der Prognosewert
+
+Die Komponente und der Device Manager funktionieren mit allen Anbietern. Was angezeigt wird, hängt von den Daten des Anbieters ab:
+
+| Anbieter | Prognosekurve, Energie, Spitze | Clearsky, Temperatur | Variabilitätsband |
+|----------|:---:|:---:|:---:|
+| Forecast.Solar | ✓ | – | – |
+| Solcast | ✓ | – | – |
+| SolarPredictionAPI | ✓ | – | – |
+| pvnode Free / Light | ✓ | ✓ | – |
+| pvnode Plus (API v2) | ✓ | ✓ | ✓ |
 
 Einstellungen der Komponente:
 
@@ -149,7 +160,7 @@ Einstellungen der Komponente:
 
 ## Device Manager
 
-Im Tab **Geräte** (Device Manager) erscheint jede Anlage und die Summe aller Anlagen als eigenes Gerät. Die Karte zeigt live die aktuelle Leistung sowie die Energie für heute und morgen. In den Details stehen installierte Leistung, Energie heute/morgen, die letzte Aktualisierung und die Web-Komponente mit der Prognose für 7 Tage.
+Im Tab **Geräte** (Device Manager) erscheint jede Anlage und die Summe aller Anlagen als eigenes Gerät. Die Karte zeigt den Anbieter (bei pvnode mit Tarif) sowie live die aktuelle Leistung und die Energie für heute und morgen. In den Details stehen Anbieter, Status des Variabilitätsbands, installierte Leistung, Energie heute/morgen, die letzte Aktualisierung und die Web-Komponente mit der Prognose für 7 Tage.
 
 Für die Web-Komponente in den Details wird ein Admin mit JSON-Config ab 10.1.14 benötigt.
 

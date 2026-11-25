@@ -30,7 +30,7 @@ export function parseForecast(val) {
  * @param {ReturnType<typeof parseForecast>} entries forecast entries
  * @param {number} dayStart start of the first day (local midnight, ms)
  * @param {number} days number of days
- * @returns {Array<{start: number, entries: ReturnType<typeof parseForecast>, energy: number, peak: number, peakTime: number, tempMax: number | null}>} days
+ * @returns {Array<{start: number, entries: ReturnType<typeof parseForecast>, energy: number, peak: number, peakTime: number, tempMax: number | null, energyMin: number | null, energyMax: number | null}>} days
  */
 export function splitDays(entries, dayStart, days) {
     const result = [];
@@ -42,13 +42,21 @@ export function splitDays(entries, dayStart, days) {
         const list = entries.filter(e => e.t >= start.getTime() && e.t < end.getTime());
 
         // Energy: trapezoidal integration of the power curve (power unit * h); gaps over 3 h are not bridged
-        let energy = 0;
-        for (let j = 1; j < list.length; j++) {
-            const dt = (list[j].t - list[j - 1].t) / 3600000;
-            if (dt > 0 && dt <= 3) {
-                energy += ((list[j].y + list[j - 1].y) / 2) * dt;
+        const integrate = value => {
+            let sum = 0;
+            for (let j = 1; j < list.length; j++) {
+                const dt = (list[j].t - list[j - 1].t) / 3600000;
+                if (dt > 0 && dt <= 3) {
+                    sum += ((value(list[j]) + value(list[j - 1])) / 2) * dt;
+                }
             }
-        }
+            return sum;
+        };
+        const energy = integrate(e => e.y);
+        // Variability band (pvnode Plus): it covers only the next ~40 hours, outside of it the forecast counts
+        const hasBand = list.some(e => e.y_min != null && e.y_max != null);
+        const energyMin = hasBand ? integrate(e => (e.y_min != null ? Number(e.y_min) : e.y)) : null;
+        const energyMax = hasBand ? integrate(e => (e.y_max != null ? Number(e.y_max) : e.y)) : null;
         let peak = 0;
         let peakTime = 0;
         let tempMax = null;
@@ -61,7 +69,7 @@ export function splitDays(entries, dayStart, days) {
                 tempMax = tempMax === null ? Number(e.temp) : Math.max(tempMax, Number(e.temp));
             }
         }
-        result.push({ start: start.getTime(), entries: list, energy, peak, peakTime, tempMax });
+        result.push({ start: start.getTime(), entries: list, energy, peak, peakTime, tempMax, energyMin, energyMax });
     }
     return result;
 }

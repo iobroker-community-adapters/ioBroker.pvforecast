@@ -168,8 +168,8 @@
     },
     "webComponents": [
       {
-        "manifest": "webcomponents/pvforecast-forecast.json",
-        "tag": "pvforecast-forecast",
+        "manifest": "webcomponents/iob-pvforecast.json",
+        "tag": "iob-pvforecast",
         "name": {
           "en": "PV forecast",
           "de": "PV-Prognose",
@@ -183,7 +183,7 @@
           "uk": "Прогноз PV",
           "zh-cn": "光伏预报"
         },
-        "icon": "pvforecast-forecast.svg",
+        "icon": "iob-pvforecast.svg",
         "size": {
           "width": 520,
           "height": 340

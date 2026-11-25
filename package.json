@@ -61,7 +61,7 @@
     "main.js"
   ],
   "scripts": {
-    "build:webcomponents": "esbuild src-webcomponents/pvforecast-forecast.mjs --bundle --format=esm --minify --target=es2020 --outfile=admin/webcomponents/pvforecast-forecast.js && iob-web-components sync-io-package",
+    "build:webcomponents": "esbuild src-webcomponents/iob-pvforecast.mjs --bundle --format=esm --minify --target=es2020 --outfile=admin/webcomponents/iob-pvforecast.js && iob-web-components sync-io-package",
     "test:js": "mocha --config test/mocharc.custom.json \"{!(node_modules|test)/**/*.test.js,*.test.js,test/**/test!(PackageFiles|Startup).js}\"",
     "test:package": "mocha test/package --exit",
     "test:integration": "mocha test/integration --exit",

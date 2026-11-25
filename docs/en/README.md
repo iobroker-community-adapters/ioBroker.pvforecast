@@ -127,13 +127,24 @@ Format: `key1=value1&key2=value2`
 
 ## Web component "PV forecast"
 
-The adapter brings a web component of [`@iobroker/web-components`](https://github.com/ioBroker/web-components) (`pvforecast-forecast`). It can be placed wherever ioBroker shows web components (e.g. Aura, vis-2, Devices, Admin).
+The adapter brings a web component of [`@iobroker/web-components`](https://github.com/ioBroker/web-components) (`iob-pvforecast`). It can be placed wherever ioBroker shows web components (e.g. Aura, vis-2, Devices, Admin).
 
 The component shows the forecast of the selected instance automatically:
 
 - **Day tiles** for up to 7 days: energy, peak power with time and maximum temperature (pvnode). For today and tomorrow the energy comes from the states `energy.today` / `energy.tomorrow`, for the following days it is calculated from the forecast curve (marked with "≈")
 - **Chart** of the power curve with clear sky line, variability band (pvnode Plus) and a marker for "now"; a click on a day tile shows only that day
 - **Tooltip** with all values when moving over the chart
+- **Variability band (pvnode Plus, API v2)**: the tiles also show the range of the energy (↕ min – max), the chart the band around the forecast curve. Outside of the band (before the request, after about 40 hours) the forecast value counts
+
+The component and the device manager work with every provider. What is shown depends on the data of the provider:
+
+| Provider | Forecast curve, energy, peak | Clear sky, temperature | Variability band |
+|----------|:---:|:---:|:---:|
+| Forecast.Solar | ✓ | – | – |
+| Solcast | ✓ | – | – |
+| SolarPredictionAPI | ✓ | – | – |
+| pvnode Free / Light | ✓ | ✓ | – |
+| pvnode Plus (API v2) | ✓ | ✓ | ✓ |
 
 Settings of the component:
 
@@ -148,7 +159,7 @@ Settings of the component:
 
 ## Device Manager
 
-In the tab **Devices** (device manager) every plant and the total of all plants is shown as a device. The card shows the current power and the energy for today and tomorrow live. The details show the installed power, energy today/tomorrow, the last update and the web component with the forecast for 7 days.
+In the tab **Devices** (device manager) every plant and the total of all plants is shown as a device. The card shows the provider (for pvnode with its tier) and, live, the current power and the energy for today and tomorrow. The details show the provider, the state of the variability band, the installed power, energy today/tomorrow, the last update and the web component with the forecast for 7 days.
 
 The web component in the details needs an admin with JSON-Config 10.1.14 or newer.
 

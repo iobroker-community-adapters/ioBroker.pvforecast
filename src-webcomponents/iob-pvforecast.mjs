@@ -1,9 +1,9 @@
 // Web component of @iobroker/web-components: shows the PV forecast of pvforecast for several days.
-// Built with `npm run build:webcomponents` to admin/webcomponents/pvforecast-forecast.js
+// Built with `npm run build:webcomponents` to admin/webcomponents/iob-pvforecast.js
 import { IobWebComponent, defineWebComponent } from '@iobroker/web-components/element';
 import { parseForecast, splitDays } from './forecastData.mjs';
 
-const TAG = 'pvforecast-forecast';
+const TAG = 'iob-pvforecast';
 const DAY_MS = 24 * 60 * 60 * 1000;
 // Chart coordinates (SVG viewBox), stretched to the size of the element
 const VB_W = 1000;
@@ -35,13 +35,14 @@ const STYLE = `
 .meta { color: var(--iob-text-secondary); font-size: 0.85em; }
 .meta b { color: var(--iob-text); font-weight: 600; }
 .days { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5em, 1fr)); gap: 1.5cqmin; }
-.day { min-width: 0; overflow: hidden; background: var(--iob-paper); border: 1px solid var(--iob-divider); border-radius: calc(var(--iob-border-radius) * 2);
+.day { display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; overflow: hidden; background: var(--iob-paper); border: 1px solid var(--iob-divider); border-radius: calc(var(--iob-border-radius) * 2);
     padding: 0.35em 0.5em; cursor: pointer; font: inherit; color: inherit; text-align: left; }
 .day.sel { border-color: var(--iob-primary); box-shadow: inset 0 0 0 1px var(--iob-primary); }
 .day .d { font-size: 0.8em; color: var(--iob-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .day .e { font-size: 1.2em; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .day .x { font-size: 0.75em; color: var(--iob-text-secondary); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .days.many .day { font-size: 0.85em; }
+.day .b { color: var(--iob-text); }
 .chart { position: relative; flex: 1 1 auto; min-height: 4em; }
 .chart svg { position: absolute; inset: 0 0 1.4em 0; width: 100%; height: calc(100% - 1.4em); overflow: visible; }
 .axis { position: absolute; left: 0; right: 0; bottom: 0; height: 1.4em; font-size: 0.75em; color: var(--iob-text-secondary); }
@@ -196,6 +197,8 @@ class PvforecastForecast extends IobWebComponent {
         const energyFactor =
             energyUnit.startsWith('k') === powerUnit.startsWith('k') ? 1 : powerUnit.startsWith('k') ? 1000 : 0.001;
 
+        const showBand = settings.showVariability !== false;
+
         if (this.selectedDay !== null && this.selectedDay >= dayList.length) {
             this.selectedDay = null;
         }
@@ -221,12 +224,22 @@ class PvforecastForecast extends IobWebComponent {
                       ).toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' })}`
                     : '&nbsp;';
                 const temp = day.tempMax !== null ? ` · ${this.format(day.tempMax, 0)} °C` : '';
+                // Variability band (pvnode Plus): range of the energy, shifted to the energy shown
+                let band = '';
+                if (showBand && day.energyMin !== null && day.energyMax !== null) {
+                    const min = Math.max(0, energy - (day.energy - day.energyMin) * energyFactor);
+                    const max = energy + (day.energyMax - day.energy) * energyFactor;
+                    band = `<div class="x b" title="${escapeHtml(this.t('band'))}">↕ ${this.format(min, eDigits)} – ${this.format(
+                        max,
+                        eDigits,
+                    )} ${escapeHtml(energyUnit)}</div>`;
+                }
                 return `<button class="day${this.selectedDay === i ? ' sel' : ''}" data-day="${i}" title="${
                     isExact ? '' : escapeHtml(this.t('estimated'))
                 }"><div class="d">${escapeHtml(label)}</div><div class="e">${isExact ? '' : '≈ '}${this.format(
                     energy,
                     eDigits,
-                )} ${escapeHtml(energyUnit)}</div><div class="x">${peak}${temp}</div></button>`;
+                )} ${escapeHtml(energyUnit)}</div>${band}<div class="x">${peak}${temp}</div></button>`;
             })
             .join('');
 
@@ -243,7 +256,6 @@ class PvforecastForecast extends IobWebComponent {
         const x = t => ((t - from) / (to - from)) * VB_W;
         const y = v => VB_H - (Math.max(0, v) / maxY) * VB_H;
 
-        const showBand = settings.showVariability !== false;
         const showClearsky = settings.showClearsky !== false;
 
         const segments = [];

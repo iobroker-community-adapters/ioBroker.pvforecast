@@ -43,8 +43,8 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 
 ### **WORK IN PROGRESS**
-- (@patricknitsch) New web component "PV forecast" (Aura, vis-2, Devices, Admin): forecast for up to 7 days with energy per day, power curve, clear sky and variability band
-- (@patricknitsch) Device manager: every plant and the total are shown as devices with live values and the forecast as details
+- (@patricknitsch) New web component `iob-pvforecast` (Aura, vis-2, Devices, Admin) for all providers: forecast for up to 7 days with energy per day, power curve, clear sky and, with pvnode Plus, the variability band with min/max energy
+- (@patricknitsch) Device manager: every plant and the total are shown as devices with provider, live values and the forecast as details
 - (@patricknitsch) pvnode Plus: the forecast now includes the variability band (lower and upper bound) as `y_min` / `y_max` in JSONData
 - (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
 
