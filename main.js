@@ -380,6 +380,8 @@ class Pvforecast extends utils.Adapter {
         const jsonDataSummaryClearsky = [];
         const jsonDataSummaryTemp = {};
         const jsonDataSummaryWeatherCode = {};
+        const jsonDataSummaryMin = {};
+        const jsonDataSummaryMax = {};
         const jsonTableSummary = [];
         const jsonGraphSummary = [];
         const jsonGraphLabelSummary = [];
@@ -578,6 +580,13 @@ class Pvforecast extends utils.Adapter {
                             if (data.weather_code?.[time] != null) {
                                 entry.weather_code = data.weather_code[time];
                             }
+                            // Variability band (pvnode Plus)
+                            if (data.watts_min?.[time] != null) {
+                                entry.y_min = data.watts_min[time] / globalunit;
+                            }
+                            if (data.watts_max?.[time] != null) {
+                                entry.y_max = data.watts_max[time] / globalunit;
+                            }
                         }
 
                         jsonData.push(entry);
@@ -610,6 +619,21 @@ class Pvforecast extends utils.Adapter {
                                 jsonDataSummaryWeatherCode[timestamp] === undefined
                             ) {
                                 jsonDataSummaryWeatherCode[timestamp] = data.weather_code[time];
+                            }
+                            // Variability band for summary (summed across plants)
+                            if (data.watts_min?.[time] != null) {
+                                jsonDataSummaryMin[timestamp] =
+                                    Math.round(
+                                        ((jsonDataSummaryMin[timestamp] || 0) + data.watts_min[time] / globalunit) *
+                                            1000,
+                                    ) / 1000;
+                            }
+                            if (data.watts_max?.[time] != null) {
+                                jsonDataSummaryMax[timestamp] =
+                                    Math.round(
+                                        ((jsonDataSummaryMax[timestamp] || 0) + data.watts_max[time] / globalunit) *
+                                            1000,
+                                    ) / 1000;
                             }
                         }
                     }
@@ -822,6 +846,12 @@ class Pvforecast extends utils.Adapter {
                 }
                 if (jsonDataSummaryWeatherCode[time] != null) {
                     entry.weather_code = jsonDataSummaryWeatherCode[time];
+                }
+                if (jsonDataSummaryMin[time] != null) {
+                    entry.y_min = jsonDataSummaryMin[time];
+                }
+                if (jsonDataSummaryMax[time] != null) {
+                    entry.y_max = jsonDataSummaryMax[time];
                 }
             }
             return entry;
@@ -1218,6 +1248,11 @@ class Pvforecast extends utils.Adapter {
 
         let url = `https://api.pvnode.com/v2/forecast/${this.config.pvnodeSiteId}?forecast_days=${forecastDays}&include=clearsky&include=default&include=weather&include=strings&past_days=0`;
 
+        // Plus tier: request the variability band (lower/upper bound of the forecast)
+        if ((this.config.pvnodeTier || 'free') === 'plus' && !this.pvnodeVariabilityUnavailable) {
+            url += '&include=variability';
+        }
+
         if (this.config.pvnodeExtraParams) {
             url += `&${this.config.pvnodeExtraParams}`;
         }
@@ -1250,7 +1285,26 @@ class Pvforecast extends utils.Adapter {
             try {
                 this.log.debug(`[pvnode v2] Starting update for site: ${this.config.pvnodeSiteId}`);
 
-                const serviceResponse = await axios.get(url, requestHeader);
+                let serviceResponse;
+                try {
+                    serviceResponse = await axios.get(url, requestHeader);
+                } catch (error) {
+                    // A plan without the variability band answers with 403 - retry without it
+                    if (
+                        axios.isAxiosError(error) &&
+                        error.response?.status === 403 &&
+                        url.includes('&include=variability')
+                    ) {
+                        this.log.warn(
+                            '[pvnode v2] variability band is not available for this pvnode plan - requesting forecast without it',
+                        );
+                        this.pvnodeVariabilityUnavailable = true;
+                        url = url.replace('&include=variability', '');
+                        serviceResponse = await axios.get(url, requestHeader);
+                    } else {
+                        throw error;
+                    }
+                }
 
                 this.log.debug(`[pvnode v2] received raw data: ${JSON.stringify(serviceResponse.data)}`);
                 this.log.info(
@@ -1290,6 +1344,8 @@ class Pvforecast extends utils.Adapter {
                             data.watts_clearsky = siteData.watts_clearsky;
                             data.temperature = siteData.temperature;
                             data.weather_code = siteData.weather_code;
+                            data.watts_min = siteData.watts_min;
+                            data.watts_max = siteData.watts_max;
                         }
                         this.log.info(
                             `[pvnode v2] plant[${i}] "${plantArray[i].name}": ${Object.keys(data.watts).length} power slots, ` +
