@@ -155,12 +155,13 @@ Einstellungen der Komponente:
 | Anlage | `Summe aller Anlagen` oder eine einzelne Anlage (die Liste kommt vom Adapter) |
 | Tage | Anzahl der angezeigten Tage (1–7) |
 | Titel | Eigener Titel, leer = Name der Anlage |
+| Kopfzeile / Tageskacheln | Ein- oder ausblenden, z. B. für eine kompakte Ansicht nur mit Diagramm |
 | Clearsky / Variabilitätsband | Linien ein- oder ausblenden |
 | Farbe | Farbe der Prognosekurve |
 
 ## Device Manager
 
-Im Tab **Geräte** (Device Manager) erscheint jede Anlage und die Summe aller Anlagen als eigenes Gerät. Die Karte zeigt den Anbieter (bei pvnode mit Tarif) sowie live die aktuelle Leistung und die Energie für heute und morgen. In den Details stehen Anbieter, Status des Variabilitätsbands, installierte Leistung, Energie heute/morgen, die letzte Aktualisierung und die Web-Komponente mit der Prognose für 7 Tage.
+Im Tab **Geräte** (Device Manager) erscheint jede Anlage und die Summe aller Anlagen als eigenes Gerät. Die Karte zeigt das pvforecast-Icon, den Anbieter (bei pvnode mit Tarif), live die installierte Leistung (bei der Summe aller Anlagen, sonst der einzelnen Anlage), die aktuelle Leistung und die Energie für heute und morgen sowie das Diagramm von heute. In den Details stehen Anbieter, Status des Variabilitätsbands, installierte Leistung, Energie heute/morgen, die letzte Aktualisierung und die Web-Komponente mit der Prognose für 7 Tage.
 
 Für die Web-Komponente in den Details wird ein Admin mit JSON-Config ab 10.1.14 benötigt.
 

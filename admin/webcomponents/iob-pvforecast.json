@@ -21,48 +21,90 @@
     },
     "icon": "iob-pvforecast.svg",
     "module": "iob-pvforecast.js",
-    "size": { "width": 520, "height": 340 },
+    "size": {
+        "width": 520,
+        "height": 340
+    },
     "settings": {
         "type": "panel",
         "items": {
             "instance": {
                 "type": "instance",
                 "adapter": "pvforecast",
-                "label": { "en": "Instance", "de": "Instanz" },
+                "label": {
+                    "en": "Instance",
+                    "de": "Instanz"
+                },
                 "default": "pvforecast.0"
             },
             "plant": {
                 "type": "selectSendTo",
                 "command": "getPlants",
                 "instance": "${data.instance}",
-                "alsoDependsOn": ["instance"],
-                "label": { "en": "Plant", "de": "Anlage" },
+                "alsoDependsOn": [
+                    "instance"
+                ],
+                "label": {
+                    "en": "Plant",
+                    "de": "Anlage"
+                },
                 "default": "summary"
             },
             "days": {
                 "type": "number",
-                "label": { "en": "Days", "de": "Tage" },
+                "label": {
+                    "en": "Days",
+                    "de": "Tage"
+                },
                 "min": 1,
                 "max": 7,
                 "default": 3
             },
             "title": {
                 "type": "text",
-                "label": { "en": "Title (empty: name of the plant)", "de": "Titel (leer: Name der Anlage)" }
+                "label": {
+                    "en": "Title (empty: name of the plant)",
+                    "de": "Titel (leer: Name der Anlage)"
+                }
+            },
+            "showHeader": {
+                "type": "checkbox",
+                "label": {
+                    "en": "Show header (name, power now, last update)",
+                    "de": "Kopfzeile anzeigen (Name, Leistung jetzt, Aktualisierung)"
+                },
+                "default": true
+            },
+            "showTiles": {
+                "type": "checkbox",
+                "label": {
+                    "en": "Show day tiles",
+                    "de": "Tageskacheln anzeigen"
+                },
+                "default": true
             },
             "showClearsky": {
                 "type": "checkbox",
-                "label": { "en": "Show clear sky", "de": "Clearsky anzeigen" },
+                "label": {
+                    "en": "Show clear sky",
+                    "de": "Clearsky anzeigen"
+                },
                 "default": true
             },
             "showVariability": {
                 "type": "checkbox",
-                "label": { "en": "Show variability band (pvnode Plus)", "de": "Variabilitätsband anzeigen (pvnode Plus)" },
+                "label": {
+                    "en": "Show variability band (pvnode Plus)",
+                    "de": "Variabilitätsband anzeigen (pvnode Plus)"
+                },
                 "default": true
             },
             "color": {
                 "type": "color",
-                "label": { "en": "Color", "de": "Farbe" },
+                "label": {
+                    "en": "Color",
+                    "de": "Farbe"
+                },
                 "default": "#f5a623"
             }
         }

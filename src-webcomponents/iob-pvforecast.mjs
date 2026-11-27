@@ -170,21 +170,24 @@ class PvforecastForecast extends IobWebComponent {
         const installed = this.states[`${base}.power.installed`]?.val;
         const updated = this.states[`${base}.lastUpdated`]?.val;
 
-        const header = `<div class="head"><span class="title">${escapeHtml(title)}${
-            sample ? ` <span class="badge">${escapeHtml(this.t('sample'))}</span>` : ''
-        }</span><span class="meta">${
-            nowVal != null && !sample
-                ? `${escapeHtml(this.t('now'))}: <b>${this.format(nowVal, digits)} ${escapeHtml(powerUnit)}</b>`
-                : ''
-        }${
-            installed != null && !sample
-                ? ` · ${escapeHtml(this.t('installed'))}: ${this.format(installed, digits)} ${escapeHtml(this.unit(`${base}.power.installed`, `${powerUnit}p`))}`
-                : ''
-        }${
-            updated && !sample
-                ? ` · ${escapeHtml(this.t('updated'))}: ${new Date(Number(updated)).toLocaleString(lang, { dateStyle: 'short', timeStyle: 'short' })}`
-                : ''
-        }</span></div>`;
+        const header =
+            settings.showHeader === false
+                ? ''
+                : `<div class="head"><span class="title">${escapeHtml(title)}${
+                      sample ? ` <span class="badge">${escapeHtml(this.t('sample'))}</span>` : ''
+                  }</span><span class="meta">${
+                      nowVal != null && !sample
+                          ? `${escapeHtml(this.t('now'))}: <b>${this.format(nowVal, digits)} ${escapeHtml(powerUnit)}</b>`
+                          : ''
+                  }${
+                      installed != null && !sample
+                          ? ` · ${escapeHtml(this.t('installed'))}: ${this.format(installed, digits)} ${escapeHtml(this.unit(`${base}.power.installed`, `${powerUnit}p`))}`
+                          : ''
+                  }${
+                      updated && !sample
+                          ? ` · ${escapeHtml(this.t('updated'))}: ${new Date(Number(updated)).toLocaleString(lang, { dateStyle: 'short', timeStyle: 'short' })}`
+                          : ''
+                  }</span></div>`;
 
         if (!entries.length) {
             this.shadowRoot.innerHTML = `<style>${STYLE}</style><div class="root">${header}<div class="empty">${escapeHtml(this.t('noData'))}</div></div>`;
@@ -344,7 +347,9 @@ class PvforecastForecast extends IobWebComponent {
                 : ''
         }</div>`;
 
-        this.shadowRoot.innerHTML = `<style>${STYLE}</style><div class="root">${header}<div class="days${dayList.length > 4 ? ' many' : ''}">${tiles}</div><div class="chart">
+        this.shadowRoot.innerHTML = `<style>${STYLE}</style><div class="root">${header}${
+            settings.showTiles === false ? '' : `<div class="days${dayList.length > 4 ? ' many' : ''}">${tiles}</div>`
+        }<div class="chart">
 <svg viewBox="0 0 ${VB_W} ${VB_H}" preserveAspectRatio="none">
 ${separators}
 ${hasBand ? `<path d="${bandPath}" fill="${color}" fill-opacity="0.25" stroke="none"/>` : ''}

@@ -154,12 +154,13 @@ Settings of the component:
 | Plant | `Total of all plants` or a single plant (the list comes from the adapter) |
 | Days | number of days shown (1–7) |
 | Title | own title, empty = name of the plant |
+| Header / day tiles | show or hide, e.g. for a compact view with the chart only |
 | Clear sky / variability band | show or hide the lines |
 | Color | color of the forecast curve |
 
 ## Device Manager
 
-In the tab **Devices** (device manager) every plant and the total of all plants is shown as a device. The card shows the provider (for pvnode with its tier) and, live, the current power and the energy for today and tomorrow. The details show the provider, the state of the variability band, the installed power, energy today/tomorrow, the last update and the web component with the forecast for 7 days.
+In the tab **Devices** (device manager) every plant and the total of all plants is shown as a device. The card shows the pvforecast icon, the provider (for pvnode with its tier), live the installed power (of all plants for the total, else of the single plant), the current power and the energy for today and tomorrow, and the chart of today. The details show the provider, the state of the variability band, the installed power, energy today/tomorrow, the last update and the web component with the forecast for 7 days.
 
 The web component in the details needs an admin with JSON-Config 10.1.14 or newer.
 
