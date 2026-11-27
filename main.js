@@ -5,6 +5,7 @@ const moment = require('moment');
 const axios = require('axios').default;
 const solcast = require(`${__dirname}/lib/solcast`);
 const pvnode = require(`${__dirname}/lib/pvnode`);
+const { PvforecastDeviceManagement, getPlantOptions } = require(`${__dirname}/lib/deviceManagement`);
 const CronJob = require('cron').CronJob;
 
 let globalunit = 1000;
@@ -53,6 +54,9 @@ class Pvforecast extends utils.Adapter {
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
         this.on('unload', this.onUnload.bind(this));
+        this.on('message', this.onMessage.bind(this));
+
+        this.deviceManagement = new PvforecastDeviceManagement(this);
     }
 
     async onReady() {
@@ -736,7 +740,7 @@ class Pvforecast extends utils.Adapter {
 
                         // Include pvnode-specific fields if available
                         if (hasPvnodeData) {
-                            if (data.watts_clearsky[time] != null) {
+                            if (data.watts_clearsky[time] != null && !data.siteWidePowers) {
                                 entry.clearsky = data.watts_clearsky[time] / globalunit;
                             }
                             if (data.temperature?.[time] != null) {
@@ -746,10 +750,10 @@ class Pvforecast extends utils.Adapter {
                                 entry.weather_code = data.weather_code[time];
                             }
                             // Variability band (pvnode Plus)
-                            if (data.watts_min?.[time] != null) {
+                            if (data.watts_min?.[time] != null && !data.siteWidePowers) {
                                 entry.y_min = data.watts_min[time] / globalunit;
                             }
-                            if (data.watts_max?.[time] != null) {
+                            if (data.watts_max?.[time] != null && !data.siteWidePowers) {
                                 entry.y_max = data.watts_max[time] / globalunit;
                             }
                         }
@@ -822,7 +826,7 @@ class Pvforecast extends utils.Adapter {
 
                         // Include pvnode-specific fields if available
                         if (hasPvnodeData) {
-                            if (data.watts_clearsky[time] != null) {
+                            if (data.watts_clearsky[time] != null && !data.siteWidePowers) {
                                 tableRow.Clearsky = this.formatValue(
                                     data.watts_clearsky[time] / globalunit,
                                     this.config.watt_kw ? 0 : 3,
@@ -1543,15 +1547,17 @@ class Pvforecast extends utils.Adapter {
 
                     if (hasStrings) {
                         // Per-string data matched by index
-                        // Clearsky, temperature and weather_code are site-wide — assign to plant[0]
-                        // only to avoid multiplying the site total by the number of plants in the summary
                         data = pvnode.convertV2StringToForecast(responseData, i);
+                        // Temperature and weather_code are the same for every plant of the site
+                        data.temperature = siteData.temperature;
+                        data.weather_code = siteData.weather_code;
+                        // Clearsky and the variability band are site-wide powers: plant[0] carries them only
+                        // for the summary (not multiplied by the number of plants), not in its own JSON data
                         if (i === 0) {
                             data.watts_clearsky = siteData.watts_clearsky;
-                            data.temperature = siteData.temperature;
-                            data.weather_code = siteData.weather_code;
                             data.watts_min = siteData.watts_min;
                             data.watts_max = siteData.watts_max;
+                            data.siteWidePowers = true;
                         }
                         this.log.info(
                             `[pvnode v2] plant[${i}] "${plantArray[i].name}": ${Object.keys(data.watts).length} power slots, ` +
@@ -2842,6 +2848,22 @@ class Pvforecast extends utils.Adapter {
             newAngle = 180 + 180 + newAngle;
         }
         return newAngle;
+    }
+
+    /**
+     * Messages of the web component (the plants for its settings). Messages of the device manager
+     * (`dm:...`) are answered by PvforecastDeviceManagement.
+     *
+     * @param {ioBroker.Message} obj
+     */
+    onMessage(obj) {
+        if (!obj || typeof obj !== 'object' || !obj.command || obj.command.startsWith('dm:')) {
+            return;
+        }
+        if (obj.command === 'getPlants' && obj.callback) {
+            const options = getPlantOptions(this.getPlantConfigData(), name => this.cleanNamespace(name));
+            this.sendTo(obj.from, obj.command, options, obj.callback);
+        }
     }
 
     /**

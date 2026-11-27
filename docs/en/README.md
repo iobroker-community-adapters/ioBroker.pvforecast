@@ -128,6 +128,46 @@ Format: `key1=value1&key2=value2`
 - **Variability band (v2, Plus)**: With the Plus tier the adapter also requests the lower and upper yield bound (about the next 40 hours). They are stored in the JSONData states as fields `y_min` and `y_max`. If the pvnode plan does not provide the band, the forecast is requested without it
 - The "damping morning" and "damping evening" fields are not used for pvnode
 
+## Web component "PV forecast"
+
+The adapter brings a web component of [`@iobroker/web-components`](https://github.com/ioBroker/web-components) (`iob-pvforecast`). It can be placed wherever ioBroker shows web components (e.g. Aura, vis-2, Devices, Admin).
+
+The component shows the forecast of the selected instance automatically:
+
+- **Header** with name, current power and an info button: the info dialog shows plant, forecast service, installed power, last update and all available forecast days at once
+- **Day tiles**, by default for today and tomorrow (up to 7 days): energy, peak power with time and maximum temperature (pvnode). The energy comes from the states `energy.today` / `energy.tomorrow` and, with pvnode Light/Plus, `energy.day2` … `energy.day6`; without a state it is calculated from the forecast curve (marked with "≈")
+- **Chart** of the power curve with clear sky line, variability band (pvnode Plus) and a marker for "now"; a click on a day tile shows only that day
+- **Tooltip** with all values when moving over the chart
+- **Variability band (pvnode Plus, API v2)**: the tiles also show the range of the energy (↕ min – max), the chart the band around the forecast curve. Outside of the band (before the request, after about 40 hours) the forecast value counts
+
+The component and the device manager work with every provider. What is shown depends on the data of the provider:
+
+| Provider | Forecast curve, energy, peak | Clear sky, temperature | Variability band |
+|----------|:---:|:---:|:---:|
+| Forecast.Solar | ✓ | – | – |
+| Solcast | ✓ | – | – |
+| SolarPredictionAPI | ✓ | – | – |
+| pvnode Free / Light | ✓ | ✓ | – |
+| pvnode Plus (API v2) | ✓ | ✓ | ✓ |
+
+Settings of the component:
+
+| Setting | Description |
+|---------|-------------|
+| Instance | pvforecast instance, e.g. `pvforecast.0` |
+| Plant | `Total of all plants` or a single plant (the list comes from the adapter) |
+| Days | number of days shown (1–7, default 2) |
+| Title | own title, empty = name of the plant |
+| Header / day tiles / info button | show or hide, e.g. for a compact view with the chart only |
+| Clear sky / variability band | show or hide the lines |
+| Color | color of the forecast curve |
+
+## Device Manager
+
+In the tab **Devices** (device manager) every plant and the total of all plants is shown as a device. The card shows the pvforecast icon, the provider (for pvnode with its tier), live the installed power (of all plants for the total, else of the single plant), the current power and the energy for today and tomorrow, and the chart of today. The details show the provider, the state of the variability band, the installed power, energy today/tomorrow, the last update and the web component with the forecast for 7 days.
+
+The web component in the details needs an admin with JSON-Config 10.1.14 or newer.
+
 # VIS example
 
 Please install: [Material Design](https://github.com/Scrounger/ioBroker.vis-materialdesign) before you use the example.
