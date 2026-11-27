@@ -58,7 +58,7 @@
                 },
                 "min": 1,
                 "max": 7,
-                "default": 3
+                "default": 2
             },
             "title": {
                 "type": "text",
@@ -80,6 +80,14 @@
                 "label": {
                     "en": "Show day tiles",
                     "de": "Tageskacheln anzeigen"
+                },
+                "default": true
+            },
+            "showInfo": {
+                "type": "checkbox",
+                "label": {
+                    "en": "Show info button (all forecast days)",
+                    "de": "Info-Button anzeigen (alle Prognosetage)"
                 },
                 "default": true
             },

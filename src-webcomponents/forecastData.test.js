@@ -6,9 +6,10 @@ const { expect } = require('chai');
 describe('web component forecast data', () => {
     let parseForecast;
     let splitDays;
+    let formatValue;
 
     before(async () => {
-        ({ parseForecast, splitDays } = await import('./forecastData.mjs'));
+        ({ parseForecast, splitDays, formatValue } = await import('./forecastData.mjs'));
     });
 
     it('parses and sorts the JSONData state', () => {
@@ -126,4 +127,14 @@ describe('web component forecast data', () => {
             }
         });
     }
+
+    it('shows W and Wh from 1000 on as kW and kWh', () => {
+        expect(formatValue(29663, 'Wh', 'de')).to.equal('29,7 kWh');
+        expect(formatValue(4063, 'Wh', 'de')).to.equal('4,06 kWh');
+        expect(formatValue(784, 'W', 'de')).to.equal('784 W');
+        expect(formatValue(19140, 'Wp', 'en')).to.equal('19.1 kWp');
+        expect(formatValue(41.2, 'kWh', 'en')).to.equal('41.2 kWh');
+        expect(formatValue(152.4, 'kWh', 'en')).to.equal('152 kWh');
+        expect(formatValue(NaN, 'W', 'en')).to.equal('-');
+    });
 });

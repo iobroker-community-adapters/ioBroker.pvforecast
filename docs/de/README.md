@@ -135,7 +135,8 @@ Der Adapter bringt eine Web-Komponente nach [`@iobroker/web-components`](https:/
 
 Die Komponente zeigt automatisch die Prognose der gewählten Instanz:
 
-- **Tageskacheln** für bis zu 7 Tage: Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Die Energie kommt aus den States `energy.today` / `energy.tomorrow` und bei pvnode Light/Plus aus `energy.day2` … `energy.day6`; wo es keinen State gibt, wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
+- **Kopfzeile** mit Name, aktueller Leistung und Info-Button: Der Info-Dialog zeigt Anlage, Prognosedienst, installierte Leistung, letzte Aktualisierung und alle verfügbaren Prognosetage auf einmal
+- **Tageskacheln**, standardmäßig für heute und morgen (bis zu 7 Tage einstellbar): Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Die Energie kommt aus den States `energy.today` / `energy.tomorrow` und bei pvnode Light/Plus aus `energy.day2` … `energy.day6`; wo es keinen State gibt, wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
 - **Diagramm** der Leistungskurve mit Clearsky-Linie, Variabilitätsband (pvnode Plus) und Markierung für „jetzt“; ein Klick auf eine Tageskachel zeigt nur diesen Tag
 - **Tooltip** mit allen Werten beim Überfahren des Diagramms
 - **Variabilitätsband (pvnode Plus, API v2)**: Die Kacheln zeigen zusätzlich die Spanne der Energie (↕ Min – Max), das Diagramm das Band um die Prognosekurve. Außerhalb des Bandes (vor dem Abruf, nach ca. 40 Stunden) zählt der Prognosewert
@@ -156,9 +157,9 @@ Einstellungen der Komponente:
 |-------------|--------------|
 | Instanz | pvforecast-Instanz, z. B. `pvforecast.0` |
 | Anlage | `Summe aller Anlagen` oder eine einzelne Anlage (die Liste kommt vom Adapter) |
-| Tage | Anzahl der angezeigten Tage (1–7) |
+| Tage | Anzahl der angezeigten Tage (1–7, Standard 2) |
 | Titel | Eigener Titel, leer = Name der Anlage |
-| Kopfzeile / Tageskacheln | Ein- oder ausblenden, z. B. für eine kompakte Ansicht nur mit Diagramm |
+| Kopfzeile / Tageskacheln / Info-Button | Ein- oder ausblenden, z. B. für eine kompakte Ansicht nur mit Diagramm |
 | Clearsky / Variabilitätsband | Linien ein- oder ausblenden |
 | Farbe | Farbe der Prognosekurve |
 

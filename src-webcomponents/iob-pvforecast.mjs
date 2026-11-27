@@ -1,7 +1,7 @@
 // Web component of @iobroker/web-components: shows the PV forecast of pvforecast for several days.
 // Built with `npm run build:webcomponents` to admin/webcomponents/iob-pvforecast.js
 import { IobWebComponent, defineWebComponent } from '@iobroker/web-components/element';
-import { parseForecast, splitDays } from './forecastData.mjs';
+import { formatValue, parseForecast, splitDays } from './forecastData.mjs';
 
 const TAG = 'iob-pvforecast';
 const DAY_MS = 24 * 60 * 60 * 1000;
@@ -23,6 +23,17 @@ const TEXTS = {
     noData: { en: 'No forecast data yet', de: 'Noch keine Prognosedaten' },
     sample: { en: 'Sample data', de: 'Beispieldaten' },
     estimated: { en: 'estimated from the forecast curve', de: 'aus der Prognosekurve berechnet' },
+    info: { en: 'Information and all forecast days', de: 'Informationen und alle Prognosetage' },
+    allDays: { en: 'All forecast days', de: 'Alle Prognosetage' },
+    service: { en: 'Forecast service', de: 'Prognosedienst' },
+    plant: { en: 'Plant', de: 'Anlage' },
+};
+
+const SERVICE_NAMES = {
+    forecastsolar: 'Forecast.Solar',
+    solcast: 'Solcast',
+    spa: 'SolarPredictionAPI',
+    pvnode: 'pvnode',
 };
 
 const STYLE = `
@@ -30,10 +41,13 @@ const STYLE = `
 * { box-sizing: border-box; }
 .root { display: flex; flex-direction: column; width: 100%; height: 100%; gap: 2cqmin; padding: 2cqmin;
     font-family: var(--iob-font-family); font-size: clamp(10px, 3.2cqmin, 15px); color: var(--iob-text); }
-.head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 0.3em 1em; }
-.title { font-weight: 600; font-size: 1.15em; }
-.meta { color: var(--iob-text-secondary); font-size: 0.85em; }
+.head { display: flex; align-items: center; gap: 0.6em; min-width: 0; }
+.title { flex: 1 1 auto; min-width: 0; font-weight: 600; font-size: 1.1em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta { flex: 0 0 auto; color: var(--iob-text-secondary); font-size: 0.85em; white-space: nowrap; }
 .meta b { color: var(--iob-text); font-weight: 600; }
+.info { flex: 0 0 auto; width: 1.7em; height: 1.7em; padding: 0; border-radius: 50%; border: 1px solid var(--iob-divider);
+    background: transparent; color: var(--iob-text-secondary); font: inherit; font-weight: 600; cursor: pointer; line-height: 1; }
+.info:hover { color: var(--iob-primary); border-color: var(--iob-primary); }
 .days { display: grid; grid-template-columns: repeat(auto-fit, minmax(6.5em, 1fr)); gap: 1.5cqmin; }
 .day { display: flex; flex-direction: column; justify-content: flex-start; min-width: 0; overflow: hidden; background: var(--iob-paper); border: 1px solid var(--iob-divider); border-radius: calc(var(--iob-border-radius) * 2);
     padding: 0.35em 0.5em; cursor: pointer; font: inherit; color: inherit; text-align: left; }
@@ -91,6 +105,12 @@ class PvforecastForecast extends IobWebComponent {
 
         this.shadowRoot.addEventListener('click', e => {
             const target = e.target;
+            if (target.closest && target.closest('.info')) {
+                if (!this.editMode) {
+                    void this.openInfo();
+                }
+                return;
+            }
             const day = target.closest && target.closest('.day');
             if (!day || this.editMode) {
                 return;
@@ -137,6 +157,14 @@ class PvforecastForecast extends IobWebComponent {
         return (obj && obj.common && obj.common.unit) || fallback;
     }
 
+    /**
+     * @param {number} value value in `unit`
+     * @param {string} unit unit of the state
+     */
+    fmt(value, unit) {
+        return escapeHtml(formatValue(value, unit, this.systemLang));
+    }
+
     format(value, digits) {
         return Number(value).toLocaleString(this.systemLang, {
             minimumFractionDigits: digits,
@@ -147,7 +175,7 @@ class PvforecastForecast extends IobWebComponent {
     render() {
         const settings = this.settings || {};
         const base = this.getBase(settings);
-        const days = Math.min(Math.max(Number(settings.days) || 3, 1), 7);
+        const days = Math.min(Math.max(Number(settings.days) || 2, 1), 7);
         const powerUnit = this.unit(`${base}.power.now`, 'kW');
         const energyUnit = this.unit(`${base}.energy.today`, `${powerUnit}h`);
         const digits = /^k/.test(powerUnit) ? 1 : 0;
@@ -169,27 +197,21 @@ class PvforecastForecast extends IobWebComponent {
             (isSummary ? this.t('summary') : String(this.states[`${base}.name`]?.val || settings.plant));
 
         const nowVal = this.states[`${base}.power.now`]?.val;
-        const installed = this.states[`${base}.power.installed`]?.val;
-        const updated = this.states[`${base}.lastUpdated`]?.val;
 
         const header =
             settings.showHeader === false
                 ? ''
                 : `<div class="head"><span class="title">${escapeHtml(title)}${
                       sample ? ` <span class="badge">${escapeHtml(this.t('sample'))}</span>` : ''
-                  }</span><span class="meta">${
+                  }</span>${
                       nowVal != null && !sample
-                          ? `${escapeHtml(this.t('now'))}: <b>${this.format(nowVal, digits)} ${escapeHtml(powerUnit)}</b>`
+                          ? `<span class="meta">${escapeHtml(this.t('now'))} <b>${this.fmt(nowVal, powerUnit)}</b></span>`
                           : ''
                   }${
-                      installed != null && !sample
-                          ? ` · ${escapeHtml(this.t('installed'))}: ${this.format(installed, digits)} ${escapeHtml(this.unit(`${base}.power.installed`, `${powerUnit}p`))}`
-                          : ''
-                  }${
-                      updated && !sample
-                          ? ` · ${escapeHtml(this.t('updated'))}: ${new Date(Number(updated)).toLocaleString(lang, { dateStyle: 'short', timeStyle: 'short' })}`
-                          : ''
-                  }</span></div>`;
+                      settings.showInfo === false
+                          ? ''
+                          : `<button class="info" title="${escapeHtml(this.t('info'))}">i</button>`
+                  }</div>`;
 
         if (!entries.length) {
             this.shadowRoot.innerHTML = `<style>${STYLE}</style><div class="root">${header}<div class="empty">${escapeHtml(this.t('noData'))}</div></div>`;
@@ -226,9 +248,8 @@ class PvforecastForecast extends IobWebComponent {
                             });
                 const isExact = exact[i] != null && !sample && (i < 2 || day.entries.length > 0);
                 const energy = isExact ? Number(exact[i]) : day.energy * energyFactor;
-                const eDigits = /^k/.test(energyUnit) ? 1 : 0;
                 const peak = day.peak
-                    ? `${escapeHtml(this.t('peak'))} ${this.format(day.peak, digits)} ${escapeHtml(powerUnit)} · ${new Date(
+                    ? `${escapeHtml(this.t('peak'))} ${this.fmt(day.peak, powerUnit)} · ${new Date(
                           day.peakTime,
                       ).toLocaleTimeString(lang, { hour: '2-digit', minute: '2-digit' })}`
                     : '&nbsp;';
@@ -238,17 +259,17 @@ class PvforecastForecast extends IobWebComponent {
                 if (showBand && day.energyMin !== null && day.energyMax !== null) {
                     const min = Math.max(0, energy - (day.energy - day.energyMin) * energyFactor);
                     const max = energy + (day.energyMax - day.energy) * energyFactor;
-                    band = `<div class="x b" title="${escapeHtml(this.t('band'))}">↕ ${this.format(min, eDigits)} – ${this.format(
+                    band = `<div class="x b" title="${escapeHtml(this.t('band'))}">↕ ${this.fmt(min, energyUnit)} – ${this.fmt(
                         max,
-                        eDigits,
-                    )} ${escapeHtml(energyUnit)}</div>`;
+                        energyUnit,
+                    )}</div>`;
                 }
                 return `<button class="day${this.selectedDay === i ? ' sel' : ''}" data-day="${i}" title="${
                     isExact ? '' : escapeHtml(this.t('estimated'))
-                }"><div class="d">${escapeHtml(label)}</div><div class="e">${isExact ? '' : '≈ '}${this.format(
+                }"><div class="d">${escapeHtml(label)}</div><div class="e">${isExact ? '' : '≈ '}${this.fmt(
                     energy,
-                    eDigits,
-                )} ${escapeHtml(energyUnit)}</div>${band}<div class="x">${peak}${temp}</div></button>`;
+                    energyUnit,
+                )}</div>${band}<div class="x">${peak}${temp}</div></button>`;
             })
             .join('');
 
@@ -365,7 +386,7 @@ ${clearPath ? `<path d="${clearPath}" fill="none" stroke="${theme.textSecondary}
 ${nowLine}
 <line class="cursor" x1="0" x2="0" y1="0" y2="${VB_H}" stroke="${theme.text}" stroke-opacity="0.4" vector-effect="non-scaling-stroke" visibility="hidden"/>
 </svg>
-<div class="ymax">${this.format(maxY / 1.08, digits)} ${escapeHtml(powerUnit)}</div>
+<div class="ymax">${this.fmt(maxY / 1.08, powerUnit)}</div>
 <div class="axis">${axis}</div>
 <div class="tip"></div>
 </div>${legend}</div>`;
@@ -397,18 +418,16 @@ ${nowLine}
         cursor.setAttribute('x1', String(pos));
         cursor.setAttribute('x2', String(pos));
         cursor.setAttribute('visibility', 'visible');
-        const u = escapeHtml(range.powerUnit);
+        const u = range.powerUnit;
         const lines = [
             `<b>${new Date(best.t).toLocaleString(this.systemLang, { weekday: 'short', hour: '2-digit', minute: '2-digit' })}</b>`,
-            `${escapeHtml(this.t('forecast'))}: ${this.format(best.y, range.digits + 1)} ${u}`,
+            `${escapeHtml(this.t('forecast'))}: ${this.fmt(best.y, u)}`,
         ];
         if (best.y_min != null && best.y_max != null) {
-            lines.push(
-                `${this.format(best.y_min, range.digits + 1)} – ${this.format(best.y_max, range.digits + 1)} ${u}`,
-            );
+            lines.push(`↕ ${this.fmt(best.y_min, u)} – ${this.fmt(best.y_max, u)}`);
         }
         if (best.clearsky != null) {
-            lines.push(`${escapeHtml(this.t('clearsky'))}: ${this.format(best.clearsky, range.digits + 1)} ${u}`);
+            lines.push(`${escapeHtml(this.t('clearsky'))}: ${this.fmt(best.clearsky, u)}`);
         }
         if (best.temp != null) {
             lines.push(`${this.format(best.temp, 1)} °C`);
@@ -418,6 +437,80 @@ ${nowLine}
         const left = (pos / VB_W) * 100;
         tip.style.left = left > 60 ? '' : `calc(${left}% + 8px)`;
         tip.style.right = left > 60 ? `calc(${100 - left}% + 8px)` : '';
+    }
+
+    /** Dialog with the information about the plant and the forecast of all days */
+    async openInfo() {
+        const settings = this.settings || {};
+        const base = this.getBase(settings);
+        const instance = String(settings.instance || 'pvforecast.0').replace(/^system\.adapter\./, '');
+        const powerUnit = this.unit(`${base}.power.now`, 'kW');
+        const installed = this.states[`${base}.power.installed`]?.val;
+        const updated = this.states[`${base}.lastUpdated`]?.val;
+
+        let service = '';
+        try {
+            const obj = await this.socket?.getObject(`system.adapter.${instance}`);
+            const native = obj?.native || {};
+            const name = SERVICE_NAMES[native.service] || native.service || '';
+            const tier =
+                native.service === 'pvnode' && native.pvnodeTier
+                    ? ` ${native.pvnodeTier.charAt(0).toUpperCase()}${native.pvnodeTier.slice(1)}`
+                    : '';
+            service = name ? `${name}${tier}` : '';
+        } catch {
+            // without the instance object the service is not shown
+        }
+
+        // all days with forecast data, at least 1
+        const todayStart = new Date();
+        todayStart.setHours(0, 0, 0, 0);
+        const entries = parseForecast(this.states[`${base}.JSONData`]?.val);
+        const available = splitDays(entries, todayStart.getTime(), 7).filter(d => d.entries.length).length || 1;
+
+        const rows = [
+            [this.t('plant'), this.shadowRoot.querySelector('.title')?.textContent || ''],
+            [this.t('service'), service],
+            [
+                this.t('installed'),
+                installed != null
+                    ? formatValue(installed, this.unit(`${base}.power.installed`, `${powerUnit}p`), this.systemLang)
+                    : '',
+            ],
+            [
+                this.t('now'),
+                this.states[`${base}.power.now`]?.val != null
+                    ? formatValue(this.states[`${base}.power.now`].val, powerUnit, this.systemLang)
+                    : '',
+            ],
+            [
+                this.t('updated'),
+                updated
+                    ? new Date(Number(updated)).toLocaleString(this.systemLang, {
+                          dateStyle: 'short',
+                          timeStyle: 'short',
+                      })
+                    : '',
+            ],
+        ].filter(r => r[1]);
+
+        const content = this.ownerDocument.createElement('div');
+        const root = content.attachShadow({ mode: 'open' });
+        root.innerHTML = `<style>
+:host { display: block; }
+.box { display: flex; flex-direction: column; gap: 12px; font-family: var(--iob-font-family, inherit); color: inherit; }
+dl { display: grid; grid-template-columns: max-content 1fr; gap: 4px 16px; margin: 0; }
+dt { color: var(--iob-text-secondary, #888); }
+dd { margin: 0; font-weight: 600; }
+.chart { width: min(860px, 85vw); height: min(440px, 60vh); }
+</style><div class="box"><dl>${rows.map(([k, v]) => `<dt>${escapeHtml(k)}</dt><dd>${escapeHtml(v)}</dd>`).join('')}</dl><div class="chart"></div></div>`;
+        const full = this.ownerDocument.createElement(TAG);
+        full.theme = this.theme;
+        full.socket = this.socket;
+        full.settings = { ...settings, days: available, showHeader: false, showTiles: true, showInfo: false };
+        root.querySelector('.chart').appendChild(full);
+
+        await this.openDialog({ title: `${this.t('allDays')} (${available})`, element: content, width: 920 });
     }
 
     hideTip() {

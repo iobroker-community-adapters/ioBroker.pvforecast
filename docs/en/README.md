@@ -134,7 +134,8 @@ The adapter brings a web component of [`@iobroker/web-components`](https://githu
 
 The component shows the forecast of the selected instance automatically:
 
-- **Day tiles** for up to 7 days: energy, peak power with time and maximum temperature (pvnode). The energy comes from the states `energy.today` / `energy.tomorrow` and, with pvnode Light/Plus, `energy.day2` … `energy.day6`; without a state it is calculated from the forecast curve (marked with "≈")
+- **Header** with name, current power and an info button: the info dialog shows plant, forecast service, installed power, last update and all available forecast days at once
+- **Day tiles**, by default for today and tomorrow (up to 7 days): energy, peak power with time and maximum temperature (pvnode). The energy comes from the states `energy.today` / `energy.tomorrow` and, with pvnode Light/Plus, `energy.day2` … `energy.day6`; without a state it is calculated from the forecast curve (marked with "≈")
 - **Chart** of the power curve with clear sky line, variability band (pvnode Plus) and a marker for "now"; a click on a day tile shows only that day
 - **Tooltip** with all values when moving over the chart
 - **Variability band (pvnode Plus, API v2)**: the tiles also show the range of the energy (↕ min – max), the chart the band around the forecast curve. Outside of the band (before the request, after about 40 hours) the forecast value counts
@@ -155,9 +156,9 @@ Settings of the component:
 |---------|-------------|
 | Instance | pvforecast instance, e.g. `pvforecast.0` |
 | Plant | `Total of all plants` or a single plant (the list comes from the adapter) |
-| Days | number of days shown (1–7) |
+| Days | number of days shown (1–7, default 2) |
 | Title | own title, empty = name of the plant |
-| Header / day tiles | show or hide, e.g. for a compact view with the chart only |
+| Header / day tiles / info button | show or hide, e.g. for a compact view with the chart only |
 | Clear sky / variability band | show or hide the lines |
 | Color | color of the forecast curve |
 

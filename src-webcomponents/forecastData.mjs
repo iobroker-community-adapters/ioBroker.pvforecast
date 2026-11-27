@@ -73,3 +73,26 @@ export function splitDays(entries, dayStart, days) {
     }
     return result;
 }
+
+/**
+ * Formats a power or energy for display: W/Wh from 1000 on as kW/kWh, with sensible decimals
+ *
+ * @param {number} value value in `unit`
+ * @param {string} unit unit of the state: W, kW, Wh, kWh, Wp or kWp
+ * @param {string} lang language for the number format
+ * @returns {string} value and unit
+ */
+export function formatValue(value, unit, lang) {
+    let v = Number(value);
+    let u = unit;
+    if (!Number.isFinite(v)) {
+        return '-';
+    }
+    if (/^W/.test(u) && Math.abs(v) >= 1000) {
+        v /= 1000;
+        u = `k${u}`;
+    }
+    const abs = Math.abs(v);
+    const digits = /^k/.test(u) ? (abs >= 100 ? 0 : abs >= 10 ? 1 : 2) : 0;
+    return `${v.toLocaleString(lang, { minimumFractionDigits: digits, maximumFractionDigits: digits })} ${u}`;
+}

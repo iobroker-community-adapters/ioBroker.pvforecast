@@ -740,7 +740,7 @@ class Pvforecast extends utils.Adapter {
 
                         // Include pvnode-specific fields if available
                         if (hasPvnodeData) {
-                            if (data.watts_clearsky[time] != null) {
+                            if (data.watts_clearsky[time] != null && !data.siteWidePowers) {
                                 entry.clearsky = data.watts_clearsky[time] / globalunit;
                             }
                             if (data.temperature?.[time] != null) {
@@ -750,10 +750,10 @@ class Pvforecast extends utils.Adapter {
                                 entry.weather_code = data.weather_code[time];
                             }
                             // Variability band (pvnode Plus)
-                            if (data.watts_min?.[time] != null) {
+                            if (data.watts_min?.[time] != null && !data.siteWidePowers) {
                                 entry.y_min = data.watts_min[time] / globalunit;
                             }
-                            if (data.watts_max?.[time] != null) {
+                            if (data.watts_max?.[time] != null && !data.siteWidePowers) {
                                 entry.y_max = data.watts_max[time] / globalunit;
                             }
                         }
@@ -826,7 +826,7 @@ class Pvforecast extends utils.Adapter {
 
                         // Include pvnode-specific fields if available
                         if (hasPvnodeData) {
-                            if (data.watts_clearsky[time] != null) {
+                            if (data.watts_clearsky[time] != null && !data.siteWidePowers) {
                                 tableRow.Clearsky = this.formatValue(
                                     data.watts_clearsky[time] / globalunit,
                                     this.config.watt_kw ? 0 : 3,
@@ -1547,15 +1547,17 @@ class Pvforecast extends utils.Adapter {
 
                     if (hasStrings) {
                         // Per-string data matched by index
-                        // Clearsky, temperature and weather_code are site-wide — assign to plant[0]
-                        // only to avoid multiplying the site total by the number of plants in the summary
                         data = pvnode.convertV2StringToForecast(responseData, i);
+                        // Temperature and weather_code are the same for every plant of the site
+                        data.temperature = siteData.temperature;
+                        data.weather_code = siteData.weather_code;
+                        // Clearsky and the variability band are site-wide powers: plant[0] carries them only
+                        // for the summary (not multiplied by the number of plants), not in its own JSON data
                         if (i === 0) {
                             data.watts_clearsky = siteData.watts_clearsky;
-                            data.temperature = siteData.temperature;
-                            data.weather_code = siteData.weather_code;
                             data.watts_min = siteData.watts_min;
                             data.watts_max = siteData.watts_max;
+                            data.siteWidePowers = true;
                         }
                         this.log.info(
                             `[pvnode v2] plant[${i}] "${plantArray[i].name}": ${Object.keys(data.watts).length} power slots, ` +
