@@ -43,6 +43,7 @@ Provides forecast data from [forecast.solar](https://forecast.solar), [Solcast](
 -->
 
 ### **WORK IN PROGRESS**
+- (@patricknitsch) pvnode Plus: the forecast now includes the variability band (lower and upper bound) as `y_min` / `y_max` in JSONData
 - (@patricknitsch) Change Free Tier Forecast from only today to today and tomorrow
 
 ### 6.2.0 (2026-07-06)

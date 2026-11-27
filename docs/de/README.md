@@ -123,6 +123,7 @@ Format: `key1=value1&key2=value2`
 - **Abfrageintervall**: Wird automatisch anhand der Kontostufe gesetzt — keine manuelle Konfiguration notwendig
 - **Pro-Flächen-Prognosen (v2)**: Wenn der pvnode-Account String-Daten liefert, erhält jede konfigurierte Anlage ihre eigene Prognose. Clearsky-Werte, Temperatur und Wettercode stammen aus den Site-weiten Daten.
 - **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
+- **Variabilitätsband (v2, Plus)**: Mit der Kontostufe Plus fragt der Adapter zusätzlich die untere und obere Ertragsgrenze ab (ca. die nächsten 40 Stunden). Sie stehen in den JSONData-States als Felder `y_min` und `y_max`. Liefert der pvnode-Tarif das Band nicht, wird die Prognose ohne Band abgerufen
 - Die Felder „Dämpfung morgens" und „Dämpfung abends" werden für pvnode nicht verwendet
 
 ## VIS Beispiel
