@@ -62,11 +62,11 @@ Falls der Längen und Breitengrad schon im System hinterlegt ist, trägt das Sys
 
 | Funktion | Free | Light | Plus |
 |----------|------|-------|------|
-| API-Anfragen/Monat | 250 | 3.000 | 3.000 |
+| API-Anfragen/Monat | 250 | 3.000 | 4.500 |
 | Updates pro Tag | 1 | 24 (stündlich) | 144 (alle 10 min) |
 | Prognosetage | 1-2 (heute + morgen) | 1-7 | 1-7 |
 | Solarflächen | bis 4 | bis 4 | bis 8 |
-| Historische Daten | nein | nein | 30 Tage |
+| Archivierte Prognose | nein | nein | 7 Tage |
 
 Das **Abfrageintervall** wird vom Adapter automatisch anhand der gewählten Kontostufe gesetzt und muss nicht manuell konfiguriert werden:
 
@@ -119,8 +119,11 @@ Format: `key1=value1&key2=value2`
 ### pvnode Besonderheiten
 
 - **15-Minuten-Auflösung**: pvnode liefert Prognosedaten in 15-Minuten-Intervallen (v1 und v2)
+- **Tagessummen für weitere Tage**: Bei mehr als 2 Prognosetagen (Light/Plus) werden zusätzlich `energy.day2` … `energy.day6` (Energie in 2 … 6 Tagen) je Anlage und unter `summary.energy` angelegt. Datenpunkte für Tage außerhalb der eingestellten Prognosetage werden automatisch entfernt.
+- **Stundenwerte für weitere Tage**: Sind die stündlichen Datenpunkte aktiviert, werden für dieselben Tage zusätzlich die Kanäle `energy.hoursDay2` … `energy.hoursDay6` und `power.hoursDay2` … `power.hoursDay6` je Anlage und unter `summary` angelegt (analog zu `hoursToday`/`hoursTomorrow`).
 - **Azimuth-Konvertierung**: Der Adapter konvertiert automatisch den Azimuth-Wert (Adapter: 0=Süd) in das pvnode-Format (180=Süd)
 - **Abfrageintervall**: Wird automatisch anhand der Kontostufe gesetzt — keine manuelle Konfiguration notwendig
+- **Neustart des Adapters**: Sind die gespeicherten Prognosedaten beim Start noch aktuell (jünger als das Abfrageintervall), wird keine neue Anfrage gestellt. Die nächste Anfrage erfolgt, sobald die Daten veraltet sind. Bei geänderter Konfiguration oder neu hinzugefügter Anlage wird sofort abgefragt.
 - **Pro-Flächen-Prognosen (v2)**: Wenn der pvnode-Account String-Daten liefert, erhält jede konfigurierte Anlage ihre eigene Prognose. Clearsky-Werte, Temperatur und Wettercode stammen aus den Site-weiten Daten.
 - **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
 - **Variabilitätsband (v2, Plus)**: Mit der Kontostufe Plus fragt der Adapter zusätzlich die untere und obere Ertragsgrenze ab (ca. die nächsten 40 Stunden). Sie stehen in den JSONData-States als Felder `y_min` und `y_max`. Liefert der pvnode-Tarif das Band nicht, wird die Prognose ohne Band abgerufen
@@ -132,7 +135,7 @@ Der Adapter bringt eine Web-Komponente nach [`@iobroker/web-components`](https:/
 
 Die Komponente zeigt automatisch die Prognose der gewählten Instanz:
 
-- **Tageskacheln** für bis zu 7 Tage: Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Für heute und morgen kommt die Energie aus den States `energy.today` / `energy.tomorrow`, für die weiteren Tage wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
+- **Tageskacheln** für bis zu 7 Tage: Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Die Energie kommt aus den States `energy.today` / `energy.tomorrow` und bei pvnode Light/Plus aus `energy.day2` … `energy.day6`; wo es keinen State gibt, wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
 - **Diagramm** der Leistungskurve mit Clearsky-Linie, Variabilitätsband (pvnode Plus) und Markierung für „jetzt“; ein Klick auf eine Tageskachel zeigt nur diesen Tag
 - **Tooltip** mit allen Werten beim Überfahren des Diagramms
 - **Variabilitätsband (pvnode Plus, API v2)**: Die Kacheln zeigen zusätzlich die Spanne der Energie (↕ Min – Max), das Diagramm das Band um die Prognosekurve. Außerhalb des Bandes (vor dem Abruf, nach ca. 40 Stunden) zählt der Prognosewert

@@ -121,6 +121,8 @@ class PvforecastForecast extends IobWebComponent {
             `${base}.power.installed`,
             `${base}.energy.today`,
             `${base}.energy.tomorrow`,
+            // pvnode Light/Plus: energy of the following days (adapter >= 7.0.0)
+            ...[2, 3, 4, 5, 6].map(offset => `${base}.energy.day${offset}`),
             `${base}.lastUpdated`,
             (settings.plant || 'summary') === 'summary' ? null : `${base}.name`,
         ];
@@ -195,8 +197,12 @@ class PvforecastForecast extends IobWebComponent {
         }
 
         const dayList = splitDays(entries, todayStart.getTime(), days);
-        // For today and tomorrow the adapter has the exact energy of the service
-        const exact = [this.states[`${base}.energy.today`]?.val, this.states[`${base}.energy.tomorrow`]?.val];
+        // The adapter has the exact energy of the service for today, tomorrow and (pvnode Light/Plus) day 2-6
+        const exact = [
+            this.states[`${base}.energy.today`]?.val,
+            this.states[`${base}.energy.tomorrow`]?.val,
+            ...[2, 3, 4, 5, 6].map(offset => this.states[`${base}.energy.day${offset}`]?.val),
+        ];
         const energyFactor =
             energyUnit.startsWith('k') === powerUnit.startsWith('k') ? 1 : powerUnit.startsWith('k') ? 1000 : 0.001;
 
@@ -218,7 +224,7 @@ class PvforecastForecast extends IobWebComponent {
                                 day: 'numeric',
                                 month: 'numeric',
                             });
-                const isExact = i < 2 && exact[i] != null && !sample;
+                const isExact = exact[i] != null && !sample && (i < 2 || day.entries.length > 0);
                 const energy = isExact ? Number(exact[i]) : day.energy * energyFactor;
                 const eDigits = /^k/.test(energyUnit) ? 1 : 0;
                 const peak = day.peak

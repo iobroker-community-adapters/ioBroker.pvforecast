@@ -1,5 +1,6 @@
 'use strict';
 
+const { describe, it, before } = require('mocha');
 const { expect } = require('chai');
 
 describe('web component forecast data', () => {
