@@ -162,6 +162,13 @@
     "adminUI": {
       "config": "json"
     },
+    "supportedMessages": {
+      "deviceManager": true,
+      "custom": true
+    },
+    "webComponents": [
+      "webcomponents/iob-pvforecast.json"
+    ],
     "extIcon": "https://raw.githubusercontent.com/iobroker-community-adapters/ioBroker.pvforecast/main/admin/pvforecast.png",
     "keywords": [
       "Solar",

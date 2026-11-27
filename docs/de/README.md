@@ -126,7 +126,48 @@ Format: `key1=value1&key2=value2`
 - **Neustart des Adapters**: Sind die gespeicherten Prognosedaten beim Start noch aktuell (jünger als das Abfrageintervall), wird keine neue Anfrage gestellt. Die nächste Anfrage erfolgt, sobald die Daten veraltet sind. Bei geänderter Konfiguration oder neu hinzugefügter Anlage wird sofort abgefragt.
 - **Pro-Flächen-Prognosen (v2)**: Wenn der pvnode-Account String-Daten liefert, erhält jede konfigurierte Anlage ihre eigene Prognose. Clearsky-Werte, Temperatur und Wettercode stammen aus den Site-weiten Daten.
 - **Summary-Daten**: Das Summary-JSON enthält Clearsky-Werte sowie Temperatur und Wettercode
+- **Variabilitätsband (v2, Plus)**: Mit der Kontostufe Plus fragt der Adapter zusätzlich die untere und obere Ertragsgrenze ab (ca. die nächsten 40 Stunden). Sie stehen in den JSONData-States als Felder `y_min` und `y_max`. Liefert der pvnode-Tarif das Band nicht, wird die Prognose ohne Band abgerufen
 - Die Felder „Dämpfung morgens" und „Dämpfung abends" werden für pvnode nicht verwendet
+
+## Web-Komponente „PV-Prognose“
+
+Der Adapter bringt eine Web-Komponente nach [`@iobroker/web-components`](https://github.com/ioBroker/web-components) mit (`iob-pvforecast`). Sie kann überall eingefügt werden, wo ioBroker Web-Komponenten anzeigt (z. B. Aura, vis-2, Devices, Admin).
+
+Die Komponente zeigt automatisch die Prognose der gewählten Instanz:
+
+- **Kopfzeile** mit Name, aktueller Leistung und Info-Button: Der Info-Dialog zeigt Anlage, Prognosedienst, installierte Leistung, letzte Aktualisierung und alle verfügbaren Prognosetage auf einmal
+- **Tageskacheln**, standardmäßig für heute und morgen (bis zu 7 Tage einstellbar): Energie, Spitzenleistung mit Uhrzeit und Höchsttemperatur (pvnode). Die Energie kommt aus den States `energy.today` / `energy.tomorrow` und bei pvnode Light/Plus aus `energy.day2` … `energy.day6`; wo es keinen State gibt, wird sie aus der Prognosekurve berechnet (markiert mit „≈“)
+- **Diagramm** der Leistungskurve mit Clearsky-Linie, Variabilitätsband (pvnode Plus) und Markierung für „jetzt“; ein Klick auf eine Tageskachel zeigt nur diesen Tag
+- **Tooltip** mit allen Werten beim Überfahren des Diagramms
+- **Variabilitätsband (pvnode Plus, API v2)**: Die Kacheln zeigen zusätzlich die Spanne der Energie (↕ Min – Max), das Diagramm das Band um die Prognosekurve. Außerhalb des Bandes (vor dem Abruf, nach ca. 40 Stunden) zählt der Prognosewert
+
+Die Komponente und der Device Manager funktionieren mit allen Anbietern. Was angezeigt wird, hängt von den Daten des Anbieters ab:
+
+| Anbieter | Prognosekurve, Energie, Spitze | Clearsky, Temperatur | Variabilitätsband |
+|----------|:---:|:---:|:---:|
+| Forecast.Solar | ✓ | – | – |
+| Solcast | ✓ | – | – |
+| SolarPredictionAPI | ✓ | – | – |
+| pvnode Free / Light | ✓ | ✓ | – |
+| pvnode Plus (API v2) | ✓ | ✓ | ✓ |
+
+Einstellungen der Komponente:
+
+| Einstellung | Beschreibung |
+|-------------|--------------|
+| Instanz | pvforecast-Instanz, z. B. `pvforecast.0` |
+| Anlage | `Summe aller Anlagen` oder eine einzelne Anlage (die Liste kommt vom Adapter) |
+| Tage | Anzahl der angezeigten Tage (1–7, Standard 2) |
+| Titel | Eigener Titel, leer = Name der Anlage |
+| Kopfzeile / Tageskacheln / Info-Button | Ein- oder ausblenden, z. B. für eine kompakte Ansicht nur mit Diagramm |
+| Clearsky / Variabilitätsband | Linien ein- oder ausblenden |
+| Farbe | Farbe der Prognosekurve |
+
+## Device Manager
+
+Im Tab **Geräte** (Device Manager) erscheint jede Anlage und die Summe aller Anlagen als eigenes Gerät. Die Karte zeigt das pvforecast-Icon, den Anbieter (bei pvnode mit Tarif), live die installierte Leistung (bei der Summe aller Anlagen, sonst der einzelnen Anlage), die aktuelle Leistung und die Energie für heute und morgen sowie das Diagramm von heute. In den Details stehen Anbieter, Status des Variabilitätsbands, installierte Leistung, Energie heute/morgen, die letzte Aktualisierung und die Web-Komponente mit der Prognose für 7 Tage.
+
+Für die Web-Komponente in den Details wird ein Admin mit JSON-Config ab 10.1.14 benötigt.
 
 ## VIS Beispiel
 
